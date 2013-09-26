@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">HDSky</string>
+	<string name="account">帳號</string>
+	<string name="password">密碼</string>
+	<string name="login">登錄</string>
+	<string name="security_code">驗證碼</string>
+	<string name="next_page">下一頁</string>
+	<string name="loading">加載中...</string>
+    <string name="pull_to_refresh_pull_label">下拉可刷新...</string>
+    <string name="pull_to_refresh_release_label">鬆開可刷新...</string>
+    <string name="pull_to_refresh_refreshing_label">正在刷新...</string>
+    <string name="pull_to_refresh_tap_label">點擊可刷新...</string>
+    <string name="subject">主題</string>
+    <string name="body">正文</string>
+    <string name="loaded">數據已更新</string>
+    <string name="get_security_code">正在獲取驗證碼...</string>
+    <string name="failed_to_download_security_code">獲取驗證碼失敗，請重試</string>
+    <string name="exit">退出</string>
+    <string name="exit_message">確定退出？</string>
+    <string name="confirm">提示</string>
+    <string name="cancel">取消</string>
+    <string name="input_password">請輸入密碼</string>
+    <string name="input_username">請輸入帳號</string>
+    <string name="input_security_code">請輸入驗證碼</string>
+    <string name="log_out">註銷</string>
+    <string name="refresh">刷新</string>
+    <string name="try_to_login">正在嘗試登錄...</string>
+    <string name="login_failed">登錄失敗，請重試</string>
+    <string name="login_error">登錄失敗，確認帳號、密碼及驗證碼無誤后再重試</string>
+    
+    <string name="reply">回覆</string>
+    <string name="new_topic">新建主題</string>
+    <string name="body_is_empty">請輸入正文內容</string>
+    <string name="subject_is_empty">請輸入一個主題</string>
+    <string name="topic_is_adding">正在發佈新的主題</string>
+    <string name="add_topic_failed">發帖失敗，請重試</string>
+    <string name="add_topic_succeeded">發帖成功</string>
+    <string name="reply_is_empty">請輸入回覆的內容</string>
+    <string name="reply_is_adding">正在回覆</string>
+    <string name="reply_succeeded">回覆完成</string>
+    <string name="reply_failed">回覆失敗，請重試</string>
+    <string name="refresh_failed">數據更新失敗，請稍後重試</string>
+    <string name="connection_refused">無法連接到服務器</string>
+    <string name="time_out">連接超時</string>
+    <string name="chat_room">聊天室</string>
+    <string name="newbie">新手上路</string>
+    <string name="movie">電影院</string>
+    <string name="music">音樂</string>
+    <string name="forum_settings">論壇設定</string>
+    <string name="topics_per_page">每頁主題數</string>
+    <string name="setting_num_hint">0默認，100最大</string>
+    <string name="posts_per_page">每頁帖子數</string>
+    <string name="forum_signature">簽名檔</string>
+    <string name="view_signatures">查看簽名</string>
+    <string name="view_avatars">顯示頭像</string>
+    <string name="click_on_topic">點擊主題時</string>
+    <string name="go_to_first_page">查看首頁</string>
+    <string name="go_to_last_page">查看尾頁</string>
+    <string name="signature_hint">允許使用BBCode代碼。最大圖片尺寸為500*200，只有第一張會顯示。</string>
+    <string name="save">保存</string>
+    <string name="forward">跳轉</string>
+    <string name="page_header">第</string>
+    <string name="page_footer">頁</string>
+
+</resources>

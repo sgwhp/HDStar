@@ -1,0 +1,97 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:padding="5dip" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="5dip"
+            android:background="@drawable/setting_strip_top_sel"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:text="获取网络图片" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="5dip"
+            android:clickable="true"
+            android:layout_below="@+id/textView1"
+            android:background="@drawable/setting_strip_middle_sel"
+            android:gravity="center_vertical"
+            android:text="声音" />
+
+        <TextView
+            android:id="@+id/clearCache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="5dip"
+            android:clickable="true"
+            android:layout_below="@+id/textView2"
+            android:background="@drawable/setting_strip_bottom_sel"
+            android:gravity="center_vertical"
+            android:text="清除缓存" />
+
+        <Button
+            android:id="@+id/logOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/checkUpdate"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/log_out_btn_sel"
+            android:onClick="onClick"
+            android:text="注销" />
+
+        <TextView
+            android:id="@+id/checkUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="5dip"
+            android:layout_below="@+id/clearCache"
+            android:layout_marginTop="10dip"
+            android:text="检查更新"
+            android:gravity="center_vertical"
+            android:background="@drawable/setting_strip_bg_sel"
+            android:clickable="true"
+            android:onClick="onClick" />
+
+        <CheckBox
+            android:id="@+id/fetchImage"
+            style="@style/CustomCheckboxTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView1"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+        <CheckBox
+            android:id="@+id/sound"
+            style="@style/CustomCheckboxTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/clearCache"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView1" />
+
+    </RelativeLayout>
+
+</ScrollView>

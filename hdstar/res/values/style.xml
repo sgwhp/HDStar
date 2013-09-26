@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="customProgressStyle" parent="@android:style/Widget.ProgressBar.Large">
+        <item name="android:minWidth">32dip</item>
+        <item name="android:maxWidth">32dip</item>
+        <item name="android:minHeight">32dip</item>
+        <item name="android:maxHeight">32dip</item>
+    </style>
+
+    <!-- popwidnow 显示消失 动画 -->
+
+    <style name="forumChooserWindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/slide_down_in</item>
+        <!-- 指定显示的动画xml -->
+
+        <item name="android:windowExitAnimation">@anim/push_up_out</item>
+        <!-- 指定消失的动画xml -->
+
+    </style>
+
+    <style name="normalPopWindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/appear</item>
+        <item name="android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <!--
+    activityOpenEnterAnimation：表示新的activity创建进入效果，
+    activityOpenExitAnimation：activity还没有finish()下退出效果， 
+    activityCloseEnterAnimation：表示上一个activity返回进入效果，
+    activityCloseExitAnimation：activity finish()之后退出效果
+    -->
+
+    <style name="activityStyle" parent="@android:Theme.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/activityAnim</item>
+    </style>
+
+    <style name="activityAnim" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/out_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/out_to_right</item>
+    </style>
+
+    <style name="dialog_theme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+</resources>

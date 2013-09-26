@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center" >
+
+    <!-- <Button
+        android:id="@+id/next_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next_page"
+        android:background="@drawable/next_page"
+        android:onClick="doNextPageClick" />
+ -->
+    <ProgressBar
+        android:id="@+id/loading_next_page_progressBar"
+        style="@style/customProgressStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/loading_next_page_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next_page"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/loadingtext"
+        android:textSize="20.0dp" />
+
+</LinearLayout>
