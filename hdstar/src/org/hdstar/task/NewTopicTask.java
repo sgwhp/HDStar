@@ -11,6 +11,7 @@ import org.hdstar.util.CustomHttpClient;
 
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.client.HttpClient;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
@@ -26,6 +27,7 @@ public class NewTopicTask extends MyAsyncTask<Void> {
 	@Override
 	protected Void doInBackground(String... params) {
 		setMessageId(R.string.add_topic_failed);
+		HttpClient client = CustomHttpClient.getHttpClient();
 		request = new HttpPost(url);
 		request.setHeader("Cookie", cookie);
 		List<NameValuePair> nvp = new ArrayList<NameValuePair>();

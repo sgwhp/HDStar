@@ -24,8 +24,8 @@ public class Const {
 				MOVIE_URL, ORDER_URL };
 		public static final String REPLY_URL = FORUM_BASE_URL + "?action=post";
 		public static final String SERVER_ADDRESS = "http://hdstar.ap01.aws.af.cm/";
-//		 public static final String SERVER_ADDRESS =
-//		 "http://192.168.1.100:8080/HDStarService/";
+		// public static final String SERVER_ADDRESS =
+		// "http://192.168.1.100:8080/HDStarService/";
 		public static final String SERVER_VIEW_FORUM_URL = SERVER_ADDRESS
 				+ "viewForum";
 		public static final String SERVER_VIEW_TOPIC_URL = SERVER_ADDRESS
@@ -46,6 +46,12 @@ public class Const {
 				SERVER_VIEW_MESSAGES_URL, SERVER_SEND_BOX_URL,
 				SERVER_STAFF_BOX_URL, SERVER_REPORT_BOX_URL,
 				SERVER_CHEATER_BOX_URL };
+		public final static String SERVER_VIEW_MESSAGE_URL = SERVER_ADDRESS
+				+ "viewmessage?id=";
+	}
+
+	public final class ResponseCode {
+		public static final int PARAMETER_ERROR = 1000;
 	}
 
 	public static final String CHARSET = "UTF-8";

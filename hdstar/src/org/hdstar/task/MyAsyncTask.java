@@ -1,19 +1,15 @@
 package org.hdstar.task;
 
-import org.hdstar.util.CustomHttpClient;
-
 import android.os.AsyncTask;
-import ch.boye.httpclientandroidlib.client.HttpClient;
 import ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
 
 public abstract class MyAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	protected String cookie;
-	protected static HttpClient client = CustomHttpClient.getHttpClient();
 	protected HttpRequestBase request = null;
 	protected TaskCallback<T> mCallback;
 	protected boolean interrupted = false;
 
-	MyAsyncTask(String cookie) {
+	public MyAsyncTask(String cookie) {
 		this.cookie = cookie;
 	}
 
@@ -36,6 +32,7 @@ public abstract class MyAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		}
 	}
 
+	@Override
 	protected void onPostExecute(T result) {
 		if (mCallback == null) {
 			return;
@@ -60,12 +57,19 @@ public abstract class MyAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		public static final int SUCCESS_MSG_ID = 0;
 		protected int msgId = SUCCESS_MSG_ID;
 
+		public TaskCallback() {
+		}
+
+		public TaskCallback(int defMsgId) {
+			msgId = defMsgId;
+		}
+
 		public int getMessageId() {
 			return msgId;
 		}
 
 		public boolean isSucceeded() {
-			return msgId == 0;
+			return msgId == SUCCESS_MSG_ID;
 		}
 
 		public abstract void onComplete(T result);

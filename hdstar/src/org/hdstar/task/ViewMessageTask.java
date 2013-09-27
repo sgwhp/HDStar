@@ -1,14 +1,12 @@
 package org.hdstar.task;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.SocketException;
-import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
-import org.hdstar.model.Message;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.IOUtils;
@@ -22,35 +20,43 @@ import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class ViewMessagesTask extends MyAsyncTask<List<Message>> {
+public class ViewMessageTask extends MyAsyncTask<String> {
 
-	public ViewMessagesTask(String cookie) {
+	public ViewMessageTask(String cookie) {
 		super(cookie);
 	}
 
+	/**
+	 * @param params
+	 *            params[0] url
+	 */
 	@Override
-	protected List<Message> doInBackground(String... params) {
-		InputStream in = null;
-		HttpClient client = CustomHttpClient.getHttpClient();
-		request = new HttpGet(Const.Urls.SERVER_VIEW_MESSAGES_URL);
+	protected String doInBackground(String... params) {
+		request = new HttpGet(params[0]);
 		request.setHeader("Cookie", cookie);
+		BufferedInputStream in = null;
+		HttpClient client = CustomHttpClient.getHttpClient();
 		try {
 			HttpResponse response = client.execute(request);
-			if (response.getStatusLine().getStatusCode() == 200) {
-				in = response.getEntity().getContent();
-				Gson gson = new Gson();
-				ResponseWrapper<List<Message>> wrapper = gson.fromJson(
-						new InputStreamReader(in),
-						new TypeToken<ResponseWrapper<List<Message>>>() {
-						}.getType());
-				setMessageId(TaskCallback.SUCCESS_MSG_ID);
-				return wrapper.body;
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			in = new BufferedInputStream(response.getEntity().getContent(),
+					1024);
+
+			Gson gson = new Gson();
+			ResponseWrapper<String> wrapper = gson.fromJson(
+					new InputStreamReader(in),
+					new TypeToken<ResponseWrapper<String>>() {
+					}.getType());
+			return wrapper.body;
 		} catch (ConnectTimeoutException e) {
 			setMessageId(R.string.time_out);
 			CustomHttpClient.restClient();
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			request.abort();
+			e.printStackTrace();
+		} catch (ConnectException e) {
+			request.abort();
+			setMessageId(R.string.connection_refused);
 			e.printStackTrace();
 		} catch (SocketException e) {
 			e.printStackTrace();
@@ -59,6 +65,7 @@ public class ViewMessagesTask extends MyAsyncTask<List<Message>> {
 				CustomHttpClient.restClient();
 			}
 		} catch (IOException e) {
+			IOUtils.closeInputStreamIgnoreExceptions(in);
 			request.abort();
 			e.printStackTrace();
 		} catch (Exception e) {
