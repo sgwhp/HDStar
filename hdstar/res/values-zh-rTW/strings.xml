@@ -42,6 +42,7 @@
     <string name="reply_succeeded">回覆完成</string>
     <string name="reply_failed">回覆失敗，請重試</string>
     <string name="refresh_failed">數據更新失敗，請稍後重試</string>
+    <string name="commit_failed">數據提交失敗，請稍後重試</string>
     <string name="connection_refused">無法連接到服務器</string>
     <string name="time_out">連接超時</string>
     <string name="chat_room">聊天室</string>

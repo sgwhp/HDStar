@@ -41,6 +41,7 @@
     <string name="reply_succeeded">Reply completed</string>
     <string name="reply_failed">Reply failed</string>
     <string name="refresh_failed">Refresh failed</string>
+    <string name="commit_failed">Commit failed</string>
     <string name="connection_refused">Connection refused</string>
     <string name="time_out">Time out</string>
     <string name="chat_room">Chat Room</string>

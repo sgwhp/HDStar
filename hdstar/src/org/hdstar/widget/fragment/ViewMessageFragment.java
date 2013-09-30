@@ -4,8 +4,9 @@ import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.MessageActivity;
+import org.hdstar.model.ResponseWrapper;
+import org.hdstar.task.DelegateTask;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
-import org.hdstar.task.ViewMessageTask;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.gson.reflect.TypeToken;
 
 public class ViewMessageFragment extends StackFragment<String> {
 	private int boxType;
@@ -99,10 +101,12 @@ public class ViewMessageFragment extends StackFragment<String> {
 		if (task != null) {
 			task.detach();
 		}
-		task = new ViewMessageTask(HDStarApp.cookies);
+		task = new DelegateTask<String>(HDStarApp.cookies);
 		task.attach(fetchCallback);
 		if (boxType == Const.boxTypes[0]) {
-			task.execute(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId);
+			task.execGet(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId,
+					new TypeToken<ResponseWrapper<String>>() {
+					}.getType());
 		}
 	}
 

@@ -1,5 +1,9 @@
 package org.hdstar.component.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
@@ -23,6 +27,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
@@ -145,7 +151,17 @@ public class LoginActivity extends SherlockActivity {
 					dialog.show();
 					task = new LoginTask();
 					task.attach(mListener);
-					task.execute(id, password, imageString, imageHash);
+					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+					nvp.add(new BasicNameValuePair("username", id));
+					nvp.add(new BasicNameValuePair("password", password));
+					nvp.add(new BasicNameValuePair("imagestring", imageString));
+					nvp.add(new BasicNameValuePair("imagehash", imageHash));
+					try {
+						task.execPost(Const.Urls.TAKE_LOGIN_URL, nvp, "");
+					} catch (UnsupportedEncodingException e) {
+						dialog.dismiss();
+						e.printStackTrace();
+					}
 				}
 			}
 

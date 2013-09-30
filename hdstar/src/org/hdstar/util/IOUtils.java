@@ -1,8 +1,10 @@
 package org.hdstar.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 
 import android.annotation.SuppressLint;
@@ -92,5 +94,15 @@ public class IOUtils {
 			file = new File(parent + File.separator + name + suffix);
 		}
 		return name + suffix;
+	}
+
+	public static String inputStream2String(InputStream in) throws IOException {
+		StringBuilder builder = new StringBuilder();
+		String str;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		while ((str = reader.readLine()) != null) {
+			builder.append(str);
+		}
+		return builder.toString();
 	}
 }

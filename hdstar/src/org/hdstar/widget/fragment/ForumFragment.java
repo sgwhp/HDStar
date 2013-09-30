@@ -7,9 +7,10 @@ import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.ForumsActivity;
+import org.hdstar.model.ResponseWrapper;
 import org.hdstar.model.Topic;
+import org.hdstar.task.DelegateTask;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
-import org.hdstar.task.ViewForumsTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PageAdapter;
 import org.hdstar.widget.PullToRefreshListView;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.gson.reflect.TypeToken;
 
 public class ForumFragment extends StackFragment<List<Topic>> {
 	private View view;
@@ -182,9 +184,13 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 		}
 		listView.setSelection(0);
 		listView.prepareForRefresh();
-		task = new ViewForumsTask(HDStarApp.cookies);
+		// task = new ViewForumsTask(HDStarApp.cookies);
+		task = new DelegateTask<List<Topic>>(HDStarApp.cookies);
 		task.attach(mCallback);
-		task.execute(forumId + "");
+		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId,
+				new TypeToken<ResponseWrapper<List<Topic>>>() {
+				}.getType());
+		// task.execute(forumId + "");
 	}
 
 	/**
@@ -233,7 +239,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 		view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
 				View.VISIBLE);
 		task.detach();
-		task = new ViewForumsTask(HDStarApp.cookies);
+		task = new DelegateTask<List<Topic>>(HDStarApp.cookies);
 		task.attach(new TaskCallback<List<Topic>>() {
 
 			@Override
@@ -266,7 +272,10 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 			}
 
 		});
-		task.execute(Const.Urls.VIEW_FORUM_BASE_URL + forumId + "&page=" + page);
+		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId
+				+ "&page=" + page,
+				new TypeToken<ResponseWrapper<List<Topic>>>() {
+				}.getType());
 		page++;
 	}
 

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.model.Post;
+import org.hdstar.model.ResponseWrapper;
+import org.hdstar.task.DelegateTask;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
-import org.hdstar.task.ViewTopicTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PostsAdapter;
 import org.hdstar.widget.PullToRefreshListView;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
@@ -34,7 +37,7 @@ public class TopicFragment extends StackFragment<List<Post>> {
 	private PullToRefreshListView listView;
 	private int topicId;
 	private String title = "";
-	private int page = 0;
+	// private int page = 0;
 	private PostsAdapter adapter = null;
 	private boolean pauseOnScroll = false;
 	private boolean pauseOnFling = true;
@@ -43,6 +46,8 @@ public class TopicFragment extends StackFragment<List<Post>> {
 
 	public static TopicFragment newInstance(int topicId, int page, String title) {
 		TopicFragment fragment = new TopicFragment();
+		fragment.url = Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId=" + topicId
+				+ "&page=" + page;
 		Bundle args = new Bundle();
 		args.putInt("topicId", topicId);
 		args.putInt("page", page);
@@ -55,7 +60,7 @@ public class TopicFragment extends StackFragment<List<Post>> {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		topicId = getArguments().getInt("topicId");
-		page = getArguments().getInt("page");
+		// page = getArguments().getInt("page");
 		title = getArguments().getString("title");
 	}
 
@@ -138,9 +143,10 @@ public class TopicFragment extends StackFragment<List<Post>> {
 			return;
 		}
 		listView.prepareForRefresh();
-		task = new ViewTopicTask(HDStarApp.cookies);
+		task = new DelegateTask<List<Post>>(HDStarApp.cookies);
 		task.attach(mCallback);
-		task.execute(topicId + "", page + "");
+		task.execGet(url, new TypeToken<ResponseWrapper<List<Post>>>() {
+		}.getType());
 	}
 
 	void refresh() {

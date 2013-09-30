@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.MessageActivity;
 import org.hdstar.model.Message;
+import org.hdstar.model.ResponseWrapper;
+import org.hdstar.task.DelegateTask;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
-import org.hdstar.task.ViewMessagesTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.MessageAdapter;
 import org.hdstar.widget.PullToRefreshListView;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.gson.reflect.TypeToken;
 
 public class MessageBoxFragment extends StackFragment<List<Message>> {
 	private int boxType;
@@ -37,6 +40,7 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 		Bundle bundle = new Bundle();
 		bundle.putInt("boxType", boxType);
 		MessageBoxFragment fragment = new MessageBoxFragment();
+		fragment.url = Const.Urls.SERVER_VIEW_MESSAGES_URL;
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -110,9 +114,10 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 		}
 		listView.setSelection(0);
 		listView.prepareForRefresh();
-		task = new ViewMessagesTask(HDStarApp.cookies);
+		task = new DelegateTask<List<Message>>(HDStarApp.cookies);
 		task.attach(mCallback);
-		task.execute("");
+		task.execGet(url, new TypeToken<ResponseWrapper<List<Message>>>() {
+		}.getType());
 	}
 
 	private void delete() {

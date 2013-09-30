@@ -1,10 +1,15 @@
 package org.hdstar.widget.fragment;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
-import org.hdstar.task.ReplyTask;
+import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.ResizeLayout;
@@ -31,6 +36,8 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 public class ReplyFragment extends StackFragment<Void> {
 
@@ -105,13 +112,21 @@ public class ReplyFragment extends StackFragment<Void> {
 					});
 					dialog.show();
 					detachTask();
-					task = new ReplyTask(HDStarApp.cookies);
+					task = new OriginTask<Void>(HDStarApp.cookies);
 					task.attach(mCallback);
 					String body = ((EditText) v.findViewById(R.id.body))
 							.getText().toString();
 					body = parser.toImg(body);
 					body += "\n£® π”√" + CustomSetting.DEVICE + "ªÿ∏¥£©";
-					task.execute(topicID, body);
+					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+					nvp.add(new BasicNameValuePair("id", topicID));
+					nvp.add(new BasicNameValuePair("type", "reply"));
+					nvp.add(new BasicNameValuePair("body", body));
+					try {
+						task.execPost(Const.Urls.REPLY_URL, nvp, "");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 

@@ -7,7 +7,12 @@ import org.hdstar.R;
 public class Const {
 	public static final class Urls {
 		public static final String BASE_URL = "http://hdsky.me";
+		public static final String TAKE_LOGIN_URL = BASE_URL + "/takelogin.php";
+		public static final String HOME_PAGE = Const.Urls.BASE_URL
+				+ "/index.php";
 		public static final String FORUM_BASE_URL = BASE_URL + "/forums.php";
+		public static final String NEW_TOPIC_URL = FORUM_BASE_URL
+				+ "?action=post";
 		public static final String VIEW_FORUM_BASE_URL = FORUM_BASE_URL
 				+ "?action=viewforum&forumid=";
 		public static final String CHAT_ROOM_URL = FORUM_BASE_URL

@@ -1,10 +1,15 @@
 package org.hdstar.widget.fragment;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
-import org.hdstar.task.NewTopicTask;
+import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.ResizeLayout;
@@ -31,6 +36,8 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 public class NewTopicFragment extends StackFragment<Void> {
 	private EditText subject, body;
@@ -97,11 +104,24 @@ public class NewTopicFragment extends StackFragment<Void> {
 					});
 					dialog.show();
 					detachTask();
-					task = new NewTopicTask(HDStarApp.cookies);
+					task = new OriginTask<Void>(HDStarApp.cookies);
 					task.attach(mCallback);
 					bodyStr = parser.toImg(bodyStr) + "\n（使用"
 							+ CustomSetting.DEVICE + "发布）";
-					task.execute(subjectStr, bodyStr, id + "");
+					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+					nvp.add(new BasicNameValuePair("id", id + ""));
+					nvp.add(new BasicNameValuePair("type", "new"));
+					nvp.add(new BasicNameValuePair("subject", subjectStr));
+					nvp.add(new BasicNameValuePair("color", "0"));
+					nvp.add(new BasicNameValuePair("font", "0"));
+					nvp.add(new BasicNameValuePair("size", "0"));
+					nvp.add(new BasicNameValuePair("body", bodyStr));
+					try {
+						task.execPost(Const.Urls.NEW_TOPIC_URL, nvp);
+					} catch (UnsupportedEncodingException e) {
+						dialog.dismiss();
+						e.printStackTrace();
+					}
 				}
 			}
 
