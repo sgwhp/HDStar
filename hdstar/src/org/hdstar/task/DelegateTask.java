@@ -32,11 +32,16 @@ public class DelegateTask<T> extends MyAsyncTask<T> {
 		parser = new ResponseParser<T>() {
 			@Override
 			public T parse(HttpResponse res, InputStream in) {
-				Gson gson = new Gson();
-				ResponseWrapper<T> wrapper = gson.fromJson(
-						new InputStreamReader(in), resultType);
-				setMessageId(ResponseParser.SUCCESS_MSG_ID);
-				return wrapper.body;
+				if (res.getStatusLine().getStatusCode() == 200) {
+					Gson gson = new Gson();
+					ResponseWrapper<T> wrapper = gson.fromJson(
+							new InputStreamReader(in), resultType);
+					if (wrapper.resCode == 200) {
+						setMessageId(ResponseParser.SUCCESS_MSG_ID);
+						return wrapper.body;
+					}
+				}
+				return null;
 			}
 		};
 		super.execGet(url, resultType);

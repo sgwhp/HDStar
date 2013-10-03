@@ -20,6 +20,8 @@ import org.hdstar.widget.TopicsAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,9 @@ import com.google.gson.reflect.TypeToken;
 public class ForumFragment extends StackFragment<List<Topic>> {
 	private View view;
 	private PullToRefreshListView listView;
+	private Parcelable listViewState;
+	// private int index;
+	// private int top;
 	private PopupWindow window = null;
 	private TopicsAdapter adapter = null;
 	private int forumId = 1;
@@ -57,6 +62,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.v("whp", "create");
 		super.onCreate(savedInstanceState);
 		url = getArguments() != null ? getArguments().getString("url") : null;
 		forumId = getArguments() != null ? getArguments().getInt("id") : 1;
@@ -65,6 +71,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.v("whp", "create view");
 		view = inflater.inflate(R.layout.forum_view, null);
 		return view;
 	}
@@ -72,6 +79,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 	@SuppressLint("NewApi")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.v("whp", "activity created");
 		super.onActivityCreated(savedInstanceState);
 		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		if (adapter == null) {
@@ -81,9 +89,23 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
 			fetch();
 		} else {
-			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
+			 adapter.notifyDataSetChanged();
 		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		Log.v("whp", "destroy view");
+		//StackPagerAdapter forward和ViewPager setCurrentItem时各会触发一次onDestroyView
+		//但两次之间并未使得listView的onRestoreInstanceState立即生效，故只有第一次的状态是有效的
+		if (listViewState == null) {
+			// 缓存listView的状态，以便在fragment attach时恢复
+			listViewState = listView.onSaveInstanceState();
+		}
+		// index = listView.getFirstVisiblePosition();
+		// View v = listView.getChildAt(0);
+		// top = v == null ? 0 : v.getTop();
+		super.onDestroyView();
 	}
 
 	@Override
@@ -105,6 +127,11 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 			getViewPager().setCurrentItem(getViewPager().getCurrentItem() + 1,
 					true);
 		}
+	}
+	
+	@Override
+	public void onSelected() {
+		listViewState = null;
 	}
 
 	protected void init() {
@@ -159,6 +186,10 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 			});
 		}
 		listView.setAdapter(adapter);
+		if (listViewState != null) {
+			listView.onRestoreInstanceState(listViewState);
+			// listView.setSelectionFromTop(index, top);
+		}
 		listView.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -169,10 +200,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 	}
 
 	void viewTopic(int topicId, int page, String title) {
-		getStackAdapter().forward(
-				TopicFragment.newInstance(topicId, page, title));
-		getViewPager()
-				.setCurrentItem(getViewPager().getCurrentItem() + 1, true);
+		push(TopicFragment.newInstance(topicId, page, title));
 	}
 
 	/**
@@ -184,13 +212,11 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 		}
 		listView.setSelection(0);
 		listView.prepareForRefresh();
-		// task = new ViewForumsTask(HDStarApp.cookies);
 		task = new DelegateTask<List<Topic>>(HDStarApp.cookies);
 		task.attach(mCallback);
 		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId,
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
 				}.getType());
-		// task.execute(forumId + "");
 	}
 
 	/**
@@ -245,7 +271,6 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 			@Override
 			public void onComplete(List<Topic> list) {
 				task.detach();
-				// topics.addAll((ArrayList<Topic>) list);
 				adapter.itemsAddAll((ArrayList<Topic>) list);
 				adapter.notifyDataSetChanged();
 				((TextView) view.findViewById(R.id.loading_next_page_text))

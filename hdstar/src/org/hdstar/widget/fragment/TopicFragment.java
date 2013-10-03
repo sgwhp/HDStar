@@ -160,10 +160,7 @@ public class TopicFragment extends StackFragment<List<Post>> {
 	void reply(String text, String username) {
 		if (getActivity().findViewById(android.R.id.list) != null
 				&& adapter.getList() != null) {
-			getStackAdapter().forward(
-					ReplyFragment.newInstance(topicId + "", text, username));
-			getViewPager().setCurrentItem(getViewPager().getCurrentItem() + 1,
-					true);
+			push(ReplyFragment.newInstance(topicId + "", text, username));
 		}
 	}
 
@@ -191,6 +188,5 @@ public class TopicFragment extends StackFragment<List<Post>> {
 			listView.onRefreshComplete();
 			detachTask();
 		}
-
 	};
 }

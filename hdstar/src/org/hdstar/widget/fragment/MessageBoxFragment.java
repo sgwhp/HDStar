@@ -98,11 +98,8 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				Message msg = list.get(position);
-				getStackAdapter().forward(
-						ViewMessageFragment.newInstance(msg.id, msg.subject,
-								msg.sender, msg.time));
-				getViewPager().setCurrentItem(
-						getViewPager().getCurrentItem() + 1, true);
+				push(ViewMessageFragment.newInstance(msg.id, msg.subject,
+						msg.sender, msg.time));
 			}
 
 		});
