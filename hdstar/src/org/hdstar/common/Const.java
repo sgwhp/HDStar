@@ -52,7 +52,7 @@ public class Const {
 				SERVER_STAFF_BOX_URL, SERVER_REPORT_BOX_URL,
 				SERVER_CHEATER_BOX_URL };
 		public final static String SERVER_VIEW_MESSAGE_URL = SERVER_ADDRESS
-				+ "viewmessage?id=";
+				+ "viewMessage?id=";
 	}
 
 	public final class ResponseCode {

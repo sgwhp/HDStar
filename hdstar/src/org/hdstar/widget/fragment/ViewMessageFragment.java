@@ -8,6 +8,7 @@ import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,7 @@ public class ViewMessageFragment extends StackFragment<String> {
 		return v;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -87,6 +89,7 @@ public class ViewMessageFragment extends StackFragment<String> {
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 
+	@Override
 	public void onActionBarClick(int MenuItemId) {
 		delete();
 	}
