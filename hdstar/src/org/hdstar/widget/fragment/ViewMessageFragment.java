@@ -51,7 +51,6 @@ public class ViewMessageFragment extends StackFragment<String> {
 		super.onCreate(savedInstanceState);
 		messageId = getArguments().getInt("messageId");
 		subject = getArguments().getString("subject");
-
 	}
 
 	@Override
@@ -84,14 +83,14 @@ public class ViewMessageFragment extends StackFragment<String> {
 	public void initActionBar(Menu menu) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(subject);
-		menu.add(0, MessageActivity.DELETE_MENU_ITEM_ID, 0, R.string.delete)
-				.setIcon(R.drawable.delete)
+		menu.add(0, MessageActivity.DELETE_MENU_ITEM_ID, 0, R.string.reply)
+				.setIcon(R.drawable.reply)
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 
 	@Override
 	public void onActionBarClick(int MenuItemId) {
-		delete();
+		reply();
 	}
 
 	private void init() {
@@ -113,7 +112,7 @@ public class ViewMessageFragment extends StackFragment<String> {
 		}
 	}
 
-	void delete() {
+	void reply() {
 
 	}
 
