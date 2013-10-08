@@ -41,8 +41,8 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 	public static MessageBoxFragment newInstance(int boxType) {
 		Bundle bundle = new Bundle();
 		bundle.putInt("boxType", boxType);
+		bundle.putString("url", Const.Urls.SERVER_VIEW_MESSAGES_URL);
 		MessageBoxFragment fragment = new MessageBoxFragment();
-		fragment.url = Const.Urls.SERVER_VIEW_MESSAGES_URL;
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -50,7 +50,9 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		boxType = getArguments().getInt("boxType");
+		Bundle bundle = getArguments();
+		boxType = bundle.getInt("boxType");
+		url = bundle.getString("url");
 	}
 
 	@Override

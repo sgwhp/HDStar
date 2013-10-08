@@ -62,8 +62,9 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		url = getArguments() != null ? getArguments().getString("url") : null;
-		forumId = getArguments() != null ? getArguments().getInt("id") : 1;
+		Bundle bundle = getArguments();
+		url = bundle.getString("url");
+		forumId = bundle.getInt("id", 1);
 	}
 
 	@Override
