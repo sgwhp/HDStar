@@ -17,6 +17,7 @@ import org.hdstar.widget.PullToRefreshListView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +34,15 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 	private int boxType;
 	private List<Message> list;
 	private PullToRefreshListView listView;
+	private Parcelable listViewState;
 	private View view;
 	private MessageAdapter adapter;
 
 	public static MessageBoxFragment newInstance(int boxType) {
 		Bundle bundle = new Bundle();
 		bundle.putInt("boxType", boxType);
+		bundle.putString("url", Const.Urls.SERVER_VIEW_MESSAGES_URL);
 		MessageBoxFragment fragment = new MessageBoxFragment();
-		fragment.url = Const.Urls.SERVER_VIEW_MESSAGES_URL;
 		fragment.setArguments(bundle);
 		return fragment;
 	}
@@ -48,7 +50,9 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		boxType = getArguments().getInt("boxType");
+		Bundle bundle = getArguments();
+		boxType = bundle.getInt("boxType");
+		url = bundle.getString("url");
 	}
 
 	@Override
@@ -72,8 +76,21 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 			fetch();
 		} else {
 			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
 		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		//StackPagerAdapter forward和ViewPager setCurrentItem时各会触发一次onDestroyView
+		//但两次之间并未使得listView的onRestoreInstanceState立即生效，故只有第一次的状态是有效的
+		if (listViewState == null) {
+			// 缓存listView的状态，以便在fragment attach时恢复
+			listViewState = listView.onSaveInstanceState();
+		}
+		// index = listView.getFirstVisiblePosition();
+		// View v = listView.getChildAt(0);
+		// top = v == null ? 0 : v.getTop();
+		super.onDestroyView();
 	}
 
 	@Override
@@ -85,24 +102,30 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 	}
 
+	@Override
 	public void onActionBarClick(int MenuItemId) {
 		delete();
+	}
+	
+	@Override
+	public void onSelected() {
+		listViewState = null;
 	}
 
 	private void init() {
 		listView = (PullToRefreshListView) view.findViewById(R.id.messageList);
 		listView.setAdapter(adapter);
+		if (listViewState != null) {
+			listView.onRestoreInstanceState(listViewState);
+		}
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				Message msg = list.get(position);
-				getStackAdapter().forward(
-						ViewMessageFragment.newInstance(msg.id, msg.subject,
-								msg.sender, msg.time));
-				getViewPager().setCurrentItem(
-						getViewPager().getCurrentItem() + 1, true);
+				Message msg = list.get(position-1);
+				push(ViewMessageFragment.newInstance(msg.id, msg.subject,
+						msg.sender, msg.time));
 			}
 
 		});
@@ -134,6 +157,8 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 		public void onComplete(List<Message> result) {
 			task.detach();
 			listView.onRefreshComplete();
+			list.clear();
+			list.addAll(result);
 			adapter.setList(result);
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);

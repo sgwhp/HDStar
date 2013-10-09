@@ -69,8 +69,10 @@ public class MessageAdapter extends BaseAdapter implements
 		holder.check.setChecked(msg.check);
 		if (msg.msg.read) {
 			convertView.setBackgroundResource(R.color.read_bg);
+			holder.subject.getPaint().setFakeBoldText(false);
 		} else {
 			convertView.setBackgroundResource(R.color.unread_bg);
+			holder.subject.getPaint().setFakeBoldText(true);
 		}
 		return convertView;
 	}

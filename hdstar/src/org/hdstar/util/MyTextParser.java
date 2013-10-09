@@ -103,14 +103,16 @@ public class MyTextParser{
     		text = text.replace(matcher.group(), "[quote=" + temp + "]");
     	}
     	//Ìæ»»±íÇé
-    	pattern = Pattern.compile("<img.*?alt=\"(\\[em\\d+\\])\"\\s.*?/>", Pattern.DOTALL);
+//    	pattern = Pattern.compile("<img.*?alt=\"(\\[em\\d+\\])\"\\s.*?/>", Pattern.DOTALL);
+    	pattern = Pattern.compile("<img[^>]*?alt=\"(\\[em\\d+\\])\"\\s.*?/>", Pattern.DOTALL);
     	matcher = pattern.matcher(text);
     	while(matcher.find()){
     		//matcher.replaceFirst(matcher.group(1));
     		text = text.replace(matcher.group(), matcher.group(1));
     	}
     	//Ìæ»»Í¼Æ¬
-    	pattern = Pattern.compile("<img\\s.*?src=\"([^\"]+)\".*?/>", Pattern.DOTALL);
+//    	pattern = Pattern.compile("<img\\s.*?src=\"([^\"]+)\".*?/>", Pattern.DOTALL);
+    	pattern = Pattern.compile("<img[^>]*?src=\"([^\"]+)\".*?/>", Pattern.DOTALL);
     	matcher = pattern.matcher(text);
     	while(matcher.find()){
     		//matcher.replaceFirst("[img]" + matcher.group(1) + "[/img]");

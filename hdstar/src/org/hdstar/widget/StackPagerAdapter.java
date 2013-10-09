@@ -133,8 +133,8 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		for (int i = fragments.size() - 1; i > curPosition; i--) {
 			t.remove(fragments.remove(i));
 		}
-		t.commit();
 		fragments.add(f);
+		t.commit();
 		notifyDataSetChanged();
 	}
 

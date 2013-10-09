@@ -69,7 +69,7 @@ public class TopicsAdapter extends BaseAdapter {
 			holder.last_reply = (TextView) convertView
 					.findViewById(R.id.last_reply);
 			holder.last_reply.setTextColor(Color.BLACK);
-			holder.img1 = (ImageView) convertView.findViewById(R.id.tag);
+			holder.tag = (ImageView) convertView.findViewById(R.id.tag);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -81,25 +81,25 @@ public class TopicsAdapter extends BaseAdapter {
 		holder.last_reply.setText(t.lastPost);
 		if (t.read) {
 			if (t.locked)
-				holder.img1.setImageResource(R.drawable.locked2);
+				holder.tag.setImageResource(R.drawable.locked2);
 			else if (t.sticky)
-				holder.img1.setImageResource(R.drawable.sticky2);
+				holder.tag.setImageResource(R.drawable.sticky2);
 			else
-				holder.img1.setImageResource(R.drawable.read);
+				holder.tag.setImageResource(R.drawable.read);
 		} else {
 			if (t.locked)
-				holder.img1.setImageResource(R.drawable.locked);
+				holder.tag.setImageResource(R.drawable.locked);
 			else if (t.sticky)
-				holder.img1.setImageResource(R.drawable.sticky);
+				holder.tag.setImageResource(R.drawable.sticky);
 			else
-				holder.img1.setImageResource(R.drawable.unread);
+				holder.tag.setImageResource(R.drawable.unread);
 		}
 		return convertView;
 	}
 
 	private class ViewHolder {
 		TextView title, author, follow, last_reply;
-		ImageView img1;
+		ImageView tag;
 	}
 
 }

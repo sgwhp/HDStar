@@ -98,6 +98,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 			@SuppressLint("NewApi")
 			@Override
 			public void onPageSelected(int position) {
+				stackAdapter.fragments.get(position).onSelected();
 				if (position < curPage) {
 					stackAdapter.forceBack(curPage - position);
 				} else if (position > curPage) {
@@ -120,6 +121,13 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		});
 		getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("pageCount", stackAdapter.getCount());
+		outState.putInt("selectedPage", viewPager.getCurrentItem());
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -134,7 +142,9 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		stackAdapter.fragments.get(curPage).initActionBar(menu);
+		if(curPage < stackAdapter.fragments.size()){
+			stackAdapter.fragments.get(curPage).initActionBar(menu);
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 

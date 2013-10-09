@@ -12,8 +12,7 @@
         android:id="@+id/subject"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="主题">
-    </EditText>
+        android:hint="@string/subject" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -25,10 +24,10 @@
         <EditText
             android:id="@+id/body"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:gravity="left"
             android:layout_weight="1"
-            android:hint="正文"
+            android:hint="@string/body"
             android:inputType="textMultiLine" />
 
         <LinearLayout
@@ -44,14 +43,14 @@
                 android:background="@drawable/smile"
                 android:textOn=""
                 android:textOff=""
-                android:layout_marginRight="10px" />
+                android:layout_marginRight="10dp" />
 
             <Button
                 android:id="@+id/commit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10px"
-                android:background="@drawable/commit" />
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/commit_btn_bg_sel" />
         </LinearLayout>
 
     </LinearLayout>
@@ -68,8 +67,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:horizontalSpacing="2dp"
-            android:numColumns="7" >
-        </GridView>
+            android:numColumns="7" />
 
     </LinearLayout>
 
