@@ -10,8 +10,8 @@
     <string-array name="boxType">
         <item>收件箱</item>
         <item>发件箱</item>
-        <item>管理组信箱</item>
+<!--         <item>管理组信箱</item>
         <item>举报信箱</item>
-        <item>作弊者</item>
+        <item>作弊者</item> -->
     </string-array>
 </resources>

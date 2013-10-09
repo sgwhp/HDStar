@@ -67,7 +67,7 @@ public class Const {
 
 	public static final int[] forumIds = { 1, 2, 11, 9 };
 
-	public static final int[] boxTypes = { 0, 1, 2, 3, 4 };
+	public static final int[] boxTypes = { 1, -1 };
 
 	public static final int[] DEFAULT_SMILEY_RES_IDS = { R.drawable.yct00,
 			R.drawable.yct01, R.drawable.yct02, R.drawable.yct03,

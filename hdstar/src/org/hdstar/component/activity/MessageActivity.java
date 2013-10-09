@@ -1,6 +1,7 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.widget.fragment.MessageBoxFragment;
 
 import android.content.Context;
@@ -48,7 +49,8 @@ public class MessageActivity extends BaseStackActivity implements
 		if (itemPosition != curTab) {
 			curTab = itemPosition;
 			stackAdapter.clear();
-			stackAdapter.forward(MessageBoxFragment.newInstance(itemPosition));
+			stackAdapter.forward(MessageBoxFragment
+					.newInstance(Const.boxTypes[itemPosition]));
 		}
 		return true;
 	}

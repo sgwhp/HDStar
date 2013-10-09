@@ -52,7 +52,8 @@ public class MessageBoxFragment extends StackFragment {
 	public static MessageBoxFragment newInstance(int boxType) {
 		Bundle bundle = new Bundle();
 		bundle.putInt("boxType", boxType);
-		bundle.putString("url", Const.Urls.SERVER_VIEW_MESSAGES_URL);
+		bundle.putString("url", Const.Urls.SERVER_VIEW_MESSAGES_URL
+				+ "?boxtype=" + boxType);
 		MessageBoxFragment fragment = new MessageBoxFragment();
 		fragment.setArguments(bundle);
 		return fragment;
