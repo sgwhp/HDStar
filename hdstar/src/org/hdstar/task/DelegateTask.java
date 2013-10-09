@@ -27,6 +27,10 @@ public class DelegateTask<T> extends MyAsyncTask<T> {
 		super(cookie);
 	}
 
+	public static <T> DelegateTask<T> newInstance(String cookie) {
+		return new DelegateTask<T>(cookie);
+	}
+
 	@Override
 	public void execGet(String url, final Type resultType) {
 		parser = new ResponseParser<T>() {

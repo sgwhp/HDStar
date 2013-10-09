@@ -22,7 +22,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 
-public class ViewMessageFragment extends StackFragment<String> {
+public class ViewMessageFragment extends StackFragment {
 	private int boxType;
 	private int messageId;
 	private String subject;
@@ -100,11 +100,9 @@ public class ViewMessageFragment extends StackFragment<String> {
 	}
 
 	private void fetch() {
-		if (task != null) {
-			task.detach();
-		}
-		task = new DelegateTask<String>(HDStarApp.cookies);
+		DelegateTask<String> task = DelegateTask.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
+		attachTask(task);
 		if (boxType == Const.boxTypes[0]) {
 			task.execGet(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId,
 					new TypeToken<ResponseWrapper<String>>() {

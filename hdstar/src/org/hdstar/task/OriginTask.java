@@ -21,6 +21,10 @@ public class OriginTask<T> extends MyAsyncTask<T> {
 		super(cookie);
 	}
 
+	public static <T> OriginTask<T> newInstance(String cookie) {
+		return new OriginTask<T>(cookie);
+	}
+
 	public OriginTask(String cookie, ResponseParser<T> parser) {
 		super(cookie, parser);
 	}

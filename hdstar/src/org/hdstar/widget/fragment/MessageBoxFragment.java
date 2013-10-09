@@ -1,5 +1,6 @@
 package org.hdstar.widget.fragment;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,32 +12,42 @@ import org.hdstar.model.Message;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
+import org.hdstar.task.OriginTask;
 import org.hdstar.util.SoundPoolManager;
+import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.MessageAdapter;
 import org.hdstar.widget.PullToRefreshListView;
+import org.hdstar.widget.PullToRefreshListView.OnRefreshListener;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 
-public class MessageBoxFragment extends StackFragment<List<Message>> {
+public class MessageBoxFragment extends StackFragment {
 	private int boxType;
 	private List<Message> list;
 	private PullToRefreshListView listView;
 	private Parcelable listViewState;
 	private View view;
 	private MessageAdapter adapter;
+	private CustomDialog dialog = null;
 
 	public static MessageBoxFragment newInstance(int boxType) {
 		Bundle bundle = new Bundle();
@@ -78,11 +89,12 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 			adapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	@Override
 	public void onDestroyView() {
-		//StackPagerAdapter forward和ViewPager setCurrentItem时各会触发一次onDestroyView
-		//但两次之间并未使得listView的onRestoreInstanceState立即生效，故只有第一次的状态是有效的
+		// StackPagerAdapter forward和ViewPager
+		// setCurrentItem时各会触发一次onDestroyView
+		// 但两次之间并未使得listView的onRestoreInstanceState立即生效，故只有第一次的状态是有效的
 		if (listViewState == null) {
 			// 缓存listView的状态，以便在fragment attach时恢复
 			listViewState = listView.onSaveInstanceState();
@@ -106,7 +118,7 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 	public void onActionBarClick(int MenuItemId) {
 		delete();
 	}
-	
+
 	@Override
 	public void onSelected() {
 		listViewState = null;
@@ -123,24 +135,42 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				Message msg = list.get(position-1);
+				Message msg = list.get(position - 1);
 				push(ViewMessageFragment.newInstance(msg.id, msg.subject,
 						msg.sender, msg.time));
 			}
 
 		});
+		listView.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				refresh();
+			}
+		});
 	}
 
 	private void fetch() {
-		if (task != null) {
+		if (mTask != null) {
 			return;
 		}
 		listView.setSelection(0);
 		listView.prepareForRefresh();
-		task = new DelegateTask<List<Message>>(HDStarApp.cookies);
-		task.attach(mCallback);
+		DelegateTask<List<Message>> task = DelegateTask
+				.newInstance(HDStarApp.cookies);
+		task.attach(fetchCallback);
+		attachTask(task);
 		task.execGet(url, new TypeToken<ResponseWrapper<List<Message>>>() {
 		}.getType());
+	}
+
+	void refresh() {
+		if (mTask != null) {
+			Log.v("whp", "messageboxfragment refresh");
+			mTask.detach();
+			mTask = null;
+		}
+		fetch();
 	}
 
 	private void delete() {
@@ -149,13 +179,44 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 					.show();
 			return;
 		}
+		dialog = new CustomDialog(getActivity(), R.string.deleting);
+		dialog.setOnKeyListener(new OnKeyListener() {
 
+			@Override
+			public boolean onKey(DialogInterface dialog, int keyCode,
+					KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_BACK) {
+					detachTask();
+					dialog.dismiss();
+					return true;
+				}
+				return false;
+			}
+		});
+		dialog.show();
+		detachTask();
+		OriginTask<Void> task = OriginTask.newInstance(HDStarApp.cookies);
+		task.attach(delCallback);
+		attachTask(task);
+		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+		nvp.add(new BasicNameValuePair("action", "moveordel"));
+		nvp.add(new BasicNameValuePair("box", "1"));
+		nvp.add(new BasicNameValuePair("delete", "删除"));
+		int[] ids = adapter.getSelectedIds();
+		for (int i = 0; i < ids.length; i++) {
+			nvp.add(new BasicNameValuePair("messages[]", ids[i] + ""));
+		}
+		try {
+			task.execPost(Const.Urls.COMMON_MESSAGE_BOX_URL, nvp);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
-	TaskCallback<List<Message>> mCallback = new TaskCallback<List<Message>>() {
+	TaskCallback<List<Message>> fetchCallback = new TaskCallback<List<Message>>() {
 		@Override
 		public void onComplete(List<Message> result) {
-			task.detach();
+			// mTask.detach();
 			listView.onRefreshComplete();
 			list.clear();
 			list.addAll(result);
@@ -167,7 +228,7 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 
 		@Override
 		public void onFail(Integer msgId) {
-			task.detach();
+			// mTask.detach();
 			listView.onRefreshComplete();
 			listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
@@ -175,9 +236,30 @@ public class MessageBoxFragment extends StackFragment<List<Message>> {
 
 		@Override
 		public void onCancel() {
-			task.detach();
+			// mTask.detach();
 			listView.onRefreshComplete();
 		}
+	};
+
+	TaskCallback<Void> delCallback = new TaskCallback<Void>() {
+
+		@Override
+		public void onComplete(Void result) {
+			dialog.dismiss();
+			refresh();
+		}
+
+		@Override
+		public void onCancel() {
+			dialog.dismiss();
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			dialog.dismiss();
+			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+		}
+
 	};
 
 }

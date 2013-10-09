@@ -12,7 +12,7 @@ import android.support.v4.view.PagerAdapter;
 
 public class StackPagerAdapter extends FragmentPagerAdapter {
 	private FragmentManager fm;
-	public ArrayList<StackFragment<?>> fragments = new ArrayList<StackFragment<?>>();
+	public ArrayList<StackFragment> fragments = new ArrayList<StackFragment>();
 	// private FragmentTransaction mCurTransaction = null;
 	// private Fragment mCurrentPrimaryItem = null;
 	// private static final String TAG = "FragmentPagerAdapter";
@@ -128,7 +128,7 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		curPosition += pages;
 	}
 
-	public void forward(StackFragment<?> f) {
+	public void forward(StackFragment f) {
 		FragmentTransaction t = fm.beginTransaction();
 		for (int i = fragments.size() - 1; i > curPosition; i--) {
 			t.remove(fragments.remove(i));
@@ -138,13 +138,13 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void add(StackFragment<?> f) {
+	public void add(StackFragment f) {
 		fragments.add(f);
 	}
 
 	public void clear() {
 		FragmentTransaction t = fm.beginTransaction();
-		for (StackFragment<?> f : fragments) {
+		for (StackFragment f : fragments) {
 			// f.abort();
 			t.remove(f);
 		}

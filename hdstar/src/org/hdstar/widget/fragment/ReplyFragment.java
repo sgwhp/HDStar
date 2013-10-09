@@ -39,7 +39,7 @@ import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
-public class ReplyFragment extends StackFragment<Void> {
+public class ReplyFragment extends StackFragment {
 
 	private String topicID = "";
 	private EditText body = null;
@@ -112,8 +112,10 @@ public class ReplyFragment extends StackFragment<Void> {
 					});
 					dialog.show();
 					detachTask();
-					task = new OriginTask<Void>(HDStarApp.cookies);
+					OriginTask<Void> task = OriginTask
+							.newInstance(HDStarApp.cookies);
 					task.attach(mCallback);
+					attachTask(task);
 					String body = ((EditText) v.findViewById(R.id.body))
 							.getText().toString();
 					body = parser.toImg(body);
@@ -207,7 +209,7 @@ public class ReplyFragment extends StackFragment<Void> {
 		@Override
 		public void onComplete(Void result) {
 			dialog.dismiss();
-			detachTask();
+			// detachTask();
 			Toast.makeText(getActivity(), R.string.reply_succeeded,
 					Toast.LENGTH_SHORT).show();
 			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
@@ -216,14 +218,14 @@ public class ReplyFragment extends StackFragment<Void> {
 		@Override
 		public void onFail(Integer msgId) {
 			dialog.dismiss();
-			detachTask();
+			// detachTask();
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
 			dialog.dismiss();
-			detachTask();
+			// detachTask();
 		}
 
 	};

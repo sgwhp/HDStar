@@ -53,6 +53,8 @@ public class Const {
 				SERVER_CHEATER_BOX_URL };
 		public final static String SERVER_VIEW_MESSAGE_URL = SERVER_ADDRESS
 				+ "viewMessage?id=";
+		public final static String COMMON_MESSAGE_BOX_URL = BASE_URL
+				+ "/messages.php";
 	}
 
 	public final class ResponseCode {

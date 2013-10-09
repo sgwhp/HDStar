@@ -32,7 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
-public class TopicFragment extends StackFragment<List<Post>> {
+public class TopicFragment extends StackFragment {
 
 	private PullToRefreshListView listView;
 	private int topicId;
@@ -140,20 +140,22 @@ public class TopicFragment extends StackFragment<List<Post>> {
 	}
 
 	void fetch() {
-		if (task != null) {
+		if (mTask != null) {
 			return;
 		}
 		listView.prepareForRefresh();
-		task = new DelegateTask<List<Post>>(HDStarApp.cookies);
+		DelegateTask<List<Post>> task = DelegateTask
+				.newInstance(HDStarApp.cookies);
 		task.attach(mCallback);
+		attachTask(task);
 		task.execGet(url, new TypeToken<ResponseWrapper<List<Post>>>() {
 		}.getType());
 	}
 
 	void refresh() {
-		if (task != null) {
-			task.detach();
-			task = null;
+		if (mTask != null) {
+			mTask.detach();
+			mTask = null;
 		}
 		fetch();
 	}

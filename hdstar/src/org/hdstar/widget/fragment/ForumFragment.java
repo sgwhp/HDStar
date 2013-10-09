@@ -38,7 +38,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 
-public class ForumFragment extends StackFragment<List<Topic>> {
+public class ForumFragment extends StackFragment {
 	private View view;
 	private PullToRefreshListView listView;
 	private Parcelable listViewState;
@@ -86,14 +86,15 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
 			fetch();
 		} else {
-			 adapter.notifyDataSetChanged();
+			adapter.notifyDataSetChanged();
 		}
 	}
 
 	@Override
 	public void onDestroyView() {
-		//StackPagerAdapter forward和ViewPager setCurrentItem时各会触发一次onDestroyView
-		//但两次之间并未使得listView的onRestoreInstanceState立即生效，故只有第一次的状态是有效的
+		// StackPagerAdapter forward和ViewPager
+		// setCurrentItem时各会触发一次onDestroyView
+		// 但两次之间并未使得listView的onRestoreInstanceState立即生效，故只有第一次的状态是有效的
 		if (listViewState == null) {
 			// 缓存listView的状态，以便在fragment attach时恢复
 			listViewState = listView.onSaveInstanceState();
@@ -124,7 +125,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 					true);
 		}
 	}
-	
+
 	@Override
 	public void onSelected() {
 		listViewState = null;
@@ -203,13 +204,15 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 	 * 通过AsyncTask获取数据
 	 * */
 	void fetch() {
-		if (task != null) {
+		if (mTask != null) {
 			return;
 		}
 		listView.setSelection(0);
 		listView.prepareForRefresh();
-		task = new DelegateTask<List<Topic>>(HDStarApp.cookies);
-		task.attach(mCallback);
+		DelegateTask<List<Topic>> task = DelegateTask
+				.newInstance(HDStarApp.cookies);
+		task.attach(refreshCallback);
+		attachTask(task);
 		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId,
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
 				}.getType());
@@ -260,39 +263,11 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 				.setText(R.string.loading);
 		view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
 				View.VISIBLE);
-		task.detach();
-		task = new DelegateTask<List<Topic>>(HDStarApp.cookies);
-		task.attach(new TaskCallback<List<Topic>>() {
-
-			@Override
-			public void onComplete(List<Topic> list) {
-				task.detach();
-				adapter.itemsAddAll((ArrayList<Topic>) list);
-				adapter.notifyDataSetChanged();
-				((TextView) view.findViewById(R.id.loading_next_page_text))
-						.setText(R.string.next_page);
-				view.findViewById(R.id.loading_next_page_progressBar)
-						.setVisibility(View.GONE);
-			}
-
-			@Override
-			public void onFail(Integer msgId) {
-				listView.onRefreshComplete();
-				task.detach();
-				((TextView) view.findViewById(R.id.loading_next_page_text))
-						.setText(R.string.next_page);
-				view.findViewById(R.id.loading_next_page_progressBar)
-						.setVisibility(View.GONE);
-				Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onCancel() {
-				task.detach();
-				listView.onRefreshComplete();
-			}
-
-		});
+		// mTask.detach();
+		DelegateTask<List<Topic>> task = new DelegateTask<List<Topic>>(
+				HDStarApp.cookies);
+		task.attach(addCallback);
+		attachTask(task);
 		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId
 				+ "&page=" + page,
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
@@ -302,18 +277,18 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 
 	void refresh() {
 		refresh = true;
-		if (task != null) {
-			task.detach();
-			task = null;
+		if (mTask != null) {
+			mTask.detach();
+			mTask = null;
 		}
 		fetch();
 	}
 
-	TaskCallback<List<Topic>> mCallback = new TaskCallback<List<Topic>>() {
+	TaskCallback<List<Topic>> refreshCallback = new TaskCallback<List<Topic>>() {
 
 		@Override
 		public void onComplete(List<Topic> list) {
-			task.detach();
+			// mTask.detach();
 			listView.onRefreshComplete();
 			if (refresh) {
 				adapter.clearItems();
@@ -339,7 +314,7 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 
 		@Override
 		public void onFail(Integer msgId) {
-			task.detach();
+			// mTask.detach();
 			listView.onRefreshComplete();
 			listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
@@ -347,9 +322,41 @@ public class ForumFragment extends StackFragment<List<Topic>> {
 
 		@Override
 		public void onCancel() {
-			task.detach();
+			// mTask.detach();
 			listView.onRefreshComplete();
 		}
+	};
+
+	TaskCallback<List<Topic>> addCallback = new TaskCallback<List<Topic>>() {
+
+		@Override
+		public void onComplete(List<Topic> list) {
+			// mTask.detach();
+			adapter.itemsAddAll((ArrayList<Topic>) list);
+			adapter.notifyDataSetChanged();
+			((TextView) view.findViewById(R.id.loading_next_page_text))
+					.setText(R.string.next_page);
+			view.findViewById(R.id.loading_next_page_progressBar)
+					.setVisibility(View.GONE);
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			listView.onRefreshComplete();
+			// mTask.detach();
+			((TextView) view.findViewById(R.id.loading_next_page_text))
+					.setText(R.string.next_page);
+			view.findViewById(R.id.loading_next_page_progressBar)
+					.setVisibility(View.GONE);
+			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void onCancel() {
+			// mTask.detach();
+			listView.onRefreshComplete();
+		}
+
 	};
 
 }

@@ -101,6 +101,17 @@ public class MessageAdapter extends BaseAdapter implements
 		return list;
 	}
 
+	public int[] getSelectedIds() {
+		int[] ids = new int[selectedCount];
+		int i = 0;
+		for (MessageWithCheck msg : list) {
+			if (msg.check) {
+				ids[i++] = msg.msg.id;
+			}
+		}
+		return ids;
+	}
+
 	public int getSelectedCount() {
 		return selectedCount;
 	}

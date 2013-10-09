@@ -39,17 +39,22 @@ import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
-public class NewTopicFragment extends StackFragment {
-	private EditText subject, body;
+public class ReplyPMFragment extends StackFragment {
+
+	private String msgId = "";
+	private int receiverId;
+	private EditText body = null;
 	private Button button = null;
-	private int id = 0;
 	private CustomDialog dialog = null;
 	private View v;
 
-	public static NewTopicFragment newInstance(int id) {
+	public static ReplyPMFragment newInstance(String msgId, String text,
+			int receiverId) {
 		Bundle args = new Bundle();
-		NewTopicFragment fragment = new NewTopicFragment();
-		args.putInt("id", id);
+		ReplyPMFragment fragment = new ReplyPMFragment();
+		args.putString("msgId", msgId);
+		args.putString("text", text);
+		args.putInt("receiverId", receiverId);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -57,50 +62,56 @@ public class NewTopicFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		id = getArguments().getInt("id");
+		Bundle bundle = getArguments();
+		msgId = bundle.getString("msgId");
+		receiverId = bundle.getInt("receiverId");
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		v = inflater.inflate(R.layout.new_topic, null);
-		subject = (EditText) v.findViewById(R.id.subject);
-		body = (EditText) v.findViewById(R.id.body);
-		button = (Button) v.findViewById(R.id.commit);
+		v = inflater.inflate(R.layout.reply, null);
 		return v;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		init();
+		init(getArguments().getString("text"),
+				getArguments().getString("username"));
 	}
 
-	void init() {
+	void init(String text, String username) {
 		final Context context = getActivity();
 		final InputMethodManager im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		final MyTextParser parser = new MyTextParser(context);
+		body = (EditText) v.findViewById(R.id.body);
+		if (username != null) {
+			text = MyTextParser.toBBCode(text, username);
+			body.setText(text);
+			body.setSelection(text.length());
+		} else if (text != null) {
+			text = parser.toImg(text);
+			body.setText(text);
+		}
+		button = (Button) v.findViewById(R.id.commit);
 		button.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				String subjectStr = subject.getText().toString();
-				String bodyStr = body.getText().toString();
-				if (bodyStr.equals("")) {
-					Toast.makeText(context, R.string.body_is_empty,
-							Toast.LENGTH_SHORT).show();
-				} else if (subjectStr.equals("")) {
-					Toast.makeText(context, R.string.subject_is_empty,
+				if (body.getText().toString().equals("")) {
+					Toast.makeText(context, R.string.reply_is_empty,
 							Toast.LENGTH_SHORT).show();
 				} else {
-					dialog = new CustomDialog(context, R.string.topic_is_adding);
+					dialog = new CustomDialog(context, R.string.reply_is_adding);
 					dialog.setOnDismissListener(new OnDismissListener() {
 
 						@Override
-						public void onDismiss(DialogInterface dialog) {
+						public void onDismiss(DialogInterface arg0) {
 							detachTask();
 						}
+
 					});
 					dialog.show();
 					detachTask();
@@ -108,20 +119,17 @@ public class NewTopicFragment extends StackFragment {
 							.newInstance(HDStarApp.cookies);
 					task.attach(mCallback);
 					attachTask(task);
-					bodyStr = parser.toImg(bodyStr) + "\n（使用"
-							+ CustomSetting.DEVICE + "发布）";
+					String body = ((EditText) v.findViewById(R.id.body))
+							.getText().toString();
+					body = parser.toImg(body);
+					body += "\n（使用" + CustomSetting.DEVICE + "回复）";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-					nvp.add(new BasicNameValuePair("id", id + ""));
-					nvp.add(new BasicNameValuePair("type", "new"));
-					nvp.add(new BasicNameValuePair("subject", subjectStr));
-					nvp.add(new BasicNameValuePair("color", "0"));
-					nvp.add(new BasicNameValuePair("font", "0"));
-					nvp.add(new BasicNameValuePair("size", "0"));
-					nvp.add(new BasicNameValuePair("body", bodyStr));
+					nvp.add(new BasicNameValuePair("id", msgId));
+					nvp.add(new BasicNameValuePair("type", "reply"));
+					nvp.add(new BasicNameValuePair("body", body));
 					try {
-						task.execPost(Const.Urls.NEW_TOPIC_URL, nvp);
+						task.execPost(Const.Urls.REPLY_URL, nvp, "");
 					} catch (UnsupportedEncodingException e) {
-						dialog.dismiss();
 						e.printStackTrace();
 					}
 				}
@@ -129,12 +137,15 @@ public class NewTopicFragment extends StackFragment {
 
 		});
 
+		// final SlidingDrawer sd =
+		// (SlidingDrawer)findViewById(R.id.slidingDrawer1);
 		final SmilesAdapter smiles = new SmilesAdapter(context);
 		final GridView grid = (GridView) v.findViewById(R.id.content);
 		final ResizeLayout root = (ResizeLayout) v
 				.findViewById(R.id.root_layout);
 		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-		// subject.requestFocus();
+		// body.requestFocus();
+		// grid.setVisibility(View.GONE);
 		final LinearLayout lin = (LinearLayout) v
 				.findViewById(R.id.linearLayout3);
 		lin.setVisibility(View.GONE);
@@ -159,7 +170,6 @@ public class NewTopicFragment extends StackFragment {
 
 			@Override
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-				// Log.v("check", isChecked+"");
 				if (isChecked) {
 					// sd.open();
 					lin.setVisibility(View.VISIBLE);
@@ -183,8 +193,6 @@ public class NewTopicFragment extends StackFragment {
 			public void OnResize(int w, int h, int oldw, int oldh) {
 				if (h < oldh) {
 					// 键盘弹出
-					// sd.close();
-					// Log.v("resize", "resize");
 					if (smile.isChecked()) {
 						// lin.setVisibility(View.GONE);
 						im.hideSoftInputFromWindow(root.getWindowToken(), 0);
@@ -205,10 +213,9 @@ public class NewTopicFragment extends StackFragment {
 		public void onComplete(Void result) {
 			dialog.dismiss();
 			// detachTask();
-			Toast.makeText(getActivity(), R.string.add_topic_succeeded,
+			Toast.makeText(getActivity(), R.string.reply_succeeded,
 					Toast.LENGTH_SHORT).show();
 			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
-			// getStackAdapter().back();
 		}
 
 		@Override

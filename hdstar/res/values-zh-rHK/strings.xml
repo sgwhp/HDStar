@@ -48,6 +48,11 @@
     <string name="newbie">新手上路</string>
     <string name="movie">電影院</string>
     <string name="music">音樂</string>
+    
+    <string name="delete">刪除</string>
+    <string name="deleting">正在刪除...</string>
+    <string name="markAsRead">標記為已讀</string>
+    
     <string name="forum_settings">論壇設定</string>
     <string name="topics_per_page">每頁主題數</string>
     <string name="setting_num_hint">0默認，100最大</string>

@@ -6,13 +6,15 @@ import org.hdstar.R;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Topic;
 import org.hdstar.task.InitLoader;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 
-public class InitActivity extends FragmentActivity implements LoaderCallbacks<ArrayList<Topic>> {
+public class InitActivity extends FragmentActivity implements
+		LoaderCallbacks<ArrayList<Topic>> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,6 @@ public class InitActivity extends FragmentActivity implements LoaderCallbacks<Ar
 
 	@Override
 	public void onLoaderReset(Loader<ArrayList<Topic>> arg0) {
-		// TODO Auto-generated method stub
-		
 	}
-	
+
 }

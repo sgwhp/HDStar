@@ -66,6 +66,7 @@
     <string name="music">音乐</string>
     
     <string name="delete">删除</string>
+    <string name="deleting">正在删除...</string>
     <string name="markAsRead">标记为已读</string>
     
     

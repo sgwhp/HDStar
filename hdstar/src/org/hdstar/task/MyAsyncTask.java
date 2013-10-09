@@ -36,6 +36,10 @@ public class MyAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		this.cookie = cookie;
 	}
 
+	public static <T> MyAsyncTask<T> newInstance(String cookie) {
+		return new MyAsyncTask<T>(cookie);
+	}
+
 	public MyAsyncTask(String cookie, ResponseParser<T> parser) {
 		this.cookie = cookie;
 		this.parser = parser;

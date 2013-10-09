@@ -80,7 +80,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 				if ((f = getFragment(i)) == null) {
 					break;
 				}
-				stackAdapter.add((StackFragment<?>) f);
+				stackAdapter.add((StackFragment) f);
 			}
 		}
 		viewPager.setAdapter(stackAdapter);
@@ -121,7 +121,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		});
 		getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -142,7 +142,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if(curPage < stackAdapter.fragments.size()){
+		if (curPage < stackAdapter.fragments.size()) {
 			stackAdapter.fragments.get(curPage).initActionBar(menu);
 		}
 		return super.onCreateOptionsMenu(menu);
