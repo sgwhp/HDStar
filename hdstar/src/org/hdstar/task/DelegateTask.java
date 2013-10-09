@@ -35,8 +35,11 @@ public class DelegateTask<T> extends MyAsyncTask<T> {
 				Gson gson = new Gson();
 				ResponseWrapper<T> wrapper = gson.fromJson(
 						new InputStreamReader(in), resultType);
-				setMessageId(ResponseParser.SUCCESS_MSG_ID);
-				return wrapper.body;
+				if (wrapper.resCode == 200) {
+					setMessageId(ResponseParser.SUCCESS_MSG_ID);
+					return wrapper.body;
+				}
+				return null;
 			}
 		};
 		super.execGet(url, resultType);

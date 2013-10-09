@@ -13,12 +13,6 @@ import org.hdstar.R;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.IOUtils;
 
-import ch.boye.httpclientandroidlib.HttpResponse;
-import ch.boye.httpclientandroidlib.client.HttpClient;
-import ch.boye.httpclientandroidlib.client.methods.HttpGet;
-import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
-import ch.boye.httpclientandroidlib.util.EntityUtils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,6 +20,11 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.widget.Toast;
+import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.client.HttpClient;
+import ch.boye.httpclientandroidlib.client.methods.HttpGet;
+import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
+import ch.boye.httpclientandroidlib.util.EntityUtils;
 
 public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	private boolean isInterrupted = false;
@@ -67,8 +66,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		String url = getImageUrl(params[0]);
 		if (url != null) {
 			imageHash = url;
-			url = "http://hdsky.me/image.php?action=regimage&imagehash="
-					+ url;
+			url = "http://hdsky.me/image.php?action=regimage&imagehash=" + url;
 			return downloadImage(url);
 		}
 		return null;
@@ -95,6 +93,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	String getImageUrl(String url) {
 		// System.out.println(NetType(mContext));
 		// System.out.println(url);
@@ -165,7 +164,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		if (downloadImage != null && ref.get() != null) {
 			ImageView mImage = (ImageView) ((Activity) ref.get())
 					.findViewById(R.id.security_image);
-			//downloadImage.setDensity(160);
+			// downloadImage.setDensity(160);
 			mImage.setImageBitmap(downloadImage);
 			downloadImage = null;
 		}
