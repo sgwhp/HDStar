@@ -103,11 +103,9 @@ public class ViewMessageFragment extends StackFragment {
 		DelegateTask<String> task = DelegateTask.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
 		attachTask(task);
-		if (boxType == Const.boxTypes[0]) {
-			task.execGet(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId,
-					new TypeToken<ResponseWrapper<String>>() {
-					}.getType());
-		}
+		task.execGet(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId,
+				new TypeToken<ResponseWrapper<String>>() {
+				}.getType());
 	}
 
 	void reply() {

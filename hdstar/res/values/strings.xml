@@ -85,5 +85,12 @@
     <string name="forward">跳转</string>
     <string name="page_header">第</string>
     <string name="page_footer">页</string>
+    
+    <string name="download_image">获取网络图片</string>
+    <string name="sound_on">提示音</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="log_out">注销</string>
+    <string name="check_update">检查更新</string>
+    <string name="device_name_setting_hint">设备名</string>
 
 </resources>

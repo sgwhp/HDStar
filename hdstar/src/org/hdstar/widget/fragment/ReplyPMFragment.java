@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
-import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.MyAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
@@ -88,7 +87,7 @@ public class ReplyPMFragment extends StackFragment {
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
 		if (username != null) {
-			text = MyTextParser.toBBCode(text, username);
+			text = MyTextParser.toQuote(text, username);
 			body.setText(text);
 			body.setSelection(text.length());
 		} else if (text != null) {
@@ -122,7 +121,7 @@ public class ReplyPMFragment extends StackFragment {
 					String body = ((EditText) v.findViewById(R.id.body))
 							.getText().toString();
 					body = parser.toImg(body);
-					body += "\n（使用" + CustomSetting.DEVICE + "回复）";
+					// body += "\n（使用" + CustomSetting.DEVICE + "回复）";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", msgId));
 					nvp.add(new BasicNameValuePair("type", "reply"));

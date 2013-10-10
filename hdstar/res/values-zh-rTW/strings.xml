@@ -69,5 +69,12 @@
     <string name="forward">跳轉</string>
     <string name="page_header">第</string>
     <string name="page_footer">頁</string>
+    
+    <string name="download_image">獲取網絡圖片</string>
+    <string name="sound_on">提示音</string>
+    <string name="clear_cache">清除緩存</string>
+    <string name="log_out">註銷</string>
+    <string name="check_update">檢查更新</string>
+    <string name="device_name_setting_hint">設備名</string>
 
 </resources>

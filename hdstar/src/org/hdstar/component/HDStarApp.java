@@ -47,7 +47,7 @@ public class HDStarApp extends Application {
 
 		init(getApplicationContext());
 	}
-	
+
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
@@ -82,17 +82,18 @@ public class HDStarApp extends Application {
 		displayOptions = new DisplayImageOptions.Builder()
 				.showStubImage(R.drawable.url_image_loading)
 				.showImageForEmptyUri(R.drawable.url_image_loading)
-				.showImageOnFail(R.drawable.url_image_failed).cacheInMemory(true)
-				.cacheOnDisc(true).displayer(new RoundedBitmapDisplayer(20))
-				.build();
+				.showImageOnFail(R.drawable.url_image_failed)
+				.cacheInMemory(true).cacheOnDisc(true)
+				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 
 	public static void init(Context context) {
-		SharedPreferences shared = context.getSharedPreferences(Const.SHARED_PREFS,
-				MODE_PRIVATE);
+		SharedPreferences shared = context.getSharedPreferences(
+				Const.SHARED_PREFS, MODE_PRIVATE);
 		cookies = shared.getString("cookies", null);
 		CustomSetting.loadImage = shared.getBoolean("loadImage", true);
 		CustomSetting.soundOn = shared.getBoolean("sound", true);
+		CustomSetting.device = shared.getString("device", CustomSetting.device);
 		initImageLoader(context);
 		// initMemoryCache();
 		// File cacheDir = getStorageCacheDir(this, DISK_CACHE_SUBDIR);

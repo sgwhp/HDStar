@@ -85,7 +85,7 @@ public class ReplyFragment extends StackFragment {
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
 		if (username != null) {
-			text = MyTextParser.toBBCode(text, username);
+			text = MyTextParser.toQuote(text, username);
 			body.setText(text);
 			body.setSelection(text.length());
 		} else if (text != null) {
@@ -119,7 +119,7 @@ public class ReplyFragment extends StackFragment {
 					String body = ((EditText) v.findViewById(R.id.body))
 							.getText().toString();
 					body = parser.toImg(body);
-					body += "\n（使用" + CustomSetting.DEVICE + "回复）";
+					body += "\n（使用" + CustomSetting.device + "回复）";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", topicID));
 					nvp.add(new BasicNameValuePair("type", "reply"));

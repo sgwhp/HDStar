@@ -109,7 +109,7 @@ public class NewTopicFragment extends StackFragment {
 					task.attach(mCallback);
 					attachTask(task);
 					bodyStr = parser.toImg(bodyStr) + "\n（使用"
-							+ CustomSetting.DEVICE + "发布）";
+							+ CustomSetting.device + "发布）";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", id + ""));
 					nvp.add(new BasicNameValuePair("type", "new"));

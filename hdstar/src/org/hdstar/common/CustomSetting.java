@@ -8,7 +8,7 @@ public class CustomSetting implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static String DEVICE = "Android客户端";
+	public static String device = "Android客户端";
 	public static boolean loadImage = true;
 	public static boolean soundOn = true;
 

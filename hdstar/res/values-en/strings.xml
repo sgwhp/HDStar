@@ -69,4 +69,10 @@
     <string name="page_header">page</string>
     <string name="page_footer"> </string>
 
+    <string name="download_image">Download image</string>
+    <string name="sound_on">Sound on</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="log_out">Log out</string>
+    <string name="check_update">Update</string>
+    <string name="device_name_setting_hint">Device name</string>
 </resources>

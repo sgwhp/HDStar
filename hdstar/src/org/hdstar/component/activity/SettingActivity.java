@@ -7,19 +7,21 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.SoundPoolManager;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SettingActivity extends BaseActivity {
-	CheckBox fetchImage;
-	CheckBox sound;
+	private CheckBox fetchImage;
+	private CheckBox sound;
+	private EditText deviceName;
 
-	public SettingActivity(){
+	public SettingActivity() {
 		super(R.string.setting);
 	}
 
@@ -29,29 +31,35 @@ public class SettingActivity extends BaseActivity {
 		setContentView(R.layout.setting);
 		fetchImage = (CheckBox) findViewById(R.id.fetchImage);
 		sound = (CheckBox) findViewById(R.id.sound);
+		deviceName = (EditText) findViewById(R.id.deviceName);
 		fetchImage.setChecked(CustomSetting.loadImage);
 		sound.setChecked(CustomSetting.soundOn);
+		deviceName.setText(CustomSetting.device);
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE).edit();
+		Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE)
+				.edit();
 		CustomSetting.loadImage = fetchImage.isChecked();
 		edit.putBoolean("loadImage", CustomSetting.loadImage);
 		CustomSetting.soundOn = sound.isChecked();
-		if(!CustomSetting.soundOn){
+		if (!CustomSetting.soundOn) {
 			SoundPoolManager.clear();
 		}
 		edit.putBoolean("sound", CustomSetting.soundOn);
+		CustomSetting.device = deviceName.getText().toString();
+		edit.putString("device", CustomSetting.device);
 		edit.commit();
 	}
-	
-	public void onClick(View v){
-		switch(v.getId()){
+
+	public void onClick(View v) {
+		switch (v.getId()) {
 		case R.id.logOut:
 			CustomHttpClient.restClient();
-			Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE).edit();
+			Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE)
+					.edit();
 			edit.remove("cookies");
 			edit.commit();
 			HDStarApp.cookies = null;
