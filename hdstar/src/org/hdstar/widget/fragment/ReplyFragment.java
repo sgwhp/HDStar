@@ -134,8 +134,6 @@ public class ReplyFragment extends StackFragment {
 
 		});
 
-		// final SlidingDrawer sd =
-		// (SlidingDrawer)findViewById(R.id.slidingDrawer1);
 		final SmilesAdapter smiles = new SmilesAdapter(context);
 		final GridView grid = (GridView) v.findViewById(R.id.content);
 		final ResizeLayout root = (ResizeLayout) v

@@ -11,6 +11,7 @@ import org.hdstar.task.DelegateTask;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
+//		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		init();
 		if (content == null) {
 			fetch();
@@ -99,7 +100,7 @@ public class ViewMessageFragment extends StackFragment {
 	private void init() {
 		if (content != null) {
 			loading.setVisibility(View.GONE);
-			contentTV.setText(content.content);
+			contentTV.setText(Html.fromHtml(content.content));
 		}
 	}
 
@@ -119,6 +120,7 @@ public class ViewMessageFragment extends StackFragment {
 	}
 
 	TaskCallback<MessageContent> fetchCallback = new TaskCallback<MessageContent>() {
+		@SuppressLint("NewApi")
 		@Override
 		public void onComplete(MessageContent result) {
 			loading.setVisibility(View.GONE);

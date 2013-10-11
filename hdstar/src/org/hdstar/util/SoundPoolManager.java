@@ -36,11 +36,12 @@ public class SoundPoolManager {
 		int h = calendar.get(Calendar.HOUR_OF_DAY);
 		//23:00至次日8:00以及13:00至14:00不开启声音提示
 		if (h > 23 || h < 8 || h == 13) {
-			int mode = ((AudioManager) context
-					.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
-			if (mode == AudioManager.RINGER_MODE_NORMAL) {
-				soundPool.play(soundID, 1, 1, 0, 0, 1);
-			}
+			return;
+		}
+		int mode = ((AudioManager) context
+				.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
+		if (mode == AudioManager.RINGER_MODE_NORMAL) {
+			soundPool.play(soundID, 1, 1, 0, 0, 1);
 		}
 	}
 }

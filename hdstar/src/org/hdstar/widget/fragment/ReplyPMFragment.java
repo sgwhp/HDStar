@@ -93,6 +93,7 @@ public class ReplyPMFragment extends StackFragment {
 		text = MyTextParser.toReplyPM(getActivity(), receiverId, text);
 		body.setText(text);
 		body.setSelection(text.length());
+		body.clearFocus();
 		button = (Button) v.findViewById(R.id.commit);
 		button.setOnClickListener(new OnClickListener() {
 
@@ -141,15 +142,13 @@ public class ReplyPMFragment extends StackFragment {
 
 		});
 
-		// final SlidingDrawer sd =
-		// (SlidingDrawer)findViewById(R.id.slidingDrawer1);
 		final SmilesAdapter smiles = new SmilesAdapter(context);
 		final GridView grid = (GridView) v.findViewById(R.id.content);
 		final ResizeLayout root = (ResizeLayout) v
 				.findViewById(R.id.root_layout);
-		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-		// body.requestFocus();
-		// grid.setVisibility(View.GONE);
+//		 im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+//		 body.requestFocus();
+//		 grid.setVisibility(View.GONE);
 		final LinearLayout lin = (LinearLayout) v
 				.findViewById(R.id.linearLayout3);
 		lin.setVisibility(View.GONE);

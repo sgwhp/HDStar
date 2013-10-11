@@ -89,7 +89,7 @@ public class MyTextParser {
 
 	public static String toBBCode(String text) {
 		// 替换所有的换行
-		text = text.replaceAll("<br\\s.*?>", "\n");
+//		text = text.replaceAll("<br\\s.*?>", "\n");
 		// 替换引用的后半部分
 		text = text.replaceAll("</fieldset>", "[/quote]");
 		// 替换引用的前半部分

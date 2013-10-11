@@ -181,7 +181,7 @@ public class HDStarApp extends Application {
 				task.detach();
 			}
 		});
-		task.execGet(Const.Urls.CHAT_ROOM_URL,
+		task.execGet(Const.Urls.SERVER_CHECK_MESSAGE_URL,
 				new TypeToken<ResponseWrapper<Boolean>>() {
 				}.getType());
 	}

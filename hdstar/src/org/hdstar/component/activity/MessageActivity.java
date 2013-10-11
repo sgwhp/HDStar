@@ -3,7 +3,6 @@ package org.hdstar.component.activity;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.widget.fragment.MessageBoxFragment;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
