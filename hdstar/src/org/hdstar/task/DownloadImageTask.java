@@ -93,7 +93,6 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	String getImageUrl(String url) {
 		// System.out.println(NetType(mContext));
 		// System.out.println(url);

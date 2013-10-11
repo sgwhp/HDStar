@@ -42,16 +42,18 @@ public class ReplyPMFragment extends StackFragment {
 
 	private String msgId = "";
 	private int receiverId;
+	private String subject;
 	private EditText body = null;
 	private Button button = null;
 	private CustomDialog dialog = null;
 	private View v;
 
-	public static ReplyPMFragment newInstance(String msgId, String text,
-			int receiverId) {
+	public static ReplyPMFragment newInstance(String msgId, String subject,
+			String text, int receiverId) {
 		Bundle args = new Bundle();
 		ReplyPMFragment fragment = new ReplyPMFragment();
 		args.putString("msgId", msgId);
+		args.putString("subject", subject);
 		args.putString("text", text);
 		args.putInt("receiverId", receiverId);
 		fragment.setArguments(args);
@@ -63,6 +65,7 @@ public class ReplyPMFragment extends StackFragment {
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
 		msgId = bundle.getString("msgId");
+		subject = bundle.getString("subject");
 		receiverId = bundle.getInt("receiverId");
 	}
 
@@ -110,7 +113,6 @@ public class ReplyPMFragment extends StackFragment {
 						public void onDismiss(DialogInterface arg0) {
 							detachTask();
 						}
-
 					});
 					dialog.show();
 					detachTask();
@@ -123,9 +125,17 @@ public class ReplyPMFragment extends StackFragment {
 					body = parser.toImg(body);
 					// body += "\n£® π”√" + CustomSetting.DEVICE + "ªÿ∏¥£©";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-					nvp.add(new BasicNameValuePair("id", msgId));
-					nvp.add(new BasicNameValuePair("type", "reply"));
+					nvp.add(new BasicNameValuePair("origmsg", msgId));
 					nvp.add(new BasicNameValuePair("body", body));
+					nvp.add(new BasicNameValuePair("color", 0 + ""));
+					nvp.add(new BasicNameValuePair("delete", "yes"));
+					nvp.add(new BasicNameValuePair("font", 0 + ""));
+					nvp.add(new BasicNameValuePair("receiver", receiverId + ""));
+					nvp.add(new BasicNameValuePair("size", 0 + ""));
+					nvp.add(new BasicNameValuePair("subject", "Re: " + subject));
+					nvp.add(new BasicNameValuePair("returnto",
+							"http://hdsky.me/messages.php?action=viewmessage&id="
+									+ msgId));
 					try {
 						task.execPost(Const.Urls.REPLY_URL, nvp, "");
 					} catch (UnsupportedEncodingException e) {
