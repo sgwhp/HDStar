@@ -4,9 +4,10 @@ import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.MessageActivity;
+import org.hdstar.model.MessageContent;
 import org.hdstar.model.ResponseWrapper;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
-import org.hdstar.task.MyAsyncTask.TaskCallback;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -23,10 +24,10 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 
 public class ViewMessageFragment extends StackFragment {
-	private int boxType;
+	// private int boxType;
 	private int messageId;
 	private String subject;
-	private String content;
+	private MessageContent content;
 	private TextView fromTV;
 	private TextView contentTV;
 	private TextView timeTV;
@@ -83,9 +84,11 @@ public class ViewMessageFragment extends StackFragment {
 	public void initActionBar(Menu menu) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(subject);
-		menu.add(0, MessageActivity.DELETE_MENU_ITEM_ID, 0, R.string.reply)
-				.setIcon(R.drawable.reply)
-				.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		if (content != null && content.receiverId != 0) {
+			menu.add(0, MessageActivity.DELETE_MENU_ITEM_ID, 0, R.string.reply)
+					.setIcon(R.drawable.reply)
+					.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
 	}
 
 	@Override
@@ -95,28 +98,32 @@ public class ViewMessageFragment extends StackFragment {
 
 	private void init() {
 		if (content != null) {
-			contentTV.setText(content);
+			loading.setVisibility(View.GONE);
+			contentTV.setText(content.content);
 		}
 	}
 
 	private void fetch() {
-		DelegateTask<String> task = DelegateTask.newInstance(HDStarApp.cookies);
+		DelegateTask<MessageContent> task = DelegateTask
+				.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
 		attachTask(task);
 		task.execGet(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId,
-				new TypeToken<ResponseWrapper<String>>() {
+				new TypeToken<ResponseWrapper<MessageContent>>() {
 				}.getType());
 	}
 
 	void reply() {
-
+		push(ReplyPMFragment.newInstance(messageId, subject, content.content,
+				content.receiverId));
 	}
 
-	TaskCallback<String> fetchCallback = new TaskCallback<String>() {
+	TaskCallback<MessageContent> fetchCallback = new TaskCallback<MessageContent>() {
 		@Override
-		public void onComplete(String result) {
+		public void onComplete(MessageContent result) {
 			loading.setVisibility(View.GONE);
 			content = result;
+			((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 			init();
 		}
 

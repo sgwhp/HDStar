@@ -24,7 +24,7 @@ import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
 import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 
-public class MyAsyncTask<T> extends AsyncTask<String, Integer, T> {
+public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	protected String cookie;
 	protected HttpRequestBase request = null;
 	protected TaskCallback<T> mCallback;
@@ -32,15 +32,15 @@ public class MyAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	protected boolean interrupted = false;
 	protected boolean needContent = true;
 
-	public MyAsyncTask(String cookie) {
+	public BaseAsyncTask(String cookie) {
 		this.cookie = cookie;
 	}
 
-	public static <T> MyAsyncTask<T> newInstance(String cookie) {
-		return new MyAsyncTask<T>(cookie);
+	public static <T> BaseAsyncTask<T> newInstance(String cookie) {
+		return new BaseAsyncTask<T>(cookie);
 	}
 
-	public MyAsyncTask(String cookie, ResponseParser<T> parser) {
+	public BaseAsyncTask(String cookie, ResponseParser<T> parser) {
 		this.cookie = cookie;
 		this.parser = parser;
 	}

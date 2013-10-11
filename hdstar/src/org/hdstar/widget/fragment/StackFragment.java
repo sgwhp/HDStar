@@ -1,19 +1,18 @@
 package org.hdstar.widget.fragment;
 
-import org.hdstar.task.MyAsyncTask;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.StackPagerAdapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 
 public class StackFragment extends Fragment {
 	protected String url;
-	protected MyAsyncTask<?> mTask;
+	protected BaseAsyncTask<?> mTask;
 
 	@Override
 	public void onDetach() {
@@ -21,9 +20,8 @@ public class StackFragment extends Fragment {
 		detachTask();
 	}
 
-	protected void attachTask(MyAsyncTask<?> task) {
+	protected void attachTask(BaseAsyncTask<?> task) {
 		if (mTask != null) {
-			Log.v("whp", "stackfragment attachtask");
 			mTask.detach();
 		}
 		mTask = task;
@@ -31,7 +29,6 @@ public class StackFragment extends Fragment {
 
 	protected void detachTask() {
 		if (mTask != null) {
-			Log.v("whp", "stackfragment detachtask");
 			mTask.detach();
 			mTask = null;
 		}

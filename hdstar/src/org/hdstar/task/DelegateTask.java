@@ -21,7 +21,7 @@ import com.google.gson.Gson;
  * @param <T>
  *            ·µ»Ø½á¹û
  */
-public class DelegateTask<T> extends MyAsyncTask<T> {
+public class DelegateTask<T> extends BaseAsyncTask<T> {
 
 	public DelegateTask(String cookie) {
 		super(cookie);

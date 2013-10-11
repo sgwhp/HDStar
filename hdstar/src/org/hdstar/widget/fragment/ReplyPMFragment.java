@@ -7,7 +7,7 @@ import java.util.List;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
-import org.hdstar.task.MyAsyncTask.TaskCallback;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.widget.CustomDialog;
@@ -40,19 +40,20 @@ import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 public class ReplyPMFragment extends StackFragment {
 
-	private String msgId = "";
+	private int msgId;
 	private int receiverId;
 	private String subject;
+	private String text;
 	private EditText body = null;
 	private Button button = null;
 	private CustomDialog dialog = null;
 	private View v;
 
-	public static ReplyPMFragment newInstance(String msgId, String subject,
+	public static ReplyPMFragment newInstance(int msgId, String subject,
 			String text, int receiverId) {
 		Bundle args = new Bundle();
 		ReplyPMFragment fragment = new ReplyPMFragment();
-		args.putString("msgId", msgId);
+		args.putInt("msgId", msgId);
 		args.putString("subject", subject);
 		args.putString("text", text);
 		args.putInt("receiverId", receiverId);
@@ -64,9 +65,10 @@ public class ReplyPMFragment extends StackFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
-		msgId = bundle.getString("msgId");
+		msgId = bundle.getInt("msgId");
 		subject = bundle.getString("subject");
 		receiverId = bundle.getInt("receiverId");
+		text = bundle.getString("text");
 	}
 
 	@Override
@@ -79,24 +81,18 @@ public class ReplyPMFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		init(getArguments().getString("text"),
-				getArguments().getString("username"));
+		init(text);
 	}
 
-	void init(String text, String username) {
+	void init(String text) {
 		final Context context = getActivity();
 		final InputMethodManager im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
-		if (username != null) {
-			text = MyTextParser.toQuote(text, username);
-			body.setText(text);
-			body.setSelection(text.length());
-		} else if (text != null) {
-			text = parser.toImg(text);
-			body.setText(text);
-		}
+		text = MyTextParser.toReplyPM(getActivity(), receiverId, text);
+		body.setText(text);
+		body.setSelection(text.length());
 		button = (Button) v.findViewById(R.id.commit);
 		button.setOnClickListener(new OnClickListener() {
 
@@ -125,7 +121,7 @@ public class ReplyPMFragment extends StackFragment {
 					body = parser.toImg(body);
 					// body += "\n£® π”√" + CustomSetting.DEVICE + "ªÿ∏¥£©";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-					nvp.add(new BasicNameValuePair("origmsg", msgId));
+					nvp.add(new BasicNameValuePair("origmsg", msgId + ""));
 					nvp.add(new BasicNameValuePair("body", body));
 					nvp.add(new BasicNameValuePair("color", 0 + ""));
 					nvp.add(new BasicNameValuePair("delete", "yes"));
@@ -134,10 +130,9 @@ public class ReplyPMFragment extends StackFragment {
 					nvp.add(new BasicNameValuePair("size", 0 + ""));
 					nvp.add(new BasicNameValuePair("subject", "Re: " + subject));
 					nvp.add(new BasicNameValuePair("returnto",
-							"http://hdsky.me/messages.php?action=viewmessage&id="
-									+ msgId));
+							Const.Urls.VIEW_MESSAGE_URL + msgId));
 					try {
-						task.execPost(Const.Urls.REPLY_URL, nvp, "");
+						task.execPost(Const.Urls.REPLY_PM_URL, nvp, "");
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}

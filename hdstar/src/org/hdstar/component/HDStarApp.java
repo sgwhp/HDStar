@@ -5,15 +5,25 @@ import java.io.File;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
+import org.hdstar.component.activity.InitActivity;
+import org.hdstar.model.ResponseWrapper;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
+import org.hdstar.task.DelegateTask;
 import org.hdstar.util.IOUtils;
 
 import android.annotation.TargetApi;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 
+import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -27,6 +37,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 public class HDStarApp extends Application {
 
 	public static String cookies = null;
+	public static boolean hasNewMessage = false;
 	public static DisplayImageOptions displayOptions;
 	// private LruCache<String, Bitmap> mImageMemoryCache = null;
 	// private DiskLruCache mDiskCache = null;
@@ -125,6 +136,54 @@ public class HDStarApp extends Application {
 		// }
 		// }
 		// }
+	}
+
+	/**
+	 * 查看是否有未读消息
+	 */
+	public void checkMessage() {
+		final DelegateTask<Boolean> task = DelegateTask.newInstance(cookies);
+		task.attach(new TaskCallback<Boolean>() {
+
+			@Override
+			public void onComplete(Boolean result) {
+				task.detach();
+				if (result) {
+					hasNewMessage = true;
+					NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					Intent intent = new Intent(getApplicationContext(),
+							InitActivity.class);
+					intent.putExtra("message", true);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					PendingIntent pendingIntent = PendingIntent.getActivity(
+							getApplicationContext(), 0, intent, 0);
+
+					Notification notification = new NotificationCompat.Builder(
+							HDStarApp.this)
+							.setSmallIcon(R.drawable.ic_launcher)
+							.setTicker(getText(R.string.have_new_message))
+							.setContentTitle(
+									getText(R.string.notification_title))
+							.setContentText(getText(R.string.have_new_message))
+							.setContentIntent(pendingIntent).build();
+					notification.flags |= Notification.FLAG_AUTO_CANCEL;
+					mNotificationManager.notify(0, notification);
+				}
+			}
+
+			@Override
+			public void onCancel() {
+				task.detach();
+			}
+
+			@Override
+			public void onFail(Integer msgId) {
+				task.detach();
+			}
+		});
+		task.execGet(Const.Urls.CHAT_ROOM_URL,
+				new TypeToken<ResponseWrapper<Boolean>>() {
+				}.getType());
 	}
 
 	// 初始化内存缓存

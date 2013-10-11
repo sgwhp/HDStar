@@ -10,7 +10,7 @@ import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.model.Post;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.DelegateTask;
-import org.hdstar.task.MyAsyncTask.TaskCallback;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PostsAdapter;
 import org.hdstar.widget.PullToRefreshListView;

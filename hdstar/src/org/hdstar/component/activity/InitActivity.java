@@ -24,6 +24,19 @@ public class InitActivity extends FragmentActivity implements
 	}
 
 	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		if (intent.getBooleanExtra("exit", false)) {
+			finish();
+			return;
+		}
+		if (intent.getBooleanExtra("message", false)) {
+			intent.setClass(this, MessageActivity.class);
+			startActivity(intent);
+		}
+	}
+
+	@Override
 	public Loader<ArrayList<Topic>> onCreateLoader(int arg0, Bundle arg1) {
 		return new InitLoader(this);
 	}
@@ -38,7 +51,8 @@ public class InitActivity extends FragmentActivity implements
 			intent = new Intent(this, LoginActivity.class);
 		}
 		startActivity(intent);
-		finish();
+		((HDStarApp) getApplicationContext()).checkMessage();
+		// finish();
 	}
 
 	@Override

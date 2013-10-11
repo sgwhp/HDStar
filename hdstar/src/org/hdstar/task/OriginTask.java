@@ -15,7 +15,7 @@ import ch.boye.httpclientandroidlib.NameValuePair;
  * @param <T>
  *            ·µ»Ø½á¹û
  */
-public class OriginTask<T> extends MyAsyncTask<T> {
+public class OriginTask<T> extends BaseAsyncTask<T> {
 
 	public OriginTask(String cookie) {
 		super(cookie);

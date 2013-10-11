@@ -4,7 +4,7 @@ import org.hdstar.R;
 
 import android.os.Bundle;
 
-public class RemoteActivity extends BaseActivity {
+public class RemoteActivity extends BaseStackActivity {
 	public RemoteActivity() {
 		super(R.string.remote);
 	}

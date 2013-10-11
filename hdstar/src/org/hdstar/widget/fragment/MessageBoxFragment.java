@@ -7,11 +7,12 @@ import java.util.List;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
+import org.hdstar.component.activity.BaseStackActivity;
 import org.hdstar.component.activity.MessageActivity;
 import org.hdstar.model.Message;
 import org.hdstar.model.ResponseWrapper;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
-import org.hdstar.task.MyAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
@@ -24,7 +25,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -167,7 +167,6 @@ public class MessageBoxFragment extends StackFragment {
 
 	void refresh() {
 		if (mTask != null) {
-			Log.v("whp", "messageboxfragment refresh");
 			mTask.detach();
 			mTask = null;
 		}
@@ -225,6 +224,8 @@ public class MessageBoxFragment extends StackFragment {
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());
+			HDStarApp.hasNewMessage = false;
+			((BaseStackActivity) getActivity()).refreshMenu();
 		}
 
 		@Override

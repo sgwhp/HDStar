@@ -9,12 +9,14 @@ import org.hdstar.widget.fragment.StackFragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -167,9 +169,14 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
+								Intent intent = new Intent(
+										BaseStackActivity.this,
+										InitActivity.class);
+								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								intent.putExtra("exit", true);
+								startActivity(intent);
 								finish();
 							}
-
 						})
 				.setNegativeButton(R.string.cancel,
 						new DialogInterface.OnClickListener() {
@@ -177,9 +184,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-
 							}
-
 						}).create().show();
 	}
 
@@ -191,6 +196,10 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	@Override
 	public ViewPager getViewPager() {
 		return viewPager;
+	}
+
+	public void refreshMenu() {
+		((ArrayAdapter<?>) mFrag.getListAdapter()).notifyDataSetChanged();
 	}
 
 	private Fragment getFragment(int position) {

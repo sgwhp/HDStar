@@ -9,7 +9,7 @@ import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.DownloadImageTask;
 import org.hdstar.task.LoginTask;
-import org.hdstar.task.MyAsyncTask.TaskCallback;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.util.EncodeDecode;
 import org.hdstar.widget.CustomDialog;
 

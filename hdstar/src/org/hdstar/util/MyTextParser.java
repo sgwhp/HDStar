@@ -1,6 +1,9 @@
 package org.hdstar.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.text.Spannable;
@@ -84,9 +88,6 @@ public class MyTextParser {
 	}
 
 	public static String toBBCode(String text) {
-		Document doc = Jsoup.parseBodyFragment(text);
-		Elements elements = doc.getElementsByTag("div");
-		text = elements.get(0).html();
 		// 替换所有的换行
 		text = text.replaceAll("<br\\s.*?>", "\n");
 		// 替换引用的后半部分
@@ -151,8 +152,29 @@ public class MyTextParser {
 	}
 
 	public static String toQuote(String text, String username) {
+		Document doc = Jsoup.parseBodyFragment(text);
+		Elements elements = doc.getElementsByTag("div");
+		if (elements.size() == 0) {
+			return text;
+		}
+		text = elements.get(0).html();
 		text = toBBCode(text);
 		text = "[quote=" + username + "]" + text + "[/quote]";
+		Spanned s = Html.fromHtml(text);
+		text = s.toString();
+		return text;
+	}
+
+	public static String toReplyPM(Context context, int sender, String text) {
+		text = toBBCode(text);
+		String userName = context.getSharedPreferences(Const.SHARED_PREFS,
+				Activity.MODE_PRIVATE).getString("username", "");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+				Locale.getDefault());
+		text += "<br>-------- [url=userdetails.php?id=" + sender + "]"
+				+ userName + "[/url][i] Wrote at "
+				+ format.format(new Date(System.currentTimeMillis()))
+				+ ":[/i] --------<br>";
 		Spanned s = Html.fromHtml(text);
 		text = s.toString();
 		return text;

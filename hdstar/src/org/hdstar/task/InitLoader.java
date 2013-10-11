@@ -14,13 +14,13 @@ public class InitLoader extends AsyncTaskLoader<ArrayList<Topic>> {
 	public InitLoader(Context context) {
 		super(context);
 	}
-	
+
 	@Override
 	protected void onStartLoading() {
 		super.onStartLoading();
 		forceLoad();
 	}
-	
+
 	@Override
 	protected void onReset() {
 		super.onReset();
@@ -29,7 +29,7 @@ public class InitLoader extends AsyncTaskLoader<ArrayList<Topic>> {
 
 	@Override
 	public ArrayList<Topic> loadInBackground() {
-//		HDStarApp.init(this.getContext());
+		// HDStarApp.init(this.getContext());
 		SoundPoolManager.load(this.getContext());
 		CustomHttpClient.getHttpClient();
 		return null;

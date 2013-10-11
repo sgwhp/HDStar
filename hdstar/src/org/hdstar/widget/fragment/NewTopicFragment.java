@@ -8,7 +8,7 @@ import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
-import org.hdstar.task.MyAsyncTask.TaskCallback;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.widget.CustomDialog;

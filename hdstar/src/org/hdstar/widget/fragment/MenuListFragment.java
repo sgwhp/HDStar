@@ -1,7 +1,7 @@
 package org.hdstar.widget.fragment;
 
 import org.hdstar.R;
-import org.hdstar.component.activity.BaseActivity;
+import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.component.activity.HelpActivity;
 import org.hdstar.component.activity.MessageActivity;
@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class MenuListFragment extends ListFragment {
+	protected SampleAdapter adapter;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class MenuListFragment extends ListFragment {
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		SampleAdapter adapter = new SampleAdapter(getActivity());
+		adapter = new SampleAdapter(getActivity());
 		// for (int i = 0; i < 20; i++) {
 		// adapter.add(new SampleItem("Sample List",
 		// android.R.drawable.ic_menu_search));
@@ -145,12 +146,12 @@ public class MenuListFragment extends ListFragment {
 			TextView title = (TextView) convertView
 					.findViewById(R.id.row_title);
 			title.setText(getItem(position).tag);
-			TextView tip = (TextView) convertView.findViewById(R.id.tip);
-			if (position == 4 && BaseActivity.newMessageNum > 0) {
-				tip.setText(BaseActivity.newMessageNum + "");
-				tip.setVisibility(View.VISIBLE);
+			if (position == 4 && HDStarApp.hasNewMessage) {
+				convertView.findViewById(R.id.new_icon).setVisibility(
+						View.VISIBLE);
 			} else {
-				tip.setVisibility(View.GONE);
+				convertView.findViewById(R.id.new_icon)
+						.setVisibility(View.GONE);
 			}
 			return convertView;
 		}

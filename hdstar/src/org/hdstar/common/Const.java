@@ -28,6 +28,9 @@ public class Const {
 		public static final String[] FORUM_URLS = { CHAT_ROOM_URL, NEWBIE_URL,
 				MOVIE_URL, ORDER_URL };
 		public static final String REPLY_URL = FORUM_BASE_URL + "?action=post";
+		public static final String VIEW_MESSAGE_URL = FORUM_BASE_URL
+				+ "/messages.php?action=viewmessage&id=";
+		public static final String REPLY_PM_URL = BASE_URL + "/takemessage.php";
 		public static final String SERVER_ADDRESS = "http://hdstar.ap01.aws.af.cm/";
 		// public static final String SERVER_ADDRESS =
 		// "http://192.168.1.100:8080/HDStarService/";
@@ -55,6 +58,8 @@ public class Const {
 				+ "viewMessage?id=";
 		public final static String COMMON_MESSAGE_BOX_URL = BASE_URL
 				+ "/messages.php";
+		public final static String SERVER_CHECK_MESSAGE_URL = SERVER_ADDRESS
+				+ "haveNewMsg";
 	}
 
 	public final class ResponseCode {
