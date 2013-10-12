@@ -7,9 +7,9 @@ import java.util.List;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DownloadImageTask;
 import org.hdstar.task.LoginTask;
-import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.util.EncodeDecode;
 import org.hdstar.widget.CustomDialog;
 
@@ -71,7 +71,8 @@ public class LoginActivity extends SherlockActivity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										finish();
+										InitActivity
+												.exitApp(LoginActivity.this);
 									}
 								})
 						.setNegativeButton(R.string.cancel,
@@ -80,7 +81,6 @@ public class LoginActivity extends SherlockActivity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-
 									}
 								}).show();
 			}

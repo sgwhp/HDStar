@@ -17,7 +17,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
@@ -151,12 +150,12 @@ public class HDStarApp extends Application {
 				if (result) {
 					hasNewMessage = true;
 					NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-					Intent intent = new Intent(getApplicationContext(),
-							InitActivity.class);
-					intent.putExtra("message", true);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					PendingIntent pendingIntent = PendingIntent.getActivity(
-							getApplicationContext(), 0, intent, 0);
+							getApplicationContext(),
+							0,
+							InitActivity
+									.buildMessageIntent(getApplicationContext()),
+							0);
 
 					Notification notification = new NotificationCompat.Builder(
 							HDStarApp.this)

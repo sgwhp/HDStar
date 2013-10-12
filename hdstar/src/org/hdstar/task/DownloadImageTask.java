@@ -29,28 +29,28 @@ import ch.boye.httpclientandroidlib.util.EntityUtils;
 public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	private boolean isInterrupted = false;
 	private WeakReference<Context> ref = null;
+	private int density;
 	Bitmap downloadImage = null;
 	String imageHash = null;
 	HttpGet get = null;
 
 	public DownloadImageTask(Context context) {
-		// mContext = context;
 		ref = new WeakReference<Context>(context);
-		// mToast = new MyToast(context);
+		density = context.getResources().getDisplayMetrics().densityDpi;
 	}
 
 	protected void setContext(Context context) {
-		// mContext = context;
 		ref = new WeakReference<Context>(context);
-		/*
-		 * if(progress >= 0){ publishProgress(this.progress); }
-		 */
+		density = context.getResources().getDisplayMetrics().densityDpi;
 	}
 
 	public void interrupt(boolean isInterrupted) {
 		this.isInterrupted = isInterrupted;
 		if (get != null)
 			get.abort();
+		if (downloadImage != null) {
+			downloadImage.recycle();
+		}
 	}
 
 	protected void onPreExecute() {
@@ -72,14 +72,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		return null;
 	}
 
-	protected void onProgressUpdate(Integer... progress) {
-		// TextView mText =
-		// (TextView)((Activity)mContext).findViewById(R.id.textView1);
-		// mText.setText("Progress so far: " + progress[0]);
-	}
-
 	protected void onPostExecute(Bitmap result) {
-		// mToast.hide();
 		if (result != null) {
 			downloadImage = result;
 			setImageInView();
@@ -93,9 +86,8 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	String getImageUrl(String url) {
-		// System.out.println(NetType(mContext));
-		// System.out.println(url);
 		HttpClient client = CustomHttpClient.getHttpClient();
 		get = new HttpGet(url);
 		BufferedReader reader = null;
@@ -163,9 +155,8 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		if (downloadImage != null && ref.get() != null) {
 			ImageView mImage = (ImageView) ((Activity) ref.get())
 					.findViewById(R.id.security_image);
-			// downloadImage.setDensity(160);
+			downloadImage.setDensity(160);
 			mImage.setImageBitmap(downloadImage);
-			downloadImage = null;
 		}
 	}
 

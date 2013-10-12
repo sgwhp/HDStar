@@ -15,7 +15,7 @@
 	<string name="subject">subject</string>
 	<string name="body">body</string>
     <string name="loaded">Update completed</string>
-    <string name="get_security_code">Tetching the security code...</string>
+    <string name="get_security_code">Fetching the security code...</string>
     <string name="failed_to_download_security_code">Failed. Try again latter</string>
     <string name="exit">exit</string>
     <string name="exit_message">sure to exit?</string>

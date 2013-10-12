@@ -89,7 +89,7 @@ public class MyTextParser {
 
 	public static String toBBCode(String text) {
 		// 替换所有的换行
-//		text = text.replaceAll("<br\\s.*?>", "\n");
+		// text = text.replaceAll("<br\\s.*?>", "\n");
 		// 替换引用的后半部分
 		text = text.replaceAll("</fieldset>", "[/quote]");
 		// 替换引用的前半部分
@@ -178,5 +178,20 @@ public class MyTextParser {
 		Spanned s = Html.fromHtml(text);
 		text = s.toString();
 		return text;
+	}
+
+	public static String toReplySubject(String subject) {
+		Pattern pattern = Pattern.compile("Re\\(([0-9]+)\\):");
+		Matcher matcher = pattern.matcher(subject);
+		if (matcher.find()) {
+			int num = Integer.parseInt(matcher.group(1));
+			num++;
+			StringBuffer buffer = new StringBuffer();
+
+			matcher.appendReplacement(buffer, "Re(" + num + "):");
+			matcher.appendTail(buffer);
+			subject = buffer.toString();
+		}
+		return subject;
 	}
 }

@@ -9,7 +9,6 @@ import org.hdstar.widget.fragment.StackFragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -169,13 +168,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Intent intent = new Intent(
-										BaseStackActivity.this,
-										InitActivity.class);
-								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-								intent.putExtra("exit", true);
-								startActivity(intent);
-								finish();
+								InitActivity.exitApp(BaseStackActivity.this);
 							}
 						})
 				.setNegativeButton(R.string.cancel,

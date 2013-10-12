@@ -7,6 +7,8 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Topic;
 import org.hdstar.task.InitLoader;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +29,8 @@ public class InitActivity extends FragmentActivity implements
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		if (intent.getBooleanExtra("exit", false)) {
+			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+					.cancelAll();
 			finish();
 			return;
 		}
@@ -57,6 +61,25 @@ public class InitActivity extends FragmentActivity implements
 
 	@Override
 	public void onLoaderReset(Loader<ArrayList<Topic>> arg0) {
+	}
+
+	/**
+	 * ÍË³öÓ¦ÓÃ
+	 * 
+	 * @param context
+	 */
+	public static void exitApp(Context context) {
+		Intent intent = new Intent(context, InitActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra("exit", true);
+		context.startActivity(intent);
+	}
+
+	public static Intent buildMessageIntent(Context context) {
+		Intent intent = new Intent(context, InitActivity.class);
+		intent.putExtra("message", true);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return intent;
 	}
 
 }

@@ -129,7 +129,8 @@ public class ReplyPMFragment extends StackFragment {
 					nvp.add(new BasicNameValuePair("font", 0 + ""));
 					nvp.add(new BasicNameValuePair("receiver", receiverId + ""));
 					nvp.add(new BasicNameValuePair("size", 0 + ""));
-					nvp.add(new BasicNameValuePair("subject", "Re: " + subject));
+					nvp.add(new BasicNameValuePair("subject", "Re: "
+							+ MyTextParser.toReplySubject(subject)));
 					nvp.add(new BasicNameValuePair("returnto",
 							Const.Urls.VIEW_MESSAGE_URL + msgId));
 					try {
@@ -146,9 +147,9 @@ public class ReplyPMFragment extends StackFragment {
 		final GridView grid = (GridView) v.findViewById(R.id.content);
 		final ResizeLayout root = (ResizeLayout) v
 				.findViewById(R.id.root_layout);
-//		 im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-//		 body.requestFocus();
-//		 grid.setVisibility(View.GONE);
+		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+		// body.requestFocus();
+		// grid.setVisibility(View.GONE);
 		final LinearLayout lin = (LinearLayout) v
 				.findViewById(R.id.linearLayout3);
 		lin.setVisibility(View.GONE);

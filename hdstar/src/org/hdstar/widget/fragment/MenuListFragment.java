@@ -105,13 +105,7 @@ public class MenuListFragment extends ListFragment {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Intent intent = new Intent(
-										getActivity(),
-										InitActivity.class);
-								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-								intent.putExtra("exit", true);
-								startActivity(intent);
-								getActivity().finish();
+								InitActivity.exitApp(getActivity());
 							}
 
 						})
