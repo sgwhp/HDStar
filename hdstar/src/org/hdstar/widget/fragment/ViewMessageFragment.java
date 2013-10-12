@@ -8,6 +8,7 @@ import org.hdstar.model.MessageContent;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
+import org.hdstar.util.URLImageParser;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -74,7 +75,7 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-//		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
+		// ((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		init();
 		if (content == null) {
 			fetch();
@@ -100,7 +101,8 @@ public class ViewMessageFragment extends StackFragment {
 	private void init() {
 		if (content != null) {
 			loading.setVisibility(View.GONE);
-			contentTV.setText(Html.fromHtml(content.content));
+			contentTV.setText(Html.fromHtml(content.content,
+					new URLImageParser(contentTV, getActivity()), null));
 		}
 	}
 

@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.IOUtils;
 
@@ -29,19 +30,16 @@ import ch.boye.httpclientandroidlib.util.EntityUtils;
 public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	private boolean isInterrupted = false;
 	private WeakReference<Context> ref = null;
-	private int density;
 	Bitmap downloadImage = null;
 	String imageHash = null;
 	HttpGet get = null;
 
 	public DownloadImageTask(Context context) {
 		ref = new WeakReference<Context>(context);
-		density = context.getResources().getDisplayMetrics().densityDpi;
 	}
 
 	protected void setContext(Context context) {
 		ref = new WeakReference<Context>(context);
-		density = context.getResources().getDisplayMetrics().densityDpi;
 	}
 
 	public void interrupt(boolean isInterrupted) {
@@ -66,7 +64,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		String url = getImageUrl(params[0]);
 		if (url != null) {
 			imageHash = url;
-			url = "http://hdsky.me/image.php?action=regimage&imagehash=" + url;
+			url = Const.Urls.GET_SECURITY_IMAGE_URL + url;
 			return downloadImage(url);
 		}
 		return null;

@@ -10,6 +10,8 @@ public class Const {
 		public static final String TAKE_LOGIN_URL = BASE_URL + "/takelogin.php";
 		public static final String HOME_PAGE = Const.Urls.BASE_URL
 				+ "/index.php";
+		public static final String GET_SECURITY_IMAGE_URL = BASE_URL
+				+ "/image.php?action=regimage&imagehash=";
 		public static final String FORUM_BASE_URL = BASE_URL + "/forums.php";
 		public static final String NEW_TOPIC_URL = FORUM_BASE_URL
 				+ "?action=post";
@@ -69,6 +71,8 @@ public class Const {
 	public static final String CHARSET = "UTF-8";
 
 	public static final String SHARED_PREFS = "setting";
+
+	public static final String NEW_MESSAGE_ACTION = "org.hdstar.NEW_MESSAGE";
 
 	public static final int[] forumIds = { 1, 2, 11, 9 };
 

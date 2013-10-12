@@ -65,6 +65,7 @@ public class BaseActivity extends SlidingFragmentActivity {
 	private void checkExit() {
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.confirm)
+				.setIcon(R.drawable.ic_launcher)
 				.setMessage(R.string.exit_message)
 				.setPositiveButton(R.string.exit,
 						new DialogInterface.OnClickListener() {

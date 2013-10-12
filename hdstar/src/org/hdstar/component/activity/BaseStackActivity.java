@@ -1,6 +1,7 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.StackPagerAdapter;
 import org.hdstar.widget.fragment.MenuListFragment;
@@ -8,7 +9,11 @@ import org.hdstar.widget.fragment.StackFragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -124,6 +129,19 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	}
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+		registerReceiver(newMessageReceiver, new IntentFilter(
+				Const.NEW_MESSAGE_ACTION));
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		unregisterReceiver(newMessageReceiver);
+	}
+
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt("pageCount", stackAdapter.getCount());
@@ -161,6 +179,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	private void checkExit() {
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.confirm)
+				.setIcon(R.drawable.ic_launcher)
 				.setMessage(R.string.exit_message)
 				.setPositiveButton(R.string.exit,
 						new DialogInterface.OnClickListener() {
@@ -203,5 +222,16 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	private String getFragmentTag(int position) {
 		return "android:switcher:" + R.id.viewPager + ":" + position;
 	}
+
+	private BroadcastReceiver newMessageReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (Const.NEW_MESSAGE_ACTION.equals(intent.getAction())) {
+				refreshMenu();
+			}
+		}
+
+	};
 
 }

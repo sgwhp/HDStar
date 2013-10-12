@@ -17,6 +17,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
@@ -147,27 +148,25 @@ public class HDStarApp extends Application {
 			@Override
 			public void onComplete(Boolean result) {
 				task.detach();
-				if (result) {
-					hasNewMessage = true;
-					NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-					PendingIntent pendingIntent = PendingIntent.getActivity(
-							getApplicationContext(),
-							0,
-							InitActivity
-									.buildMessageIntent(getApplicationContext()),
-							0);
-
-					Notification notification = new NotificationCompat.Builder(
-							HDStarApp.this)
-							.setSmallIcon(R.drawable.ic_launcher)
-							.setTicker(getText(R.string.have_new_message))
-							.setContentTitle(
-									getText(R.string.notification_title))
-							.setContentText(getText(R.string.have_new_message))
-							.setContentIntent(pendingIntent).build();
-					notification.flags |= Notification.FLAG_AUTO_CANCEL;
-					mNotificationManager.notify(0, notification);
+				if (!result) {
+					return;
 				}
+				hasNewMessage = true;
+				HDStarApp.this.sendBroadcast(new Intent(
+						Const.NEW_MESSAGE_ACTION));
+				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				PendingIntent pendingIntent = PendingIntent.getActivity(
+						getApplicationContext(), 0, InitActivity
+								.buildMessageIntent(getApplicationContext()), 0);
+
+				Notification notification = new NotificationCompat.Builder(
+						HDStarApp.this).setSmallIcon(R.drawable.ic_launcher)
+						.setTicker(getText(R.string.have_new_message))
+						.setContentTitle(getText(R.string.notification_title))
+						.setContentText(getText(R.string.have_new_message))
+						.setContentIntent(pendingIntent).build();
+				notification.flags |= Notification.FLAG_AUTO_CANCEL;
+				mNotificationManager.notify(0, notification);
 			}
 
 			@Override
