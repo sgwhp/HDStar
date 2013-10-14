@@ -17,8 +17,6 @@ import org.hdstar.task.OriginTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.MessageAdapter;
-import org.hdstar.widget.PullToRefreshListView;
-import org.hdstar.widget.PullToRefreshListView.OnRefreshListener;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -31,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.Toast;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
@@ -39,11 +38,15 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MessageBoxFragment extends StackFragment {
 	private int boxType;
 	private List<Message> list;
-	private PullToRefreshListView listView;
+	private PullToRefreshListView refreshView;
+	private ListView listView;
 	private Parcelable listViewState;
 	private View view;
 	private MessageAdapter adapter;
@@ -85,7 +88,8 @@ public class MessageBoxFragment extends StackFragment {
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			fetch();
+			refreshView.setRefreshing();
+//			fetch();
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -126,7 +130,8 @@ public class MessageBoxFragment extends StackFragment {
 	}
 
 	private void init() {
-		listView = (PullToRefreshListView) view.findViewById(R.id.messageList);
+		refreshView = (PullToRefreshListView) view.findViewById(R.id.messageList);
+		listView = refreshView.getRefreshableView();
 		listView.setAdapter(adapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
@@ -142,10 +147,10 @@ public class MessageBoxFragment extends StackFragment {
 			}
 
 		});
-		listView.setOnRefreshListener(new OnRefreshListener() {
+		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
-			public void onRefresh() {
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				refresh();
 			}
 		});
@@ -156,7 +161,7 @@ public class MessageBoxFragment extends StackFragment {
 			return;
 		}
 		listView.setSelection(0);
-		listView.prepareForRefresh();
+//		listView.prepareForRefresh();
 		DelegateTask<List<Message>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
@@ -217,7 +222,8 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Message> result) {
 			// mTask.detach();
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 			list.clear();
 			list.addAll(result);
 			adapter.setList(result);
@@ -231,7 +237,8 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			// mTask.detach();
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 			listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
@@ -239,7 +246,8 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onCancel() {
 			// mTask.detach();
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 		}
 	};
 

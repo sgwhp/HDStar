@@ -13,8 +13,6 @@ import org.hdstar.task.DelegateTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PostsAdapter;
-import org.hdstar.widget.PullToRefreshListView;
-import org.hdstar.widget.PullToRefreshListView.OnRefreshListener;
 import org.jsoup.Jsoup;
 
 import android.os.Bundle;
@@ -23,18 +21,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 public class TopicFragment extends StackFragment {
 
-	private PullToRefreshListView listView;
+	private PullToRefreshListView refreshView;
+	private ListView listView;
 	private int topicId;
 	private String title = "";
 	// private int page = 0;
@@ -94,19 +97,19 @@ public class TopicFragment extends StackFragment {
 		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), pauseOnScroll, pauseOnFling));
 		// 注册下拉列表刷新的监听器
-		listView.setOnRefreshListener(new OnRefreshListener() {
+		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
-			public void onRefresh() {
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
 				refresh();
 			}
-
 		});
 		if (adapter.getCount() != 0) {
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 		} else {
-			fetch();
+			refreshView.setRefreshing();
+//			fetch();
 		}
 	}
 
@@ -114,7 +117,8 @@ public class TopicFragment extends StackFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.topic_view, null);
-		listView = (PullToRefreshListView) view.findViewById(android.R.id.list);
+		refreshView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
+		listView = refreshView.getRefreshableView();
 		return view;
 	}
 
@@ -143,7 +147,7 @@ public class TopicFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-		listView.prepareForRefresh();
+//		listView.prepareForRefresh();
 		DelegateTask<List<Post>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(mCallback);
@@ -175,20 +179,23 @@ public class TopicFragment extends StackFragment {
 			adapter.addAll(list);
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 			SoundPoolManager.play(getActivity());
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
-			listView.onRefreshComplete();
-			listView.setSelection(1);
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
+//			listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 			detachTask();
 		}
 	};

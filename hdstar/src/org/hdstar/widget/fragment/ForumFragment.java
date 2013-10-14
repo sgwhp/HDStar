@@ -13,14 +13,13 @@ import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PageAdapter;
-import org.hdstar.widget.PullToRefreshListView;
-import org.hdstar.widget.PullToRefreshListView.OnRefreshListener;
 import org.hdstar.widget.TopicsAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +36,14 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class ForumFragment extends StackFragment {
 	private View view;
-	private PullToRefreshListView listView;
+	private PullToRefreshListView refreshView;
+	private ListView listView;
 	private Parcelable listViewState;
 	// private int index;
 	// private int top;
@@ -84,7 +87,8 @@ public class ForumFragment extends StackFragment {
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			fetch();
+			refreshView.setRefreshing(false);
+//			fetch();
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -136,7 +140,8 @@ public class ForumFragment extends StackFragment {
 		final Activity act = getActivity();
 		final View footerView = LayoutInflater.from(act).inflate(
 				R.layout.footer_view, null);
-		listView = (PullToRefreshListView) view.findViewById(android.R.id.list);
+		refreshView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
+		listView = refreshView.getRefreshableView();
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -187,10 +192,23 @@ public class ForumFragment extends StackFragment {
 			listView.onRestoreInstanceState(listViewState);
 			// listView.setSelectionFromTop(index, top);
 		}
-		listView.setOnRefreshListener(new OnRefreshListener() {
+//		listView.setOnRefreshListener(new OnRefreshListener() {
+//
+//			@Override
+//			public void onRefresh() {
+//				refresh();
+//			}
+//		});
+		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>(){
 
 			@Override
-			public void onRefresh() {
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
 				refresh();
 			}
 		});
@@ -208,7 +226,7 @@ public class ForumFragment extends StackFragment {
 			return;
 		}
 		listView.setSelection(0);
-		listView.prepareForRefresh();
+//		listView.prepareForRefresh();
 		DelegateTask<List<Topic>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(refreshCallback);
@@ -227,7 +245,7 @@ public class ForumFragment extends StackFragment {
 	public void updateView(List<Topic> list) {
 		adapter.setList(list);
 		adapter.notifyDataSetChanged();
-		listView.onRefreshComplete();
+//		listView.onRefreshComplete();
 		final Activity act = getActivity();
 		final View footerView = LayoutInflater.from(act).inflate(
 				R.layout.footer_view, null);
@@ -289,7 +307,8 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Topic> list) {
 			// mTask.detach();
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 			if (refresh) {
 				adapter.clearItems();
 			}
@@ -315,15 +334,17 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			// mTask.detach();
-			listView.onRefreshComplete();
-			listView.setSelection(1);
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
+//			listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
 			// mTask.detach();
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 		}
 	};
 
@@ -332,6 +353,7 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Topic> list) {
 			// mTask.detach();
+			refreshView.onRefreshComplete();
 			adapter.itemsAddAll((ArrayList<Topic>) list);
 			adapter.notifyDataSetChanged();
 			((TextView) view.findViewById(R.id.loading_next_page_text))
@@ -342,8 +364,9 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
 			// mTask.detach();
+			refreshView.onRefreshComplete();
 			((TextView) view.findViewById(R.id.loading_next_page_text))
 					.setText(R.string.next_page);
 			view.findViewById(R.id.loading_next_page_progressBar)
@@ -354,7 +377,8 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onCancel() {
 			// mTask.detach();
-			listView.onRefreshComplete();
+//			listView.onRefreshComplete();
+			refreshView.onRefreshComplete();
 		}
 
 	};
