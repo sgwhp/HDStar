@@ -10,6 +10,8 @@ public class Torrent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public int id;
+	public String firstClass;
+	public String secondClass;
 	public String title;
 	public String subTitle;
 	public String freeType;
