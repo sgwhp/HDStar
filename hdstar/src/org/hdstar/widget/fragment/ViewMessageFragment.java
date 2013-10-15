@@ -16,14 +16,16 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 public class ViewMessageFragment extends StackFragment {
 	// private int boxType;
@@ -33,8 +35,9 @@ public class ViewMessageFragment extends StackFragment {
 	private TextView fromTV;
 	private TextView contentTV;
 	private TextView timeTV;
-	private LinearLayout loading;
-	private ProgressBar progress;
+	private PullToRefreshScrollView refreshView;
+	// private LinearLayout loading;
+	// private ProgressBar progress;
 	private TextView message;
 
 	public static ViewMessageFragment newInstance(int messageId,
@@ -65,8 +68,18 @@ public class ViewMessageFragment extends StackFragment {
 		timeTV = (TextView) v.findViewById(R.id.time);
 		fromTV.setText(getArguments().getString("from"));
 		timeTV.setText(getArguments().getString("time"));
-		loading = (LinearLayout) v.findViewById(R.id.loading);
-		progress = (ProgressBar) v.findViewById(R.id.progressBar);
+		refreshView = (PullToRefreshScrollView) v
+				.findViewById(R.id.pull_refresh_scrollview);
+		refreshView.setScrollingWhileRefreshingEnabled(true);
+		refreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+				refresh();
+			}
+		});
+		// loading = (LinearLayout) v.findViewById(R.id.loading);
+		// progress = (ProgressBar) v.findViewById(R.id.progressBar);
 		message = (TextView) v.findViewById(R.id.message);
 		return v;
 	}
@@ -78,7 +91,7 @@ public class ViewMessageFragment extends StackFragment {
 		// ((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		init();
 		if (content == null) {
-			fetch();
+			refreshView.setRefreshing(false);
 		}
 	}
 
@@ -100,10 +113,18 @@ public class ViewMessageFragment extends StackFragment {
 
 	private void init() {
 		if (content != null) {
-			loading.setVisibility(View.GONE);
+			// loading.setVisibility(View.GONE);
 			contentTV.setText(Html.fromHtml(content.content,
 					new URLImageParser(contentTV, getActivity()), null));
 		}
+	}
+
+	private void refresh() {
+		if (mTask != null) {
+			mTask.detach();
+			mTask = null;
+		}
+		fetch();
 	}
 
 	private void fetch() {
@@ -125,7 +146,8 @@ public class ViewMessageFragment extends StackFragment {
 		@SuppressLint("NewApi")
 		@Override
 		public void onComplete(MessageContent result) {
-			loading.setVisibility(View.GONE);
+			// loading.setVisibility(View.GONE);
+			refreshView.onRefreshComplete();
 			content = result;
 			((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 			init();
@@ -133,13 +155,15 @@ public class ViewMessageFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			progress.setVisibility(View.GONE);
+			// progress.setVisibility(View.GONE);
+			refreshView.onRefreshComplete();
 			message.setText(msgId);
 		}
 
 		@Override
 		public void onCancel() {
-			progress.setVisibility(View.GONE);
+			// progress.setVisibility(View.GONE);
+			refreshView.onRefreshComplete();
 			message.setText("");
 		}
 	};

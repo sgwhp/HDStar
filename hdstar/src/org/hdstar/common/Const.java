@@ -62,6 +62,8 @@ public class Const {
 				+ "/messages.php";
 		public final static String SERVER_CHECK_MESSAGE_URL = SERVER_ADDRESS
 				+ "haveNewMsg";
+		public static final String SERVER_TORRENTS_URL = SERVER_ADDRESS
+				+ "torrents";
 	}
 
 	public final class ResponseCode {

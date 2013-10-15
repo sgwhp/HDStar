@@ -88,8 +88,8 @@ public class MessageBoxFragment extends StackFragment {
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			refreshView.setRefreshing();
-//			fetch();
+			refreshView.setRefreshing(false);
+			// fetch();
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -130,7 +130,8 @@ public class MessageBoxFragment extends StackFragment {
 	}
 
 	private void init() {
-		refreshView = (PullToRefreshListView) view.findViewById(R.id.messageList);
+		refreshView = (PullToRefreshListView) view
+				.findViewById(R.id.messageList);
 		listView = refreshView.getRefreshableView();
 		listView.setAdapter(adapter);
 		if (listViewState != null) {
@@ -161,7 +162,7 @@ public class MessageBoxFragment extends StackFragment {
 			return;
 		}
 		listView.setSelection(0);
-//		listView.prepareForRefresh();
+		// listView.prepareForRefresh();
 		DelegateTask<List<Message>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
@@ -222,7 +223,7 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Message> result) {
 			// mTask.detach();
-//			listView.onRefreshComplete();
+			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			list.clear();
 			list.addAll(result);
@@ -237,7 +238,7 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			// mTask.detach();
-//			listView.onRefreshComplete();
+			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
@@ -246,7 +247,7 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onCancel() {
 			// mTask.detach();
-//			listView.onRefreshComplete();
+			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 		}
 	};

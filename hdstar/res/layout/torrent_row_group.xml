@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/first_class"
         android:layout_toRightOf="@+id/expand"
-        android:src="@drawable/url_image_loading" />
+        android:src="@drawable/c_movie" />
 
     <ImageView
         android:id="@+id/first_class"
@@ -45,6 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/expand"
-        android:src="@drawable/url_image_loading" />
+        android:src="@drawable/bd_h264" />
 
 </RelativeLayout>

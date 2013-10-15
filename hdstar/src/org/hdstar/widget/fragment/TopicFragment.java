@@ -9,8 +9,8 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.model.Post;
 import org.hdstar.model.ResponseWrapper;
-import org.hdstar.task.DelegateTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
+import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PostsAdapter;
 import org.jsoup.Jsoup;
@@ -108,8 +108,8 @@ public class TopicFragment extends StackFragment {
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 		} else {
-			refreshView.setRefreshing();
-//			fetch();
+			refreshView.setRefreshing(false);
+			// fetch();
 		}
 	}
 
@@ -117,7 +117,8 @@ public class TopicFragment extends StackFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.topic_view, null);
-		refreshView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
+		refreshView = (PullToRefreshListView) view
+				.findViewById(R.id.pull_refresh_list);
 		listView = refreshView.getRefreshableView();
 		return view;
 	}
@@ -147,7 +148,7 @@ public class TopicFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-//		listView.prepareForRefresh();
+		// listView.prepareForRefresh();
 		DelegateTask<List<Post>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(mCallback);
@@ -179,22 +180,22 @@ public class TopicFragment extends StackFragment {
 			adapter.addAll(list);
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
-//			listView.onRefreshComplete();
+			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			SoundPoolManager.play(getActivity());
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
-//			listView.onRefreshComplete();
+			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
-//			listView.setSelection(1);
+			// listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
-//			listView.onRefreshComplete();
+			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			detachTask();
 		}
