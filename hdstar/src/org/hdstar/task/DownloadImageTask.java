@@ -84,7 +84,6 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	String getImageUrl(String url) {
 		HttpClient client = CustomHttpClient.getHttpClient();
 		get = new HttpGet(url);

@@ -7,8 +7,6 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Topic;
 import org.hdstar.task.InitLoader;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -25,20 +23,26 @@ public class InitActivity extends FragmentActivity implements
 		getSupportLoaderManager().initLoader(0, null, this);
 	}
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		if (intent.getBooleanExtra("exit", false)) {
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-					.cancelAll();
-			finish();
-			return;
-		}
-		if (intent.getBooleanExtra("message", false)) {
-			intent.setClass(this, MessageActivity.class);
-			startActivity(intent);
-		}
-	}
+//	@Override
+//	protected void onNewIntent(Intent intent) {
+//		super.onNewIntent(intent);
+//		dealWithIntent(intent);
+//	}
+//	
+//	private boolean dealWithIntent(Intent intent){
+//		if (intent.getBooleanExtra("exit", false)) {
+//			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+//					.cancelAll();
+//			finish();
+//			return true;
+//		}
+//		if (intent.getBooleanExtra("message", false)) {
+//			intent.setClass(this, MessageActivity.class);
+//			startActivity(intent);
+//			return true;
+//		}
+//		return false;
+//	}
 
 	@Override
 	public Loader<ArrayList<Topic>> onCreateLoader(int arg0, Bundle arg1) {
@@ -56,7 +60,7 @@ public class InitActivity extends FragmentActivity implements
 		}
 		startActivity(intent);
 		((HDStarApp) getApplicationContext()).checkMessage();
-		// finish();
+		 finish();
 	}
 
 	@Override
@@ -68,18 +72,19 @@ public class InitActivity extends FragmentActivity implements
 	 * 
 	 * @param context
 	 */
-	public static void exitApp(Context context) {
-		Intent intent = new Intent(context, InitActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra("exit", true);
-		context.startActivity(intent);
-	}
-
-	public static Intent buildMessageIntent(Context context) {
-		Intent intent = new Intent(context, InitActivity.class);
-		intent.putExtra("message", true);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		return intent;
-	}
+//	public static void exitApp(Activity context) {
+//		Intent intent = new Intent(context, InitActivity.class);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//		intent.putExtra("exit", true);
+//		context.startActivity(intent);
+//		context.finish();
+//	}
+//
+//	public static Intent buildMessageIntent(Context context) {
+//		Intent intent = new Intent(context, InitActivity.class);
+//		intent.putExtra("message", true);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//		return intent;
+//	}
 
 }

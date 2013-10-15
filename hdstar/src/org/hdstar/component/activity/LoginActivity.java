@@ -72,8 +72,9 @@ public class LoginActivity extends SherlockActivity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										InitActivity
-												.exitApp(LoginActivity.this);
+//										InitActivity
+//												.exitApp(LoginActivity.this);
+										finish();
 									}
 								})
 						.setNegativeButton(R.string.cancel,

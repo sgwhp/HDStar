@@ -4,7 +4,6 @@ import org.hdstar.R;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.component.activity.HelpActivity;
-import org.hdstar.component.activity.InitActivity;
 import org.hdstar.component.activity.MessageActivity;
 import org.hdstar.component.activity.MiscActivity;
 import org.hdstar.component.activity.RemoteActivity;
@@ -106,7 +105,8 @@ public class MenuListFragment extends ListFragment {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								InitActivity.exitApp(getActivity());
+//								InitActivity.exitApp(getActivity());
+								getActivity().finish();
 							}
 
 						})

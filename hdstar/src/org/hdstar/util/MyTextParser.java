@@ -183,15 +183,21 @@ public class MyTextParser {
 	public static String toReplySubject(String subject) {
 		Pattern pattern = Pattern.compile("Re\\(([0-9]+)\\):");
 		Matcher matcher = pattern.matcher(subject);
+		StringBuffer buffer = new StringBuffer();
 		if (matcher.find()) {
 			int num = Integer.parseInt(matcher.group(1));
 			num++;
-			StringBuffer buffer = new StringBuffer();
 
 			matcher.appendReplacement(buffer, "Re(" + num + "):");
 			matcher.appendTail(buffer);
-			subject = buffer.toString();
+		} else {
+			buffer.append(subject);
+			if(subject.startsWith("Re")){
+				buffer.insert(2, "(2)");
+			} else {
+				buffer.insert(0, "Re: ");
+			}
 		}
-		return subject;
+		return buffer.toString();
 	}
 }

@@ -187,7 +187,8 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								InitActivity.exitApp(BaseStackActivity.this);
+//								InitActivity.exitApp(BaseStackActivity.this);
+								finish();
 							}
 						})
 				.setNegativeButton(R.string.cancel,
@@ -228,7 +229,13 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (Const.NEW_MESSAGE_ACTION.equals(intent.getAction())) {
-				refreshMenu();
+				if(intent.getIntExtra("req", 0) == Const.NEW_MESSAGE_REQ_REFRESH){
+					refreshMenu();
+				} else if(intent.getIntExtra("req", 0) == Const.NEW_MESSAGE_REQ_VIEW) {
+					Intent nIntent = new Intent(BaseStackActivity.this, MessageActivity.class);
+					startActivity(nIntent);
+					finish();
+				}
 			}
 		}
 

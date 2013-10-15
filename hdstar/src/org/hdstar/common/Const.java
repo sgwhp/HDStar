@@ -75,6 +75,8 @@ public class Const {
 	public static final String SHARED_PREFS = "setting";
 
 	public static final String NEW_MESSAGE_ACTION = "org.hdstar.NEW_MESSAGE";
+	public static final int NEW_MESSAGE_REQ_REFRESH = 1;
+	public static final int NEW_MESSAGE_REQ_VIEW = 2;
 
 	public static final int[] forumIds = { 1, 2, 11, 9 };
 

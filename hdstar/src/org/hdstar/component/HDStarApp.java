@@ -5,7 +5,6 @@ import java.io.File;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
-import org.hdstar.component.activity.InitActivity;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
@@ -152,12 +151,14 @@ public class HDStarApp extends Application {
 					return;
 				}
 				hasNewMessage = true;
-				HDStarApp.this.sendBroadcast(new Intent(
-						Const.NEW_MESSAGE_ACTION));
+				Intent intent = new Intent(Const.NEW_MESSAGE_ACTION);
+				intent.putExtra("req", Const.NEW_MESSAGE_REQ_REFRESH);
+				HDStarApp.this.sendBroadcast(intent);
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				PendingIntent pendingIntent = PendingIntent.getActivity(
-						getApplicationContext(), 0, InitActivity
-								.buildMessageIntent(getApplicationContext()), 0);
+				Intent nIntent = new Intent(Const.NEW_MESSAGE_ACTION);
+				nIntent.putExtra("req", Const.NEW_MESSAGE_REQ_VIEW);
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(
+						getApplicationContext(), 0, nIntent, 0);
 
 				Notification notification = new NotificationCompat.Builder(
 						HDStarApp.this).setSmallIcon(R.drawable.ic_launcher)
