@@ -78,5 +78,8 @@
     
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未讀消息，點擊查看</string>
+    
+    <string name="bookmark">收藏</string>
+    <string name="unbookmark">取消收藏</string>
 
 </resources>

@@ -3,48 +3,76 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/torrent_title"
+    <LinearLayout
+        android:id="@+id/icons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/first_class"
-        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/second_class"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/first_class"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_collapse" />
+
+        <ImageView
+            android:id="@+id/sticky"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sticky" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/second_class"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/icons"
+        android:layout_below="@+id/first_class"
+        android:src="@drawable/bd_h264" />
 
     <TextView
         android:id="@+id/torrent_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/second_class"
-        android:layout_alignLeft="@+id/torrent_title"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/second_class"
+        android:layout_below="@+id/torrent_title"
+        android:layout_toLeftOf="@+id/view_torrent"
+        android:layout_toRightOf="@+id/first_class"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ImageView
-        android:id="@+id/expand"
+    <TextView
+        android:id="@+id/torrent_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/arrow_expand" />
-
-    <ImageView
-        android:id="@+id/second_class"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/first_class"
-        android:layout_toRightOf="@+id/expand"
-        android:src="@drawable/c_movie" />
+        android:layout_alignBottom="@+id/first_class"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/view_torrent"
+        android:layout_toRightOf="@+id/second_class"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
         android:id="@+id/first_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/expand"
-        android:src="@drawable/bd_h264" />
+        android:layout_toRightOf="@+id/icons"
+        android:src="@drawable/c_movie" />
+
+    <org.hdstar.widget.LTAButton
+        android:id="@+id/view_torrent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_forward_bg_sel"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 </RelativeLayout>

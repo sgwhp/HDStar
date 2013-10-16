@@ -63,6 +63,12 @@ public class TorrentListFragment extends StackFragment {
 		if (adapter == null) {
 			adapter = new TorrentAdapter(getActivity(), torrents);
 		}
+		init();
+		if (torrents.size() == 0) {
+			refreshView.setRefreshing(false);
+		} else {
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
@@ -125,17 +131,33 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	void fetch() {
-		if (mTask != null) {
-			return;
+		Torrent t;
+		for (int i = 0; i < 20; i++) {
+			t = new Torrent();
+			t.title = "title " + i;
+			t.subtitle = "subtitle " + i;
+			t.bookmark = false;
+			t.comments = i;
+			t.seeders = i;
+			t.leechers = i;
+			t.snatched = i;
+			t.size = i + "GB";
+			t.time = "" + i;
+			t.uploader = "uploader " + i;
+			torrents.add(t);
 		}
-		listView.setSelection(0);
-		DelegateTask<List<Torrent>> task = DelegateTask
-				.newInstance(HDStarApp.cookies);
-		task.attach(refreshCallback);
-		attachTask(task);
-		task.execGet(Const.Urls.SERVER_TORRENTS_URL,
-				new TypeToken<ResponseWrapper<List<Torrent>>>() {
-				}.getType());
+		adapter.notifyDataSetChanged();
+		// if (mTask != null) {
+		// return;
+		// }
+		// listView.setSelection(0);
+		// DelegateTask<List<Torrent>> task = DelegateTask
+		// .newInstance(HDStarApp.cookies);
+		// task.attach(refreshCallback);
+		// attachTask(task);
+		// task.execGet(Const.Urls.SERVER_TORRENTS_URL,
+		// new TypeToken<ResponseWrapper<List<Torrent>>>() {
+		// }.getType());
 	}
 
 	void refresh() {
