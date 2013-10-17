@@ -73,9 +73,9 @@ public class PullToRefreshExpandableListView extends
 				|| null == adapter || adapter.isEmpty()) {
 			super.onRefreshing(doScroll);
 			// return;
+		} else {
+			super.onRefreshing(false);
 		}
-
-		super.onRefreshing(false);
 
 		final LoadingLayout origLoadingView, listViewLoadingView, oppositeListViewLoadingView;
 		final int selection, scrollToY;
