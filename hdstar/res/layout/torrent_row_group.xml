@@ -7,9 +7,9 @@
         android:id="@+id/icons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/second_class"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:orientation="vertical"
         android:gravity="center" >
 
@@ -27,41 +27,44 @@
 
     </LinearLayout>
 
-    <ImageView
+<!--     <ImageView
         android:id="@+id/second_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icons"
         android:layout_below="@+id/first_class"
-        android:src="@drawable/bd_h264" />
+        android:src="@drawable/bd_h264" /> -->
 
     <TextView
         android:id="@+id/torrent_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/second_class"
+        android:layout_alignLeft="@+id/torrent_title"
         android:layout_below="@+id/torrent_title"
         android:layout_toLeftOf="@+id/view_torrent"
-        android:layout_toRightOf="@+id/first_class"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/bd_h264" />
 
     <TextView
         android:id="@+id/torrent_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/first_class"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/view_torrent"
-        android:layout_toRightOf="@+id/second_class"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_toRightOf="@+id/icons"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:drawableLeft="@drawable/c_movie" />
 
+<!-- 
     <ImageView
         android:id="@+id/first_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/icons"
-        android:src="@drawable/c_movie" />
+        android:src="@drawable/c_movie" /> -->
 
     <org.hdstar.widget.LTAButton
         android:id="@+id/view_torrent"

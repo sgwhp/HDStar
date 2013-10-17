@@ -77,11 +77,10 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		// getSupportActionBar().setSplitBackgroundDrawable(bgSplit);
 		// }
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		int selectedPage = 0;
 		stackAdapter = new StackPagerAdapter(getSupportFragmentManager());
 		if (savedInstanceState != null) {
 			int count = savedInstanceState.getInt("pageCount");
-			selectedPage = savedInstanceState.getInt("selectedPage");
+			curPage = savedInstanceState.getInt("selectedPage");
 			Fragment f;
 			for (int i = 0; i < count; i++) {
 				if ((f = getFragment(i)) == null) {
@@ -89,9 +88,10 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 				}
 				stackAdapter.add((StackFragment) f);
 			}
+			stackAdapter.setCurPosition(curPage);
 		}
 		viewPager.setAdapter(stackAdapter);
-		viewPager.setCurrentItem(selectedPage);
+		viewPager.setCurrentItem(curPage);
 
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override

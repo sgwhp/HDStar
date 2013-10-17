@@ -167,17 +167,17 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 	private static class GroupHolder {
 		ImageView expand;
 		ImageView sticky;
-		ImageView freeType;
-		ImageView firstClass;
-		ImageView secondClass;
+//		ImageView freeType;
+//		ImageView firstClass;
+//		ImageView secondClass;
 		TextView title;
 		TextView subtitle;
 
 		GroupHolder(View v) {
 			expand = (ImageView) v.findViewById(R.id.expand);
 			sticky = (ImageView) v.findViewById(R.id.sticky);
-			firstClass = (ImageView) v.findViewById(R.id.first_class);
-			secondClass = (ImageView) v.findViewById(R.id.second_class);
+//			firstClass = (ImageView) v.findViewById(R.id.first_class);
+//			secondClass = (ImageView) v.findViewById(R.id.second_class);
 			title = (TextView) v.findViewById(R.id.torrent_title);
 			title.getPaint().setFakeBoldText(true);
 			subtitle = (TextView) v.findViewById(R.id.torrent_subtitle);

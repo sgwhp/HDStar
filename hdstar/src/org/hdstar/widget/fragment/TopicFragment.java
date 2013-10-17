@@ -49,12 +49,12 @@ public class TopicFragment extends StackFragment {
 
 	public static TopicFragment newInstance(int topicId, int page, String title) {
 		TopicFragment fragment = new TopicFragment();
-		fragment.url = Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId=" + topicId
-				+ "&page=" + page;
 		Bundle args = new Bundle();
 		args.putInt("topicId", topicId);
 		args.putInt("page", page);
 		args.putString("title", title);
+		args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId=" + topicId
+				+ "&page=" + page);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -66,6 +66,7 @@ public class TopicFragment extends StackFragment {
 		topicId = bundle.getInt("topicId");
 		// page = getArguments().getInt("page");
 		title = bundle.getString("title");
+		url = bundle.getString("url");
 	}
 
 	@Override

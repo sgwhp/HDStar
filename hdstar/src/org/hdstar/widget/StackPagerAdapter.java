@@ -119,6 +119,10 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		fragments.get(curPosition).abort();
 		curPosition -= pages;
 	}
+	
+	public void setCurPosition(int curPosition){
+		this.curPosition = curPosition;
+	}
 
 	public int curPosition() {
 		return curPosition;
