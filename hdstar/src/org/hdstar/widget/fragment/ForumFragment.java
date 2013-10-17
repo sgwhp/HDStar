@@ -135,6 +135,11 @@ public class ForumFragment extends StackFragment {
 		listViewState = null;
 	}
 
+	@Override
+	public void refresh() {
+		refreshView.setRefreshing(false);
+	}
+
 	protected void init() {
 		final float dip = this.getResources().getDisplayMetrics().density;
 		final Activity act = getActivity();
@@ -212,7 +217,7 @@ public class ForumFragment extends StackFragment {
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 
-				refresh();
+				doRefresh();
 			}
 		});
 	}
@@ -296,7 +301,7 @@ public class ForumFragment extends StackFragment {
 		page++;
 	}
 
-	void refresh() {
+	private void doRefresh() {
 		refresh = true;
 		if (mTask != null) {
 			mTask.detach();

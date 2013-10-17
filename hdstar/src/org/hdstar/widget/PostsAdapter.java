@@ -34,6 +34,7 @@ public class PostsAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<Post> items;
 	private WeakReference<Context> ref = null;
+
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
 	public PostsAdapter(Context context, List<Post> items) {

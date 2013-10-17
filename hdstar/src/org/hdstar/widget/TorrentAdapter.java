@@ -3,24 +3,31 @@ package org.hdstar.widget;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
+import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Torrent;
+import org.hdstar.task.BaseAsyncTask.TaskCallback;
+import org.hdstar.task.OriginTask;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TorrentAdapter extends BaseExpandableListAdapter {
+	// private Context context;
 	private LayoutInflater inflater;
 	private List<Torrent> torrents;
 	private Drawable bookmarked;
 	private Drawable unbookmark;
 
 	public TorrentAdapter(Context context, List<Torrent> torrents) {
+		// this.context = context;
 		inflater = LayoutInflater.from(context);
 		this.torrents = torrents;
 		bookmarked = context.getResources().getDrawable(
@@ -106,7 +113,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		} else {
 			holder = (ChildHolder) convertView.getTag();
 		}
-		Torrent t = torrents.get(groupPosition);
+		final Torrent t = torrents.get(groupPosition);
 		holder.comments.setText(t.comments + "");
 		holder.time.setText(t.time);
 		holder.size.setText(t.size);
@@ -117,6 +124,34 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			holder.bookmark.setCompoundDrawables(null, unbookmark, null, null);
 			holder.bookmark.setText(R.string.bookmark);
 		}
+		holder.bookmark.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				final OriginTask<Void> task = OriginTask
+						.newInstance(HDStarApp.cookies);
+				task.attach(new TaskCallback<Void>() {
+
+					@Override
+					public void onComplete(Void result) {
+						task.detach();
+						t.bookmark = !t.bookmark;
+						notifyDataSetChanged();
+					}
+
+					@Override
+					public void onCancel() {
+						task.detach();
+					}
+
+					@Override
+					public void onFail(Integer msgId) {
+						task.detach();
+					}
+				});
+				task.execGet(Const.Urls.BOOKMARK_URL + t.id, Void.class);
+			}
+		});
 		holder.seeders.setText(t.seeders + "");
 		holder.leachers.setText(t.leechers + "");
 		holder.snatched.setText(t.snatched + "");

@@ -33,6 +33,8 @@ public class Const {
 		public static final String VIEW_MESSAGE_URL = FORUM_BASE_URL
 				+ "/messages.php?action=viewmessage&id=";
 		public static final String REPLY_PM_URL = BASE_URL + "/takemessage.php";
+		public static final String BOOKMARK_URL = BASE_URL
+				+ "/bookmark.php?torrentid=";
 		public static final String SERVER_ADDRESS = "http://hdstar.ap01.aws.af.cm/";
 		// public static final String SERVER_ADDRESS =
 		// "http://192.168.1.100:8080/HDStarService/";

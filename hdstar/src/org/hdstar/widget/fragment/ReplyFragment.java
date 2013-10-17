@@ -210,7 +210,11 @@ public class ReplyFragment extends StackFragment {
 			// detachTask();
 			Toast.makeText(getActivity(), R.string.reply_succeeded,
 					Toast.LENGTH_SHORT).show();
+			StackFragment f = getStackAdapter().preItem();
 			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
+			if (CustomSetting.autoRefresh) {
+				f.refresh();
+			}
 		}
 
 		@Override

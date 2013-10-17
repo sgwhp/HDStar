@@ -9,6 +9,7 @@ import org.hdstar.widget.fragment.StackFragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -187,7 +188,9 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-//								InitActivity.exitApp(BaseStackActivity.this);
+								// InitActivity.exitApp(BaseStackActivity.this);
+								((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+										.cancelAll();
 								finish();
 							}
 						})
@@ -229,10 +232,11 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (Const.NEW_MESSAGE_ACTION.equals(intent.getAction())) {
-				if(intent.getIntExtra("req", 0) == Const.NEW_MESSAGE_REQ_REFRESH){
+				if (intent.getIntExtra("req", 0) == Const.NEW_MESSAGE_REQ_REFRESH) {
 					refreshMenu();
-				} else if(intent.getIntExtra("req", 0) == Const.NEW_MESSAGE_REQ_VIEW) {
-					Intent nIntent = new Intent(BaseStackActivity.this, MessageActivity.class);
+				} else if (intent.getIntExtra("req", 0) == Const.NEW_MESSAGE_REQ_VIEW) {
+					Intent nIntent = new Intent(BaseStackActivity.this,
+							MessageActivity.class);
 					startActivity(nIntent);
 					finish();
 				}

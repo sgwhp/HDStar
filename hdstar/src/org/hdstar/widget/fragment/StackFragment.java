@@ -48,6 +48,9 @@ public class StackFragment extends Fragment {
 	public void onSelected() {
 	}
 
+	public void refresh() {
+	}
+
 	protected void push(StackFragment f) {
 		getStackAdapter().forward(f);
 		ViewPager vp = getViewPager();

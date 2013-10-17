@@ -11,5 +11,6 @@ public class CustomSetting implements Serializable {
 	public static String device = "Android¿Í»§¶Ë";
 	public static boolean loadImage = true;
 	public static boolean soundOn = true;
+	public static boolean autoRefresh = false;
 
 }

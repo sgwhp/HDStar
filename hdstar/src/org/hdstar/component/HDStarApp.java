@@ -93,7 +93,7 @@ public class HDStarApp extends Application {
 				.showStubImage(R.drawable.url_image_loading)
 				.showImageForEmptyUri(R.drawable.url_image_loading)
 				.showImageOnFail(R.drawable.url_image_failed)
-				.cacheInMemory(true).cacheOnDisc(true)
+				// .cacheInMemory(true).cacheOnDisc(true).build();
 				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 
@@ -104,6 +104,7 @@ public class HDStarApp extends Application {
 		CustomSetting.loadImage = shared.getBoolean("loadImage", true);
 		CustomSetting.soundOn = shared.getBoolean("sound", true);
 		CustomSetting.device = shared.getString("device", CustomSetting.device);
+		CustomSetting.autoRefresh = shared.getBoolean("autoRefresh", false);
 		initImageLoader(context);
 		// initMemoryCache();
 		// File cacheDir = getStorageCacheDir(this, DISK_CACHE_SUBDIR);

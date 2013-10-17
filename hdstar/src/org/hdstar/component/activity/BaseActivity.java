@@ -4,8 +4,8 @@ import org.hdstar.R;
 import org.hdstar.widget.fragment.MenuListFragment;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -73,11 +73,8 @@ public class BaseActivity extends SlidingFragmentActivity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Intent intent = new Intent(BaseActivity.this,
-										InitActivity.class);
-								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-								intent.putExtra("exit", true);
-								startActivity(intent);
+								((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+										.cancelAll();
 								finish();
 							}
 

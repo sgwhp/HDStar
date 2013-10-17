@@ -129,6 +129,11 @@ public class MessageBoxFragment extends StackFragment {
 		listViewState = null;
 	}
 
+	@Override
+	public void refresh() {
+		refreshView.setRefreshing(false);
+	}
+
 	private void init() {
 		refreshView = (PullToRefreshListView) view
 				.findViewById(R.id.messageList);
@@ -152,7 +157,7 @@ public class MessageBoxFragment extends StackFragment {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				refresh();
+				doRefresh();
 			}
 		});
 	}
@@ -171,7 +176,7 @@ public class MessageBoxFragment extends StackFragment {
 		}.getType());
 	}
 
-	void refresh() {
+	private void doRefresh() {
 		if (mTask != null) {
 			mTask.detach();
 			mTask = null;
@@ -257,7 +262,7 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onComplete(Void result) {
 			dialog.dismiss();
-			refresh();
+			doRefresh();
 		}
 
 		@Override

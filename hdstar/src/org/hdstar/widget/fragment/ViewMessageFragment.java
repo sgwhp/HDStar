@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -36,9 +37,10 @@ public class ViewMessageFragment extends StackFragment {
 	private TextView contentTV;
 	private TextView timeTV;
 	private PullToRefreshScrollView refreshView;
+
 	// private LinearLayout loading;
 	// private ProgressBar progress;
-	private TextView message;
+	// private TextView message;
 
 	public static ViewMessageFragment newInstance(int messageId,
 			String subject, String from, String time) {
@@ -75,12 +77,12 @@ public class ViewMessageFragment extends StackFragment {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-				refresh();
+				doRefresh();
 			}
 		});
 		// loading = (LinearLayout) v.findViewById(R.id.loading);
 		// progress = (ProgressBar) v.findViewById(R.id.progressBar);
-		message = (TextView) v.findViewById(R.id.message);
+		// message = (TextView) v.findViewById(R.id.message);
 		return v;
 	}
 
@@ -111,6 +113,11 @@ public class ViewMessageFragment extends StackFragment {
 		reply();
 	}
 
+	@Override
+	public void refresh() {
+		refreshView.setRefreshing(false);
+	}
+
 	private void init() {
 		if (content != null) {
 			// loading.setVisibility(View.GONE);
@@ -119,7 +126,7 @@ public class ViewMessageFragment extends StackFragment {
 		}
 	}
 
-	private void refresh() {
+	private void doRefresh() {
 		if (mTask != null) {
 			mTask.detach();
 			mTask = null;
@@ -157,14 +164,13 @@ public class ViewMessageFragment extends StackFragment {
 		public void onFail(Integer msgId) {
 			// progress.setVisibility(View.GONE);
 			refreshView.onRefreshComplete();
-			message.setText(msgId);
+			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
 			// progress.setVisibility(View.GONE);
 			refreshView.onRefreshComplete();
-			message.setText("");
 		}
 	};
 

@@ -36,6 +36,19 @@
             android:gravity="center_vertical"
             android:text="@string/sound_on" />
         
+        <TextView
+            android:id="@+id/auto_refresh_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="5dip"
+            android:clickable="true"
+            android:layout_below="@+id/textView2"
+            android:background="@drawable/setting_strip_middle_sel"
+            android:gravity="center_vertical"
+            android:text="@string/auto_refresh" />
+        
         <EditText
             android:id="@+id/deviceName"
             android:layout_width="wrap_content"
@@ -44,9 +57,11 @@
             android:layout_alignParentRight="true"
             android:paddingLeft="56dip"
             android:paddingRight="5dp"
-            android:layout_below="@+id/textView2"
+            android:layout_below="@+id/auto_refresh_tag"
             android:background="@drawable/setting_strip_bottom_sel"
-            android:gravity="right|center_vertical" />
+            android:gravity="right|center_vertical"
+            android:inputType="text"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/clearCache"
@@ -88,7 +103,7 @@
             android:clickable="true"
             android:onClick="onClick" />
 
-        <CheckBox
+        <org.hdstar.widget.LTACheckBox
             android:id="@+id/fetchImage"
             style="@style/CustomCheckboxTheme"
             android:layout_width="wrap_content"
@@ -97,7 +112,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" />
 
-        <CheckBox
+        <org.hdstar.widget.LTACheckBox
             android:id="@+id/sound"
             style="@style/CustomCheckboxTheme"
             android:layout_width="wrap_content"
@@ -112,10 +127,19 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/deviceName"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView2"
-            android:paddingLeft="5dip"
+            android:layout_alignTop="@+id/deviceName"
             android:gravity="center_vertical"
+            android:paddingLeft="5dip"
             android:text="@string/device_name_setting_hint" />
+
+        <org.hdstar.widget.LTACheckBox
+            android:id="@+id/auto_refresh"
+            style="@style/CustomCheckboxTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/auto_refresh_tag"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/auto_refresh_tag" />
 
     </RelativeLayout>
 

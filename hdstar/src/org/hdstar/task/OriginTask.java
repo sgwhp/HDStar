@@ -2,6 +2,7 @@ package org.hdstar.task;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -27,6 +28,20 @@ public class OriginTask<T> extends BaseAsyncTask<T> {
 
 	public OriginTask(String cookie, ResponseParser<T> parser) {
 		super(cookie, parser);
+	}
+
+	@Override
+	public void execGet(String url, final Type resultType) {
+		parser = new ResponseParser<T>() {
+			@Override
+			public T parse(HttpResponse res, InputStream in) {
+				if (res.getStatusLine().getStatusCode() == 200) {
+					setMessageId(ResponseParser.SUCCESS_MSG_ID);
+				}
+				return null;
+			}
+		};
+		super.execGet(url, resultType);
 	}
 
 	@Override

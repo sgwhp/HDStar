@@ -12,6 +12,7 @@ import org.hdstar.component.activity.SlidingFragmentActivity;
 import org.hdstar.component.activity.TorrentActivity;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,10 +39,6 @@ public class MenuListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		adapter = new SampleAdapter(getActivity());
-		// for (int i = 0; i < 20; i++) {
-		// adapter.add(new SampleItem("Sample List",
-		// android.R.drawable.ic_menu_search));
-		// }
 		adapter.add(new SampleItem("论坛", R.drawable.menu_forum));
 		adapter.add(new SampleItem("种子", R.drawable.menu_torrent));
 		adapter.add(new SampleItem("远程控制", R.drawable.menu_remote));
@@ -105,7 +102,10 @@ public class MenuListFragment extends ListFragment {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-//								InitActivity.exitApp(getActivity());
+								((NotificationManager) getActivity()
+										.getSystemService(
+												Context.NOTIFICATION_SERVICE))
+										.cancelAll();
 								getActivity().finish();
 							}
 

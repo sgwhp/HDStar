@@ -91,6 +91,11 @@ public class TorrentListFragment extends StackFragment {
 		listViewState = null;
 	}
 
+	@Override
+	public void refresh() {
+		refreshView.setRefreshing(false);
+	}
+
 	void init() {
 		final View footerView = LayoutInflater.from(getActivity()).inflate(
 				R.layout.footer_view, null);
@@ -125,42 +130,26 @@ public class TorrentListFragment extends StackFragment {
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
 
-						refresh();
+						doRefresh();
 					}
 				});
 	}
 
 	void fetch() {
-		Torrent t;
-		for (int i = 0; i < 20; i++) {
-			t = new Torrent();
-			t.title = "title " + i;
-			t.subtitle = "subtitle " + i;
-			t.bookmark = false;
-			t.comments = i;
-			t.seeders = i;
-			t.leechers = i;
-			t.snatched = i;
-			t.size = i + "GB";
-			t.time = "" + i;
-			t.uploader = "uploader " + i;
-			torrents.add(t);
+		if (mTask != null) {
+			return;
 		}
-		adapter.notifyDataSetChanged();
-		// if (mTask != null) {
-		// return;
-		// }
-		// listView.setSelection(0);
-		// DelegateTask<List<Torrent>> task = DelegateTask
-		// .newInstance(HDStarApp.cookies);
-		// task.attach(refreshCallback);
-		// attachTask(task);
-		// task.execGet(Const.Urls.SERVER_TORRENTS_URL,
-		// new TypeToken<ResponseWrapper<List<Torrent>>>() {
-		// }.getType());
+		listView.setSelection(0);
+		DelegateTask<List<Torrent>> task = DelegateTask
+				.newInstance(HDStarApp.cookies);
+		task.attach(refreshCallback);
+		attachTask(task);
+		task.execGet(Const.Urls.SERVER_TORRENTS_URL,
+				new TypeToken<ResponseWrapper<List<Torrent>>>() {
+				}.getType());
 	}
 
-	void refresh() {
+	private void doRefresh() {
 		refresh = true;
 		if (mTask != null) {
 			mTask.detach();
@@ -217,6 +206,22 @@ public class TorrentListFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshView.onRefreshComplete();
+			// Torrent t;
+			// for (int i = 0; i < 20; i++) {
+			// t = new Torrent();
+			// t.title = "title " + i;
+			// t.subtitle = "subtitle " + i;
+			// t.bookmark = false;
+			// t.comments = i;
+			// t.seeders = i;
+			// t.leechers = i;
+			// t.snatched = i;
+			// t.size = i + "GB";
+			// t.time = "" + i;
+			// t.uploader = "uploader " + i;
+			// torrents.add(t);
+			// }
+			// adapter.notifyDataSetChanged();
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 

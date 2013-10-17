@@ -208,7 +208,10 @@ public class NewTopicFragment extends StackFragment {
 			Toast.makeText(getActivity(), R.string.add_topic_succeeded,
 					Toast.LENGTH_SHORT).show();
 			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
-			// getStackAdapter().back();
+			if (CustomSetting.autoRefresh) {
+				StackFragment f = getStackAdapter().preItem();
+				f.refresh();
+			}
 		}
 
 		@Override

@@ -101,7 +101,7 @@ public class TopicFragment extends StackFragment {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				refresh();
+				doRefresh();
 			}
 		});
 		if (adapter.getCount() != 0) {
@@ -144,6 +144,11 @@ public class TopicFragment extends StackFragment {
 		reply(null, null);
 	}
 
+	@Override
+	public void refresh() {
+		refreshView.setRefreshing(false);
+	}
+
 	void fetch() {
 		if (mTask != null) {
 			return;
@@ -157,7 +162,7 @@ public class TopicFragment extends StackFragment {
 		}.getType());
 	}
 
-	void refresh() {
+	private void doRefresh() {
 		if (mTask != null) {
 			mTask.detach();
 			mTask = null;

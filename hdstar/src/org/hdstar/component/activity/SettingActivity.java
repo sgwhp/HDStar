@@ -20,6 +20,7 @@ public class SettingActivity extends BaseActivity {
 	private CheckBox fetchImage;
 	private CheckBox sound;
 	private EditText deviceName;
+	private CheckBox autoRefresh;
 
 	public SettingActivity() {
 		super(R.string.setting);
@@ -31,10 +32,12 @@ public class SettingActivity extends BaseActivity {
 		setContentView(R.layout.setting);
 		fetchImage = (CheckBox) findViewById(R.id.fetchImage);
 		sound = (CheckBox) findViewById(R.id.sound);
+		autoRefresh = (CheckBox) findViewById(R.id.auto_refresh);
 		deviceName = (EditText) findViewById(R.id.deviceName);
 		fetchImage.setChecked(CustomSetting.loadImage);
 		sound.setChecked(CustomSetting.soundOn);
 		deviceName.setText(CustomSetting.device);
+		autoRefresh.setChecked(CustomSetting.autoRefresh);
 	}
 
 	@Override
@@ -51,6 +54,8 @@ public class SettingActivity extends BaseActivity {
 		edit.putBoolean("sound", CustomSetting.soundOn);
 		CustomSetting.device = deviceName.getText().toString();
 		edit.putString("device", CustomSetting.device);
+		CustomSetting.autoRefresh = autoRefresh.isChecked();
+		edit.putBoolean("autoRefresh", CustomSetting.autoRefresh);
 		edit.commit();
 	}
 

@@ -120,6 +120,36 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		curPosition -= pages;
 	}
 
+	public int curPosition() {
+		return curPosition;
+	}
+
+	public StackFragment curItem() {
+		return fragments.get(curPosition);
+	}
+
+	public int prePosition() {
+		return curPosition - 1;
+	}
+
+	public StackFragment preItem() {
+		if (curPosition - 1 >= 0) {
+			return fragments.get(curPosition - 1);
+		}
+		return null;
+	}
+
+	public int nextPosition() {
+		return curPosition + 1;
+	}
+
+	public StackFragment nextItem() {
+		if (curPosition + 1 < fragments.size()) {
+			return fragments.get(curPosition + 1);
+		}
+		return null;
+	}
+
 	public void back(int pages) {
 		curPosition -= pages;
 	}
