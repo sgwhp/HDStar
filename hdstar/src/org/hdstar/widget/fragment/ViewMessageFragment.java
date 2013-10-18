@@ -13,6 +13,7 @@ import org.hdstar.util.URLImageParser;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,13 @@ public class ViewMessageFragment extends StackFragment {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+				String label = DateUtils.formatDateTime(getActivity(),
+						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+								| DateUtils.FORMAT_SHOW_DATE
+								| DateUtils.FORMAT_ABBREV_ALL);
+
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				doRefresh();
 			}
 		});

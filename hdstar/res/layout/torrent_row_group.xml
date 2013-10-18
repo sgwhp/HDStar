@@ -25,6 +25,13 @@
             android:layout_height="wrap_content"
             android:src="@drawable/sticky" />
 
+        <TextView
+            android:id="@+id/free_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textSize="12sp" />
+
     </LinearLayout>
 
 <!--     <ImageView
@@ -44,7 +51,7 @@
         android:layout_toLeftOf="@+id/view_torrent"
         android:textColor="@color/black"
         android:textSize="14sp"
-        android:drawableLeft="@drawable/bd_h264" />
+        android:drawableLeft="@drawable/notallowed" />
 
     <TextView
         android:id="@+id/torrent_title"

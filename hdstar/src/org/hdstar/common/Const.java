@@ -84,6 +84,43 @@ public class Const {
 
 	public static final int[] boxTypes = { 1, -1 };
 
+	/**
+	 * 种子优惠类型
+	 * 
+	 * @author wuhongping
+	 * 
+	 */
+	public static final class FreeType {
+		public static final String FREE = "pro_free";
+		public static final String _2X_FREE = "pro_free2up";
+		public static final String _2X_50_PTC = "pro_50pctdown2up";
+		public static final String _2X = "pro_2up";
+		public static final String _50_PTC = "pro_50pctdown";
+		public static final String _30_PTC = "pro_30pctdown";
+
+		public static String getFreeTag(String freeType) {
+			if (FREE.equals(freeType)) {
+				return "Free";
+			}
+			if (_2X_FREE.equals(freeType)) {
+				return "2xFree";
+			}
+			if ((_2X_50_PTC.equals(freeType))) {
+				return "2x50%";
+			}
+			if (_2X.equals(freeType)) {
+				return "2x";
+			}
+			if (_50_PTC.equals(freeType)) {
+				return "50%";
+			}
+			if (_30_PTC.equals(freeType)) {
+				return "30%";
+			}
+			return "";
+		}
+	}
+
 	public static final int[] DEFAULT_SMILEY_RES_IDS = { R.drawable.yct00,
 			R.drawable.yct01, R.drawable.yct02, R.drawable.yct03,
 			R.drawable.yct04, R.drawable.yct05, R.drawable.yct06,
