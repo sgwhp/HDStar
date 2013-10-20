@@ -70,6 +70,13 @@
         	takes effect when using the 'Rotate' Animation Style.
         -->
         <attr name="ptrRotateDrawableWhilePulling" format="reference|boolean" />
+        
+        <attr name="ptrHeaderPullText" format="reference|string" />
+        <attr name="ptrHeaderReleaseText" format="reference|string" />
+        <attr name="ptrHeaderRefreshingText" format="reference|string" />
+        <attr name="ptrFooterPullText" format="reference|string" />
+        <attr name="ptrFooterReleaseText" format="reference|string" />
+        <attr name="ptrFooterRefreshingText" format="reference|string" />
 
         <!-- BELOW HERE ARE DEPRECEATED. DO NOT USE. -->
         <attr name="ptrAdapterViewBackground" format="reference|color" />

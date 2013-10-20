@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -37,7 +36,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class ForumFragment extends StackFragment {
@@ -51,7 +50,6 @@ public class ForumFragment extends StackFragment {
 	private TopicsAdapter adapter = null;
 	private int forumId = 1;
 	private int page = 1;
-	private boolean refresh = false;
 
 	public static ForumFragment newInstance(String url, int id) {
 		ForumFragment fragment = new ForumFragment();
@@ -205,10 +203,11 @@ public class ForumFragment extends StackFragment {
 		// refresh();
 		// }
 		// });
-		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		refreshView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+			public void onPullDownToRefresh(
+					PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(getActivity(),
 						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
 								| DateUtils.FORMAT_SHOW_DATE
@@ -219,6 +218,13 @@ public class ForumFragment extends StackFragment {
 
 				doRefresh();
 			}
+
+			@Override
+			public void onPullUpToRefresh(
+					PullToRefreshBase<ListView> refreshView) {
+				doNextPageClick(refreshView);
+			}
+
 		});
 	}
 
@@ -250,45 +256,44 @@ public class ForumFragment extends StackFragment {
 	 * @param list
 	 *            新的Topic列表
 	 * */
-	public void updateView(List<Topic> list) {
-		adapter.setList(list);
-		adapter.notifyDataSetChanged();
-		// listView.onRefreshComplete();
-		final Activity act = getActivity();
-		final View footerView = LayoutInflater.from(act).inflate(
-				R.layout.footer_view, null);
-		if (adapter.getCount() != 0) {
-			listView.addFooterView(footerView);
-			footerView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					doNextPageClick(footerView);
-				}
-			});
-		}
-		listView.setSelection(1);
-	}
+	// public void updateView(List<Topic> list) {
+	// adapter.setList(list);
+	// adapter.notifyDataSetChanged();
+	// // listView.onRefreshComplete();
+	// final Activity act = getActivity();
+	// final View footerView = LayoutInflater.from(act).inflate(
+	// R.layout.footer_view, null);
+	// if (adapter.getCount() != 0) {
+	// listView.addFooterView(footerView);
+	// footerView.setOnClickListener(new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	// doNextPageClick(footerView);
+	// }
+	// });
+	// }
+	// listView.setSelection(1);
+	// }
 
 	/** 加载下一页 */
-	public void addNextPage(List<Topic> list) {
-		adapter.itemsAddAll(list);
-		adapter.notifyDataSetChanged();
-		// listView.setSelection(listView.mLastItem - listView.mVisibleItemCount
-		// + 1);
-		// findViewById(R.id.next_page).setVisibility(View.VISIBLE);
-		((TextView) view.findViewById(R.id.loading_next_page_text))
-				.setText(R.string.next_page);
-		view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
-				View.GONE);
-	}
+	// public void addNextPage(List<Topic> list) {
+	// adapter.itemsAddAll(list);
+	// adapter.notifyDataSetChanged();
+	// // listView.setSelection(listView.mLastItem - listView.mVisibleItemCount
+	// // + 1);
+	// // findViewById(R.id.next_page).setVisibility(View.VISIBLE);
+	// ((TextView) view.findViewById(R.id.loading_next_page_text))
+	// .setText(R.string.next_page);
+	// view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
+	// View.GONE);
+	// }
 
 	public void doNextPageClick(final View view) {
-		refresh = false;
-		((TextView) view.findViewById(R.id.loading_next_page_text))
-				.setText(R.string.loading);
-		view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
-				View.VISIBLE);
+		// ((TextView) view.findViewById(R.id.loading_next_page_text))
+		// .setText(R.string.loading);
+		// view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
+		// View.VISIBLE);
 		// mTask.detach();
 		DelegateTask<List<Topic>> task = new DelegateTask<List<Topic>>(
 				HDStarApp.cookies);
@@ -298,11 +303,9 @@ public class ForumFragment extends StackFragment {
 				+ "&page=" + page,
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
 				}.getType());
-		page++;
 	}
 
 	private void doRefresh() {
-		refresh = true;
 		if (mTask != null) {
 			mTask.detach();
 			mTask = null;
@@ -316,10 +319,9 @@ public class ForumFragment extends StackFragment {
 		public void onComplete(List<Topic> list) {
 			// mTask.detach();
 			// listView.onRefreshComplete();
+			page = 1;
 			refreshView.onRefreshComplete();
-			if (refresh) {
-				adapter.clearItems();
-			}
+			adapter.clearItems();
 			adapter.itemsAddAll(list);
 			if (adapter.getCount() != 0) {
 				final Activity act = getActivity();
@@ -363,13 +365,19 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Topic> list) {
 			// mTask.detach();
+			page++;
 			refreshView.onRefreshComplete();
-			adapter.itemsAddAll((ArrayList<Topic>) list);
-			adapter.notifyDataSetChanged();
-			((TextView) view.findViewById(R.id.loading_next_page_text))
-					.setText(R.string.next_page);
-			view.findViewById(R.id.loading_next_page_progressBar)
-					.setVisibility(View.GONE);
+			if (list.size() > 0) {
+				adapter.itemsAddAll((ArrayList<Topic>) list);
+				adapter.notifyDataSetChanged();
+			} else {
+				Toast.makeText(getActivity(), R.string.no_more_data,
+						Toast.LENGTH_SHORT).show();
+			}
+			// ((TextView) view.findViewById(R.id.loading_next_page_text))
+			// .setText(R.string.next_page);
+			// view.findViewById(R.id.loading_next_page_progressBar)
+			// .setVisibility(View.GONE);
 		}
 
 		@Override
@@ -377,10 +385,10 @@ public class ForumFragment extends StackFragment {
 			// listView.onRefreshComplete();
 			// mTask.detach();
 			refreshView.onRefreshComplete();
-			((TextView) view.findViewById(R.id.loading_next_page_text))
-					.setText(R.string.next_page);
-			view.findViewById(R.id.loading_next_page_progressBar)
-					.setVisibility(View.GONE);
+			// ((TextView) view.findViewById(R.id.loading_next_page_text))
+			// .setText(R.string.next_page);
+			// view.findViewById(R.id.loading_next_page_progressBar)
+			// .setVisibility(View.GONE);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 

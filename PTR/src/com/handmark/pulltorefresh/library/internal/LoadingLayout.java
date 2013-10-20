@@ -92,9 +92,21 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 				lp.gravity = scrollDirection == Orientation.VERTICAL ? Gravity.TOP : Gravity.LEFT;
 
 				// Load in labels
-				mPullLabel = context.getString(R.string.pull_to_refresh_from_bottom_pull_label);
-				mRefreshingLabel = context.getString(R.string.pull_to_refresh_from_bottom_refreshing_label);
-				mReleaseLabel = context.getString(R.string.pull_to_refresh_from_bottom_release_label);
+				if(attrs.hasValue(R.styleable.PullToRefresh_ptrFooterPullText)){
+					mPullLabel = attrs.getString(R.styleable.PullToRefresh_ptrFooterPullText);
+				} else{
+					mPullLabel = context.getString(R.string.pull_to_refresh_from_bottom_pull_label);
+				}
+				if(attrs.hasValue(R.styleable.PullToRefresh_ptrFooterRefreshingText)){
+					mRefreshingLabel = attrs.getString(R.styleable.PullToRefresh_ptrFooterRefreshingText);
+				} else{
+					mRefreshingLabel = context.getString(R.string.pull_to_refresh_from_bottom_refreshing_label);
+				}
+				if(attrs.hasValue(R.styleable.PullToRefresh_ptrFooterReleaseText)){
+					mReleaseLabel = attrs.getString(R.styleable.PullToRefresh_ptrFooterReleaseText);
+				} else {
+					mReleaseLabel = context.getString(R.string.pull_to_refresh_from_bottom_release_label);
+				}
 				break;
 
 			case PULL_FROM_START:
@@ -102,9 +114,21 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 				lp.gravity = scrollDirection == Orientation.VERTICAL ? Gravity.BOTTOM : Gravity.RIGHT;
 
 				// Load in labels
-				mPullLabel = context.getString(R.string.pull_to_refresh_pull_label);
-				mRefreshingLabel = context.getString(R.string.pull_to_refresh_refreshing_label);
-				mReleaseLabel = context.getString(R.string.pull_to_refresh_release_label);
+				if(attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderPullText)){
+					mPullLabel = attrs.getString(R.styleable.PullToRefresh_ptrHeaderPullText);
+				} else{
+					mPullLabel = context.getString(R.string.pull_to_refresh_pull_label);
+				}
+				if(attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderRefreshingText)){
+					mRefreshingLabel = attrs.getString(R.styleable.PullToRefresh_ptrHeaderRefreshingText);
+				} else{
+					mRefreshingLabel = context.getString(R.string.pull_to_refresh_refreshing_label);
+				}
+				if(attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderReleaseText)){
+					mReleaseLabel = attrs.getString(R.styleable.PullToRefresh_ptrHeaderReleaseText);
+				} else {
+					mReleaseLabel = context.getString(R.string.pull_to_refresh_release_label);
+				}
 				break;
 		}
 

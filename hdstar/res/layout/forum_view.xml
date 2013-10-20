@@ -16,6 +16,9 @@
         android:headerDividersEnabled="false"
         ptr:ptrHeaderBackground="@android:color/darker_gray"
         ptr:ptrHeaderTextColor="@android:color/white"
-        ptr:ptrAnimationStyle="flip" />
+        ptr:ptrFooterPullText="@string/pull_to_add_next_page"
+        ptr:ptrFooterReleaseText="@string/release_to_add_next_page"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrMode="both" />
 
 </LinearLayout>

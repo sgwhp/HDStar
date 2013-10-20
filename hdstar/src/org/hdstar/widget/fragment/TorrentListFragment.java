@@ -13,6 +13,7 @@ import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.TorrentAdapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -22,13 +23,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
 public class TorrentListFragment extends StackFragment {
@@ -39,7 +39,6 @@ public class TorrentListFragment extends StackFragment {
 	private TorrentAdapter adapter;
 	private List<Torrent> torrents = new ArrayList<Torrent>();
 	private int page = 1;
-	private boolean refresh = false;
 
 	public static TorrentListFragment newInstance() {
 		TorrentListFragment f = new TorrentListFragment();
@@ -56,6 +55,7 @@ public class TorrentListFragment extends StackFragment {
 		return view;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -97,28 +97,16 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	void init() {
-		final View footerView = LayoutInflater.from(getActivity()).inflate(
-				R.layout.footer_view, null);
-		if (torrents.size() != 0) {
-			listView.addFooterView(footerView);
-			footerView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					doNextPageClick(footerView);
-				}
-			});
-		}
 		listView.setAdapter(adapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
 		}
 
 		refreshView
-				.setOnRefreshListener(new OnRefreshListener<ExpandableListView>() {
+				.setOnRefreshListener(new OnRefreshListener2<ExpandableListView>() {
 
 					@Override
-					public void onRefresh(
+					public void onPullDownToRefresh(
 							PullToRefreshBase<ExpandableListView> refreshView) {
 						String label = DateUtils.formatDateTime(getActivity(),
 								System.currentTimeMillis(),
@@ -132,6 +120,13 @@ public class TorrentListFragment extends StackFragment {
 
 						doRefresh();
 					}
+
+					@Override
+					public void onPullUpToRefresh(
+							PullToRefreshBase<ExpandableListView> refreshView) {
+						doNextPageClick(refreshView);
+					}
+
 				});
 	}
 
@@ -150,7 +145,6 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	private void doRefresh() {
-		refresh = true;
 		if (mTask != null) {
 			mTask.detach();
 			mTask = null;
@@ -159,29 +153,26 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	public void doNextPageClick(final View view) {
-		refresh = false;
-		((TextView) view.findViewById(R.id.loading_next_page_text))
-				.setText(R.string.loading);
-		view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
-				View.VISIBLE);
+		// ((TextView) view.findViewById(R.id.loading_next_page_text))
+		// .setText(R.string.loading);
+		// view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
+		// View.VISIBLE);
 		DelegateTask<List<Torrent>> task = new DelegateTask<List<Torrent>>(
 				HDStarApp.cookies);
 		task.attach(addCallback);
 		attachTask(task);
-		task.execGet(Const.Urls.SERVER_TORRENTS_URL + "&page=" + page,
+		task.execGet(Const.Urls.SERVER_TORRENTS_URL + "?page=" + page,
 				new TypeToken<ResponseWrapper<List<Torrent>>>() {
 				}.getType());
-		page++;
 	}
 
 	TaskCallback<List<Torrent>> refreshCallback = new TaskCallback<List<Torrent>>() {
 
 		@Override
 		public void onComplete(List<Torrent> list) {
+			page = 1;
 			refreshView.onRefreshComplete();
-			if (refresh) {
-				torrents.clear();
-			}
+			torrents.clear();
 			torrents.addAll(list);
 			if (torrents.size() != 0) {
 				final Activity act = getActivity();
@@ -206,22 +197,6 @@ public class TorrentListFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshView.onRefreshComplete();
-			// Torrent t;
-			// for (int i = 0; i < 20; i++) {
-			// t = new Torrent();
-			// t.title = "title " + i;
-			// t.subtitle = "subtitle " + i;
-			// t.bookmark = false;
-			// t.comments = i;
-			// t.seeders = i;
-			// t.leechers = i;
-			// t.snatched = i;
-			// t.size = i + "GB";
-			// t.time = "" + i;
-			// t.uploader = "uploader " + i;
-			// torrents.add(t);
-			// }
-			// adapter.notifyDataSetChanged();
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
@@ -235,22 +210,28 @@ public class TorrentListFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Torrent> list) {
+			page++;
 			refreshView.onRefreshComplete();
-			torrents.addAll((ArrayList<Torrent>) list);
-			adapter.notifyDataSetChanged();
-			((TextView) view.findViewById(R.id.loading_next_page_text))
-					.setText(R.string.next_page);
-			view.findViewById(R.id.loading_next_page_progressBar)
-					.setVisibility(View.GONE);
+			if (list.size() > 0) {
+				torrents.addAll((ArrayList<Torrent>) list);
+				adapter.notifyDataSetChanged();
+			} else {
+				Toast.makeText(getActivity(), R.string.no_more_data,
+						Toast.LENGTH_SHORT).show();
+			}
+			// ((TextView) view.findViewById(R.id.loading_next_page_text))
+			// .setText(R.string.next_page);
+			// view.findViewById(R.id.loading_next_page_progressBar)
+			// .setVisibility(View.GONE);
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
 			refreshView.onRefreshComplete();
-			((TextView) view.findViewById(R.id.loading_next_page_text))
-					.setText(R.string.next_page);
-			view.findViewById(R.id.loading_next_page_progressBar)
-					.setVisibility(View.GONE);
+			// ((TextView) view.findViewById(R.id.loading_next_page_text))
+			// .setText(R.string.next_page);
+			// view.findViewById(R.id.loading_next_page_progressBar)
+			// .setVisibility(View.GONE);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 

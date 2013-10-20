@@ -7,15 +7,18 @@
 	<string name="login">登錄</string>
 	<string name="security_code">驗證碼</string>
 	<string name="next_page">下一頁</string>
-	<string name="loading">加載中...</string>
-    <string name="pull_to_refresh_pull_label">下拉可刷新...</string>
-    <string name="pull_to_refresh_release_label">鬆開可刷新...</string>
-    <string name="pull_to_refresh_refreshing_label">正在刷新...</string>
-    <string name="pull_to_refresh_tap_label">點擊可刷新...</string>
+	<string name="loading">加載中…</string>
+    <string name="pull_to_refresh_pull_label">下拉可刷新…</string>
+    <string name="pull_to_refresh_release_label">鬆開可刷新…</string>
+    <string name="pull_to_refresh_refreshing_label">正在刷新…</string>
+    <string name="pull_to_refresh_tap_label">點擊可刷新…</string>
+    <string name="pull_to_add_next_page">上拉可添加下一頁…</string>
+    <string name="release_to_add_next_page">鬆開可添加下一頁…</string>
+    <string name="no_more_data">沒有更多數據</string>
     <string name="subject">主題</string>
     <string name="body">正文</string>
     <string name="loaded">數據已更新</string>
-    <string name="get_security_code">正在獲取驗證碼...</string>
+    <string name="get_security_code">正在獲取驗證碼…</string>
     <string name="failed_to_download_security_code">獲取驗證碼失敗，請重試</string>
     <string name="exit">退出</string>
     <string name="exit_message">確定退出？</string>
@@ -26,7 +29,7 @@
     <string name="input_security_code">請輸入驗證碼</string>
     <string name="log_out">註銷</string>
     <string name="refresh">刷新</string>
-    <string name="try_to_login">正在嘗試登錄...</string>
+    <string name="try_to_login">正在嘗試登錄…</string>
     <string name="login_failed">登錄失敗，請重試</string>
     <string name="login_error">登錄失敗，確認帳號、密碼及驗證碼無誤后再重試</string>
     
@@ -51,7 +54,7 @@
     <string name="music">音樂</string>
     
     <string name="delete">刪除</string>
-    <string name="deleting">正在刪除...</string>
+    <string name="deleting">正在刪除…</string>
     <string name="markAsRead">標記為已讀</string>
     
     <string name="forum_settings">論壇設定</string>

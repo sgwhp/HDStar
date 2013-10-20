@@ -7,15 +7,18 @@
 	<string name="login">Login</string>
 	<string name="security_code">captcha</string>
 	<string name="next_page">Next Page</string>
-	<string name="loading">Loading...</string>
-	<string name="pull_to_refresh_pull_label">Pull to refresh...</string>
-	<string name="pull_to_refresh_release_label">Release to refresh...</string>
-	<string name="pull_to_refresh_refreshing_label">Loading...</string>
-	<string name="pull_to_refresh_tap_label">Tap to refresh...</string>
+	<string name="loading">Loading…</string>
+	<string name="pull_to_refresh_pull_label">Pull to refresh…</string>
+	<string name="pull_to_refresh_release_label">Release to refresh…</string>
+	<string name="pull_to_refresh_refreshing_label">Loading…</string>
+	<string name="pull_to_refresh_tap_label">Tap to refresh…</string>
+    <string name="pull_to_add_next_page">Pull to add next page…</string>
+    <string name="release_to_add_next_page">release to add next page…</string>
+    <string name="no_more_data">No more data</string>
 	<string name="subject">subject</string>
 	<string name="body">body</string>
     <string name="loaded">Update completed</string>
-    <string name="get_security_code">Fetching the security code...</string>
+    <string name="get_security_code">Fetching the security code…</string>
     <string name="failed_to_download_security_code">Failed. Try again latter</string>
     <string name="exit">exit</string>
     <string name="exit_message">sure to exit?</string>
@@ -26,14 +29,14 @@
     <string name="input_security_code">The security code is empty!</string>
     <string name="log_out">logout</string>
     <string name="refresh">refresh</string>
-    <string name="try_to_login">try to login...</string>
+    <string name="try_to_login">try to login…</string>
     <string name="login_failed">Login failed. Try again latter</string>
     <string name="login_error">Login failed. Please make sure ur account, password and security number are correct.</string>
     <string name="reply">reply</string>
     <string name="new_topic">new topic</string>
     <string name="body_is_empty">The body is empty!</string>
     <string name="subject_is_empty">The subject is empty!</string>
-    <string name="topic_is_adding">Topic is adding...</string>
+    <string name="topic_is_adding">Topic is adding…</string>
     <string name="add_topic_failed">Add topic failed. Try again latter</string>
     <string name="add_topic_succeeded">completed</string>
     <string name="reply_is_empty">The reply content is empty!</string>
@@ -50,7 +53,7 @@
     <string name="music">Music</string>
     
     <string name="delete">delete</string>
-    <string name="deleting">processing delete request...</string>
+    <string name="deleting">processing delete request…</string>
     <string name="markAsRead">mark as read</string>
     
     <string name="forum_settings">Forum Settings</string>
