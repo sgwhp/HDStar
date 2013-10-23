@@ -14,13 +14,11 @@ import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.TorrentAdapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
@@ -174,21 +172,21 @@ public class TorrentListFragment extends StackFragment {
 			refreshView.onRefreshComplete();
 			torrents.clear();
 			torrents.addAll(list);
-			if (torrents.size() != 0) {
-				final Activity act = getActivity();
-				final View footerView = LayoutInflater.from(act).inflate(
-						R.layout.footer_view, null);
-				if (listView.getFooterViewsCount() == 0) {
-					listView.addFooterView(footerView);
-					footerView.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							doNextPageClick(footerView);
-						}
-					});
-				}
-			}
+//			if (torrents.size() != 0) {
+//				final Activity act = getActivity();
+//				final View footerView = LayoutInflater.from(act).inflate(
+//						R.layout.footer_view, null);
+//				if (listView.getFooterViewsCount() == 0) {
+//					listView.addFooterView(footerView);
+//					footerView.setOnClickListener(new OnClickListener() {
+//
+//						@Override
+//						public void onClick(View v) {
+//							doNextPageClick(footerView);
+//						}
+//					});
+//				}
+//			}
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());
