@@ -12,7 +12,7 @@ import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
-import org.hdstar.widget.PostsAdapter;
+import org.hdstar.widget.PostAdapter;
 import org.jsoup.Jsoup;
 
 import android.os.Bundle;
@@ -41,7 +41,7 @@ public class TopicFragment extends StackFragment {
 	private int topicId;
 	private String title = "";
 	// private int page = 0;
-	private PostsAdapter adapter = null;
+	private PostAdapter adapter = null;
 	private boolean pauseOnScroll = false;
 	private boolean pauseOnFling = true;
 
@@ -79,7 +79,7 @@ public class TopicFragment extends StackFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (adapter == null) {
-			adapter = new PostsAdapter(getActivity(), new ArrayList<Post>());
+			adapter = new PostAdapter(getActivity(), new ArrayList<Post>());
 		}
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {

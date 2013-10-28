@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
@@ -46,7 +47,6 @@ public class URLImageParser implements ImageGetter {
 		try {
 			URLEncoder.encode(source, Const.CHARSET);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<Bitmap> list = null;
@@ -78,15 +78,36 @@ public class URLImageParser implements ImageGetter {
 						if (loadedImage != null) {
 							urlDrawable.setDrawable(new BitmapDrawable(c
 									.getResources(), loadedImage));
-							// urlDrawable.drawable.setBounds(0, 0,
-							// 0 + urlDrawable.drawable
-							// .getIntrinsicWidth(),
-							// 0 + urlDrawable.drawable
-							// .getIntrinsicHeight());
+							// 可以解决图片载入后重叠的问题，但是textview会被设定死了高度
+							// container.setHeight(container.getHeight()
+							// + drawable.getIntrinsicHeight());
+							// container.setEllipsize(null);
+							container.requestLayout();
 							URLImageParser.this.container.invalidate();
 
-							// URLImageParser.this.container.setText(container.getText());
+							URLImageParser.this.container.setText(container
+									.getText());
 						}
+					}
+
+					// @Override
+					// public void onLoadingCancelled(String imageUri, View
+					// view) {
+					// super.onLoadingCancelled(imageUri, view);
+					// Log.v("whp", (imageUri + " load image canceled"));
+					// }
+
+					@Override
+					public void onLoadingFailed(String imageUri, View view,
+							FailReason failReason) {
+						urlDrawable.setDrawable(c.getResources().getDrawable(
+								R.drawable.url_image_failed));
+						container.requestLayout();
+						URLImageParser.this.container.invalidate();
+
+						URLImageParser.this.container.setText(container
+								.getText());
+						// Log.v("whp", imageUri + " load image failed");
 					}
 				});
 

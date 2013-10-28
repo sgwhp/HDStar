@@ -21,8 +21,10 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,14 +32,14 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
-public class PostsAdapter extends BaseAdapter {
+public class PostAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<Post> items;
 	private WeakReference<Context> ref = null;
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
-	public PostsAdapter(Context context, List<Post> items) {
+	public PostAdapter(Context context, List<Post> items) {
 		inflater = LayoutInflater.from(context);
 		ref = new WeakReference<Context>(context);
 		this.items = items;
@@ -99,6 +101,8 @@ public class PostsAdapter extends BaseAdapter {
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
 				p.userClassSrc, (Context) ref.get()));
 		if (CustomSetting.loadImage) {
+			holder.main.setLayoutParams(new LinearLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			holder.main.setText(Html.fromHtml(p.body, new URLImageParser(
 					holder.main, ref.get()), null));
 			try {
