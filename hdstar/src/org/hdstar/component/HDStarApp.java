@@ -93,7 +93,7 @@ public class HDStarApp extends Application {
 				.showStubImage(R.drawable.url_image_loading)
 				.showImageForEmptyUri(R.drawable.url_image_loading)
 				.showImageOnFail(R.drawable.url_image_failed)
-				// .cacheInMemory(true).cacheOnDisc(true).build();
+				.cacheInMemory(true).cacheOnDisc(true)
 				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 

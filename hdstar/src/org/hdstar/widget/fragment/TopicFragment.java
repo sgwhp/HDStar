@@ -42,6 +42,7 @@ public class TopicFragment extends StackFragment {
 	private String title = "";
 	// private int page = 0;
 	private PostAdapter adapter = null;
+
 	private boolean pauseOnScroll = false;
 	private boolean pauseOnFling = true;
 
@@ -53,8 +54,8 @@ public class TopicFragment extends StackFragment {
 		args.putInt("topicId", topicId);
 		args.putInt("page", page);
 		args.putString("title", title);
-		args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId=" + topicId
-				+ "&page=" + page);
+		args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId="
+				+ topicId + "&page=" + page);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -110,7 +111,6 @@ public class TopicFragment extends StackFragment {
 			listView.setSelection(1);
 		} else {
 			refreshView.setRefreshing(false);
-			// fetch();
 		}
 	}
 

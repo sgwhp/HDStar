@@ -40,10 +40,14 @@ public class URLImageParser implements ImageGetter {
 	}
 
 	public Drawable getDrawable(String source) {
-		if (!source.startsWith("http://")) {
-			source = Const.Urls.BASE_URL + "/" + source;
+		if (source.startsWith("pic/smilies/")) {
+			source = "assets://" + source;
+		} else if (!source.startsWith("http://")) {
+			source = Const.Urls.SERVER_GET_IMAGE_URL + Const.Urls.BASE_URL
+					+ "/" + source;
+		} else {
+			source = Const.Urls.SERVER_GET_IMAGE_URL + source;
 		}
-		source = Const.Urls.SERVER_GET_IMAGE_URL + source;
 		try {
 			URLEncoder.encode(source, Const.CHARSET);
 		} catch (UnsupportedEncodingException e) {
