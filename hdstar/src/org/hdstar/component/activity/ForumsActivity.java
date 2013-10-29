@@ -27,8 +27,8 @@ public class ForumsActivity extends BaseStackActivity implements
 
 		if (savedInstanceState == null) {
 			curTab = 0;
-			stackAdapter.fragments.add(ForumFragment.newInstance(
-					Const.Urls.CHAT_ROOM_URL, Const.forumIds[0]));
+			stackAdapter.fragments.add(ForumFragment
+					.newInstance(Const.Urls.CHAT_ROOM_URL));
 		} else {
 			curTab = savedInstanceState.getInt("curForum");
 		}
@@ -52,9 +52,8 @@ public class ForumsActivity extends BaseStackActivity implements
 		if (itemPosition != curTab) {
 			curTab = itemPosition;
 			stackAdapter.clear();
-			stackAdapter.forward(ForumFragment.newInstance(
-					Const.Urls.FORUM_URLS[itemPosition],
-					Const.forumIds[itemPosition]));
+			stackAdapter.forward(ForumFragment
+					.newInstance(Const.Urls.FORUM_URLS[itemPosition]));
 		}
 		return true;
 	}

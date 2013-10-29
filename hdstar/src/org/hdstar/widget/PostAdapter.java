@@ -12,6 +12,7 @@ import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Post;
+import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.URLImageParser;
 import org.hdstar.util.UserClassImageGetter;
 
@@ -21,10 +22,8 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -101,10 +100,12 @@ public class PostAdapter extends BaseAdapter {
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
 				p.userClassSrc, (Context) ref.get()));
 		if (CustomSetting.loadImage) {
-			holder.main.setLayoutParams(new LinearLayout.LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			holder.main.setText(Html.fromHtml(p.body, new URLImageParser(
 					holder.main, ref.get()), null));
+			holder.main.setMovementMethod(CustomLinkMovementMethod
+					.getInstance());
+			holder.main.setFocusable(false);
+			holder.main.setFocusableInTouchMode(false);
 			try {
 				ImageLoader.getInstance()
 						.displayImage(

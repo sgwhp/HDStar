@@ -2,6 +2,8 @@ package org.hdstar.widget.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
@@ -51,13 +53,20 @@ public class ForumFragment extends StackFragment {
 	private int forumId = 1;
 	private int page = 1;
 
-	public static ForumFragment newInstance(String url, int id) {
-		ForumFragment fragment = new ForumFragment();
-		Bundle args = new Bundle();
-		args.putString("url", url);
-		args.putInt("id", id);
-		fragment.setArguments(args);
-		return fragment;
+	public static ForumFragment newInstance(String url) {
+		Pattern pattern = Pattern.compile("forumid=([0-9]+)");
+		Matcher matcher = pattern.matcher(url);
+		if (matcher.find()) {
+			int id = Integer.parseInt(matcher.group(1));
+			ForumFragment fragment = new ForumFragment();
+			Bundle args = new Bundle();
+			args.putString("url", url);
+			args.putInt("id", id);
+			fragment.setArguments(args);
+			return fragment;
+		} else {
+			throw new IllegalArgumentException("url must contains forumid");
+		}
 	}
 
 	@Override
@@ -323,21 +332,21 @@ public class ForumFragment extends StackFragment {
 			refreshView.onRefreshComplete();
 			adapter.clearItems();
 			adapter.itemsAddAll(list);
-//			if (adapter.getCount() != 0) {
-//				final Activity act = getActivity();
-//				final View footerView = LayoutInflater.from(act).inflate(
-//						R.layout.footer_view, null);
-//				if (listView.getFooterViewsCount() == 0) {
-//					listView.addFooterView(footerView);
-//					footerView.setOnClickListener(new OnClickListener() {
-//
-//						@Override
-//						public void onClick(View v) {
-//							doNextPageClick(footerView);
-//						}
-//					});
-//				}
-//			}
+			// if (adapter.getCount() != 0) {
+			// final Activity act = getActivity();
+			// final View footerView = LayoutInflater.from(act).inflate(
+			// R.layout.footer_view, null);
+			// if (listView.getFooterViewsCount() == 0) {
+			// listView.addFooterView(footerView);
+			// footerView.setOnClickListener(new OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View v) {
+			// doNextPageClick(footerView);
+			// }
+			// });
+			// }
+			// }
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());

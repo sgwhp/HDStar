@@ -80,7 +80,7 @@ public class Const {
 	public static final int NEW_MESSAGE_REQ_REFRESH = 1;
 	public static final int NEW_MESSAGE_REQ_VIEW = 2;
 
-	public static final int[] forumIds = { 1, 2, 11, 9 };
+	// public static final int[] forumIds = { 1, 2, 11, 9 };
 
 	public static final int[] boxTypes = { 1, -1 };
 
