@@ -1,8 +1,11 @@
 package org.hdstar.common;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.hdstar.R;
+
+import android.os.Environment;
 
 public class Const {
 	public static final class Urls {
@@ -66,6 +69,7 @@ public class Const {
 				+ "haveNewMsg";
 		public static final String SERVER_TORRENTS_URL = SERVER_ADDRESS
 				+ "torrents";
+		public static final String SERVER_DOWNLOAD_URL = SERVER_ADDRESS + "download";
 	}
 
 	public final class ResponseCode {
@@ -75,6 +79,7 @@ public class Const {
 	public static final String CHARSET = "UTF-8";
 
 	public static final String SHARED_PREFS = "setting";
+	public static final String DOWNLOAD_DIR = Environment.getExternalStorageDirectory().getPath() + File.separator + "download";
 
 	public static final String NEW_MESSAGE_ACTION = "org.hdstar.NEW_MESSAGE";
 	public static final int NEW_MESSAGE_REQ_REFRESH = 1;
