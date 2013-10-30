@@ -85,4 +85,9 @@
     
     <string name="bookmark">bookmark</string>
     <string name="unbookmark">unbookmark</string>
+    
+    <string name="download_complete">Download complete</string>
+    <string name="app_version_tag">version: </string>
+    <string name="app_size_tag">size: </string>
+    <string name="update_date_tag">update date: </string>
 </resources>

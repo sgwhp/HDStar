@@ -102,5 +102,10 @@
     
     <string name="bookmark">收藏</string>
     <string name="unbookmark">取消收藏</string>
+    
+    <string name="download_complete">下载完毕，点击安装</string>
+    <string name="app_version_tag">版本：</string>
+    <string name="app_size_tag">大小：</string>
+    <string name="update_date_tag">更新：</string>
 
 </resources>

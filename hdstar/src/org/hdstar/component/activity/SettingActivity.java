@@ -3,6 +3,7 @@ package org.hdstar.component.activity;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
+import org.hdstar.component.DownloadService;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.SoundPoolManager;
@@ -74,6 +75,15 @@ public class SettingActivity extends BaseActivity {
 			break;
 		case R.id.clearCache:
 			ImageLoader.getInstance().clearDiscCache();
+			break;
+		case R.id.checkUpdate:
+			Intent dlIntent = new Intent(this, DownloadActivity.class);
+			startActivity(dlIntent);
+			dlIntent = new Intent(this, DownloadService.class);
+			dlIntent.putExtra("command", DownloadService.COMMAND_DOWNLOAD_ADD);
+			dlIntent.putExtra("appCode", 1);
+			dlIntent.putExtra("isPatch", false);
+			this.startService(dlIntent);
 			break;
 		}
 	}
