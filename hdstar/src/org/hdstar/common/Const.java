@@ -78,7 +78,8 @@ public class Const {
 
 	public static final String CHARSET = "UTF-8";
 
-	public static final String SHARED_PREFS = "setting";
+	public static final String SETTING_SHARED_PREFS = "setting";
+	public static final String DOWNLOAD_SHARED_PREFS = "download";
 	public static final String DOWNLOAD_DIR = Environment.getExternalStorageDirectory().getPath() + File.separator + "download";
 
 	public static final String NEW_MESSAGE_ACTION = "org.hdstar.NEW_MESSAGE";

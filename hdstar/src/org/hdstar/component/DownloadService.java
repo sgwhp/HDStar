@@ -79,7 +79,7 @@ public class DownloadService extends Service {
 			pause();
 			break;
 		case COMMAND_DOWNLOAD_STOP:
-			pause();
+			stop();
 			break;
 		case COMMAND_DOWNLOAD_EXIT:
 			stopSelf();
@@ -116,7 +116,7 @@ public class DownloadService extends Service {
 	/**
 	 * 停止一个下载任务
 	 */
-	void stop(int id) {
+	void stop() {
 		if (task != null) {
 			task.pauseNDelete();
 		}
@@ -205,6 +205,9 @@ public class DownloadService extends Service {
 			RandomAccessFile file = null;
 			updateStatus(DOWNLOAD_STATUS_RUNNING);
 			HttpClient client = null;
+			SharedPreferences shared = DownloadService.this
+					.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
+			Editor editor = shared.edit();
 			try {
 				File dir = new File(Const.DOWNLOAD_DIR);
 				if (!dir.exists()) {
@@ -215,10 +218,8 @@ public class DownloadService extends Service {
 				// + appCode + "patch=" + isPatch);
 				get = new HttpGet(
 						"http://10.10.28.113:8084/HDStarService/download?appCode=1&appVersion=164");
-				SharedPreferences shared = DownloadService.this
-						.getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE);
 				if (!isNew) {
-					fileName = shared.getString("downloadFile", null);
+					fileName = shared.getString("fileName", null);
 					if (fileName != null) {
 						file = new RandomAccessFile(dir.getAbsolutePath()
 								+ File.separator + fileName, "rwd");
@@ -230,6 +231,8 @@ public class DownloadService extends Service {
 				HttpResponse response = client.execute(get);
 				size = Long.parseLong(response.getFirstHeader("Content-Length")
 						.getValue());
+				editor.putLong("size", size);
+				editor.commit();
 				Intent intent = new Intent(ACTION_DOWNLOAD_STATUS_CHANGED);
 				intent.putExtra("status", DOWNLOAD_STATUS_START);
 				intent.putExtra("size", size);
@@ -240,7 +243,6 @@ public class DownloadService extends Service {
 							.getValue();
 					fileName = fileName
 							.substring(fileName.indexOf("filename=") + 10);
-					Editor editor = shared.edit();
 					editor.putString("downloadFile", fileName);
 					editor.commit();
 				}
@@ -270,14 +272,20 @@ public class DownloadService extends Service {
 			} finally {
 				IOUtils.closeInputStreamIgnoreExceptions(in);
 				IOUtils.closeFileIgnoreExceptions(file);
+				editor.putLong("completeSize", startPos);
 				if (startPos == size) {
+					editor.putInt("status", DOWNLOAD_STATUS_FINISHED);
+					editor.commit();
 					finishDownload(this, true);
 				} else if (paused) {
+					editor.putInt("status", DOWNLOAD_STATUS_PAUSED);
+					editor.commit();
 					DownloadService.this.pause();
 				} else {
+					editor.putInt("status", DOWNLOAD_STATUS_FAILED);
+					editor.commit();
 					finishDownload(this, false);
 				}
-
 			}
 		}
 

@@ -99,7 +99,7 @@ public class HDStarApp extends Application {
 
 	public static void init(Context context) {
 		SharedPreferences shared = context.getSharedPreferences(
-				Const.SHARED_PREFS, MODE_PRIVATE);
+				Const.SETTING_SHARED_PREFS, MODE_PRIVATE);
 		cookies = shared.getString("cookies", null);
 		CustomSetting.loadImage = shared.getBoolean("loadImage", true);
 		CustomSetting.soundOn = shared.getBoolean("sound", true);

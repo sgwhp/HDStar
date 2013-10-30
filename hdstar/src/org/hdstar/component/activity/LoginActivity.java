@@ -93,7 +93,7 @@ public class LoginActivity extends SherlockActivity {
 
 	void init() {
 		Button login = (Button) findViewById(R.id.login);
-		SharedPreferences user = getSharedPreferences(Const.SHARED_PREFS,
+		SharedPreferences user = getSharedPreferences(Const.SETTING_SHARED_PREFS,
 				MODE_PRIVATE);
 		String username = user.getString("username", null);
 		String password = user.getString("password", null);
@@ -135,7 +135,7 @@ public class LoginActivity extends SherlockActivity {
 						return;
 					}
 					Editor user = LoginActivity.this.getSharedPreferences(
-							Const.SHARED_PREFS, MODE_PRIVATE).edit();
+							Const.SETTING_SHARED_PREFS, MODE_PRIVATE).edit();
 					user.putString("username", id);
 					user.putString("password", EncodeDecode.encode(password));
 					user.commit();
@@ -217,7 +217,7 @@ public class LoginActivity extends SherlockActivity {
 			// cookieStr += "c_lang_folder=cht";
 			// }
 			HDStarApp.cookies = cookieStr;
-			Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE)
+			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS, MODE_PRIVATE)
 					.edit();
 			edit.putString("cookies", cookieStr);
 			edit.commit();

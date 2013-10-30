@@ -167,7 +167,7 @@ public class MyTextParser {
 
 	public static String toReplyPM(Context context, int sender, String text) {
 		text = toBBCode(text);
-		String userName = context.getSharedPreferences(Const.SHARED_PREFS,
+		String userName = context.getSharedPreferences(Const.SETTING_SHARED_PREFS,
 				Activity.MODE_PRIVATE).getString("username", "");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
 				Locale.getDefault());

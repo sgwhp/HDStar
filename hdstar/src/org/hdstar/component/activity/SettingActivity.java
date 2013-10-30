@@ -44,7 +44,7 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE)
+		Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS, MODE_PRIVATE)
 				.edit();
 		CustomSetting.loadImage = fetchImage.isChecked();
 		edit.putBoolean("loadImage", CustomSetting.loadImage);
@@ -64,7 +64,7 @@ public class SettingActivity extends BaseActivity {
 		switch (v.getId()) {
 		case R.id.logOut:
 			CustomHttpClient.restClient();
-			Editor edit = getSharedPreferences(Const.SHARED_PREFS, MODE_PRIVATE)
+			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS, MODE_PRIVATE)
 					.edit();
 			edit.remove("cookies");
 			edit.commit();
