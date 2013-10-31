@@ -19,13 +19,16 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
-public class DownloadActivity extends SherlockActivity implements OnClickListener {
+public class DownloadActivity extends SherlockActivity implements
+		OnClickListener {
 	private ProgressBar progress;
 	private ImageButton ctrlBtn;
 	private ImageButton cancelBtn;
 	private TextView sizeTV;
+	private TextView versionTV;
 	private long size;
 	private int status;
+	private int appVersion;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,14 +38,20 @@ public class DownloadActivity extends SherlockActivity implements OnClickListene
 		ctrlBtn = (ImageButton) findViewById(R.id.download_ctrl_btn);
 		cancelBtn = (ImageButton) findViewById(R.id.download_cancel_btn);
 		sizeTV = (TextView) findViewById(R.id.app_size);
-		SharedPreferences shared = this.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
+		versionTV = (TextView) findViewById(R.id.app_version);
+		SharedPreferences shared = this.getSharedPreferences(
+				Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
 		size = shared.getLong("size", 0);
 		long completeSize = shared.getLong("completeSize", 0);
-		if(size != 0){
+		if (size != 0) {
 			setProgress(completeSize);
 		}
 		status = shared.getInt("status", -1);
 		refreshCtrlBtn();
+		appVersion = getIntent().getIntExtra("appVersion", 0);
+		if(appVersion != 0){
+			versionTV.setText(appVersion+"");
+		}
 	}
 
 	@Override
@@ -59,27 +68,31 @@ public class DownloadActivity extends SherlockActivity implements OnClickListene
 		super.onPause();
 		unregisterReceiver(receiver);
 	}
-	
-	private void stopDownload(){
+
+	private void stopDownload() {
 		Intent intent = new Intent(this, DownloadService.class);
 		intent.putExtra("command", DownloadService.COMMAND_DOWNLOAD_STOP);
 		startService(intent);
 	}
-	
-	private void pauseDownload(){
+
+	private void pauseDownload() {
 		Intent intent = new Intent(this, DownloadService.class);
 		intent.putExtra("command", DownloadService.COMMAND_DOWNLOAD_PAUSE);
 		startService(intent);
 	}
-	
-	private void resumeDownload(){
+
+	private void resumeDownload() {
 		Intent intent = new Intent(this, DownloadService.class);
 		intent.putExtra("command", DownloadService.COMMAND_DOWNLOAD_RESUME);
 		startService(intent);
 	}
-	
-	private void refreshCtrlBtn(){
-		switch(status){
+
+	private void refreshCtrlBtn() {
+		switch (status) {
+		case -1:
+			ctrlBtn.setEnabled(false);
+			cancelBtn.setEnabled(false);
+			break;
 		case DownloadService.DOWNLOAD_STATUS_PAUSED:
 		case DownloadService.DOWNLOAD_STATUS_FAILED:
 			ctrlBtn.setEnabled(true);
@@ -96,22 +109,22 @@ public class DownloadActivity extends SherlockActivity implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()){
+		switch (v.getId()) {
 		case R.id.download_cancel_btn:
 			stopDownload();
 			break;
 		case R.id.download_ctrl_btn:
 			ctrlBtn.setEnabled(false);
-			if(status == DownloadService.DOWNLOAD_STATUS_RUNNING){
+			if (status == DownloadService.DOWNLOAD_STATUS_RUNNING) {
 				pauseDownload();
-			} else if(status == DownloadService.DOWNLOAD_STATUS_PAUSED){
+			} else if (status == DownloadService.DOWNLOAD_STATUS_PAUSED) {
 				resumeDownload();
 			}
 			break;
 		}
 	}
-	
-	private void setProgress(long completeSize){
+
+	private void setProgress(long completeSize) {
 		progress.setProgress((int) (completeSize * 100.0 / size));
 	}
 

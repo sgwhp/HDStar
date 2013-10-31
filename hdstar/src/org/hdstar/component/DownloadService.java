@@ -1,6 +1,7 @@
 package org.hdstar.component;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
@@ -9,6 +10,8 @@ import org.hdstar.common.Const;
 import org.hdstar.component.activity.DownloadActivity;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.IOUtils;
+
+import cn.sgwhp.patchdroid.PatchClient;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -38,6 +41,7 @@ public class DownloadService extends Service {
 	public static final int DOWNLOAD_STATUS_PAUSING = 4;
 	public static final int DOWNLOAD_STATUS_FAILED = 5;
 	public static final int DOWNLOAD_STATUS_START = 6;
+	public static final int DOWNLOAD_STATUS_PATCH_FAILED = 7;
 	// 下载任务状态更改
 	public static final String ACTION_DOWNLOAD_STATUS_CHANGED = "org.hdstar.action.download.status.changed";
 	// 下载任务失败
@@ -206,7 +210,8 @@ public class DownloadService extends Service {
 			updateStatus(DOWNLOAD_STATUS_RUNNING);
 			HttpClient client = null;
 			SharedPreferences shared = DownloadService.this
-					.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
+					.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS,
+							MODE_PRIVATE);
 			Editor editor = shared.edit();
 			try {
 				File dir = new File(Const.DOWNLOAD_DIR);
@@ -261,8 +266,16 @@ public class DownloadService extends Service {
 					}
 				}
 				updateProgress(startPos);
-				if (isPatch) {
-					// patch
+				try {
+					if (isPatch) {
+						PatchClient.applyPatchToOwn(DownloadService.this,
+								Const.DOWNLOAD_DIR + File.separator + fileName,
+								Const.DOWNLOAD_DIR + File.separator
+										+ "patch.patch");
+					}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+					updateStatus(DOWNLOAD_STATUS_PATCH_FAILED);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
