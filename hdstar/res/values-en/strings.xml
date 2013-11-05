@@ -21,7 +21,7 @@
     <string name="get_security_code">Fetching the security code…</string>
     <string name="failed_to_download_security_code">Failed. Try again latter</string>
     <string name="exit">exit</string>
-    <string name="exit_message">sure to exit?</string>
+    <string name="exit_message">Sure to exit?</string>
     <string name="confirm">confirm</string>
     <string name="cancel">cancel</string>
     <string name="input_password">The password is empty!</string>
@@ -43,7 +43,7 @@
     <string name="reply_is_adding">Reply is adding</string>
     <string name="reply_succeeded">Reply completed</string>
     <string name="reply_failed">Reply failed</string>
-    <string name="refresh_failed">Refresh failed</string>
+    <string name="refresh_failed">Fetching data failed</string>
     <string name="commit_failed">Commit failed</string>
     <string name="connection_refused">Connection refused</string>
     <string name="time_out">Time out</string>
@@ -77,6 +77,11 @@
     <string name="clear_cache">Clear cache</string>
     <string name="log_out">Log out</string>
     <string name="check_update">Update</string>
+    <string name="searching_for_update">Searching for update…</string>
+    <string name="searching_update_fail">Searching for update fail.</string>
+    <string name="latest_version">Current version is the latest.</string>
+    <string name="update">Update</string>
+    <string name="update_info">Version:%1$s\nSize:%2$s</string>
     <string name="device_name_setting_hint">Device name</string>
     <string name="auto_refresh">Auto refresh after adding a reply</string>
     
@@ -90,4 +95,5 @@
     <string name="app_version_tag">version: </string>
     <string name="app_size_tag">size: </string>
     <string name="update_date_tag">update date: </string>
+    <string name="delete_message">Sure to exit?</string>
 </resources>

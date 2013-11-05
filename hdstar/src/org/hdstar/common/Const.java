@@ -8,6 +8,8 @@ import org.hdstar.R;
 import android.os.Environment;
 
 public class Const {
+	public static final int APP_CODE = 1;
+
 	public static final class Urls {
 		public static final String BASE_URL = "http://hdsky.me";
 		public static final String TAKE_LOGIN_URL = BASE_URL + "/takelogin.php";
@@ -69,7 +71,10 @@ public class Const {
 				+ "haveNewMsg";
 		public static final String SERVER_TORRENTS_URL = SERVER_ADDRESS
 				+ "torrents";
-		public static final String SERVER_DOWNLOAD_URL = SERVER_ADDRESS + "download";
+		public static final String SERVER_DOWNLOAD_URL = SERVER_ADDRESS
+				+ "download";
+		public static final String SERVER_CHECK_UPDATE_URL = SERVER_ADDRESS
+				+ "checkVersion";
 	}
 
 	public final class ResponseCode {
@@ -80,7 +85,10 @@ public class Const {
 
 	public static final String SETTING_SHARED_PREFS = "setting";
 	public static final String DOWNLOAD_SHARED_PREFS = "download";
-	public static final String DOWNLOAD_DIR = Environment.getExternalStorageDirectory().getPath() + File.separator + "download";
+	public static final String DOWNLOAD_DIR = Environment
+			.getExternalStorageDirectory().getPath()
+			+ File.separator
+			+ "download";
 
 	public static final String NEW_MESSAGE_ACTION = "org.hdstar.NEW_MESSAGE";
 	public static final int NEW_MESSAGE_REQ_REFRESH = 1;

@@ -43,7 +43,7 @@
     <string name="reply_is_adding">正在回覆</string>
     <string name="reply_succeeded">回覆完成</string>
     <string name="reply_failed">回覆失敗，請重試</string>
-    <string name="refresh_failed">數據更新失敗，請稍後重試</string>
+    <string name="refresh_failed">數據獲取失敗，請稍後重試</string>
     <string name="commit_failed">數據提交失敗，請稍後重試</string>
     <string name="connection_refused">無法連接到服務器</string>
     <string name="time_out">連接超時</string>
@@ -77,6 +77,11 @@
     <string name="clear_cache">清除緩存</string>
     <string name="log_out">註銷</string>
     <string name="check_update">檢查更新</string>
+    <string name="searching_for_update">正在搜索更新…</string>
+    <string name="searching_update_fail">搜索更新失敗，請稍後重試</string>
+    <string name="latest_version">當前為最新版本</string>
+    <string name="update">升級</string>
+    <string name="update_info">版本：%1$s\n新版大小： %2$s</string>
     <string name="device_name_setting_hint">設備名</string>
     
     <string name="notification_title">HDSky提醒</string>
@@ -89,5 +94,6 @@
     <string name="app_version_tag">版本：</string>
     <string name="app_size_tag">大小：</string>
     <string name="update_date_tag">更新：</string>
+    <string name="delete_message">確定刪除？</string>
 
 </resources>
