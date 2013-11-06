@@ -122,7 +122,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		}
 	}
 
-	protected void setMessageId(int msgId) {
+	public void setMessageId(int msgId) {
 		parser.msgId = msgId;
 	}
 

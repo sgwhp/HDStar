@@ -79,6 +79,8 @@ public class Const {
 
 	public final class ResponseCode {
 		public static final int PARAMETER_ERROR = 1000;
+		public static final int PARSE_ERROR = 1001;
+		public static final int NO_APK_FOUND = 1002;
 	}
 
 	public static final String CHARSET = "UTF-8";
