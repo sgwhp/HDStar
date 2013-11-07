@@ -141,6 +141,15 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/auto_refresh_tag" />
 
+        <Button
+            android:id="@+id/download_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/checkUpdate"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/checkUpdate"
+            android:background="@drawable/download_task_icon" />
+
     </RelativeLayout>
 
 </ScrollView>

@@ -7,6 +7,7 @@ import java.util.List;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
+import org.hdstar.model.MessageContent;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
@@ -41,6 +42,7 @@ import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 public class ReplyPMFragment extends StackFragment {
 
 	private int msgId;
+	private int senderId;
 	private int receiverId;
 	private String subject;
 	private String text;
@@ -50,13 +52,14 @@ public class ReplyPMFragment extends StackFragment {
 	private View v;
 
 	public static ReplyPMFragment newInstance(int msgId, String subject,
-			String text, int receiverId) {
+			MessageContent content) {
 		Bundle args = new Bundle();
 		ReplyPMFragment fragment = new ReplyPMFragment();
 		args.putInt("msgId", msgId);
+		args.putInt("senderId", content.senderId);
 		args.putString("subject", subject);
-		args.putString("text", text);
-		args.putInt("receiverId", receiverId);
+		args.putString("text", content.content);
+		args.putInt("receiverId", content.receiverId);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -66,6 +69,7 @@ public class ReplyPMFragment extends StackFragment {
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
 		msgId = bundle.getInt("msgId");
+		senderId = bundle.getInt("senderId");
 		subject = bundle.getString("subject");
 		receiverId = bundle.getInt("receiverId");
 		text = bundle.getString("text");
@@ -90,7 +94,7 @@ public class ReplyPMFragment extends StackFragment {
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
-		text = MyTextParser.toReplyPM(getActivity(), receiverId, text);
+		text = MyTextParser.toReplyPM(getActivity(), senderId, text);
 		body.setText(text);
 		body.setSelection(text.length());
 		body.clearFocus();

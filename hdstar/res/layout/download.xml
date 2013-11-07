@@ -13,24 +13,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <Gallery
-                android:id="@+id/gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            
             <View
                 android:id="@+id/land_mark"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/gallery" />
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:id="@+id/app_version_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/gallery"
                 android:text="@string/app_version_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -48,7 +41,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/app_version_tag"
-                android:layout_below="@+id/gallery"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/land_mark"
                 android:layout_toRightOf="@+id/app_version_tag"
@@ -60,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/app_size_tag"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/gallery"
                 android:layout_toRightOf="@+id/app_size_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -68,7 +59,6 @@
                 android:id="@+id/app_size_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/gallery"
                 android:layout_toRightOf="@+id/land_mark"
                 android:text="@string/app_size_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -78,10 +68,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/update_date_tag"
-                android:layout_below="@+id/app_version"
-                android:layout_toRightOf="@+id/app_version_tag"
+                android:layout_alignLeft="@+id/app_version"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/update_date_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <HorizontalScrollView
+                android:id="@+id/h_scroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/update_date_tag" >
+
+                <LinearLayout
+                    android:id="@+id/thumbnails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/h_scroll"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </ScrollView>
 
@@ -95,8 +110,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/sw_start_n"
-            android:onClick="onClick" />
+            android:onClick="onClick"
+            android:src="@drawable/sw_start_n" />
 
         <ProgressBar
             android:id="@+id/download_progress"
@@ -114,9 +129,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/sw_cancel_n"
-            android:onClick="onClick" />
-
+            android:onClick="onClick"
+            android:src="@drawable/sw_cancel_n" />
     </RelativeLayout>
 
 </LinearLayout>

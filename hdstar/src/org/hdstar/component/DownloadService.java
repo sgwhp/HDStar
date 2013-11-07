@@ -11,8 +11,6 @@ import org.hdstar.component.activity.DownloadActivity;
 import org.hdstar.util.CustomHttpClient;
 import org.hdstar.util.IOUtils;
 
-import cn.sgwhp.patchdroid.PatchClient;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,6 +25,7 @@ import android.support.v4.app.NotificationCompat;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.client.HttpClient;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
+import cn.sgwhp.patchdroid.PatchClient;
 
 /**
  * 
@@ -76,8 +75,7 @@ public class DownloadService extends Service {
 		int command = intent.getIntExtra("command", -1);
 		switch (command) {
 		case COMMAND_DOWNLOAD_ADD:
-			add(intent.getIntExtra("appCode", 0),
-					intent.getBooleanExtra("isPatch", false), true);
+			add(intent.getBooleanExtra("isPatch", false), true);
 			break;
 		case COMMAND_DOWNLOAD_PAUSE:
 			pause();
@@ -89,8 +87,7 @@ public class DownloadService extends Service {
 			stopSelf();
 			break;
 		case COMMAND_DOWNLOAD_RESUME:
-			add(intent.getIntExtra("appCode", 0),
-					intent.getBooleanExtra("isPatch", false), false);
+			add(intent.getBooleanExtra("isPatch", false), false);
 			break;
 		}
 		return super.onStartCommand(intent, flags, startId);
@@ -106,14 +103,15 @@ public class DownloadService extends Service {
 		super.onDestroy();
 	}
 
-	void add(int appCode, boolean isPatch, boolean isNew) {
-		task = new DownloadTask(appCode, isPatch, isNew);
+	void add(boolean isPatch, boolean isNew) {
+		task = new DownloadTask(isPatch, isNew);
 		task.start();
 	}
 
 	void pause() {
 		if (task != null) {
 			task.pause(true);
+			updateStatus(DOWNLOAD_STATUS_PAUSED);
 		}
 	}
 
@@ -123,6 +121,7 @@ public class DownloadService extends Service {
 	void stop() {
 		if (task != null) {
 			task.pauseNDelete();
+			updateStatus(DOWNLOAD_STATUS_PAUSED);
 		}
 	}
 
@@ -181,7 +180,6 @@ public class DownloadService extends Service {
 	}
 
 	class DownloadTask extends Thread {
-		private int appCode;
 		private boolean isPatch;
 		private boolean isNew;
 		private boolean paused = false;
@@ -193,26 +191,23 @@ public class DownloadService extends Service {
 		private String fileName;
 		private HttpGet get;
 		private InputStream in = null;
-		private Boolean isRunning = false;
 
-		DownloadTask(int appCode, boolean isPatch, boolean isNew) {
-			this.appCode = appCode;
+		DownloadTask(boolean isPatch, boolean isNew) {
 			this.isPatch = isPatch;
 			this.isNew = isNew;
 		}
 
 		@Override
 		public void run() {
-			synchronized (isRunning) {
-				isRunning = true;
-			}
-			RandomAccessFile file = null;
-			updateStatus(DOWNLOAD_STATUS_RUNNING);
-			HttpClient client = null;
 			SharedPreferences shared = DownloadService.this
 					.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS,
 							MODE_PRIVATE);
 			Editor editor = shared.edit();
+			RandomAccessFile file = null;
+			editor.putInt("status", DOWNLOAD_STATUS_RUNNING);
+			editor.commit();
+			updateStatus(DOWNLOAD_STATUS_RUNNING);
+			HttpClient client = null;
 			try {
 				File dir = new File(Const.DOWNLOAD_DIR);
 				if (!dir.exists()) {
@@ -222,9 +217,10 @@ public class DownloadService extends Service {
 				// get = new HttpGet(Const.Urls.SERVER_DOWNLOAD_URL + "appCode="
 				// + appCode + "patch=" + isPatch);
 				get = new HttpGet(
-						"http://10.10.28.113:8084/HDStarService/download?appCode=1&appVersion=164");
+						"http://10.10.28.113:8084/HDStarService/download?appCode="
+								+ Const.APP_CODE + "&appVersion=164");
 				if (!isNew) {
-					fileName = shared.getString("fileName", null);
+					fileName = shared.getString("downloadFile", null);
 					if (fileName != null) {
 						file = new RandomAccessFile(dir.getAbsolutePath()
 								+ File.separator + fileName, "rwd");
@@ -306,9 +302,6 @@ public class DownloadService extends Service {
 			paused = isPause;
 			if (paused && get != null) {
 				get.abort();
-			}
-			if (paused && in != null) {
-				IOUtils.closeInputStreamIgnoreExceptions(in);
 			}
 		}
 
