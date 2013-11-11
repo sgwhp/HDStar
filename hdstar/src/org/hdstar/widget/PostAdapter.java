@@ -9,17 +9,18 @@ import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
-import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Post;
 import org.hdstar.model.QuoteVO;
 import org.hdstar.util.CustomLinkMovementMethod;
+import org.hdstar.util.MyTextParser;
 import org.hdstar.util.URLImageParser;
 import org.hdstar.util.UserClassImageGetter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Html;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class PostAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
-	private List<Post> items;
-	private List<QuoteVO> quotes;
+	private List<Post> posts;
+	private SparseArray<QuoteVO> quotes;
 	private WeakReference<Context> ref = null;
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
@@ -43,7 +44,8 @@ public class PostAdapter extends BaseAdapter {
 	public PostAdapter(Context context, List<Post> items) {
 		inflater = LayoutInflater.from(context);
 		ref = new WeakReference<Context>(context);
-		this.items = items;
+		this.posts = items;
+		quotes = new SparseArray<QuoteVO>();
 	}
 
 	public void clearAnimListener() {
@@ -51,33 +53,36 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	public List<Post> getList() {
-		return items;
+		return posts;
 	}
 
 	public void setList(List<Post> items) {
-		this.items.clear();
-		this.items.addAll(items);
+		this.posts.clear();
+		this.posts.addAll(items);
 	}
 
 	public void clearItems() {
-		items.clear();
+		posts.clear();
 	}
 
 	public void addAll(List<Post> items) {
-		this.items.addAll(items);
+//		for(Post post : items){
+//			post.info = post.info.replaceAll("\\s", "").replaceAll("  ", "\n").trim();
+//		}
+		this.posts.addAll(items);
 	}
 
 	@Override
 	public int getCount() {
-		if (items != null)
-			return items.size();
+		if (posts != null)
+			return posts.size();
 		return 0;
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		if (items != null)
-			return items.get(arg0);
+		if (posts != null)
+			return posts.get(arg0);
 		return null;
 	}
 
@@ -97,41 +102,94 @@ public class PostAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Post p = items.get(position);
+		Post p = posts.get(position);
 		holder.username.setText(Html.fromHtml(p.userName));
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
 				p.userClassSrc, (Context) ref.get()));
-		if (CustomSetting.loadImage) {
-			holder.main.setText(Html.fromHtml(p.body, new URLImageParser(
-					holder.main, ref.get()), null));
-			holder.main.setMovementMethod(CustomLinkMovementMethod
+		QuoteVO quote = quotes.get(position);
+		if (quote == null) {
+			quote = new QuoteVO();
+			quotes.put(position, quote);
+			MyTextParser.toQuoteVO(quote, p.body, 0);
+		}
+		// if (CustomSetting.loadImage) {
+		holder.contentOuter.setText(Html.fromHtml(quote.content,
+				new URLImageParser(holder.contentOuter, ref.get()), null));
+		holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
+				.getInstance());
+		if (quote.quote != null) {
+			holder.legend.setVisibility(View.VISIBLE);
+			holder.frameOuter.setVisibility(View.VISIBLE);
+			holder.legend.setText(quote.legend);
+			quote = quote.quote;
+			holder.contentMiddle.setText(Html.fromHtml(quote.content,
+					new URLImageParser(holder.contentMiddle, ref.get()), null));
+			holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
-			holder.main.setFocusable(false);
-			holder.main.setFocusableInTouchMode(false);
-			try {
-				ImageLoader.getInstance()
-						.displayImage(
-								Const.Urls.SERVER_GET_IMAGE_URL
-										+ URLEncoder.encode(p.avatarSrc,
-												Const.CHARSET), holder.avatar,
-								HDStarApp.displayOptions, animateFirstListener);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if (quote.quote != null) {
+				holder.legendInner.setVisibility(View.VISIBLE);
+				holder.frameInner.setVisibility(View.VISIBLE);
+				holder.legendInner.setText(quote.legend);
+				quote = quote.quote;
+				holder.contentInner.setText(Html.fromHtml(quote.content,
+						new URLImageParser(holder.contentInner, ref.get()),
+						null));
+				holder.contentInner.setMovementMethod(CustomLinkMovementMethod
+						.getInstance());
+				if (quote.quote != null) {
+					holder.frameMore.setVisibility(View.VISIBLE);
+				} else {
+					holder.frameMore.setVisibility(View.GONE);
+				}
+			} else {
+				holder.legendInner.setVisibility(View.GONE);
+				holder.frameInner.setVisibility(View.GONE);
 			}
 		} else {
-			holder.main.setText(Html.fromHtml(p.body));
+			holder.legend.setVisibility(View.GONE);
+			holder.frameOuter.setVisibility(View.GONE);
 		}
+		// holder.main.setText(Html.fromHtml(p.body, new URLImageParser(
+		// holder.main, ref.get()), null));
+		// holder.main.setMovementMethod(CustomLinkMovementMethod
+		// .getInstance());
+		// holder.main.setFocusable(false);
+		// holder.main.setFocusableInTouchMode(false);
+		try {
+			ImageLoader.getInstance().displayImage(
+					Const.Urls.SERVER_GET_IMAGE_URL
+							+ URLEncoder.encode(p.avatarSrc, Const.CHARSET),
+					holder.avatar, HDStarApp.displayOptions,
+					animateFirstListener);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		// }
+		// else {
+		// holder.main.setText(Html.fromHtml(p.body));
+		// }
 		holder.info.setText(p.info);
 		return convertView;
 	}
 
 	private class ViewHolder {
-		TextView main, username, info;
+		TextView username, info, contentOuter, legend, contentInner,
+				legendInner, contentMiddle, frameMore;
+		View frameOuter, frameInner;
 		ImageView userClass;
 		ImageView avatar;
 
 		ViewHolder(View v) {
-			main = (TextView) v.findViewById(R.id.main);
+			// main = (TextView) v.findViewById(R.id.main);
+			contentOuter = (TextView) v.findViewById(R.fieldset.content_outer);
+			frameOuter = v.findViewById(R.fieldset.frame_outer);
+			legend = (TextView) v.findViewById(R.fieldset.legend);
+			contentMiddle = (TextView) v
+					.findViewById(R.fieldset.content_middle);
+			frameInner = v.findViewById(R.fieldset.frame_inner);
+			legendInner = (TextView) v.findViewById(R.fieldset.legend_inner);
+			contentInner = (TextView) v.findViewById(R.fieldset.content_inner);
+			frameMore = (TextView) v.findViewById(R.fieldset.frame_more);
 			username = (TextView) v.findViewById(R.id.username);
 			userClass = (ImageView) v.findViewById(R.id.user_class);
 			info = (TextView) v.findViewById(R.id.info);

@@ -204,7 +204,7 @@ public class MyTextParser {
 		return buffer.toString();
 	}
 
-	static QuoteVO toQuoteVO(QuoteVO parent, String html, int level) {
+	public static QuoteVO toQuoteVO(QuoteVO parent, String html, int level) {
 		QuoteVO quote = null;
 		Pattern pattern = Pattern.compile(
 				"<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>",
@@ -213,14 +213,16 @@ public class MyTextParser {
 		quote = new QuoteVO();
 		if (matcher.find()) {
 			parent.quote = quote;
-			quote.legend = matcher.group(1);
-			String[] str = html
-					.split("<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>");
-			if (str.length >= 2) {
-				parent.content = str[0] + str[1];
-			} else {
-				parent.content = str[0];
-			}
+			parent.legend = matcher.group(1);
+			int index = html.indexOf(matcher.group());
+			parent.content = html.substring(0, index) + html.substring(index + matcher.group().length()+1);
+//			String[] str = html
+//					.split("<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>");
+//			if (str.length >= 2) {
+//				parent.content = str[0] + str[1];
+//			} else {
+//				parent.content = str[0];
+//			}
 			if (level >= MAX_QUOTE_LEVEL) {
 				return quote;
 			}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 
 import android.content.Context;
@@ -40,6 +41,9 @@ public class URLImageParser implements ImageGetter {
 	}
 
 	public Drawable getDrawable(String source) {
+		if(!CustomSetting.loadImage){
+			return null;
+		}
 		if (source.startsWith("pic/smilies/")) {
 			source = "assets://" + source;
 		} else if (!source.startsWith("http://")) {
