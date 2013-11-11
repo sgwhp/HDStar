@@ -25,7 +25,6 @@ import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -150,8 +149,6 @@ public class ForumFragment extends StackFragment {
 	protected void init() {
 		final float dip = this.getResources().getDisplayMetrics().density;
 		final Activity act = getActivity();
-		final View footerView = LayoutInflater.from(act).inflate(
-				R.layout.footer_view, null);
 		refreshView = (PullToRefreshListView) view
 				.findViewById(R.id.pull_refresh_list);
 		listView = refreshView.getRefreshableView();
@@ -190,28 +187,11 @@ public class ForumFragment extends StackFragment {
 			}
 
 		});
-		if (adapter.getCount() != 0) {
-			listView.addFooterView(footerView);
-			footerView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					doNextPageClick(footerView);
-				}
-			});
-		}
 		listView.setAdapter(adapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
 			// listView.setSelectionFromTop(index, top);
 		}
-		// listView.setOnRefreshListener(new OnRefreshListener() {
-		//
-		// @Override
-		// public void onRefresh() {
-		// refresh();
-		// }
-		// });
 		refreshView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
 			@Override
@@ -231,7 +211,7 @@ public class ForumFragment extends StackFragment {
 			@Override
 			public void onPullUpToRefresh(
 					PullToRefreshBase<ListView> refreshView) {
-				doNextPageClick(refreshView);
+				loadNextPage();
 			}
 
 		});
@@ -259,51 +239,7 @@ public class ForumFragment extends StackFragment {
 				}.getType());
 	}
 
-	/**
-	 * 更新ListView
-	 * 
-	 * @param list
-	 *            新的Topic列表
-	 * */
-	// public void updateView(List<Topic> list) {
-	// adapter.setList(list);
-	// adapter.notifyDataSetChanged();
-	// // listView.onRefreshComplete();
-	// final Activity act = getActivity();
-	// final View footerView = LayoutInflater.from(act).inflate(
-	// R.layout.footer_view, null);
-	// if (adapter.getCount() != 0) {
-	// listView.addFooterView(footerView);
-	// footerView.setOnClickListener(new OnClickListener() {
-	//
-	// @Override
-	// public void onClick(View v) {
-	// doNextPageClick(footerView);
-	// }
-	// });
-	// }
-	// listView.setSelection(1);
-	// }
-
-	/** 加载下一页 */
-	// public void addNextPage(List<Topic> list) {
-	// adapter.itemsAddAll(list);
-	// adapter.notifyDataSetChanged();
-	// // listView.setSelection(listView.mLastItem - listView.mVisibleItemCount
-	// // + 1);
-	// // findViewById(R.id.next_page).setVisibility(View.VISIBLE);
-	// ((TextView) view.findViewById(R.id.loading_next_page_text))
-	// .setText(R.string.next_page);
-	// view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
-	// View.GONE);
-	// }
-
-	public void doNextPageClick(final View view) {
-		// ((TextView) view.findViewById(R.id.loading_next_page_text))
-		// .setText(R.string.loading);
-		// view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
-		// View.VISIBLE);
-		// mTask.detach();
+	public void loadNextPage() {
 		DelegateTask<List<Topic>> task = new DelegateTask<List<Topic>>(
 				HDStarApp.cookies);
 		task.attach(addCallback);
@@ -326,27 +262,10 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Topic> list) {
-			// mTask.detach();
-			// listView.onRefreshComplete();
 			page = 1;
 			refreshView.onRefreshComplete();
 			adapter.clearItems();
 			adapter.itemsAddAll(list);
-			// if (adapter.getCount() != 0) {
-			// final Activity act = getActivity();
-			// final View footerView = LayoutInflater.from(act).inflate(
-			// R.layout.footer_view, null);
-			// if (listView.getFooterViewsCount() == 0) {
-			// listView.addFooterView(footerView);
-			// footerView.setOnClickListener(new OnClickListener() {
-			//
-			// @Override
-			// public void onClick(View v) {
-			// doNextPageClick(footerView);
-			// }
-			// });
-			// }
-			// }
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());
@@ -354,8 +273,6 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			// mTask.detach();
-			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			// listView.setSelection(1);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
@@ -363,8 +280,6 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onCancel() {
-			// mTask.detach();
-			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 		}
 	};
@@ -373,7 +288,6 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Topic> list) {
-			// mTask.detach();
 			page++;
 			refreshView.onRefreshComplete();
 			if (list.size() > 0) {
@@ -383,28 +297,16 @@ public class ForumFragment extends StackFragment {
 				Toast.makeText(getActivity(), R.string.no_more_data,
 						Toast.LENGTH_SHORT).show();
 			}
-			// ((TextView) view.findViewById(R.id.loading_next_page_text))
-			// .setText(R.string.next_page);
-			// view.findViewById(R.id.loading_next_page_progressBar)
-			// .setVisibility(View.GONE);
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
-			// listView.onRefreshComplete();
-			// mTask.detach();
 			refreshView.onRefreshComplete();
-			// ((TextView) view.findViewById(R.id.loading_next_page_text))
-			// .setText(R.string.next_page);
-			// view.findViewById(R.id.loading_next_page_progressBar)
-			// .setVisibility(View.GONE);
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
-			// mTask.detach();
-			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 		}
 

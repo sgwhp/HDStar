@@ -76,6 +76,17 @@ public class URLImageParser implements ImageGetter {
 		// the src tag
 		ImageLoader.getInstance().loadImage(source, HDStarApp.displayOptions,
 				new SimpleImageLoadingListener() {
+					@SuppressWarnings("unused")
+					private View mView;
+
+					@Override
+					public void onLoadingStarted(String imageUri, View view) {
+						// see bug:
+						// https://github.com/nostra13/Android-Universal-Image-Loader/issues/356
+						mView = view;
+						super.onLoadingStarted(imageUri, view);
+					}
+
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
@@ -92,6 +103,7 @@ public class URLImageParser implements ImageGetter {
 							URLImageParser.this.container.setText(container
 									.getText());
 						}
+						mView = null;
 					}
 
 					// @Override
@@ -112,6 +124,7 @@ public class URLImageParser implements ImageGetter {
 						URLImageParser.this.container.setText(container
 								.getText());
 						// Log.v("whp", imageUri + " load image failed");
+						mView = null;
 					}
 				});
 

@@ -12,6 +12,7 @@ import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Post;
+import org.hdstar.model.QuoteVO;
 import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.URLImageParser;
 import org.hdstar.util.UserClassImageGetter;
@@ -34,6 +35,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 public class PostAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<Post> items;
+	private List<QuoteVO> quotes;
 	private WeakReference<Context> ref = null;
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();

@@ -80,28 +80,29 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 			CustomHttpClient.restClient();
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
-			request.abort();
+			// request.abort();
 			e.printStackTrace();
 		} catch (ConnectException e) {
-			request.abort();
+			// request.abort();
 			setMessageId(R.string.connection_refused);
 			e.printStackTrace();
 		} catch (SocketException e) {
 			e.printStackTrace();
-			request.abort();
+			// request.abort();
 			if ("Connection reset by peer".equals(e.getMessage())) {
 				CustomHttpClient.restClient();
 			}
 		} catch (IOException e) {
 			IOUtils.closeInputStreamIgnoreExceptions(in);
-			request.abort();
+			// request.abort();
 			e.printStackTrace();
 		} catch (Exception e) {
-			request.abort();
+			// request.abort();
 			e.printStackTrace();
 		} finally {
 			IOUtils.closeInputStreamIgnoreExceptions(in);
 			request.releaseConnection();
+			request.abort();
 		}
 		return null;
 	}

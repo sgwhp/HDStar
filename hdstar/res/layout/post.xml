@@ -46,14 +46,18 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/black" />
+        
+        <include
+            android:id="@+id/main"
+            layout="@layout/field_set_layout" />
 
-        <TextView
+        <!-- <TextView
             android:id="@+id/main"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/chatfrom_bg_sel"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            android:textColor="@color/black" /> -->
     </LinearLayout>
 
 </LinearLayout>

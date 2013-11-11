@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.common.Const;
+import org.hdstar.model.QuoteVO;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -21,6 +22,7 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 
 public class MyTextParser {
+	private static final int MAX_QUOTE_LEVEL = 3;
 	private Context mContext;
 	private String[] mSmileyTexts;
 	private Pattern mPattern;
@@ -167,8 +169,9 @@ public class MyTextParser {
 
 	public static String toReplyPM(Context context, int sender, String text) {
 		text = toBBCode(text);
-		String userName = context.getSharedPreferences(Const.SETTING_SHARED_PREFS,
-				Activity.MODE_PRIVATE).getString("username", "");
+		String userName = context.getSharedPreferences(
+				Const.SETTING_SHARED_PREFS, Activity.MODE_PRIVATE).getString(
+				"username", "");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
 				Locale.getDefault());
 		text += "<br>-------- [url=userdetails.php?id=" + sender + "]"
@@ -192,12 +195,39 @@ public class MyTextParser {
 			matcher.appendTail(buffer);
 		} else {
 			buffer.append(subject);
-			if(subject.startsWith("Re")){
+			if (subject.startsWith("Re")) {
 				buffer.insert(2, "(2)");
 			} else {
 				buffer.insert(0, "Re: ");
 			}
 		}
 		return buffer.toString();
+	}
+
+	static QuoteVO toQuoteVO(QuoteVO parent, String html, int level) {
+		QuoteVO quote = null;
+		Pattern pattern = Pattern.compile(
+				"<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>",
+				Pattern.DOTALL);
+		Matcher matcher = pattern.matcher(html);
+		quote = new QuoteVO();
+		if (matcher.find()) {
+			parent.quote = quote;
+			quote.legend = matcher.group(1);
+			String[] str = html
+					.split("<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>");
+			if (str.length >= 2) {
+				parent.content = str[0] + str[1];
+			} else {
+				parent.content = str[0];
+			}
+			if (level >= MAX_QUOTE_LEVEL) {
+				return quote;
+			}
+			toQuoteVO(quote, matcher.group(2), ++level);
+		} else {
+			parent.content = html;
+		}
+		return quote;
 	}
 }
