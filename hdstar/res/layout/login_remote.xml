@@ -6,21 +6,34 @@
     android:background="@drawable/login_background"
     android:paddingBottom="10.0dip"
     android:paddingTop="15.0dip" >
-
+    
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/ip"
+        style="@style/CustomEditTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="5.0dip"
         android:layout_marginLeft="20.0dip"
         android:layout_marginRight="20.0dip"
+        android:hint="@string/ip_hint"
+        android:saveEnabled="true" />
+
+    <EditText
+        android:id="@+id/username"
+        style="@style/CustomEditTextStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ip"
+        android:layout_marginBottom="5.0dip"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginRight="20.0dip"
         android:paddingLeft="42.0dip"
-        android:saveEnabled="true"
-        style="@style/CustomEditTextStyle" />
+        android:saveEnabled="true" />
 
     <EditText
         android:id="@+id/password"
+        style="@style/CustomEditTextStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
@@ -29,58 +42,17 @@
         android:layout_marginRight="20.0dip"
         android:inputType="textPassword"
         android:paddingLeft="42.0dip"
-        android:saveEnabled="true"
-        style="@style/CustomEditTextStyle" />
+        android:saveEnabled="true" />
 
-    <EditText
-        android:id="@+id/security_code"
-        android:layout_width="fill_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/password"
         android:layout_alignRight="@+id/password"
         android:layout_below="@+id/password"
-        android:layout_marginBottom="5.0dip"
-        android:ems="10"
-        android:maxLength="10"
-        android:paddingLeft="160.0dip"
-        style="@style/CustomEditTextStyle" >
-    </EditText>
-
-    <ImageView
-        android:id="@+id/security_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/security_code"
-        android:layout_alignLeft="@+id/security_code"
-        android:layout_alignTop="@+id/security_code"
-        android:layout_marginLeft="5dp"
-        android:src="@drawable/temp_image" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_alignLeft="@+id/security_code"
-        android:layout_alignRight="@+id/security_code"
-        android:layout_below="@+id/security_code" >
-
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_left_bg_sel"
-            android:text="@string/refresh" />
-
-        <Button
-            android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_right_bg_sel"
-            android:text="@string/login" />
-
-    </LinearLayout>
+        android:background="@drawable/btn_bg_sel"
+        android:text="@string/login"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -96,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/password"
-        android:layout_alignLeft="@+id/security_image"
+        android:layout_alignLeft="@+id/password"
         android:layout_alignTop="@+id/password"
         android:src="@drawable/password_ic" />
 

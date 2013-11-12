@@ -215,14 +215,17 @@ public class MyTextParser {
 			parent.quote = quote;
 			parent.legend = matcher.group(1);
 			int index = html.indexOf(matcher.group());
-			parent.content = html.substring(0, index) + html.substring(index + matcher.group().length()+1);
-//			String[] str = html
-//					.split("<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>");
-//			if (str.length >= 2) {
-//				parent.content = str[0] + str[1];
-//			} else {
-//				parent.content = str[0];
-//			}
+			// 截取引用以外的部分，并移除开始的几个<br>
+			parent.content = html.substring(0, index)
+					+ html.substring(index + matcher.group().length() + 1)
+							.replaceFirst("(<br\\s*/{0,1}>\\s*)+", "");
+			// String[] str = html
+			// .split("<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>");
+			// if (str.length >= 2) {
+			// parent.content = str[0] + str[1];
+			// } else {
+			// parent.content = str[0];
+			// }
 			if (level >= MAX_QUOTE_LEVEL) {
 				return quote;
 			}

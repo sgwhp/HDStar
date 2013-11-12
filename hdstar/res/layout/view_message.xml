@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="5dp"
     ptr:ptrAnimationStyle="flip"
     ptr:ptrHeaderBackground="@android:color/darker_gray"
     ptr:ptrHeaderTextColor="@android:color/white" >
@@ -13,12 +12,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="5dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/message_header_bg"
+            android:background="@drawable/setting_strip_top_pressed"
             android:gravity="center_vertical" >
 
             <TextView
@@ -40,7 +40,7 @@
             android:id="@+id/messageContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/message_bg_sel"
+            android:background="@drawable/setting_strip_bottom"
             android:clickable="true" />
     </LinearLayout>
 

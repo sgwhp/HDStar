@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
@@ -66,9 +68,21 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	public void addAll(List<Post> items) {
-//		for(Post post : items){
-//			post.info = post.info.replaceAll("\\s", "").replaceAll("聽聽", "\n").trim();
-//		}
+		// "   帖子：595    上传：3.754  TB   下载：35.75  GB   分享率：107.505" 去除空白字符
+		Pattern pattern = Pattern
+				.compile(
+						"\\s+([^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+)",
+						Pattern.DOTALL);
+		Matcher matcher;
+		for (Post post : items) {
+			matcher = pattern.matcher(post.info);
+			if (matcher.find()) {
+				post.info = matcher.group(1) + "\n"
+						+ matcher.group(2).replaceAll("\\s+", "") + "\n"
+						+ matcher.group(3).replaceAll("\\s+", "") + "\n"
+						+ matcher.group(4);
+			}
+		}
 		this.posts.addAll(items);
 	}
 
@@ -117,6 +131,9 @@ public class PostAdapter extends BaseAdapter {
 				new URLImageParser(holder.contentOuter, ref.get()), null));
 		holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
 				.getInstance());
+		// setMovementMethod后需要调用以下方法，不能在xml里配置
+		holder.contentOuter.setFocusable(false);
+		holder.contentOuter.setFocusableInTouchMode(false);
 		if (quote.quote != null) {
 			holder.legend.setVisibility(View.VISIBLE);
 			holder.frameOuter.setVisibility(View.VISIBLE);
@@ -126,6 +143,9 @@ public class PostAdapter extends BaseAdapter {
 					new URLImageParser(holder.contentMiddle, ref.get()), null));
 			holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
+			// setMovementMethod后需要调用以下方法，不能在xml里配置
+			holder.contentMiddle.setFocusable(false);
+			holder.contentMiddle.setFocusableInTouchMode(false);
 			if (quote.quote != null) {
 				holder.legendInner.setVisibility(View.VISIBLE);
 				holder.frameInner.setVisibility(View.VISIBLE);
@@ -136,6 +156,9 @@ public class PostAdapter extends BaseAdapter {
 						null));
 				holder.contentInner.setMovementMethod(CustomLinkMovementMethod
 						.getInstance());
+				// setMovementMethod后需要调用以下方法，不能在xml里配置
+				holder.contentInner.setFocusable(false);
+				holder.contentInner.setFocusableInTouchMode(false);
 				if (quote.quote != null) {
 					holder.frameMore.setVisibility(View.VISIBLE);
 				} else {

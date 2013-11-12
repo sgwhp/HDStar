@@ -84,6 +84,7 @@
     <string name="page_header">第</string>
     <string name="page_footer">页</string>
     
+    <!-- setting -->
     <string name="download_image">获取网络图片</string>
     <string name="sound_on">提示音</string>
     <string name="clear_cache">清除缓存</string>
@@ -100,13 +101,19 @@
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未读消息，点击查看</string>
     
+    <!-- torrent -->
     <string name="bookmark">收藏</string>
     <string name="unbookmark">取消收藏</string>
     
+    <!-- download -->
     <string name="download_complete">下载完毕，点击安装</string>
     <string name="app_version_tag">版本：</string>
     <string name="app_size_tag">大小：</string>
     <string name="update_date_tag">更新：</string>
     <string name="delete_message">确定删除？</string>
+    
+    <!-- remote -->
+    <string name="task_info">大小：%1$s  分享率：%2$s  下载速度：%3$s  上传速度：%4$S</string>
+    <string name="ip_hint">127.0.0.1:80</string>
 
 </resources>

@@ -24,7 +24,7 @@ public class CustomHttpClient {
 	/**
 	 * 获取连接的最大等待时间
 	 */
-	public final static int WAIT_TIMEOUT = 5 * 60 * 1000;
+	public final static int WAIT_TIMEOUT = 60 * 1000;
 	/**
 	 * 每个路由最大连接数
 	 */

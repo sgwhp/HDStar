@@ -96,5 +96,8 @@
     <string name="app_size_tag">大小：</string>
     <string name="update_date_tag">更新：</string>
     <string name="delete_message">確定刪除？</string>
+    
+    <!-- remote -->
+    <string name="task_info">大小：%1$s  分享率：%2$s  下載速度：%3$s  上傳速度：%4$S</string>
 
 </resources>

@@ -50,6 +50,11 @@ public class SettingActivity extends BaseActivity {
 		sound.setChecked(CustomSetting.soundOn);
 		deviceName.setText(CustomSetting.device);
 		autoRefresh.setChecked(CustomSetting.autoRefresh);
+		SharedPreferences shared = this.getSharedPreferences(
+				Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
+		if (shared.getInt("status", -1) != -1) {
+			findViewById(R.id.download_btn).setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
@@ -102,6 +107,10 @@ public class SettingActivity extends BaseActivity {
 							+ Util.getVersionCode(this),
 					new TypeToken<ResponseWrapper<NewApkInfo>>() {
 					}.getType());
+			break;
+		case R.id.download_btn:
+			Intent dIntent = new Intent(this, DownloadActivity.class);
+			startActivity(dIntent);
 			break;
 		}
 	}

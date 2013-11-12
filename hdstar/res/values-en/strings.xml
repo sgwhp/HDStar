@@ -96,4 +96,7 @@
     <string name="app_size_tag">size: </string>
     <string name="update_date_tag">update date: </string>
     <string name="delete_message">Sure to exit?</string>
+    
+    <!-- remote -->
+    <string name="task_info">Size:%1$s  Ratio：%2$s  DL Speed:%3$s  UL Speed:%4$S</string>
 </resources>

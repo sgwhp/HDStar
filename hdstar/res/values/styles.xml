@@ -20,5 +20,9 @@
     <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/checkbox_bg_sel</item>
     </style>
+    
+    <style name="CustomEditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/input_bg_sel</item> 
+    </style>
 
 </resources>

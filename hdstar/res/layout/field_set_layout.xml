@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/chatfrom_bg_sel" >
+    android:layout_height="wrap_content" >
 
     <!-- This is the main content -->
 
@@ -58,7 +57,8 @@
             android:layout_marginLeft="10dp"
             android:padding="2dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:background="@color/background" />
 
         <TextView
             android:id="@+fieldset/content_middle"
@@ -79,7 +79,8 @@
         android:layout_marginLeft="10dp"
         android:padding="2dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:background="@color/background" />
 
     <TextView
         android:id="@+fieldset/content_outer"

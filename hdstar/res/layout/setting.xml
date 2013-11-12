@@ -147,8 +147,9 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/checkUpdate"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/checkUpdate"
-            android:background="@drawable/download_task_icon" />
+            android:onClick="onClick"
+            android:background="@drawable/download_task_icon_sel"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
