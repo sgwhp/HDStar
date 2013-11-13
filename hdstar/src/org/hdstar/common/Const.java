@@ -31,7 +31,7 @@ public class Const {
 		public static final String ORDER_URL = FORUM_BASE_URL
 				+ "?action=viewforum&forumid=9";
 		public static final String VIEW_TOPIC_BASE_URL = FORUM_BASE_URL
-				+ "?action=viewtopic&forumid=";
+				+ "?action=viewtopic";
 		public static final String[] FORUM_URLS = { CHAT_ROOM_URL, NEWBIE_URL,
 				MOVIE_URL, ORDER_URL };
 		public static final String REPLY_URL = FORUM_BASE_URL + "?action=post";

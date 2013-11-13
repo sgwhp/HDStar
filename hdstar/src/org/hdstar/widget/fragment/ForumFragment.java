@@ -50,7 +50,8 @@ public class ForumFragment extends StackFragment {
 	private PopupWindow window = null;
 	private TopicsAdapter adapter = null;
 	private int forumId = 1;
-	private int page = 1;
+	private int page = 0;
+	private int curPage = 0;
 
 	public static ForumFragment newInstance(String url) {
 		Pattern pattern = Pattern.compile("forumid=([0-9]+)");
@@ -61,6 +62,11 @@ public class ForumFragment extends StackFragment {
 			Bundle args = new Bundle();
 			args.putString("url", url);
 			args.putInt("id", id);
+			pattern = Pattern.compile("&page=([0-9]+)");
+			matcher = pattern.matcher(url);
+			if (matcher.find()) {
+				args.putInt("page", Integer.parseInt(matcher.group(1)));
+			}
 			fragment.setArguments(args);
 			return fragment;
 		} else {
@@ -74,6 +80,7 @@ public class ForumFragment extends StackFragment {
 		Bundle bundle = getArguments();
 		url = bundle.getString("url");
 		forumId = bundle.getInt("id", 1);
+		page = bundle.getInt("page", 0);
 	}
 
 	@Override
@@ -159,7 +166,7 @@ public class ForumFragment extends StackFragment {
 					int position, long id) {
 				final Topic t = (Topic) listView.getItemAtPosition(position);
 				if (t.pageList == null) {
-					viewTopic(t.topicId, page, t.title);
+					viewTopic(t.topicId, 0, t.title);
 				} else {
 					View v = LayoutInflater.from(act).inflate(
 							R.layout.popupwindow, null);
@@ -245,7 +252,7 @@ public class ForumFragment extends StackFragment {
 		task.attach(addCallback);
 		attachTask(task);
 		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId
-				+ "&page=" + page,
+				+ "&page=" + ++curPage,
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
 				}.getType());
 	}
@@ -262,7 +269,7 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Topic> list) {
-			page = 1;
+			curPage = page;
 			refreshView.onRefreshComplete();
 			adapter.clearItems();
 			adapter.itemsAddAll(list);
@@ -288,7 +295,6 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Topic> list) {
-			page++;
 			refreshView.onRefreshComplete();
 			if (list.size() > 0) {
 				adapter.itemsAddAll((ArrayList<Topic>) list);
@@ -301,12 +307,14 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
+			--curPage;
 			refreshView.onRefreshComplete();
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
+			--curPage;
 			refreshView.onRefreshComplete();
 		}
 

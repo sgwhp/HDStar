@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/chat_bg"
+    android:background="@drawable/chat_bg_sel"
+    android:descendantFocusability="blocksDescendants"
     android:baselineAligned="false" >
 
     <!-- 设置scaleType为centerCrop，否则在ListView中使用UIL的圆角功能时，图片可能会被缩小 -->

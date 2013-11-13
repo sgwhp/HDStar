@@ -132,8 +132,8 @@ public class PostAdapter extends BaseAdapter {
 		holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
 				.getInstance());
 		// setMovementMethod后需要调用以下方法，不能在xml里配置
-		holder.contentOuter.setFocusable(false);
-		holder.contentOuter.setFocusableInTouchMode(false);
+		// holder.contentOuter.setFocusable(false);
+		// holder.contentOuter.setFocusableInTouchMode(false);
 		if (quote.quote != null) {
 			holder.legend.setVisibility(View.VISIBLE);
 			holder.frameOuter.setVisibility(View.VISIBLE);
@@ -144,8 +144,8 @@ public class PostAdapter extends BaseAdapter {
 			holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
 			// setMovementMethod后需要调用以下方法，不能在xml里配置
-			holder.contentMiddle.setFocusable(false);
-			holder.contentMiddle.setFocusableInTouchMode(false);
+			// holder.contentMiddle.setFocusable(false);
+			// holder.contentMiddle.setFocusableInTouchMode(false);
 			if (quote.quote != null) {
 				holder.legendInner.setVisibility(View.VISIBLE);
 				holder.frameInner.setVisibility(View.VISIBLE);
@@ -157,8 +157,8 @@ public class PostAdapter extends BaseAdapter {
 				holder.contentInner.setMovementMethod(CustomLinkMovementMethod
 						.getInstance());
 				// setMovementMethod后需要调用以下方法，不能在xml里配置
-				holder.contentInner.setFocusable(false);
-				holder.contentInner.setFocusableInTouchMode(false);
+				// holder.contentInner.setFocusable(false);
+				// holder.contentInner.setFocusableInTouchMode(false);
 				if (quote.quote != null) {
 					holder.frameMore.setVisibility(View.VISIBLE);
 				} else {

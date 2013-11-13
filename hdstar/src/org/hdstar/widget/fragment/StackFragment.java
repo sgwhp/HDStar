@@ -51,7 +51,7 @@ public class StackFragment extends Fragment {
 	public void refresh() {
 	}
 
-	protected void push(StackFragment f) {
+	public void push(StackFragment f) {
 		getStackAdapter().forward(f);
 		ViewPager vp = getViewPager();
 		vp.setCurrentItem(vp.getCurrentItem() + 1, true);

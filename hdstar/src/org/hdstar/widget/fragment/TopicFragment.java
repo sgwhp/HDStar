@@ -2,6 +2,8 @@ package org.hdstar.widget.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
@@ -11,6 +13,7 @@ import org.hdstar.model.Post;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
+import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.PostAdapter;
 import org.jsoup.Jsoup;
@@ -48,11 +51,33 @@ public class TopicFragment extends StackFragment {
 
 	// private ArrayList<Post> posts;
 
+	public static TopicFragment newInstance(String url) {
+		TopicFragment fragment = new TopicFragment();
+		Bundle args = new Bundle();
+		Pattern pattern = Pattern.compile("topicid=([0-9]+)");
+		Matcher matcher = pattern.matcher(url);
+		if (matcher.find()) {
+			int id = Integer.parseInt(matcher.group(1));
+			args.putInt("topicId", id);
+			int page = 0;
+			pattern = Pattern.compile("&page=([0-9]+)");
+			matcher = pattern.matcher(url);
+			if (matcher.find()) {
+				page = Integer.parseInt(matcher.group(1));
+			}
+			args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL
+					+ "?topicId=" + id + "&page=" + page);
+			fragment.setArguments(args);
+			return fragment;
+		}
+		return null;
+	}
+
 	public static TopicFragment newInstance(int topicId, int page, String title) {
 		TopicFragment fragment = new TopicFragment();
 		Bundle args = new Bundle();
 		args.putInt("topicId", topicId);
-		args.putInt("page", page);
+		// args.putInt("page", page);
 		args.putString("title", title);
 		args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId="
 				+ topicId + "&page=" + page);
@@ -67,12 +92,16 @@ public class TopicFragment extends StackFragment {
 		topicId = bundle.getInt("topicId");
 		// page = getArguments().getInt("page");
 		title = bundle.getString("title");
+		if (title == null) {
+			title = "";
+		}
 		url = bundle.getString("url");
 	}
 
 	@Override
 	public void onDestroy() {
 		adapter.clearAnimListener();
+		CustomLinkMovementMethod.detach();
 		super.onDestroy();
 	}
 
@@ -80,6 +109,7 @@ public class TopicFragment extends StackFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (adapter == null) {
+			CustomLinkMovementMethod.attach(this);
 			adapter = new PostAdapter(getActivity(), new ArrayList<Post>());
 		}
 		listView.setAdapter(adapter);
