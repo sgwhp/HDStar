@@ -53,7 +53,9 @@ public class CustomLinkMovementMethod extends LinkMovementMethod {
 	}
 
 	public static void attach(StackFragment stackFragment) {
-		mFragment = stackFragment;
+		if(mFragment == null){
+			mFragment = stackFragment;
+		}
 	}
 
 	public static void detach() {

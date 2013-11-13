@@ -13,7 +13,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/field_set_frame"
         android:padding="5dp" >
 
@@ -25,7 +25,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/field_set_frame"
             android:padding="5dp" >
 

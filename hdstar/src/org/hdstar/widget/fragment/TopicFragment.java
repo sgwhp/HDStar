@@ -101,15 +101,20 @@ public class TopicFragment extends StackFragment {
 	@Override
 	public void onDestroy() {
 		adapter.clearAnimListener();
-		CustomLinkMovementMethod.detach();
 		super.onDestroy();
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		CustomLinkMovementMethod.detach();
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		CustomLinkMovementMethod.attach(this);
 		if (adapter == null) {
-			CustomLinkMovementMethod.attach(this);
 			adapter = new PostAdapter(getActivity(), new ArrayList<Post>());
 		}
 		listView.setAdapter(adapter);
