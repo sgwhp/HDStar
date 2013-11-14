@@ -135,8 +135,7 @@ public class NewTopicFragment extends StackFragment {
 				.findViewById(R.id.root_layout);
 		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		// subject.requestFocus();
-		final LinearLayout lin = (LinearLayout) v
-				.findViewById(R.id.linearLayout3);
+		final LinearLayout lin = (LinearLayout) v.findViewById(R.id.smilies);
 		lin.setVisibility(View.GONE);
 		grid.setAdapter(smiles);
 		grid.setOnItemClickListener(new OnItemClickListener() {

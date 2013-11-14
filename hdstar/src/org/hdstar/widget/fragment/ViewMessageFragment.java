@@ -8,6 +8,7 @@ import org.hdstar.model.MessageContent;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
+import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.URLImageParser;
 
 import android.annotation.SuppressLint;
@@ -63,6 +64,12 @@ public class ViewMessageFragment extends StackFragment {
 	}
 
 	@Override
+	public void onDetach() {
+		super.onDetach();
+		CustomLinkMovementMethod.detach();
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.view_message, null);
@@ -98,6 +105,8 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		CustomLinkMovementMethod.attach(this);
+		contentTV.setMovementMethod(CustomLinkMovementMethod.getInstance());
 		// ((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		init();
 		if (content == null) {

@@ -141,8 +141,7 @@ public class ReplyFragment extends StackFragment {
 		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		// body.requestFocus();
 		// grid.setVisibility(View.GONE);
-		final LinearLayout lin = (LinearLayout) v
-				.findViewById(R.id.linearLayout3);
+		final LinearLayout lin = (LinearLayout) v.findViewById(R.id.smilies);
 		lin.setVisibility(View.GONE);
 		grid.setAdapter(smiles);
 		grid.setOnItemClickListener(new OnItemClickListener() {

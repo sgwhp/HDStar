@@ -129,8 +129,8 @@ public class PostAdapter extends BaseAdapter {
 		// if (CustomSetting.loadImage) {
 		holder.contentOuter.setText(Html.fromHtml(quote.content,
 				new URLImageParser(holder.contentOuter, ref.get()), null));
-		holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
-				.getInstance());
+		// holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
+		// .getInstance());
 		// setMovementMethod后需要调用以下方法，不能在xml里配置
 		// holder.contentOuter.setFocusable(false);
 		// holder.contentOuter.setFocusableInTouchMode(false);
@@ -141,8 +141,8 @@ public class PostAdapter extends BaseAdapter {
 			quote = quote.quote;
 			holder.contentMiddle.setText(Html.fromHtml(quote.content,
 					new URLImageParser(holder.contentMiddle, ref.get()), null));
-			holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
-					.getInstance());
+			// holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
+			// .getInstance());
 			// setMovementMethod后需要调用以下方法，不能在xml里配置
 			// holder.contentMiddle.setFocusable(false);
 			// holder.contentMiddle.setFocusableInTouchMode(false);
@@ -154,8 +154,8 @@ public class PostAdapter extends BaseAdapter {
 				holder.contentInner.setText(Html.fromHtml(quote.content,
 						new URLImageParser(holder.contentInner, ref.get()),
 						null));
-				holder.contentInner.setMovementMethod(CustomLinkMovementMethod
-						.getInstance());
+				// holder.contentInner.setMovementMethod(CustomLinkMovementMethod
+				// .getInstance());
 				// setMovementMethod后需要调用以下方法，不能在xml里配置
 				// holder.contentInner.setFocusable(false);
 				// holder.contentInner.setFocusableInTouchMode(false);
@@ -205,13 +205,19 @@ public class PostAdapter extends BaseAdapter {
 		ViewHolder(View v) {
 			// main = (TextView) v.findViewById(R.id.main);
 			contentOuter = (TextView) v.findViewById(R.fieldset.content_outer);
+			contentOuter.setMovementMethod(CustomLinkMovementMethod
+					.getInstance());
 			frameOuter = v.findViewById(R.fieldset.frame_outer);
 			legend = (TextView) v.findViewById(R.fieldset.legend);
 			contentMiddle = (TextView) v
 					.findViewById(R.fieldset.content_middle);
+			contentMiddle.setMovementMethod(CustomLinkMovementMethod
+					.getInstance());
 			frameInner = v.findViewById(R.fieldset.frame_inner);
 			legendInner = (TextView) v.findViewById(R.fieldset.legend_inner);
 			contentInner = (TextView) v.findViewById(R.fieldset.content_inner);
+			contentInner.setMovementMethod(CustomLinkMovementMethod
+					.getInstance());
 			frameMore = (TextView) v.findViewById(R.fieldset.frame_more);
 			username = (TextView) v.findViewById(R.id.username);
 			userClass = (ImageView) v.findViewById(R.id.user_class);

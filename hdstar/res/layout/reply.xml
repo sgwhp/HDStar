@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.hdstar.widget.ResizeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<org.hdstar.widget.ResizeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/background"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@color/background" >
-
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -18,7 +15,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -26,14 +22,12 @@
 
         <EditText
             android:id="@+id/body"
+            style="@style/CustomEditTextStyle"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
-            android:gravity="left"
             android:layout_weight="1"
-            android:inputType="textMultiLine">
-
-            <requestFocus />
-        </EditText>
+            android:gravity="left"
+            android:inputType="textMultiLine" />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
@@ -45,10 +39,10 @@
                 android:id="@+id/smile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/smile"
-                android:textOn=""
                 android:textOff=""
-                android:layout_marginRight="10dp" />
+                android:textOn="" />
 
             <Button
                 android:id="@+id/commit"
@@ -57,11 +51,10 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/commit_btn_bg_sel" />
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/smilies"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -74,7 +67,6 @@
             android:horizontalSpacing="2dp"
             android:numColumns="7" >
         </GridView>
-
     </LinearLayout>
 
-</org.hdstar.widget.ResizeLayout  >
+</org.hdstar.widget.ResizeLayout>

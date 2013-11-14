@@ -50,10 +50,17 @@ public class SettingActivity extends BaseActivity {
 		sound.setChecked(CustomSetting.soundOn);
 		deviceName.setText(CustomSetting.device);
 		autoRefresh.setChecked(CustomSetting.autoRefresh);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 		SharedPreferences shared = this.getSharedPreferences(
 				Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
 		if (shared.getInt("status", -1) != -1) {
 			findViewById(R.id.download_btn).setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.download_btn).setVisibility(View.GONE);
 		}
 	}
 
@@ -100,11 +107,17 @@ public class SettingActivity extends BaseActivity {
 					Toast.LENGTH_LONG).show();
 			task = DelegateTask.newInstance("");
 			task.attach(mCallback);
-			task.execGet(
-					"http://10.10.28.113:8084/HDStarService/checkVersion?appCode="
-							+ Const.APP_CODE + "&packageName="
-							+ this.getPackageName() + "&versionCode="
-							+ Util.getVersionCode(this),
+			// task.execGet(
+			// "http://10.10.28.113:8084/HDStarService/checkVersion?appCode="
+			// + Const.APP_CODE + "&packageName="
+			// + this.getPackageName() + "&versionCode="
+			// + Util.getVersionCode(this),
+			// new TypeToken<ResponseWrapper<NewApkInfo>>() {
+			// }.getType());
+
+			task.execGet(Const.Urls.SERVER_CHECK_UPDATE_URL + "?appCode="
+					+ Const.APP_CODE + "&packageName=" + this.getPackageName()
+					+ "&versionCode=" + Util.getVersionCode(this),
 					new TypeToken<ResponseWrapper<NewApkInfo>>() {
 					}.getType());
 			break;

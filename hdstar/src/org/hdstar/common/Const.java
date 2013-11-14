@@ -5,7 +5,11 @@ import java.util.HashMap;
 
 import org.hdstar.R;
 
+import android.graphics.Color;
 import android.os.Environment;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
 
 public class Const {
 	public static final int APP_CODE = 1;
@@ -114,26 +118,47 @@ public class Const {
 		public static final String _50_PTC = "pro_50pctdown";
 		public static final String _30_PTC = "pro_30pctdown";
 
-		public static String getFreeTag(String freeType) {
+		public static SpannableString getFreeTag(String freeType) {
+			SpannableString ss;
 			if (FREE.equals(freeType)) {
-				return "Free";
+				ss = new SpannableString("Free");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 52, 206)), 0,
+						4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				return ss;
 			}
 			if (_2X_FREE.equals(freeType)) {
-				return "2xFree";
+				ss = new SpannableString("2xFree");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(15, 164, 100)), 0,
+						6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				return ss;
 			}
 			if ((_2X_50_PTC.equals(freeType))) {
-				return "2x50%";
+				ss = new SpannableString("2x50%");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 2,
+						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 2, 5,
+						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				return ss;
 			}
 			if (_2X.equals(freeType)) {
-				return "2x";
+				ss = new SpannableString("2x");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 2,
+						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				return ss;
 			}
 			if (_50_PTC.equals(freeType)) {
-				return "50%";
+				ss = new SpannableString("50%");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 0, 3,
+						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				return ss;
 			}
 			if (_30_PTC.equals(freeType)) {
-				return "30%";
+				ss = new SpannableString("30%");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(65, 23, 73)), 0,
+						3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				return ss;
 			}
-			return "";
+			return new SpannableString("");
 		}
 	}
 

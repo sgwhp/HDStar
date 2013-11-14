@@ -1,5 +1,6 @@
 package org.hdstar.component.activity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.hdstar.R;
@@ -28,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DownloadActivity extends SherlockActivity implements
@@ -48,6 +50,7 @@ public class DownloadActivity extends SherlockActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.download);
 		progress = (ProgressBar) findViewById(R.id.download_progress);
 		ctrlBtn = (ImageButton) findViewById(R.id.download_ctrl_btn);
@@ -83,12 +86,22 @@ public class DownloadActivity extends SherlockActivity implements
 		versionTV.setText(shared.getString("versionName", ""));
 		updateDate.setText(shared.getString("updateDate", ""));
 		descTV.setText(shared.getString("desc", ""));
-		pics = shared.getStringSet("pics", null);
+		pics = shared.getStringSet("pics", new HashSet<String>());
 		for (String pic : pics) {
 			ImageView thumbnail = new ImageView(this);
 			ImageLoader.getInstance().displayImage(pic, thumbnail);
 			thumbnails.addView(thumbnail);
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
