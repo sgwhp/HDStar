@@ -214,8 +214,8 @@ public class DownloadService extends Service {
 					dir.mkdirs();
 				}
 				client = CustomHttpClient.getHttpClient();
-				get = new HttpGet(Const.Urls.SERVER_DOWNLOAD_URL + "appCode="
-						+ Const.APP_CODE + "patch=" + isPatch);
+				get = new HttpGet(Const.Urls.SERVER_DOWNLOAD_URL + "?appCode="
+						+ Const.APP_CODE + "&patch=" + isPatch);
 				// get = new HttpGet(
 				// "http://10.10.28.113:8084/HDStarService/download?appCode="
 				// + Const.APP_CODE + "&appVersion=164");

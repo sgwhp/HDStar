@@ -157,8 +157,11 @@ public class SettingActivity extends BaseActivity {
 									editor.putString("packageName",
 											result.packageName);
 									editor.putString("desc", result.desc);
-									editor.putStringSet("pics",
-											result.getPicsSet());
+									String pics = "";
+									for (String pic : result.pics) {
+										pics += pic;
+									}
+									editor.putString("pics", pics);
 									editor.putString("updateDate",
 											result.updateDate);
 									editor.putString("versionName",

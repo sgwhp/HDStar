@@ -1,7 +1,6 @@
 package org.hdstar.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
 
 public class NewApkInfo implements Serializable {
 	/**
@@ -17,14 +16,4 @@ public class NewApkInfo implements Serializable {
 	public String desc;
 	public String[] pics;
 	public String updateDate;
-
-	public HashSet<String> getPicsSet() {
-		HashSet<String> set = new HashSet<String>();
-		if (pics != null) {
-			for (String pic : pics) {
-				set.add(pic);
-			}
-		}
-		return set;
-	}
 }

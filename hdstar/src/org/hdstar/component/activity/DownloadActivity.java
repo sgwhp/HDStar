@@ -1,8 +1,5 @@
 package org.hdstar.component.activity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.DownloadService;
@@ -45,7 +42,7 @@ public class DownloadActivity extends SherlockActivity implements
 	private boolean isPatch;
 	private long downloadSize;
 	private int status;
-	private Set<String> pics;
+	private String[] pics;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +83,7 @@ public class DownloadActivity extends SherlockActivity implements
 		versionTV.setText(shared.getString("versionName", ""));
 		updateDate.setText(shared.getString("updateDate", ""));
 		descTV.setText(shared.getString("desc", ""));
-		pics = shared.getStringSet("pics", new HashSet<String>());
+		pics = shared.getString("pics", "").split(" ");
 		for (String pic : pics) {
 			ImageView thumbnail = new ImageView(this);
 			ImageLoader.getInstance().displayImage(pic, thumbnail);
