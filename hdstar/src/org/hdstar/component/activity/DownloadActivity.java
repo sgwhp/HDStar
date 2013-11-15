@@ -216,12 +216,12 @@ public class DownloadActivity extends SherlockActivity implements
 					.equals(action)) {
 				status = intent.getIntExtra("status", -1);
 				refreshCtrlBtn();
-				switch (status) {
-				case DownloadService.DOWNLOAD_STATUS_START:
-					downloadSize = intent.getLongExtra("size", 0);
-					sizeTV.setText(Util.formatFileSize(downloadSize));
-					break;
-				}
+				// switch (status) {
+				// case DownloadService.DOWNLOAD_STATUS_START:
+				// downloadSize = intent.getLongExtra("size", 0);
+				// sizeTV.setText(Util.formatFileSize(downloadSize));
+				// break;
+				// }
 			}
 		}
 	};

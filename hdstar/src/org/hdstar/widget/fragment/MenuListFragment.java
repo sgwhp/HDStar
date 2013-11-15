@@ -6,7 +6,7 @@ import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.component.activity.HelpActivity;
 import org.hdstar.component.activity.MessageActivity;
 import org.hdstar.component.activity.MiscActivity;
-import org.hdstar.component.activity.RemoteActivity;
+import org.hdstar.component.activity.RemoteLoginActivity;
 import org.hdstar.component.activity.SettingActivity;
 import org.hdstar.component.activity.SlidingFragmentActivity;
 import org.hdstar.component.activity.TorrentActivity;
@@ -63,7 +63,7 @@ public class MenuListFragment extends ListFragment {
 			klass = TorrentActivity.class;
 			break;
 		case 2:
-			klass = RemoteActivity.class;
+			klass = RemoteLoginActivity.class;
 			break;
 		case 3:
 			klass = MiscActivity.class;

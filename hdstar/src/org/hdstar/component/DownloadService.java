@@ -202,6 +202,10 @@ public class DownloadService extends Service {
 			SharedPreferences shared = DownloadService.this
 					.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS,
 							MODE_PRIVATE);
+			size = shared.getLong("patchSize", 0);
+			if (size == 0) {
+				size = shared.getLong("size", 0);
+			}
 			Editor editor = shared.edit();
 			RandomAccessFile file = null;
 			editor.putInt("status", DOWNLOAD_STATUS_RUNNING);
@@ -230,10 +234,12 @@ public class DownloadService extends Service {
 				}
 				get.setHeader("Range", "bytes=" + startPos + "-");
 				HttpResponse response = client.execute(get);
-				size = Long.parseLong(response.getFirstHeader("Content-Length")
-						.getValue());
-				editor.putLong("size", size);
-				editor.commit();
+				if (size == 0) {
+					size = Long.parseLong(response.getFirstHeader(
+							"Content-Length").getValue());
+					editor.putLong("size", size);
+					editor.commit();
+				}
 				Intent intent = new Intent(ACTION_DOWNLOAD_STATUS_CHANGED);
 				intent.putExtra("status", DOWNLOAD_STATUS_START);
 				intent.putExtra("size", size);
@@ -243,7 +249,7 @@ public class DownloadService extends Service {
 					fileName = response.getFirstHeader("Content-Disposition")
 							.getValue();
 					fileName = fileName
-							.substring(fileName.indexOf("filename=") + 10);
+							.substring(fileName.indexOf("filename=") + 9);
 					editor.putString("downloadFile", fileName);
 					editor.commit();
 				}

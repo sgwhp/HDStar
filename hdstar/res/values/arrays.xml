@@ -14,4 +14,9 @@
         <item>举报信箱</item>
         <item>作弊者</item> -->
     </string-array>
+    
+    <string-array name="remoteClient">
+        <item>rutorrent</item>
+        <item>transmission</item>
+    </string-array>
 </resources>

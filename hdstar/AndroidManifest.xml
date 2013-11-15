@@ -95,8 +95,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Styled">
         </activity>
-        
-        
+        <activity 
+            android:name=".component.activity.RemoteLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Styled">
+        </activity>
         
         <service android:name=".component.DownloadService"></service>
     </application>

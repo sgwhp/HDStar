@@ -12,9 +12,6 @@ import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
 
 public class LoginTask extends BaseAsyncTask<String> {
-	public LoginTask() {
-		super("");
-	}
 
 	// @Override
 	// protected String doInBackground(String... params) {

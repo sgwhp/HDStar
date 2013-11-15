@@ -32,6 +32,10 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	protected boolean interrupted = false;
 	protected boolean needContent = true;
 
+	public BaseAsyncTask() {
+		this.cookie = "";
+	}
+
 	public BaseAsyncTask(String cookie) {
 		this.cookie = cookie;
 	}

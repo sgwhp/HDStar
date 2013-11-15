@@ -78,7 +78,7 @@ public class HDStarApp extends Application {
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
 				.memoryCache(new LruMemoryCache(MEMORY_CACHE_SIZE))
 				.memoryCacheSize(MEMORY_CACHE_SIZE)
-				.memoryCacheSizePercentage(13).writeDebugLogs();
+				.memoryCacheSizePercentage(13);
 		File discCache = getExternalStorageCacheDir(context, DISK_CACHE_SUBDIR);
 		if (discCache != null) {
 			builder.discCache(new UnlimitedDiscCache(discCache))
