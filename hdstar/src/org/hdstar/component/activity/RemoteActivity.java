@@ -1,6 +1,7 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.widget.fragment.RemoteFragment;
 
 import android.os.Bundle;
 
@@ -12,6 +13,8 @@ public class RemoteActivity extends BaseStackActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.test);
+		if(savedInstanceState == null){
+			stackAdapter.fragments.add(RemoteFragment.newInstance());
+		}
 	}
 }

@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.activity.DownloadActivity;
-import org.hdstar.util.CustomHttpClient;
+import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
 import android.app.Notification;
@@ -217,7 +217,7 @@ public class DownloadService extends Service {
 				if (!dir.exists()) {
 					dir.mkdirs();
 				}
-				client = CustomHttpClient.getHttpClient();
+				client = HttpClientManager.getHttpClient();
 				get = new HttpGet(Const.Urls.SERVER_DOWNLOAD_URL + "?appCode="
 						+ Const.APP_CODE + "&patch=" + isPatch);
 				// get = new HttpGet(
@@ -270,6 +270,7 @@ public class DownloadService extends Service {
 				updateProgress(startPos);
 				try {
 					if (isPatch) {
+						PatchClient.loadLib();
 						PatchClient.applyPatchToOwn(DownloadService.this,
 								Const.DOWNLOAD_DIR + File.separator + fileName,
 								Const.DOWNLOAD_DIR + File.separator

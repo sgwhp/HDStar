@@ -9,7 +9,7 @@ import org.hdstar.model.NewApkInfo;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
-import org.hdstar.util.CustomHttpClient;
+import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
 
@@ -89,7 +89,7 @@ public class SettingActivity extends BaseActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.logOut:
-			CustomHttpClient.restClient();
+			HttpClientManager.restClient();
 			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS,
 					MODE_PRIVATE).edit();
 			edit.remove("cookies");
@@ -101,6 +101,7 @@ public class SettingActivity extends BaseActivity {
 			break;
 		case R.id.clearCache:
 			ImageLoader.getInstance().clearDiscCache();
+			Toast.makeText(this, R.string.cache_cleared, Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.checkUpdate:
 			Toast.makeText(this, R.string.searching_for_update,

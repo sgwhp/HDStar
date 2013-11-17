@@ -88,6 +88,7 @@
     <string name="download_image">获取网络图片</string>
     <string name="sound_on">提示音</string>
     <string name="clear_cache">清除缓存</string>
+    <string name="cache_cleared">缓存已清除</string>
     <string name="log_out">注销</string>
     <string name="check_update">检查更新</string>
     <string name="searching_for_update">正在搜索更新…</string>

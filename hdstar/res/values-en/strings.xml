@@ -75,6 +75,7 @@
     <string name="download_image">Download image</string>
     <string name="sound_on">Sound on</string>
     <string name="clear_cache">Clear cache</string>
+    <string name="cache_cleared">Cache is cleared</string>
     <string name="log_out">Log out</string>
     <string name="check_update">Update</string>
     <string name="searching_for_update">Searching for update…</string>

@@ -1,7 +1,13 @@
 package org.hdstar.util;
 
+import java.io.IOException;
+
+import org.hdstar.common.Const;
+
 import ch.boye.httpclientandroidlib.HttpHost;
+import ch.boye.httpclientandroidlib.client.ClientProtocolException;
 import ch.boye.httpclientandroidlib.client.HttpClient;
+import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.params.ClientPNames;
 import ch.boye.httpclientandroidlib.conn.routing.HttpRoute;
 import ch.boye.httpclientandroidlib.conn.scheme.PlainSocketFactory;
@@ -14,7 +20,7 @@ import ch.boye.httpclientandroidlib.params.BasicHttpParams;
 import ch.boye.httpclientandroidlib.params.CoreConnectionPNames;
 import ch.boye.httpclientandroidlib.params.HttpParams;
 
-public class CustomHttpClient {
+public class HttpClientManager {
 	private static volatile HttpClient customHttpClient;
 
 	/**
@@ -37,9 +43,13 @@ public class CustomHttpClient {
 	 * 读取超时时间
 	 */
 	public final static int READ_TIMEOUT = 10000;
+	
+	//client更新周期
+	private static final int VALIDATE_PERIOD = 10 * 60 * 1000;
+	//client最后一次使用时间
+	private static long latest;
 
-	private CustomHttpClient() {
-
+	private HttpClientManager() {
 	}
 
 	public static HttpClient getHttpClient() {
@@ -99,8 +109,9 @@ public class CustomHttpClient {
 		// ((AbstractHttpClient) customHttpClient)
 		// .setHttpRequestRetryHandler(myRetryHandler);
 		// }
+		long cur = System.currentTimeMillis();
 		if (customHttpClient == null) {
-			synchronized (CustomHttpClient.class) {
+			synchronized (HttpClientManager.class) {
 				if (customHttpClient == null) {
 					HttpParams params = new BasicHttpParams();
 					params.setParameter(
@@ -126,13 +137,48 @@ public class CustomHttpClient {
 					customHttpClient = new DefaultHttpClient(cm, params);
 				}
 			}
+		} else if(cur - latest > VALIDATE_PERIOD){
+			synchronized(HttpClientManager.class){
+				if(cur - latest > VALIDATE_PERIOD){
+					final HttpGet get = new HttpGet(Const.Urls.SERVER_ADDRESS);
+					activateClient(get);
+					new Thread(){
+						public void run(){
+							try {
+								//连接打开后关闭并返回
+								Thread.sleep(200);
+								get.abort();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}.start();
+					latest = cur;
+				}
+			}
 		}
 
+		latest = cur;
 		return customHttpClient;
 	}
 
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
+	}
+	
+	/**
+	 * client一段时间不使用后，会出现长时间无法连接的情况，需要新建一个连接并关闭它。
+	 */
+	private static void activateClient(HttpGet get){
+		try {
+			customHttpClient.execute(get);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public static void restClient() {

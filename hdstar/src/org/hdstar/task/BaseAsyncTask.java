@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
-import org.hdstar.util.CustomHttpClient;
+import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
 import android.os.AsyncTask;
@@ -70,7 +70,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 
 	@Override
 	protected T doInBackground(String... params) {
-		HttpClient client = CustomHttpClient.getHttpClient();
+		HttpClient client = HttpClientManager.getHttpClient();
 		InputStream in = null;
 		request.setHeader("Cookie", cookie);
 		try {
@@ -81,7 +81,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 			return parser.parse(response, in);
 		} catch (ConnectTimeoutException e) {
 			setMessageId(R.string.time_out);
-			CustomHttpClient.restClient();
+			HttpClientManager.restClient();
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
 			// request.abort();
@@ -94,7 +94,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 			e.printStackTrace();
 			// request.abort();
 			if ("Connection reset by peer".equals(e.getMessage())) {
-				CustomHttpClient.restClient();
+				HttpClientManager.restClient();
 			}
 		} catch (IOException e) {
 			IOUtils.closeInputStreamIgnoreExceptions(in);

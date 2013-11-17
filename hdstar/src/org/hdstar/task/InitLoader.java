@@ -3,7 +3,7 @@ package org.hdstar.task;
 import java.util.ArrayList;
 
 import org.hdstar.model.Topic;
-import org.hdstar.util.CustomHttpClient;
+import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.SoundPoolManager;
 
 import android.content.Context;
@@ -31,7 +31,7 @@ public class InitLoader extends AsyncTaskLoader<ArrayList<Topic>> {
 	public ArrayList<Topic> loadInBackground() {
 		// HDStarApp.init(this.getContext());
 		SoundPoolManager.load(this.getContext());
-		CustomHttpClient.getHttpClient();
+		HttpClientManager.getHttpClient();
 		return null;
 	}
 

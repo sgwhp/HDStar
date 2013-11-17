@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
-import org.hdstar.util.CustomHttpClient;
+import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
 import android.app.Activity;
@@ -85,7 +85,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	}
 
 	String getImageUrl(String url) {
-		HttpClient client = CustomHttpClient.getHttpClient();
+		HttpClient client = HttpClientManager.getHttpClient();
 		get = new HttpGet(url);
 		BufferedReader reader = null;
 		InputStream in = null;
@@ -103,13 +103,13 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 				}
 			}
 		} catch (ConnectTimeoutException e) {
-			CustomHttpClient.restClient();
+			HttpClientManager.restClient();
 			e.printStackTrace();
 		} catch (SocketException e) {
 			e.printStackTrace();
 			get.abort();
 			if ("Connection reset by peer".equals(e.getMessage())) {
-				CustomHttpClient.restClient();
+				HttpClientManager.restClient();
 			}
 		} catch (Exception e) {
 			get.abort();
@@ -122,7 +122,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	}
 
 	public Bitmap downloadImage(String... urls) {
-		HttpClient httpClient = CustomHttpClient.getHttpClient();
+		HttpClient httpClient = HttpClientManager.getHttpClient();
 		get = new HttpGet(urls[0]);
 		try {
 			if (isInterrupted)
@@ -133,12 +133,12 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 					image.length);
 			return mBitmap;
 		} catch (ConnectTimeoutException e) {
-			CustomHttpClient.restClient();
+			HttpClientManager.restClient();
 			e.printStackTrace();
 		} catch (SocketException e) {
 			e.printStackTrace();
 			if ("Connection reset by peer".equals(e.getMessage())) {
-				CustomHttpClient.restClient();
+				HttpClientManager.restClient();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

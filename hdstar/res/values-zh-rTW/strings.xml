@@ -76,6 +76,7 @@
     <string name="download_image">獲取網絡圖片</string>
     <string name="sound_on">提示音</string>
     <string name="clear_cache">清除緩存</string>
+    <string name="cache_cleared">緩存已清除</string>
     <string name="log_out">註銷</string>
     <string name="check_update">檢查更新</string>
     <string name="searching_for_update">正在搜索更新…</string>

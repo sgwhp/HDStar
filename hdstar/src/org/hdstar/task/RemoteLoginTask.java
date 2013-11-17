@@ -3,7 +3,7 @@ package org.hdstar.task;
 import java.io.InputStream;
 
 import org.hdstar.R;
-import org.hdstar.util.CustomHttpClient;
+import org.hdstar.util.HttpClientManager;
 
 import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -17,7 +17,7 @@ public class RemoteLoginTask extends BaseAsyncTask<Boolean> {
 	public void auth(String ip, int port, String url, String username,
 			String password) {
 		HttpHost targetHost = new HttpHost(ip, port, "http");
-		DefaultHttpClient client = (DefaultHttpClient) CustomHttpClient
+		DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
 				.getHttpClient();
 		client.getCredentialsProvider().setCredentials(
 				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
