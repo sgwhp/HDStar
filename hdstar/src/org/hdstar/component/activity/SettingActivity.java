@@ -20,18 +20,18 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class SettingActivity extends BaseActivity {
-	private CheckBox fetchImage;
-	private CheckBox sound;
+	private ToggleButton fetchImage;
+	private ToggleButton sound;
 	private EditText deviceName;
-	private CheckBox autoRefresh;
+	private ToggleButton autoRefresh;
 	private DelegateTask<NewApkInfo> task;
 
 	public SettingActivity() {
@@ -42,9 +42,9 @@ public class SettingActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting);
-		fetchImage = (CheckBox) findViewById(R.id.fetchImage);
-		sound = (CheckBox) findViewById(R.id.sound);
-		autoRefresh = (CheckBox) findViewById(R.id.auto_refresh);
+		fetchImage = (ToggleButton) findViewById(R.id.fetchImage);
+		sound = (ToggleButton) findViewById(R.id.sound);
+		autoRefresh = (ToggleButton) findViewById(R.id.auto_refresh);
 		deviceName = (EditText) findViewById(R.id.deviceName);
 		fetchImage.setChecked(CustomSetting.loadImage);
 		sound.setChecked(CustomSetting.soundOn);

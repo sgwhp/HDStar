@@ -17,12 +17,15 @@ import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -48,9 +51,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public class RemoteFragment extends StackFragment {
+public class RemoteFragment extends StackFragment implements OnClickListener {
 	private PullToRefreshListView refreshView;
 	private View root;
+	private View empty;
+	private View start, pause, stop, delete;
 	private ListView listView;
 	private Parcelable listViewState;
 	private RemoteTaskAdapter adapter;
@@ -68,9 +73,18 @@ public class RemoteFragment extends StackFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		root = inflater.inflate(R.layout.message_box, null);
+		root = inflater.inflate(R.layout.remote_layout, null);
 		refreshView = (PullToRefreshListView) root
-				.findViewById(R.id.messageList);
+				.findViewById(R.id.taskList);
+		empty = root.findViewById(R.id.empty);
+		start = root.findViewById(R.id.start);
+		start.setOnClickListener(this);
+		pause = root.findViewById(R.id.pause);
+		pause.setOnClickListener(this);
+		stop = root.findViewById(R.id.stop);
+		stop.setOnClickListener(this);
+		delete = root.findViewById(R.id.del);
+		delete.setOnClickListener(this);
 		return root;
 	}
 
@@ -104,6 +118,42 @@ public class RemoteFragment extends StackFragment {
 		// View v = listView.getChildAt(0);
 		// top = v == null ? 0 : v.getTop();
 		super.onDestroyView();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.start:
+			break;
+		case R.id.pause:
+			break;
+		case R.id.stop:
+			break;
+		case R.id.del:
+			new AlertDialog.Builder(getActivity())
+			.setTitle(R.string.confirm)
+			.setIcon(R.drawable.ic_launcher)
+			.setMessage(R.string.exit_message)
+			.setPositiveButton(R.string.delete,
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog,
+								int which) {
+						}
+
+					})
+			.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog,
+								int which) {
+						}
+
+					}).create().show();
+			break;
+		}
 	}
 
 	@Override
@@ -304,10 +354,12 @@ public class RemoteFragment extends StackFragment {
 								selectedCount--;
 							}
 							if (isChecked && selectedCount == 1) {
+								empty.setVisibility(View.INVISIBLE);
 								window.update();
 								window.showAtLocation(root, Gravity.CENTER
 										| Gravity.BOTTOM, 0, 0);
 							} else if (selectedCount == 0) {
+								empty.setVisibility(View.GONE);
 								window.dismiss();
 							}
 							notifyDataSetChanged();

@@ -37,6 +37,7 @@ public class HDStarApp extends Application {
 
 	public static String cookies = null;
 	public static boolean hasNewMessage = false;
+	public static boolean loginRemote = false;
 	public static DisplayImageOptions displayOptions;
 	// private LruCache<String, Bitmap> mImageMemoryCache = null;
 	// private DiskLruCache mDiskCache = null;

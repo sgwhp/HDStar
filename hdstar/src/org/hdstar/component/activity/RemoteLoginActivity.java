@@ -1,6 +1,7 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.RemoteLoginTask;
 import org.hdstar.widget.CustomDialog;
@@ -86,6 +87,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 		@Override
 		public void onComplete(Boolean result) {
 			dialog.dismiss();
+			HDStarApp.loginRemote = true;
 			Intent intent = new Intent(RemoteLoginActivity.this,
 					RemoteActivity.class);
 			startActivity(intent);
