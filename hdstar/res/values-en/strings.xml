@@ -99,5 +99,5 @@
     <string name="delete_message">Sure to exit?</string>
     
     <!-- remote -->
-    <string name="task_info">Size:%1$s  Ratio：%2$s  DL Speed:%3$s  UL Speed:%4$S</string>
+    <string name="task_info">Size:%1$s  Ratio：%2$s  DL Speed:%3$s/s  UL Speed:%4$s/s</string>
 </resources>

@@ -114,7 +114,7 @@
     <string name="delete_message">确定删除？</string>
     
     <!-- remote -->
-    <string name="task_info">大小：%1$s  分享率：%2$s  下载速度：%3$s  上传速度：%4$S</string>
+    <string name="task_info">大小：%1$s  分享率：%2$s  下载速度：%3$s/s  上传速度：%4$s/s</string>
     <string name="ip_hint">127.0.0.1:80</string>
 
 </resources>

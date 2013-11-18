@@ -1,37 +1,64 @@
 package org.hdstar.widget.fragment;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.hdstar.R;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.ResponseParser;
-import org.hdstar.widget.RemoteTaskAdapter;
-
-import ch.boye.httpclientandroidlib.HttpResponse;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import org.hdstar.util.SoundPoolManager;
+import org.hdstar.util.Util;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class RemoteFragment extends StackFragment {
 	private PullToRefreshListView refreshView;
+	private View root;
 	private ListView listView;
 	private Parcelable listViewState;
 	private RemoteTaskAdapter adapter;
-	private ArrayList<RemoteTaskInfo> list = new ArrayList<RemoteTaskInfo>();
+	private ArrayList<RemoteTaskInfo> list;
+	private boolean[] selected;
+	private int selectedCount;
+	private PopupWindow window = null;
+	private LinearLayout ctrlBox;
 
 	public static RemoteFragment newInstance() {
 		RemoteFragment f = new RemoteFragment();
@@ -41,25 +68,29 @@ public class RemoteFragment extends StackFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.forum_view, null);
+		root = inflater.inflate(R.layout.message_box, null);
+		refreshView = (PullToRefreshListView) root
+				.findViewById(R.id.messageList);
+		return root;
 	}
-	
+
 	@SuppressLint("NewApi")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		if (adapter == null) {
-			adapter = new RemoteTaskAdapter(getActivity(), list);
+			list = new ArrayList<RemoteTaskInfo>();
+			adapter = new RemoteTaskAdapter();
 		}
 		init();
-		if (adapter.getList() == null || adapter.getList().size() == 0) {
+		if (list == null || list.size() == 0) {
 			refreshView.setRefreshing(false);
 		} else {
 			adapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	@Override
 	public void onDestroyView() {
 		// StackPagerAdapter forwardºÍViewPager
@@ -74,7 +105,7 @@ public class RemoteFragment extends StackFragment {
 		// top = v == null ? 0 : v.getTop();
 		super.onDestroyView();
 	}
-	
+
 	@Override
 	public void onSelected() {
 		listViewState = null;
@@ -84,8 +115,10 @@ public class RemoteFragment extends StackFragment {
 	public void refresh() {
 		refreshView.setRefreshing(false);
 	}
-	
+
 	protected void init() {
+		listView = refreshView.getRefreshableView();
+		listView.setAdapter(adapter);
 		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
@@ -100,8 +133,13 @@ public class RemoteFragment extends StackFragment {
 				doRefresh();
 			}
 		});
+		window = new PopupWindow(ctrlBox, LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT, false);
+		window.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.bottom_pop_up_window_bg));
+		window.setAnimationStyle(R.style.task_ctrl_box_anim_style);
 	}
-	
+
 	void fetch() {
 		if (mTask != null) {
 			return;
@@ -109,16 +147,53 @@ public class RemoteFragment extends StackFragment {
 		BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = new BaseAsyncTask<ArrayList<RemoteTaskInfo>>();
 		task.attach(mCallback);
 		attachTask(task);
-		task.execGet("", new ResponseParser<ArrayList<RemoteTaskInfo>>(){
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("cmd", "d.get_throttle_name="));
+		params.add(new BasicNameValuePair("cmd", "d.get_custom=sch_ignore"));
+		params.add(new BasicNameValuePair("cmd", "cat=$d.views="));
+		params.add(new BasicNameValuePair("cmd", "d.get_custom=seedingtime"));
+		params.add(new BasicNameValuePair("cmd", "d.get_custom=addtime"));
+		params.add(new BasicNameValuePair("mode", "list"));
+		try {
+			task.execPost(
+					"http://91.121.104.122/rutorrent/plugins/httprpc/action.php",
+					params, new ResponseParser<ArrayList<RemoteTaskInfo>>() {
 
-			@Override
-			public ArrayList<RemoteTaskInfo> parse(HttpResponse res,
-					InputStream in) {
-				//
-				return null;
-			}});
+						@Override
+						public ArrayList<RemoteTaskInfo> parse(
+								HttpResponse res, InputStream in) {
+							JsonParser parser = new JsonParser();
+							JsonElement element = parser
+									.parse(new InputStreamReader(in));
+							JsonObject obj = element.getAsJsonObject()
+									.getAsJsonObject("t");
+							Set<Entry<String, JsonElement>> set = obj
+									.entrySet();
+							ArrayList<RemoteTaskInfo> result = new ArrayList<RemoteTaskInfo>();
+							RemoteTaskInfo info;
+							JsonArray arr;
+							for (Entry<String, JsonElement> entry : set) {
+								info = new RemoteTaskInfo();
+								arr = entry.getValue().getAsJsonArray();
+								info.hash = entry.getKey();
+								info.state = arr.get(3).getAsInt();
+								info.title = arr.get(4).toString();
+								info.size = arr.get(5).getAsLong();
+								info.completeSize = arr.get(8).getAsLong();
+								info.ratio = arr.get(10).getAsFloat() / 1000;
+								info.upSpeed = arr.get(11).getAsLong();
+								info.dlSpeed = arr.get(12).getAsLong();
+								result.add(info);
+							}
+							msgId = SUCCESS_MSG_ID;
+							return result;
+						}
+					});
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	private void doRefresh() {
 		if (mTask != null) {
 			mTask.detach();
@@ -126,23 +201,125 @@ public class RemoteFragment extends StackFragment {
 		}
 		fetch();
 	}
-	
-	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>(){
+
+	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {
 
 		@Override
 		public void onComplete(ArrayList<RemoteTaskInfo> result) {
-			
+			refreshView.onRefreshComplete();
+			list.clear();
+			SoundPoolManager.play(getActivity());
+			list.addAll(result);
+			selected = new boolean[list.size()];
+			adapter.notifyDataSetChanged();
 		}
 
 		@Override
 		public void onCancel() {
-			
+			refreshView.onRefreshComplete();
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
-			
+			refreshView.onRefreshComplete();
+			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 	};
+
+	private static class ViewHolder {
+		TextView title, info;
+		ProgressBar progress;
+		CheckBox check;
+
+		ViewHolder(View v) {
+			title = (TextView) v.findViewById(R.id.title);
+			info = (TextView) v.findViewById(R.id.task_info);
+			progress = (ProgressBar) v.findViewById(R.id.progress);
+			check = (CheckBox) v.findViewById(R.id.check);
+		}
+	}
+
+	public class RemoteTaskAdapter extends BaseAdapter {
+		private LayoutInflater inflater;
+		private String taskInfo;
+
+		public RemoteTaskAdapter() {
+			inflater = LayoutInflater.from(getActivity());
+			selectedCount = 0;
+			selected = new boolean[list.size()];
+			// for (int i = 0; i < list.size(); i++) {
+			// selected[i] = false;
+			// }
+			taskInfo = getActivity().getString(R.string.task_info);
+			ctrlBox = (LinearLayout) inflater.inflate(
+					R.layout.remote_task_ctrl_layout, null);
+		}
+
+		@Override
+		public int getCount() {
+			return list == null ? 0 : list.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return null;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+
+		@Override
+		public View getView(final int position, View convertView,
+				ViewGroup parent) {
+			ViewHolder holder;
+			if (convertView == null) {
+				convertView = inflater.inflate(R.layout.remote_task_row, null);
+				holder = new ViewHolder(convertView);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+			RemoteTaskInfo item = list.get(position);
+			holder.title.setText(item.title);
+			holder.progress
+					.setProgress((int) (item.completeSize * 100.0 / item.size));
+			holder.info.setText(String.format(taskInfo,
+					Util.formatFileSize(item.size), item.ratio,
+					Util.formatFileSize(item.dlSpeed),
+					Util.formatFileSize(item.upSpeed)));
+			holder.check.setOnCheckedChangeListener(null);
+			holder.check.setChecked(selected[position]);
+			holder.check
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							selected[position] = isChecked;
+							if (isChecked) {
+								selectedCount++;
+							} else {
+								selectedCount--;
+							}
+							if (isChecked && selectedCount == 1) {
+								window.update();
+								window.showAtLocation(root, Gravity.CENTER
+										| Gravity.BOTTOM, 0, 0);
+							} else if (selectedCount == 0) {
+								window.dismiss();
+							}
+							notifyDataSetChanged();
+						}
+					});
+			return convertView;
+		}
+
+		public ArrayList<RemoteTaskInfo> getList() {
+			return list;
+		}
+
+	}
 
 }

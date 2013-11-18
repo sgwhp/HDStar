@@ -75,6 +75,7 @@
             android:layout_below="@+id/deviceName"
             android:background="@drawable/setting_strip_top_sel"
             android:gravity="center_vertical"
+            android:onClick="onClick"
             android:text="@string/clear_cache" />
 
         <Button
@@ -105,7 +106,7 @@
 
         <org.hdstar.widget.LTACheckBox
             android:id="@+id/fetchImage"
-            style="@style/CustomCheckboxTheme"
+            style="@style/TransparentCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView1"
@@ -114,7 +115,7 @@
 
         <org.hdstar.widget.LTACheckBox
             android:id="@+id/sound"
-            style="@style/CustomCheckboxTheme"
+            style="@style/TransparentCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView2"
@@ -134,7 +135,7 @@
 
         <org.hdstar.widget.LTACheckBox
             android:id="@+id/auto_refresh"
-            style="@style/CustomCheckboxTheme"
+            style="@style/TransparentCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/auto_refresh_tag"

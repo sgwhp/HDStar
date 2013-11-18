@@ -61,7 +61,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 
 	@Override
 	public void onClick(View v) {
-		String[] ip = ipET.getText().toString().split(":");
+		String ip = ipET.getText().toString();
 		String acc = accET.getText().toString();
 		String pwd = pwdET.getText().toString();
 
@@ -78,8 +78,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 		dialog.show();
 		task = new RemoteLoginTask();
 		task.attach(mCallback);
-		task.auth(ip[0], Integer.parseInt(ip[1]), "http://" + ip[0]
-				+ "/rutorrent", acc, pwd);
+		task.auth(ip, "http://" + ip + "/rutorrent", acc, pwd);
 	}
 
 	private TaskCallback<Boolean> mCallback = new TaskCallback<Boolean>() {

@@ -13,12 +13,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <View
-                android:id="@+id/land_mark"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:layout_centerHorizontal="true" />
-
             <TextView
                 android:id="@+id/app_version_tag"
                 android:layout_width="wrap_content"
@@ -32,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/app_version_tag"
+                android:layout_below="@+id/app_size_tag"
                 android:text="@string/update_date_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -41,8 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/app_version_tag"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/land_mark"
+                android:layout_alignParentRight="true"
                 android:layout_toRightOf="@+id/app_version_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -59,7 +52,7 @@
                 android:id="@+id/app_size_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/land_mark"
+                android:layout_below="@+id/app_version_tag"
                 android:text="@string/app_size_tag"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -98,6 +91,7 @@
                 android:layout_below="@+id/h_scroll"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
+
     </ScrollView>
 
     <RelativeLayout

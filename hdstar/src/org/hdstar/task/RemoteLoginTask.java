@@ -27,12 +27,17 @@ public class RemoteLoginTask extends BaseAsyncTask<Boolean> {
 
 			@Override
 			public Boolean parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 200) {
-					return true;
-				}
-				return false;
+				// if (res.getStatusLine().getStatusCode() == 200) {
+				// return true;
+				// }
+				msgId = SUCCESS_MSG_ID;
+				return true;
 			}
 		};
 		this.execute("");
+	}
+
+	public void auth(String ip, String url, String username, String password) {
+		auth(ip, 80, url, username, password);
 	}
 }

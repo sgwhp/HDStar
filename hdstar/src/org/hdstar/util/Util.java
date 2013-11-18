@@ -6,16 +6,23 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 public class Util {
+	public static final long KB_TO_B = 1024;
+	public static final long MB_TO_B = 1024 * 1024;
+	public static final long GB_TO_B = 1024 * 1024 * 1024;
+	public static final long TB_TO_B = 1024 * 1024 * 1024 * 1024;
+
 	public static String formatFileSize(long size) {
 		final DecimalFormat numFormat = new DecimalFormat("0.##");
 		if (size < 820) {
 			return size + "B";
 		} else if (size < 838860) {
-			return numFormat.format(size / 1024.0) + "KB";
+			return numFormat.format(size * 1.0 / KB_TO_B) + "KB";
 		} else if (size < 858993459L) {
-			return numFormat.format(size / (1024 * 1024.0)) + "MB";
+			return numFormat.format(size * 1.0 / MB_TO_B) + "MB";
+		} else if (size < 879609302220L) {
+			return numFormat.format(size * 1.0 / GB_TO_B) + "GB";
 		} else {
-			return numFormat.format(size / (1024 * 1024 * 1024.0)) + "GB";
+			return numFormat.format(size * 1.0 / TB_TO_B) + "TB";
 		}
 	}
 

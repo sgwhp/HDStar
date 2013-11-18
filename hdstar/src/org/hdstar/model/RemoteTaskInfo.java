@@ -8,11 +8,13 @@ public class RemoteTaskInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public String hash;
 	public String title;
 	public long size;
 	public float ratio;
-	public float upSpeed;
-	public float dlSpeed;
-	public int progress;
+	public long upSpeed;
+	public long dlSpeed;
+	public long completeSize;
+	public int state;
 
 }
