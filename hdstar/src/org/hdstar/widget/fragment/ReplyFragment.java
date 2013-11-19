@@ -46,6 +46,10 @@ public class ReplyFragment extends StackFragment {
 	private Button button = null;
 	private CustomDialog dialog = null;
 	private View v;
+	private ToggleButton smile;
+	private ResizeLayout root;
+	private InputMethodManager im;
+	private LinearLayout lin;
 
 	public static ReplyFragment newInstance(String topicID, String text,
 			String username) {
@@ -80,7 +84,7 @@ public class ReplyFragment extends StackFragment {
 
 	void init(String text, String username) {
 		final Context context = getActivity();
-		final InputMethodManager im = (InputMethodManager) context
+		im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
@@ -136,12 +140,11 @@ public class ReplyFragment extends StackFragment {
 
 		final SmilesAdapter smiles = new SmilesAdapter(context);
 		final GridView grid = (GridView) v.findViewById(R.id.content);
-		final ResizeLayout root = (ResizeLayout) v
-				.findViewById(R.id.root_layout);
+		root = (ResizeLayout) v.findViewById(R.id.root_layout);
 		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		// body.requestFocus();
 		// grid.setVisibility(View.GONE);
-		final LinearLayout lin = (LinearLayout) v.findViewById(R.id.smilies);
+		lin = (LinearLayout) v.findViewById(R.id.smilies);
 		lin.setVisibility(View.GONE);
 		grid.setAdapter(smiles);
 		grid.setOnItemClickListener(new OnItemClickListener() {
@@ -159,47 +162,56 @@ public class ReplyFragment extends StackFragment {
 
 		});
 
-		final ToggleButton smile = (ToggleButton) v.findViewById(R.id.smile);
-		smile.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-				if (isChecked) {
-					// sd.open();
-					lin.setVisibility(View.VISIBLE);
-					// im.hideSoftInputFromWindow(root.getWindowToken(), 0);
-					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-					smile.setBackgroundResource(R.drawable.keyboard);
-				} else {
-					// sd.close();
-					lin.setVisibility(View.GONE);
-					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-					smile.setBackgroundResource(R.drawable.smile);
-				}
-			}
-
-		});
+		smile = (ToggleButton) v.findViewById(R.id.smile);
+		smile.setOnCheckedChangeListener(checkListener);
 		// smile.performClick();
 
-		root.setOnResizeListener(new ResizeLayout.OnResizeListener() {
+		root.setOnResizeListener(resizeListener);
+	}
 
-			@Override
-			public void OnResize(int w, int h, int oldw, int oldh) {
-				if (h < oldh) {
-					// ¼üÅÌµ¯³ö
-					if (smile.isChecked()) {
-						// lin.setVisibility(View.GONE);
-						im.hideSoftInputFromWindow(root.getWindowToken(), 0);
-						smile.performClick();
-						im.toggleSoftInput(0,
-								InputMethodManager.HIDE_NOT_ALWAYS);
-						// im.showSoftInput(root,
-						// InputMethodManager.HIDE_NOT_ALWAYS);
-					}
+	private OnCheckedChangeListener checkListener = new OnCheckedChangeListener() {
+
+		@Override
+		public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+			if (isChecked) {
+				// sd.open();
+				root.setOnResizeListener(null);
+				lin.setVisibility(View.VISIBLE);
+				// im.hideSoftInputFromWindow(root.getWindowToken(), 0);
+				im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+				smile.setBackgroundResource(R.drawable.keyboard);
+				root.setOnResizeListener(resizeListener);
+			} else {
+				// sd.close();
+				root.setOnResizeListener(null);
+				lin.setVisibility(View.GONE);
+				im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+				smile.setBackgroundResource(R.drawable.smile);
+				root.setOnResizeListener(resizeListener);
+			}
+		}
+
+	};
+
+	private ResizeLayout.OnResizeListener resizeListener = new ResizeLayout.OnResizeListener() {
+
+		@Override
+		public void OnResize(int w, int h, int oldw, int oldh) {
+			if (h < oldh) {
+				// ¼üÅÌµ¯³ö
+				if (smile.isChecked()) {
+					// lin.setVisibility(View.GONE);
+					root.setOnResizeListener(null);
+					im.hideSoftInputFromWindow(root.getWindowToken(), 0);
+					smile.performClick();
+					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+					root.setOnResizeListener(resizeListener);
+					// im.showSoftInput(root,
+					// InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			}
-		});
-	}
+		}
+	};
 
 	private TaskCallback<Void> mCallback = new TaskCallback<Void>() {
 

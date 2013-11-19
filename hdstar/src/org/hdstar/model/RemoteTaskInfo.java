@@ -15,6 +15,7 @@ public class RemoteTaskInfo implements Serializable {
 	public long upSpeed;
 	public long dlSpeed;
 	public long completeSize;
+	public int open;
 	public int state;
 
 }

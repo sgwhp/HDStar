@@ -1,15 +1,19 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.RemoteLoginTask;
+import org.hdstar.util.EncodeDecode;
 import org.hdstar.widget.CustomDialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -45,6 +49,11 @@ public class RemoteLoginActivity extends BaseActivity implements
 		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		getSupportActionBar().setListNavigationCallbacks(list, this);
+		SharedPreferences share = getSharedPreferences(
+				Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
+		ipET.setText(share.getString("ip", ""));
+		accET.setText(share.getString("username", ""));
+		pwdET.setText(EncodeDecode.decode(share.getString("password", "")));
 	}
 
 	@Override
@@ -66,20 +75,29 @@ public class RemoteLoginActivity extends BaseActivity implements
 		String acc = accET.getText().toString();
 		String pwd = pwdET.getText().toString();
 
+		SharedPreferences share = getSharedPreferences(
+				Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
+		Editor editor = share.edit();
+		editor.putString("ip", ip);
+		editor.putString("username", acc);
+		editor.putString("password", EncodeDecode.encode(pwd));
+		editor.commit();
+
 		dialog = new CustomDialog(this, R.string.try_to_login);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				if (task.getStatus() != AsyncTask.Status.FINISHED)
-					task.abort();
+					task.detach();
 			}
 
 		});
 		dialog.show();
 		task = new RemoteLoginTask();
 		task.attach(mCallback);
-		task.auth(ip, "http://" + ip + "/rutorrent", acc, pwd);
+		task.auth(ip, String.format(Const.Urls.RUTORRENT_HOME_PAGE, ip), acc,
+				pwd);
 	}
 
 	private TaskCallback<Boolean> mCallback = new TaskCallback<Boolean>() {

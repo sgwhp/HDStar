@@ -9,16 +9,21 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.hdstar.R;
+import org.hdstar.common.Const;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
+import org.hdstar.widget.CustomDialog;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
@@ -32,6 +37,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -52,6 +58,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class RemoteFragment extends StackFragment implements OnClickListener {
+	private String ip;
 	private PullToRefreshListView refreshView;
 	private View root;
 	private View empty;
@@ -64,6 +71,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 	private int selectedCount;
 	private PopupWindow window = null;
 	private LinearLayout ctrlBox;
+	private CustomDialog dialog = null;
 
 	public static RemoteFragment newInstance() {
 		RemoteFragment f = new RemoteFragment();
@@ -74,17 +82,8 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		root = inflater.inflate(R.layout.remote_layout, null);
-		refreshView = (PullToRefreshListView) root
-				.findViewById(R.id.taskList);
+		refreshView = (PullToRefreshListView) root.findViewById(R.id.taskList);
 		empty = root.findViewById(R.id.empty);
-		start = root.findViewById(R.id.start);
-		start.setOnClickListener(this);
-		pause = root.findViewById(R.id.pause);
-		pause.setOnClickListener(this);
-		stop = root.findViewById(R.id.stop);
-		stop.setOnClickListener(this);
-		delete = root.findViewById(R.id.del);
-		delete.setOnClickListener(this);
 		return root;
 	}
 
@@ -93,6 +92,18 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
+		if (ctrlBox == null) {
+			ctrlBox = (LinearLayout) LayoutInflater.from(getActivity())
+					.inflate(R.layout.remote_task_ctrl_layout, null);
+			start = ctrlBox.findViewById(R.id.start);
+			start.setOnClickListener(this);
+			pause = ctrlBox.findViewById(R.id.pause);
+			pause.setOnClickListener(this);
+			stop = ctrlBox.findViewById(R.id.stop);
+			stop.setOnClickListener(this);
+			delete = ctrlBox.findViewById(R.id.del);
+			delete.setOnClickListener(this);
+		}
 		if (adapter == null) {
 			list = new ArrayList<RemoteTaskInfo>();
 			adapter = new RemoteTaskAdapter();
@@ -122,36 +133,40 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()){
+		switch (v.getId()) {
 		case R.id.start:
+			start();
 			break;
 		case R.id.pause:
+			pause();
 			break;
 		case R.id.stop:
+			stop();
 			break;
 		case R.id.del:
 			new AlertDialog.Builder(getActivity())
-			.setTitle(R.string.confirm)
-			.setIcon(R.drawable.ic_launcher)
-			.setMessage(R.string.exit_message)
-			.setPositiveButton(R.string.delete,
-					new DialogInterface.OnClickListener() {
+					.setTitle(R.string.confirm)
+					.setIcon(R.drawable.ic_launcher)
+					.setMessage(R.string.exit_message)
+					.setPositiveButton(R.string.delete,
+							new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog,
-								int which) {
-						}
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									delete();
+								}
 
-					})
-			.setNegativeButton(R.string.cancel,
-					new DialogInterface.OnClickListener() {
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog,
-								int which) {
-						}
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+								}
 
-					}).create().show();
+							}).create().show();
 			break;
 		}
 	}
@@ -167,6 +182,9 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 	}
 
 	protected void init() {
+		SharedPreferences share = getActivity().getSharedPreferences(
+				Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
+		ip = share.getString("ip", null);
 		listView = refreshView.getRefreshableView();
 		listView.setAdapter(adapter);
 		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
@@ -205,8 +223,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		params.add(new BasicNameValuePair("cmd", "d.get_custom=addtime"));
 		params.add(new BasicNameValuePair("mode", "list"));
 		try {
-			task.execPost(
-					"http://91.121.104.122/rutorrent/plugins/httprpc/action.php",
+			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
 					params, new ResponseParser<ArrayList<RemoteTaskInfo>>() {
 
 						@Override
@@ -226,6 +243,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 								info = new RemoteTaskInfo();
 								arr = entry.getValue().getAsJsonArray();
 								info.hash = entry.getKey();
+								info.open = arr.get(0).getAsInt();
 								info.state = arr.get(3).getAsInt();
 								info.title = arr.get(4).toString();
 								info.size = arr.get(5).getAsLong();
@@ -244,7 +262,166 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		}
 	}
 
+	private List<NameValuePair> buildParams(String mode) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("mode", mode));
+		for (int i = 0; i < list.size(); i++) {
+			if (selected[i]) {
+				params.add(new BasicNameValuePair("hash", list.get(i).hash));
+			}
+		}
+		return params;
+	}
+
+	private void start() {
+		if (selectedCount == 0) {
+			Toast.makeText(getActivity(), R.string.no_task_selected,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		dialog = new CustomDialog(getActivity(), R.string.connecting);
+		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
+		task.attach(processCallback);
+		attachTask(task);
+		try {
+			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+					buildParams("start"), new ResponseParser<Boolean>() {
+
+						@Override
+						public Boolean parse(HttpResponse res, InputStream in) {
+							if (res.getStatusLine().getStatusCode() == 200) {
+								msgId = SUCCESS_MSG_ID;
+								return true;
+							}
+							return false;
+						}
+					});
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					task.detach();
+				}
+			});
+			dialog.show();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void pause() {
+		if (selectedCount == 0) {
+			Toast.makeText(getActivity(), R.string.no_task_selected,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		dialog = new CustomDialog(getActivity(), R.string.connecting);
+		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
+		task.attach(processCallback);
+		attachTask(task);
+		try {
+			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+					buildParams("pause"), new ResponseParser<Boolean>() {
+
+						@Override
+						public Boolean parse(HttpResponse res, InputStream in) {
+							if (res.getStatusLine().getStatusCode() == 200) {
+								msgId = SUCCESS_MSG_ID;
+								return true;
+							}
+							return false;
+						}
+					});
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					task.detach();
+				}
+			});
+			dialog.show();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void stop() {
+		if (selectedCount == 0) {
+			Toast.makeText(getActivity(), R.string.no_task_selected,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		dialog = new CustomDialog(getActivity(), R.string.connecting);
+		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
+		task.attach(processCallback);
+		attachTask(task);
+		try {
+			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+					buildParams("stop"), new ResponseParser<Boolean>() {
+
+						@Override
+						public Boolean parse(HttpResponse res, InputStream in) {
+							if (res.getStatusLine().getStatusCode() == 200) {
+								msgId = SUCCESS_MSG_ID;
+								return true;
+							}
+							return false;
+						}
+					});
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					task.detach();
+				}
+			});
+			dialog.show();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void delete() {
+		if (selectedCount == 0) {
+			Toast.makeText(getActivity(), R.string.no_task_selected,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+		dialog = new CustomDialog(getActivity(), R.string.connecting);
+		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
+		task.attach(processCallback);
+		attachTask(task);
+		try {
+			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+					buildParams("remove"), new ResponseParser<Boolean>() {
+
+						@Override
+						public Boolean parse(HttpResponse res, InputStream in) {
+							if (res.getStatusLine().getStatusCode() == 200) {
+								msgId = SUCCESS_MSG_ID;
+								return true;
+							}
+							return false;
+						}
+					});
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					task.detach();
+				}
+			});
+			dialog.show();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void doRefresh() {
+		if (window != null) {
+			window.dismiss();
+			empty.setVisibility(View.GONE);
+		}
 		if (mTask != null) {
 			mTask.detach();
 			mTask = null;
@@ -276,16 +453,37 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		}
 	};
 
+	private TaskCallback<Boolean> processCallback = new TaskCallback<Boolean>() {
+
+		@Override
+		public void onComplete(Boolean result) {
+			dialog.dismiss();
+		}
+
+		@Override
+		public void onCancel() {
+			dialog.dismiss();
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			dialog.dismiss();
+		}
+
+	};
+
 	private static class ViewHolder {
 		TextView title, info;
 		ProgressBar progress;
 		CheckBox check;
+		ImageView state;
 
 		ViewHolder(View v) {
 			title = (TextView) v.findViewById(R.id.title);
 			info = (TextView) v.findViewById(R.id.task_info);
 			progress = (ProgressBar) v.findViewById(R.id.progress);
 			check = (CheckBox) v.findViewById(R.id.check);
+			state = (ImageView) v.findViewById(R.id.state);
 		}
 	}
 
@@ -301,8 +499,6 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 			// selected[i] = false;
 			// }
 			taskInfo = getActivity().getString(R.string.task_info);
-			ctrlBox = (LinearLayout) inflater.inflate(
-					R.layout.remote_task_ctrl_layout, null);
 		}
 
 		@Override
@@ -365,6 +561,17 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 							notifyDataSetChanged();
 						}
 					});
+			if (item.open == 0) {
+				holder.state.setImageResource(R.drawable.state_stop);
+			} else if (item.state == 0) {
+				holder.state.setImageResource(R.drawable.state_pause);
+			} else if (item.state == 1) {
+				if (item.completeSize == item.size) {
+					holder.state.setImageResource(R.drawable.state_seeding);
+				} else {
+					holder.state.setImageResource(R.drawable.state_leaching);
+				}
+			}
 			return convertView;
 		}
 

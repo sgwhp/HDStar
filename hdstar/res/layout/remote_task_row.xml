@@ -7,7 +7,8 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/check"
+        android:layout_toLeftOf="@+id/check"
+        android:layout_toRightOf="@+id/state"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ProgressBar
@@ -16,23 +17,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
-        android:layout_toRightOf="@+id/check" />
+        android:layout_toLeftOf="@+id/check"
+        android:layout_toRightOf="@+id/state" />
 
     <TextView
         android:id="@+id/task_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/progress"
-        android:layout_toRightOf="@+id/check"
+        android:layout_toLeftOf="@+id/check"
+        android:layout_toRightOf="@+id/state"
         android:text="@string/task_info"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    <ImageView
+        android:id="@+id/state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/state_stop" />
+    
     <CheckBox
         android:id="@+id/check"
         style="@style/CustomCheckboxTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 
 </RelativeLayout>

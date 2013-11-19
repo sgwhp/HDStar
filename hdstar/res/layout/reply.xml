@@ -65,6 +65,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:horizontalSpacing="2dp"
+            android:verticalSpacing="2dp"
             android:numColumns="7" >
         </GridView>
     </LinearLayout>

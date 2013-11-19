@@ -19,7 +19,6 @@
         android:layout_marginLeft="20.0dip"
         android:layout_marginRight="20.0dip"
         android:hint="@string/ip_hint"
-        android:text="91.121.104.122"
         android:saveEnabled="true" />
 
     <EditText
@@ -32,7 +31,6 @@
         android:layout_marginLeft="20.0dip"
         android:layout_marginRight="20.0dip"
         android:paddingLeft="42.0dip"
-        android:text="robust"
         android:saveEnabled="true" />
 
     <EditText
@@ -46,7 +44,6 @@
         android:layout_marginRight="20.0dip"
         android:inputType="textPassword"
         android:paddingLeft="42.0dip"
-        android:text="08201127"
         android:saveEnabled="true" />
 
     <Button

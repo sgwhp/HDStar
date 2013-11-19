@@ -15,6 +15,7 @@ public class Const {
 	public static final int APP_CODE = 1;
 
 	public static final class Urls {
+		/** web服务器地址 */
 		public static final String BASE_URL = "http://hdsky.me";
 		public static final String TAKE_LOGIN_URL = BASE_URL + "/takelogin.php";
 		public static final String HOME_PAGE = Const.Urls.BASE_URL
@@ -44,6 +45,8 @@ public class Const {
 		public static final String REPLY_PM_URL = BASE_URL + "/takemessage.php";
 		public static final String BOOKMARK_URL = BASE_URL
 				+ "/bookmark.php?torrentid=";
+
+		/** 客户端服务器地址 */
 		public static final String SERVER_ADDRESS = "http://hdstar.ap01.aws.af.cm/";
 		// public static final String SERVER_ADDRESS =
 		// "http://192.168.1.100:8080/HDStarService/";
@@ -79,6 +82,11 @@ public class Const {
 				+ "download";
 		public static final String SERVER_CHECK_UPDATE_URL = SERVER_ADDRESS
 				+ "checkVersion";
+
+		/** rutorrent地址 */
+		public static final String RUTORRENT_HOME_PAGE = "http://%s/rutorrent";
+		public static final String RUTORRENT_ACTION_URL = RUTORRENT_HOME_PAGE
+				+ "/plugins/httprpc/action.php";
 	}
 
 	public final class ResponseCode {
@@ -91,6 +99,7 @@ public class Const {
 
 	public static final String SETTING_SHARED_PREFS = "setting";
 	public static final String DOWNLOAD_SHARED_PREFS = "download";
+	public static final String RUTORRENT_SHARED_PREFS = "rutorrent";
 	public static final String DOWNLOAD_DIR = Environment
 			.getExternalStorageDirectory().getPath()
 			+ File.separator
