@@ -175,19 +175,15 @@ public class ReplyFragment extends StackFragment {
 		public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
 			if (isChecked) {
 				// sd.open();
-				root.setOnResizeListener(null);
 				lin.setVisibility(View.VISIBLE);
-				// im.hideSoftInputFromWindow(root.getWindowToken(), 0);
-				im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+				 im.hideSoftInputFromWindow(root.getWindowToken(), 0);
+//				im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 				smile.setBackgroundResource(R.drawable.keyboard);
-				root.setOnResizeListener(resizeListener);
 			} else {
 				// sd.close();
-				root.setOnResizeListener(null);
 				lin.setVisibility(View.GONE);
 				im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 				smile.setBackgroundResource(R.drawable.smile);
-				root.setOnResizeListener(resizeListener);
 			}
 		}
 
@@ -201,11 +197,11 @@ public class ReplyFragment extends StackFragment {
 				// ¼üÅÌµ¯³ö
 				if (smile.isChecked()) {
 					// lin.setVisibility(View.GONE);
-					root.setOnResizeListener(null);
+//					root.setOnResizeListener(null);
 					im.hideSoftInputFromWindow(root.getWindowToken(), 0);
 					smile.performClick();
 					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-					root.setOnResizeListener(resizeListener);
+//					root.setOnResizeListener(resizeListener);
 					// im.showSoftInput(root,
 					// InputMethodManager.HIDE_NOT_ALWAYS);
 				}

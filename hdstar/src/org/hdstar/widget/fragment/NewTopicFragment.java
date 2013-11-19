@@ -162,8 +162,8 @@ public class NewTopicFragment extends StackFragment {
 				if (isChecked) {
 					// sd.open();
 					lin.setVisibility(View.VISIBLE);
-					// im.hideSoftInputFromWindow(root.getWindowToken(), 0);
-					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+					 im.hideSoftInputFromWindow(root.getWindowToken(), 0);
+//					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 					smile.setBackgroundResource(R.drawable.keyboard);
 				} else {
 					// sd.close();
