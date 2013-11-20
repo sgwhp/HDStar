@@ -85,8 +85,10 @@ public class Const {
 
 		/** rutorrentµÿ÷∑ */
 		public static final String RUTORRENT_HOME_PAGE = "http://%s/rutorrent";
-		public static final String RUTORRENT_ACTION_URL = RUTORRENT_HOME_PAGE
+		public static final String RUTORRENT_RPC_ACTION_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/httprpc/action.php";
+		public static final String RUTORRENT_RSS_ACTION_URL = RUTORRENT_HOME_PAGE
+				+ "/plugins/rss/action.php";
 	}
 
 	public final class ResponseCode {

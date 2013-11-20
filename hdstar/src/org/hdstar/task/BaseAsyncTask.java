@@ -40,6 +40,10 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		this.cookie = cookie;
 	}
 
+	public static <T> BaseAsyncTask<T> newInstance() {
+		return new BaseAsyncTask<T>();
+	}
+
 	public static <T> BaseAsyncTask<T> newInstance(String cookie) {
 		return new BaseAsyncTask<T>(cookie);
 	}

@@ -82,7 +82,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		root = inflater.inflate(R.layout.remote_layout, null);
-		refreshView = (PullToRefreshListView) root.findViewById(R.id.taskList);
+		refreshView = (PullToRefreshListView) root.findViewById(R.id.task_list);
 		empty = root.findViewById(R.id.empty);
 		return root;
 	}
@@ -223,7 +223,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		params.add(new BasicNameValuePair("cmd", "d.get_custom=addtime"));
 		params.add(new BasicNameValuePair("mode", "list"));
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					params, new ResponseParser<ArrayList<RemoteTaskInfo>>() {
 
 						@Override
@@ -284,7 +284,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("start"), new ResponseParser<Boolean>() {
 
 						@Override
@@ -320,7 +320,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("pause"), new ResponseParser<Boolean>() {
 
 						@Override
@@ -356,7 +356,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("stop"), new ResponseParser<Boolean>() {
 
 						@Override
@@ -392,7 +392,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_ACTION_URL, ip),
+			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("remove"), new ResponseParser<Boolean>() {
 
 						@Override

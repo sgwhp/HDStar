@@ -7,7 +7,7 @@
 
     <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pull_refresh_expandable_list"
+        android:id="@+id/rss_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"
@@ -18,7 +18,6 @@
         ptr:ptrHeaderTextColor="@android:color/white"
         ptr:ptrFooterPullText="@string/pull_to_add_next_page"
         ptr:ptrFooterReleaseText="@string/release_to_add_next_page"
-        ptr:ptrAnimationStyle="flip"
-        ptr:ptrMode="both" />
+        ptr:ptrAnimationStyle="flip" />
 
 </LinearLayout>

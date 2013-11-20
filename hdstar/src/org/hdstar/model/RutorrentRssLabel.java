@@ -10,8 +10,8 @@ public class RutorrentRssLabel implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	public String label;
-	public boolean auto;
-	public boolean enabled;
+	public int auto;// 布尔值，只有0,1
+	public int enabled;// 布尔值，只有0,1
 	public String hash;
 	public String url;
 	public ArrayList<RutorrentRssItem> items;
