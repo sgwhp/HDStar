@@ -102,4 +102,7 @@
     <string name="task_info">Size:%1$s  Ratio：%2$s  DL Speed:%3$s/s  UL Speed:%4$s/s</string>
     <string name="connecting">Connecting…</string>
     <string name="no_task_selected">Please select a task.</string>
+    <string name="download">Load</string>
+    <string name="rss">rss</string>
+    <string name="download_dir">Download directory</string>
 </resources>

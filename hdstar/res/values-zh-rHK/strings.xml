@@ -101,4 +101,7 @@
     <string name="task_info">大小：%1$s  分享率：%2$s  下載速度：%3$s/s  上傳速度：%4$/s</string>
     <string name="connecting">正在連接…</string>
     <string name="no_task_selected">請選擇一個任務</string>
+    <string name="download">下載</string>
+    <string name="rss">訂閱</string>
+    <string name="download_dir">下載目錄</string>
 </resources>

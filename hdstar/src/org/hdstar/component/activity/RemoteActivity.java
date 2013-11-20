@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -39,7 +40,10 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -77,12 +81,17 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private ArrayList<RemoteTaskInfo> list = new ArrayList<RemoteTaskInfo>();
 	private ArrayList<RutorrentRssLabel> rssList = new ArrayList<RutorrentRssLabel>();
 	private boolean[] selected;
+	private boolean[] selectedRss;
 	private int selectedCount;
 	private PopupWindow window = null;
+	private PopupWindow addRssWindow;
+	private EditText dir;
 	private LinearLayout ctrlBox;
 	private CustomDialog dialog = null;
 	private BaseAsyncTask<?> mTask;
 	private BaseAsyncTask<?> rssTask;
+	private LayoutInflater inflater;
+	private int group = -1;
 
 	public RemoteActivity() {
 		super(R.string.rutorrent);
@@ -104,18 +113,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		refreshExpandableView = (PullToRefreshExpandableListView) findViewById(R.id.rss_list);
 		rssListView = refreshExpandableView.getRefreshableView();
 
-		if (ctrlBox == null) {
-			ctrlBox = (LinearLayout) LayoutInflater.from(this).inflate(
-					R.layout.remote_task_ctrl_layout, null);
-			start = ctrlBox.findViewById(R.id.start);
-			start.setOnClickListener(this);
-			pause = ctrlBox.findViewById(R.id.pause);
-			pause.setOnClickListener(this);
-			stop = ctrlBox.findViewById(R.id.stop);
-			stop.setOnClickListener(this);
-			delete = ctrlBox.findViewById(R.id.del);
-			delete.setOnClickListener(this);
-		}
+		inflater = LayoutInflater.from(this);
 		init();
 		refreshView.setRefreshing(false);
 		refreshExpandableView.setRefreshing(false);
@@ -188,6 +186,16 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 								}
 							}).create().show();
 			break;
+		case R.id.download:
+			showDownloadWindow();
+			break;
+		case R.id.add_rss:
+			addRssWindow.dismiss();
+			download();
+			break;
+		case R.id.close:
+			addRssWindow.dismiss();
+			break;
 		}
 	}
 
@@ -215,6 +223,30 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 		rssAdapter = new RssAdapter();
 		rssListView.setAdapter(rssAdapter);
+		// 只能同时展开一项
+		rssListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+
+			@Override
+			public void onGroupExpand(int groupPosition) {
+				for (int i = 0; i < rssAdapter.getGroupCount(); i++) {
+					if (groupPosition != i) {
+						rssListView.collapseGroup(i);
+					}
+				}
+				group = groupPosition;
+				selectedRss = new boolean[rssList.get(groupPosition).items
+						.size()];
+			}
+		});
+
+		rssListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+
+			@Override
+			public void onGroupCollapse(int groupPosition) {
+				group = -1;
+				selectedRss = null;
+			}
+		});
 		refreshExpandableView
 				.setOnRefreshListener(new OnRefreshListener<ExpandableListView>() {
 
@@ -232,11 +264,35 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 						refreshRss();
 					}
 				});
+
+		findViewById(R.id.download).setOnClickListener(this);
+		
+		ctrlBox = (LinearLayout) inflater.inflate(
+				R.layout.remote_task_ctrl_layout, null);
+		start = ctrlBox.findViewById(R.id.start);
+		start.setOnClickListener(this);
+		pause = ctrlBox.findViewById(R.id.pause);
+		pause.setOnClickListener(this);
+		stop = ctrlBox.findViewById(R.id.stop);
+		stop.setOnClickListener(this);
+		delete = ctrlBox.findViewById(R.id.del);
+		delete.setOnClickListener(this);
 		window = new PopupWindow(ctrlBox, LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT, false);
 		window.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.bottom_pop_up_window_bg));
 		window.setAnimationStyle(R.style.task_ctrl_box_anim_style);
+
+		View addRssLayout = inflater.inflate(R.layout.add_rss_dialog, null);
+		addRssLayout.findViewById(R.id.add_rss).setOnClickListener(this);
+		addRssLayout.findViewById(R.id.close).setOnClickListener(this);
+		dir = (EditText)addRssLayout.findViewById(R.id.dir);
+		dir.setText(share.getString("downloadDir", ""));
+		addRssWindow = new PopupWindow(addRssLayout, LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT, true);
+		addRssWindow.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.bottom_pop_up_window_bg));
+		addRssWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
 	}
 
 	// public void refresh() {
@@ -493,6 +549,89 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	private void showDownloadWindow() {
+		if (selectedRss == null) {
+			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
+		int i = selectedRss.length - 1;
+		for (; i >= 0; i--) {
+			if (selectedRss[i]) {
+				break;
+			}
+		}
+		if (i < 0) {
+			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
+					.show();
+			return;
+		}
+		addRssWindow.update();
+		addRssWindow.showAtLocation(root, Gravity.CENTER, 0, 0);
+	}
+	
+	private void download(){
+		dialog = new CustomDialog(this, R.string.connecting);
+		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
+		task.attach(new TaskCallback<Boolean>(){
+
+			@Override
+			public void onComplete(Boolean result) {
+				dialog.dismiss();
+				refreshExpandableView.setRefreshing(false);
+			}
+
+			@Override
+			public void onCancel() {
+				dialog.dismiss();
+			}
+
+			@Override
+			public void onFail(Integer msgId) {
+				dialog.dismiss();
+				Toast.makeText(getApplicationContext(), msgId, Toast.LENGTH_SHORT).show();
+			}});
+		attachRssTask(task);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("mode", "loadtorrents"));
+		Editor editor = getPreferences(MODE_PRIVATE).edit();
+		editor.putString("downloadDir", dir.getText().toString());
+		editor.commit();
+		params.add(new BasicNameValuePair("dir_edit", dir.getText().toString()));
+		RutorrentRssLabel label = rssList.get(group);
+		params.add(new BasicNameValuePair("rss", label.hash));
+		for (int i = 0; i < label.items.size(); i++) {
+			if (selectedRss[i]) {
+				params.add(new BasicNameValuePair("url", label.items.get(i).href));
+			}
+		}
+		try {
+			task.execPost(
+					String.format(Const.Urls.RUTORRENT_RSS_ACTION_URL, ip),
+					params, new ResponseParser<Boolean>() {
+
+						@Override
+						public Boolean parse(HttpResponse res, InputStream in) {
+							if (res.getStatusLine().getStatusCode() == 200) {
+								msgId = SUCCESS_MSG_ID;
+								return true;
+							}
+							return false;
+						}
+					});
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					task.detach();
+				}
+			});
+			dialog.show();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void doRefresh() {
 		if (window != null) {
 			window.dismiss();
@@ -589,11 +728,10 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	}
 
 	public class RemoteTaskAdapter extends BaseAdapter {
-		private LayoutInflater inflater;
+
 		private String taskInfo;
 
 		public RemoteTaskAdapter() {
-			inflater = LayoutInflater.from(RemoteActivity.this);
 			selectedCount = 0;
 			selected = new boolean[list.size()];
 			taskInfo = getString(R.string.task_info);
@@ -679,6 +817,27 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 	}
 
+	private static class RssItemViewHolder {
+		private CheckBox check;
+		private TextView title;
+		private RssOnCheckedChangeListener listener;
+
+		RssItemViewHolder(View v) {
+			check = (CheckBox) v.findViewById(R.id.rss_check);
+			title = (TextView) v.findViewById(R.id.rss_title);
+		}
+	}
+
+	private class RssOnCheckedChangeListener implements OnCheckedChangeListener {
+		int child;
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
+			selectedRss[child] = isChecked;
+		}
+	}
+
 	private class RssAdapter extends BaseExpandableListAdapter {
 		Drawable expand;
 		Drawable collapse;
@@ -732,7 +891,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				View convertView, ViewGroup parent) {
 			if (convertView == null) {
 				TextView tv = new TextView(RemoteActivity.this);
-				tv.setTextSize(18);
+				tv.setTextSize(20);
+				tv.setPadding(10, 5, 10, 5);
 				convertView = tv;
 			}
 			RutorrentRssLabel label = rssList.get(groupPosition);
@@ -751,18 +911,28 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
+			RssItemViewHolder holder;
 			if (convertView == null) {
-				convertView = new TextView(RemoteActivity.this);
+				convertView = inflater.inflate(R.layout.rss_item, null);
+				holder = new RssItemViewHolder(convertView);
+				holder.listener = new RssOnCheckedChangeListener();
+				convertView.setTag(holder);
+			} else {
+				holder = (RssItemViewHolder) convertView.getTag();
 			}
 			RutorrentRssItem item = rssList.get(groupPosition).items
 					.get(childPosition);
-			((TextView) convertView).setText(item.title);
+			holder.title.setText(item.title);
+			holder.check.setOnCheckedChangeListener(null);
+			holder.check.setChecked(selectedRss[childPosition]);
+			holder.listener.child = childPosition;
+			holder.check.setOnCheckedChangeListener(holder.listener);
 			return convertView;
 		}
 
 		@Override
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
-			return false;
+			return true;
 		}
 
 	};
