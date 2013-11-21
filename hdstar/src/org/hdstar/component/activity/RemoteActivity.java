@@ -26,7 +26,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -37,6 +36,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -55,6 +55,8 @@ import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -82,7 +84,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private ArrayList<RutorrentRssLabel> rssList = new ArrayList<RutorrentRssLabel>();
 	private boolean[] selected;
 	private boolean[] selectedRss;
-	private int selectedCount;
+	private int refreshingLabel = -1;// 正在刷新的标签位置
+	private int selectedCount;// 选中的下载任务数
 	private PopupWindow window = null;
 	private PopupWindow addRssWindow;
 	private EditText dir;
@@ -91,7 +94,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private BaseAsyncTask<?> mTask;
 	private BaseAsyncTask<?> rssTask;
 	private LayoutInflater inflater;
-	private int group = -1;
+	private int group = -1;// 选中的rss标签位置
 
 	public RemoteActivity() {
 		super(R.string.rutorrent);
@@ -148,6 +151,24 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			rssTask.detach();
 			rssTask = null;
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.rss);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
+				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			showSecondaryMenu();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -261,12 +282,16 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						refreshExpandableView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
-						refreshRss();
+						if (refreshingLabel == -1) {
+							refreshRss();
+						} else {
+							refreshRssLabel();
+						}
 					}
 				});
 
 		findViewById(R.id.download).setOnClickListener(this);
-		
+		// 初始化下载任务控制弹出窗口
 		ctrlBox = (LinearLayout) inflater.inflate(
 				R.layout.remote_task_ctrl_layout, null);
 		start = ctrlBox.findViewById(R.id.start);
@@ -282,11 +307,11 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		window.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.bottom_pop_up_window_bg));
 		window.setAnimationStyle(R.style.task_ctrl_box_anim_style);
-
+		// 初始化rss下载弹出窗口
 		View addRssLayout = inflater.inflate(R.layout.add_rss_dialog, null);
 		addRssLayout.findViewById(R.id.add_rss).setOnClickListener(this);
 		addRssLayout.findViewById(R.id.close).setOnClickListener(this);
-		dir = (EditText)addRssLayout.findViewById(R.id.dir);
+		dir = (EditText) addRssLayout.findViewById(R.id.dir);
 		dir.setText(share.getString("downloadDir", ""));
 		addRssWindow = new PopupWindow(addRssLayout, LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT, true);
@@ -401,6 +426,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		return params;
 	}
 
+	/**
+	 * 开始下载任务
+	 */
 	private void start() {
 		if (selectedCount == 0) {
 			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
@@ -438,6 +466,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 暂停下载任务
+	 */
 	private void pause() {
 		if (selectedCount == 0) {
 			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
@@ -475,6 +506,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 停止下载任务
+	 */
 	private void stop() {
 		if (selectedCount == 0) {
 			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
@@ -512,6 +546,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 删除下载任务和文件
+	 */
 	private void delete() {
 		if (selectedCount == 0) {
 			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
@@ -549,6 +586,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 展示下载确认窗口
+	 */
 	private void showDownloadWindow() {
 		if (selectedRss == null) {
 			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
@@ -569,11 +609,14 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		addRssWindow.update();
 		addRssWindow.showAtLocation(root, Gravity.CENTER, 0, 0);
 	}
-	
-	private void download(){
+
+	/**
+	 * 从rss中添加下载任务
+	 */
+	private void download() {
 		dialog = new CustomDialog(this, R.string.connecting);
 		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
-		task.attach(new TaskCallback<Boolean>(){
+		task.attach(new TaskCallback<Boolean>() {
 
 			@Override
 			public void onComplete(Boolean result) {
@@ -589,8 +632,10 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onFail(Integer msgId) {
 				dialog.dismiss();
-				Toast.makeText(getApplicationContext(), msgId, Toast.LENGTH_SHORT).show();
-			}});
+				Toast.makeText(getApplicationContext(), msgId,
+						Toast.LENGTH_SHORT).show();
+			}
+		});
 		attachRssTask(task);
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("mode", "loadtorrents"));
@@ -602,7 +647,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		params.add(new BasicNameValuePair("rss", label.hash));
 		for (int i = 0; i < label.items.size(); i++) {
 			if (selectedRss[i]) {
-				params.add(new BasicNameValuePair("url", label.items.get(i).href));
+				params.add(new BasicNameValuePair("url",
+						label.items.get(i).href));
 			}
 		}
 		try {
@@ -632,6 +678,36 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 刷新选中订阅
+	 */
+	private void refreshRssLabel() {
+		final BaseAsyncTask<ArrayList<RutorrentRssLabel>> task = new BaseAsyncTask<ArrayList<RutorrentRssLabel>>();
+		task.attach(rssCallback);
+		task.execGet(
+				String.format(Const.Urls.RUTORRENT_RSS_REFRESH_URL, ip,
+						rssList.get(refreshingLabel).hash),
+				new ResponseParser<ArrayList<RutorrentRssLabel>>() {
+
+					@Override
+					public ArrayList<RutorrentRssLabel> parse(HttpResponse res,
+							InputStream in) {
+						JsonParser parser = new JsonParser();
+						JsonElement element = parser
+								.parse(new InputStreamReader(in));
+						JsonArray arr = element.getAsJsonObject()
+								.getAsJsonArray("list");
+						Gson gson = new Gson();
+						ArrayList<RutorrentRssLabel> result = gson.fromJson(
+								arr,
+								new TypeToken<ArrayList<RutorrentRssLabel>>() {
+								}.getType());
+						msgId = SUCCESS_MSG_ID;
+						return result;
+					}
+				});
+	}
+
 	private void doRefresh() {
 		if (window != null) {
 			window.dismiss();
@@ -653,6 +729,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			SoundPoolManager.play(RemoteActivity.this);
 			list.addAll(result);
 			selected = new boolean[list.size()];
+			selectedCount = 0;
+			window.dismiss();
+			empty.setVisibility(View.GONE);
 			adapter.notifyDataSetChanged();
 		}
 
@@ -673,7 +752,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void onComplete(Boolean result) {
-			refreshView.onRefreshComplete();
+			refreshView.setRefreshing(true);
 			dialog.dismiss();
 		}
 
@@ -696,6 +775,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			refreshExpandableView.onRefreshComplete();
 			rssList.clear();
 			rssList.addAll(result);
+			refreshingLabel = -1;
 			rssAdapter.notifyDataSetChanged();
 		}
 
@@ -828,6 +908,20 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	private static class RssLabelViewHolder {
+		private ImageView expand;
+		private TextView label;
+		private ProgressBar progress;
+		private Button refresh;
+
+		RssLabelViewHolder(View v) {
+			expand = (ImageView) v.findViewById(R.id.expand);
+			label = (TextView) v.findViewById(R.id.label);
+			progress = (ProgressBar) v.findViewById(R.id.progress);
+			refresh = (Button) v.findViewById(R.id.refresh_rss_label);
+		}
+	}
+
 	private class RssOnCheckedChangeListener implements OnCheckedChangeListener {
 		int child;
 
@@ -839,16 +933,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private class RssAdapter extends BaseExpandableListAdapter {
-		Drawable expand;
-		Drawable collapse;
 
 		RssAdapter() {
-			expand = getResources().getDrawable(R.drawable.arrow_expand);
-			expand.setBounds(0, 0, expand.getIntrinsicWidth(),
-					expand.getIntrinsicHeight());
-			collapse = getResources().getDrawable(R.drawable.arrow_collapse);
-			collapse.setBounds(0, 0, collapse.getIntrinsicWidth(),
-					collapse.getIntrinsicHeight());
 		}
 
 		@Override
@@ -887,24 +973,42 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 
 		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded,
+		public View getGroupView(final int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
+			RssLabelViewHolder holder;
 			if (convertView == null) {
-				TextView tv = new TextView(RemoteActivity.this);
-				tv.setTextSize(20);
-				tv.setPadding(10, 5, 10, 5);
-				convertView = tv;
+				convertView = inflater.inflate(R.layout.rss_label, null);
+				holder = new RssLabelViewHolder(convertView);
+				convertView.setTag(holder);
+			} else {
+				holder = (RssLabelViewHolder) convertView.getTag();
 			}
 			RutorrentRssLabel label = rssList.get(groupPosition);
-			((TextView) convertView).setText(label.label + "("
-					+ label.items.size() + ")");
-			if (isExpanded) {
-				((TextView) convertView).setCompoundDrawables(expand, null,
-						null, null);
+			holder.label.setText(label.label + "(" + label.items.size() + ")");
+			if (refreshingLabel == -1) {
+				holder.progress.setVisibility(View.INVISIBLE);
+				holder.refresh.setEnabled(true);
+			} else if (refreshingLabel == groupPosition) {
+				holder.progress.setVisibility(View.VISIBLE);
+				holder.refresh.setEnabled(false);
 			} else {
-				((TextView) convertView).setCompoundDrawables(collapse, null,
-						null, null);
+				holder.progress.setVisibility(View.INVISIBLE);
+				holder.refresh.setEnabled(false);
 			}
+			if (isExpanded) {
+				holder.expand.setImageResource(R.drawable.arrow_expand);
+			} else {
+				holder.expand.setImageResource(R.drawable.arrow_collapse);
+			}
+			holder.refresh.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					refreshingLabel = groupPosition;
+					notifyDataSetChanged();
+					refreshExpandableView.setRefreshing(true);
+				}
+			});
 			return convertView;
 		}
 

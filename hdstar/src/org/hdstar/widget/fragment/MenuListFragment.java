@@ -43,9 +43,9 @@ public class MenuListFragment extends ListFragment {
 		adapter.add(new SampleItem("论坛", R.drawable.menu_forum));
 		adapter.add(new SampleItem("种子", R.drawable.menu_torrent));
 		adapter.add(new SampleItem("远程控制", R.drawable.menu_remote));
-		adapter.add(new SampleItem("其他", R.drawable.menu_misc));
 		adapter.add(new SampleItem("消息中心", R.drawable.menu_message));
 		adapter.add(new SampleItem("设置", R.drawable.menu_setting));
+		adapter.add(new SampleItem("其他", R.drawable.menu_misc));
 		adapter.add(new SampleItem("帮助", R.drawable.menu_help));
 		adapter.add(new SampleItem("退出", R.drawable.menu_exit));
 		setListAdapter(adapter);
@@ -64,20 +64,20 @@ public class MenuListFragment extends ListFragment {
 			klass = TorrentActivity.class;
 			break;
 		case 2:
-			if(HDStarApp.loginRemote){
+			if (HDStarApp.loginRemote) {
 				klass = RemoteActivity.class;
 			} else {
 				klass = RemoteLoginActivity.class;
 			}
 			break;
 		case 3:
-			klass = MiscActivity.class;
-			break;
-		case 4:
 			klass = MessageActivity.class;
 			break;
-		case 5:
+		case 4:
 			klass = SettingActivity.class;
+			break;
+		case 5:
+			klass = MiscActivity.class;
 			break;
 		case 6:
 			klass = HelpActivity.class;

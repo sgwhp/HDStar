@@ -89,6 +89,9 @@ public class Const {
 				+ "/plugins/httprpc/action.php";
 		public static final String RUTORRENT_RSS_ACTION_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/rss/action.php";
+		// Ë¢ÐÂrss±êÇ©µØÖ·
+		public static final String RUTORRENT_RSS_REFRESH_URL = RUTORRENT_RSS_ACTION_URL
+				+ "?mode=refresh&rss=%s";
 	}
 
 	public final class ResponseCode {
