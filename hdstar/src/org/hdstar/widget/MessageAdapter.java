@@ -71,7 +71,7 @@ public class MessageAdapter extends BaseAdapter implements
 			convertView.setBackgroundResource(R.color.read_bg);
 			holder.subject.getPaint().setFakeBoldText(false);
 		} else {
-			convertView.setBackgroundResource(R.color.unread_bg);
+			convertView.setBackgroundResource(R.color.white);
 			holder.subject.getPaint().setFakeBoldText(true);
 		}
 		return convertView;

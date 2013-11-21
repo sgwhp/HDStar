@@ -141,7 +141,6 @@ public class HttpClientManager {
 			synchronized(HttpClientManager.class){
 				if(cur - latest > VALIDATE_PERIOD){
 					final HttpGet get = new HttpGet(Const.Urls.SERVER_ADDRESS);
-					activateClient(get);
 					new Thread(){
 						public void run(){
 							try {
@@ -153,6 +152,7 @@ public class HttpClientManager {
 							}
 						}
 					}.start();
+					activateClient(get);
 					latest = cur;
 				}
 			}

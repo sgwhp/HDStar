@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -382,6 +383,12 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 						@Override
 						public ArrayList<RemoteTaskInfo> parse(
 								HttpResponse res, InputStream in) {
+							if(res.getStatusLine().getStatusCode() == 401){
+								Intent intent = new Intent(RemoteActivity.this, RemoteLoginActivity.class);
+								startActivity(intent);
+								finish();
+								return null;
+							}
 							JsonParser parser = new JsonParser();
 							JsonElement element = parser
 									.parse(new InputStreamReader(in));

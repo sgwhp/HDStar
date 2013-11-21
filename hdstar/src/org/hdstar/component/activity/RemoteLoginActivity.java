@@ -6,9 +6,9 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.RemoteLoginTask;
 import org.hdstar.util.EncodeDecode;
+import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -18,11 +18,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 
 public class RemoteLoginActivity extends BaseActivity implements
@@ -43,12 +41,12 @@ public class RemoteLoginActivity extends BaseActivity implements
 		accET = (EditText) findViewById(R.id.username);
 		pwdET = (EditText) findViewById(R.id.password);
 
-		Context context = getSupportActionBar().getThemedContext();
-		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(
-				context, R.array.remoteClient, R.layout.sherlock_spinner_item);
-		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		getSupportActionBar().setListNavigationCallbacks(list, this);
+//		Context context = getSupportActionBar().getThemedContext();
+//		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(
+//				context, R.array.remoteClient, R.layout.sherlock_spinner_item);
+//		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+//		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//		getSupportActionBar().setListNavigationCallbacks(list, this);
 		SharedPreferences share = getSharedPreferences(
 				Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
 		ipET.setText(share.getString("ip", ""));
@@ -72,6 +70,10 @@ public class RemoteLoginActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		String ip = ipET.getText().toString();
+		if(!Util.isIp(ip)){
+			Toast.makeText(this, R.string.invalidate_ip, Toast.LENGTH_SHORT).show();
+			return;
+		}
 		String acc = accET.getText().toString();
 		String pwd = pwdET.getText().toString();
 
@@ -96,8 +98,12 @@ public class RemoteLoginActivity extends BaseActivity implements
 		dialog.show();
 		task = new RemoteLoginTask();
 		task.attach(mCallback);
-		task.auth(ip, String.format(Const.Urls.RUTORRENT_HOME_PAGE, ip), acc,
-				pwd);
+		if(ip.contains(":")){
+			int port = Integer.parseInt(ip.substring(ip.indexOf(':') + 1));
+			task.auth(ip, port, acc, pwd);
+		} else {
+			task.auth(ip, acc, pwd);
+		}
 	}
 
 	private TaskCallback<Boolean> mCallback = new TaskCallback<Boolean>() {

@@ -105,4 +105,5 @@
     <string name="download">Load</string>
     <string name="rss">rss</string>
     <string name="download_dir">Download directory</string>
+    <string name="invalidate_ip">Invalidate IP</string>
 </resources>

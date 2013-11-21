@@ -105,5 +105,6 @@
     <string name="download">下載</string>
     <string name="rss">訂閱</string>
     <string name="download_dir">下載目錄</string>
+    <string name="invalidate_ip">非法IP</string>
 
 </resources>
