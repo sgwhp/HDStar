@@ -19,6 +19,7 @@ import org.hdstar.task.ResponseParser;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
+import org.hdstar.widget.TextProgressBar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -96,7 +97,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private BaseAsyncTask<?> rssTask;
 	private LayoutInflater inflater;
 	private int group = -1;// 选中的rss标签位置
-	private ProgressBar disk;
+	private TextProgressBar disk;
 	private Button refreshDiskInfoBtn;
 	private BaseAsyncTask<long[]> diskTask;
 
@@ -304,7 +305,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 		findViewById(R.id.refresh_disk_info).setOnClickListener(this);
 		refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);
-		disk = (ProgressBar) findViewById(R.id.disk_info);
+		disk = (TextProgressBar) findViewById(R.id.disk_info);
 		findViewById(R.id.download).setOnClickListener(this);
 		// 初始化下载任务控制弹出窗口
 		ctrlBox = (LinearLayout) inflater.inflate(
