@@ -5,11 +5,13 @@
     android:orientation="horizontal"
     android:gravity="center_vertical" >
 
-    <CheckBox
+    <org.hdstar.widget.LTACheckBox
         style="@style/CustomCheckboxTheme"
         android:id="@+id/rss_check"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/rss_title"

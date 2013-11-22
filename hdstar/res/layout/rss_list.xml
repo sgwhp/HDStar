@@ -8,34 +8,62 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/abs__action_bar_default_height"
-        android:gravity="center_vertical|right"
-        android:background="@drawable/action_bar_bg" >
+        android:background="@drawable/action_bar_bg"
+        android:gravity="center_vertical|right" >
 
         <Button
             android:id="@+id/download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_bg_sel"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/download"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_bg_sel" />
-
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/rss_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:cacheColorHint="#00000000"
         android:fastScrollEnabled="true"
-        android:headerDividersEnabled="false"
         android:groupIndicator="@null"
-        ptr:ptrHeaderBackground="@android:color/darker_gray"
-        ptr:ptrHeaderTextColor="@android:color/white"
+        android:headerDividersEnabled="false"
+        ptr:ptrAnimationStyle="flip"
         ptr:ptrFooterPullText="@string/pull_to_add_next_page"
         ptr:ptrFooterReleaseText="@string/release_to_add_next_page"
-        ptr:ptrAnimationStyle="flip" />
+        ptr:ptrHeaderBackground="@android:color/darker_gray"
+        ptr:ptrHeaderTextColor="@android:color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="@string/disk"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ProgressBar
+            android:id="@+id/disk_info"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <org.hdstar.widget.LTAButton
+            android:id="@+id/refresh_disk_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:enabled="false"
+            android:background="@drawable/refresh_btn_sel" />
+    </LinearLayout>
 
 </LinearLayout>

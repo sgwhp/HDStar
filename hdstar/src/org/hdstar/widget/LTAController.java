@@ -21,7 +21,6 @@ class LTAController {
 	int mPreviousTop = -1;
 
 	LTAController() {
-
 	}
 
 	LTAController(Context context, AttributeSet attrs) {

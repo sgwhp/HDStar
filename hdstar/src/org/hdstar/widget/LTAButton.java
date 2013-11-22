@@ -6,7 +6,7 @@ import android.widget.Button;
 
 /**
  * 
- * @author wuhongping
+ * @author robust
  * 
  */
 public class LTAButton extends Button {

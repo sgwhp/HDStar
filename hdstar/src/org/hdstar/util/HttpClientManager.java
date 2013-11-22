@@ -43,10 +43,10 @@ public class HttpClientManager {
 	 * 读取超时时间
 	 */
 	public final static int READ_TIMEOUT = 10000;
-	
-	//client更新周期
-	private static final int VALIDATE_PERIOD = 10 * 60 * 1000;
-	//client最后一次使用时间
+
+	// client更新周期
+	private static final int VALIDATE_PERIOD = 5 * 60 * 1000;
+	// client最后一次使用时间
 	private static long latest;
 
 	private HttpClientManager() {
@@ -137,14 +137,16 @@ public class HttpClientManager {
 					customHttpClient = new DefaultHttpClient(cm, params);
 				}
 			}
-		} else if(cur - latest > VALIDATE_PERIOD){
-			synchronized(HttpClientManager.class){
-				if(cur - latest > VALIDATE_PERIOD){
+		} else if (cur - latest > VALIDATE_PERIOD) {
+			// 一段时间未使用httpclient，首次使用时会出现连接超时
+			// 这里超过5分钟（10分钟太长）未使用就新建一个测试连接并关闭它
+			synchronized (HttpClientManager.class) {
+				if (cur - latest > VALIDATE_PERIOD) {
 					final HttpGet get = new HttpGet(Const.Urls.SERVER_ADDRESS);
-					new Thread(){
-						public void run(){
+					new Thread() {
+						public void run() {
 							try {
-								//连接打开后关闭并返回
+								// 连接打开后关闭并返回
 								Thread.sleep(200);
 								get.abort();
 							} catch (InterruptedException e) {
@@ -165,18 +167,18 @@ public class HttpClientManager {
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
-	
+
 	/**
 	 * client一段时间不使用后，会出现长时间无法连接的情况，需要新建一个连接并关闭它。
 	 */
-	private static void activateClient(HttpGet get){
+	private static void activateClient(HttpGet get) {
 		try {
 			customHttpClient.execute(get);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

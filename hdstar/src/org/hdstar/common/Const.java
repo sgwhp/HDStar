@@ -92,6 +92,8 @@ public class Const {
 		// 刷新rss标签地址
 		public static final String RUTORRENT_RSS_REFRESH_URL = RUTORRENT_RSS_ACTION_URL
 				+ "?mode=refresh&rss=%s";
+		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
+				+ "/plugins/diskspace/action.php?_=";
 	}
 
 	public final class ResponseCode {
@@ -132,12 +134,18 @@ public class Const {
 		public static final String _50_PTC = "pro_50pctdown";
 		public static final String _30_PTC = "pro_30pctdown";
 
+		/**
+		 * 为保持种子列表整齐，尽量限制返回的字符串长度为6
+		 * 
+		 * @param freeType
+		 * @return
+		 */
 		public static SpannableString getFreeTag(String freeType) {
 			SpannableString ss;
 			if (FREE.equals(freeType)) {
-				ss = new SpannableString("Free");
+				ss = new SpannableString(" Free ");
 				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 52, 206)), 0,
-						4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+						6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 				return ss;
 			}
 			if (_2X_FREE.equals(freeType)) {
@@ -147,29 +155,29 @@ public class Const {
 				return ss;
 			}
 			if ((_2X_50_PTC.equals(freeType))) {
-				ss = new SpannableString("2x50%");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 2,
+				ss = new SpannableString(" 2x50%");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 3,
 						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 2, 5,
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 3, 6,
 						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 				return ss;
 			}
 			if (_2X.equals(freeType)) {
-				ss = new SpannableString("2x");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 2,
+				ss = new SpannableString("  2x  ");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 6,
 						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 				return ss;
 			}
 			if (_50_PTC.equals(freeType)) {
-				ss = new SpannableString("50%");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 0, 3,
+				ss = new SpannableString(" 50%  ");
+				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 0, 6,
 						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 				return ss;
 			}
 			if (_30_PTC.equals(freeType)) {
-				ss = new SpannableString("30%");
+				ss = new SpannableString(" 30%  ");
 				ss.setSpan(new BackgroundColorSpan(Color.rgb(65, 23, 73)), 0,
-						3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+						6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 				return ss;
 			}
 			return new SpannableString("");

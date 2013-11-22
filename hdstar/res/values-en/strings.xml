@@ -99,11 +99,13 @@
     <string name="delete_message">Sure to exit?</string>
     
     <!-- remote -->
-    <string name="task_info">Size:%1$s  Ratio：%2$s  DL Speed:%3$s/s  UL Speed:%4$s/s</string>
+    <string name="task_info">Size:%1$s - Uploaded: %2$s(Ratio: %3$s)  DL:%4$s/s  UL: %5$s/s</string>
     <string name="connecting">Connecting…</string>
     <string name="no_task_selected">Please select a task.</string>
     <string name="download">Load</string>
     <string name="rss">rss</string>
     <string name="download_dir">Download directory</string>
     <string name="invalidate_ip">Invalidate IP</string>
+    <string name="disk">Disk</string>
+    <string name="get_disk_space_failed">Get disk space failed.</string>
 </resources>

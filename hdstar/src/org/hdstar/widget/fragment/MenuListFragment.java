@@ -153,7 +153,7 @@ public class MenuListFragment extends ListFragment {
 			TextView title = (TextView) convertView
 					.findViewById(R.id.row_title);
 			title.setText(getItem(position).tag);
-			if (position == 4 && HDStarApp.hasNewMessage) {
+			if (position == 3 && HDStarApp.hasNewMessage) {
 				convertView.findViewById(R.id.new_icon).setVisibility(
 						View.VISIBLE);
 			} else {

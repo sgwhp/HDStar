@@ -24,13 +24,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <org.hdstar.widget.LTAButton
         android:id="@+id/refresh_rss_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:background="@drawable/refresh_btn_sel" />

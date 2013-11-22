@@ -1,0 +1,129 @@
+rutorrent
+
+
+请求头
+Accept	application/json, text/javascript, */*; q=0.01
+Accept-Encoding	gzip, deflate
+Accept-Language	zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3
+Authorization	Basic cm9idXN0OjA4MjAxMTI3
+Cache-Control	no-cache
+Connection	keep-alive
+Content-Length	56
+Content-Type	application/x-www-form-urlencoded; charset=UTF-8
+Cookie	compact_display_state=false
+Host	91.121.104.122
+Pragma	no-cache
+Referer	http://91.121.104.122/rutorrent/
+User-Agent	Mozilla/5.0 (Windows NT 5.1; rv:24.0) Gecko/20100101 Firefox/24.0
+X-Requested-With	XMLHttpRequest
+
+
+暂停
+post http://91.121.104.122/rutorrent/plugins/httprpc/action.php
+mode=pause&hash=D128AEF502CD9F38F9A05D881643CF9B53E46841
+
+开始
+post http://91.121.104.122/rutorrent/plugins/httprpc/action.php
+mode=start&hash=D128AEF502CD9F38F9A05D881643CF9B53E46841
+
+种子列表
+post http://91.121.104.122/rutorrent/plugins/httprpc/action.php
+cmd	d.get_throttle_name=
+cmd	d.get_custom=sch_ignore
+cmd	cat=$d.views=
+cmd	d.get_custom=seedingtime
+cmd	d.get_custom=addtime
+mode	list
+
+设置
+http://91.121.104.122/rutorrent/php/setsettings.php
+v={"webui.fls.view":0,"webui.show_cats":1,"webui.show_dets":1,"webui.needmessage":1,"webui.reqtimeout":30000,"webui.confirm_when_deleting":1,"webui.alternate_color":0,"webui.update_interval":3000,"webui.hsplit":0.88,"webui.vsplit":0.832,"webui.effects":0,"webui.fullrows":0,"webui.no_delaying_draw":1,"webui.search":-1,"webui.speedlistdl":"100,150,200,250,300,350,400,450,500,750,1000,1250","webui.speedlistul":"100,150,200,250,300,350,400,450,500,750,1000,1250","webui.ignore_timeouts":0,"webui.retry_on_error":120,"webui.closed_panels":{"ptrackers":0,"prss":0,"pstate":0,"plabel":0,"flabel":0},"webui.timeformat":0,"webui.dateformat":0,"webui.speedintitle":0,"webui.log_autoswitch":1,"webui.lang":"zh-cn","webui.trt.colwidth":[200,100,60,100,100,100,60,60,60,60,60,60,60,80,100,90,100,100,60,60,75,75,75,100],"webui.trt.colenabled":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"webui.trt.colorder":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],"webui.trt.sindex":-1,"webui.trt.rev":0,"webui.trt.sindex2":0,"webui.trt.rev2":0,"webui.fls.colwidth":[200,60,100,100,80],"webui.fls.colenabled":[1,1,1,1,1],"webui.fls.colorder":[0,1,2,3,4],"webui.fls.sindex":-1,"webui.fls.rev":0,"webui.fls.sindex2":0,"webui.fls.rev2":0,"webui.trk.colwidth":[200,60,60,60,60,60,80,85,80,60],"webui.trk.colenabled":[1,1,1,1,1,1,1,1,1,1],"webui.trk.colorder":[0,1,2,3,4,5,6,7,8,9],"webui.trk.sindex":-1,"webui.trk.rev":0,"webui.trk.sindex2":0,"webui.trk.rev2":0,"webui.prs.colwidth":[60,100,120,60,100,100,100,60,60],"webui.prs.colenabled":[1,1,1,1,1,1,1,1,1],"webui.prs.colorder":[0,1,2,3,4,5,6,7,8],"webui.prs.sindex":-1,"webui.prs.rev":0,"webui.prs.sindex2":0,"webui.prs.rev2":0,"webui.plg.colwidth":[150,60,80,80,80,500],"webui.plg.colenabled":[1,1,1,1,1,1],"webui.plg.colorder":[0,1,2,3,4,5],"webui.plg.sindex":-1,"webui.plg.rev":0,"webui.plg.sindex2":0,"webui.plg.rev2":0,"webui.teg.colwidth":[200,100,60,100,100,100,60,60,60,60,60,60,60,80,100,90,100,100,60,60,75,75,75,100],"webui.teg.colenabled":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"webui.teg.colorder":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],"webui.teg.sindex":-1,"webui.teg.rev":0,"webui.teg.sindex2":0,"webui.teg.rev2":0,"webui.rss.colwidth":[200,100,60,100,100,100,60,60,60,60,60,60,60,80,100,90,100,100,60,60,75,75,75,100],"webui.rss.colenabled":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"webui.rss.colorder":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],"webui.rss.sindex":-1,"webui.rss.rev":0,"webui.rss.sindex2":0,"webui.rss.rev2":0,"webui.flm.colwidth":[210,60,120,80,80],"webui.flm.colenabled":[1,1,1,1,1],"webui.flm.colorder":[0,1,2,3,4],"webui.flm.sindex":-1,"webui.flm.rev":0,"webui.flm.sindex2":0,"webui.flm.rev2":0,"webui.fManager.timef":"%d-%M-%y %h:%m:%s","webui.fManager.permf":1,"webui.fManager.histpath":5,"webui.fManager.stripdirs":1,"webui.fManager.showhidden":1,"webui.fManager.cleanlog":0,"webui.fManager.arcnscheme":"new","webui.fManager.scrows":12,"webui.fManager.sccols":4,"webui.fManager.scwidth":300}
+
+
+
+rss
+post http://91.121.104.122/rutorrent/plugins/rss/action.php
+mode=get
+
+{"errors":[{"time":1384770637,"desc":"theUILang.cantFetchRSS","prm":"http:\/\/chdbits.org\/torrentrss.php?myrss=1&linktype=dl&uid=92157&passkey=ba8f32114a3ddbb73438e5e88eff9bf7"},{"time":1384785035,"desc":"theUILang.cantFetchRSS","prm":"http:\/\/chdbits.org\/torrentrss.php?myrss=1&linktype=dl&uid=92157&passkey=ba8f32114a3ddbb73438e5e88eff9bf7"},{"time":1384828237,"desc":"theUILang.cantFetchRSS","prm":"http:\/\/ttg.im\/putrssmc.php?par=dnZ2OTMzODgsY2Q4YWQxNWY1MWJiMzk4NTMwZmE2ZTZmY2M1MTlhZjJ6eg==&ssl=yes"}],"list":[{"label":"hdw","auto":0,"enabled":1,"hash":"bac5ccfd9774b64f9b899da46f2a941d","url":"http:\/\/hdwing.com\/rssdd.php?&uid=122812&pass=ee0bab33ebd2d9ed75736ec7f0544613","items":[{"time":null,"title":"The Smurfs 2.2013.DD5.1-448Kbps.ac3 [\u84dd\u7cbe\u70752.\u53f0\u914d\u56fd\u8bed] (\u8865\u5145\u97f3\u8f68)","href":"http:\/\/hdwing.com\/download\/131848\/ee0bab33ebd2d9ed75736ec7f0544613\/\u84dd\u7cbe\u70752.The Smurfs 2.2013 \u53f0\u914d\u56fd\u8bed.DD5.1-448Kbps.ac3.torrent","guid":"http:\/\/hdwing.com\/download\/131848\/ee0bab33ebd2d9ed75736ec7f0544613\/\u84dd\u7cbe\u70752.The Smurfs 2.2013 \u53f0\u914d\u56fd\u8bed.DD5.1-448Kbps.ac3.torrent","errcount":0,"hash":""},{"time":null,"title":"The Smurfs 2.2013.DD2.0-256kbps ac3 [\u84dd\u7cbe\u70752.\u6e2f\u7248\u7ca4\u8bed] (\u8865\u5145\u97f3\u8f68)","href":"http:\/\/hdwing.com\/download\/131847\/ee0bab33ebd2d9ed75736ec7f0544613\/\u84dd\u7cbe\u70752.The Smurfs 2.2013 \u6e2f\u7248\u7ca4\u8bed.DD5.1-448Kbps.ac3.torrent","guid":"http:\/\/hdwing.com\/download\/131847\/ee0bab33ebd2d9ed75736ec7f0544613\/\u84dd\u7cbe\u70752.The Smurfs 2.2013 \u6e2f\u7248\u7ca4\u8bed.DD5.1-448Kbps.ac3.torrent","errcount":0,"hash":""},{"time":null,"title":"El.Alamein.2002.DTS 5.1-768kbps.dts [\u6c99\u6f20\u5144\u5f1f\u8fde \u3010\u91cd\u6df7\u3011\u592e\u89c6\u56fd\u914d] (\u8865\u5145\u97f3\u8f68)","href":"http:\/\/hdwing.com\/download\/131846\/ee0bab33ebd2d9ed75736ec7f0544613\/\u6c99\u6f20\u5144\u5f1f\u8fde\u3010\u6df7\u97f3\u3011DTS 5.1 768Kbps.dts.torrent","guid":"http:\/\/hdwing.com\/download\/131846\/ee0bab33ebd2d9ed75736ec7f0544613\/\u6c99\u6f20\u5144\u5f1f\u8fde\u3010\u6df7\u97f3\u3011DTS 5.1 768Kbps.dts.torrent","errcount":0,"hash":""},{"time":null,"title":"Hostages.S01E09.720p.HDTV.X264-DIMENSION [\u4eba\u8d28 \u7b2c\u4e00\u5b63 \u7b2c9\u96c6] (\u6b27\u7f8e\u5267)","href":"http:\/\/hdwing.com\/download\/131845\/ee0bab33ebd2d9ed75736ec7f0544613\/Hostages.S01E09.720p.HDTV.X264-DIMENSION.torrent","guid":"http:\/\/hdwing.com\/download\/131845\/ee0bab33ebd2d9ed75736ec7f0544613\/Hostages.S01E09.720p.HDTV.X264-DIMENSION.torrent","errcount":0,"hash":""},{"time":null,"title":"Were.the.Millers.2013.Extended.720p.BluRay.x264.DTS-HDWinG[\u5192\u724c\u5bb6\u5ead\/\u540d\u7792\u6206\u65cf(\u6e2f)\/\u5168\u5bb6\u5c31\u662f\u7c73\u5bb6(\u53f0)]*\u52a0\u957f\u7248+\u7b80\u7e41\u4e2d\u6587\u5b57\u5e55+\u7b80\u82f1\u7e41\u82f1\u53cc\u5b57\u5e55*\u5947\u8469\u5374\u6df7\u6742\u7740\u7b11\u4e0e\u6cea\u7684\u4e00\u5bb6\u4eba* (\u7535\u5f71(720p))","href":"http:\/\/hdwing.com\/download\/131844\/ee0bab33ebd2d9ed75736ec7f0544613\/Were.the.Millers.2013.Extended.720p.BluRay.x264.DTS-HDWinG.torrent","guid":"http:\/\/hdwing.com\/download\/131844\/ee0bab33ebd2d9ed75736ec7f0544613\/Were.the.Millers.2013.Extended.720p.BluRay.x264.DTS-HDWinG.torrent","errcount":0,"hash":""},{"time":null,"title":"JFK.1991.DD2.0-224Kbps.ac3 [\u523a\u6740\u80af\u5c3c\u8fea \u84dd\u5149\u81ea\u5e26\u516b\u4e00\u65b0\u7248\u56fd\u914d] (\u8865\u5145\u97f3\u8f68)","href":"http:\/\/hdwing.com\/download\/131843\/ee0bab33ebd2d9ed75736ec7f0544613\/\u523a\u6740\u80af\u5c3c\u8fea.JFK.1991.DC.\u84dd\u5149\u81ea\u5e26\u516b\u4e00\u65b0\u7248\u56fd\u914d DD2.0-224Kbps.ac3.torrent","guid":"http:\/\/hdwing.com\/download\/131843\/ee0bab33ebd2d9ed75736ec7f0544613\/\u523a\u6740\u80af\u5c3c\u8fea.JFK.1991.DC.\u84dd\u5149\u81ea\u5e26\u516b\u4e00\u65b0\u7248\u56fd\u914d DD2.0-224Kbps.ac3.torrent","errcount":0,"hash":""},{"time":null,"title":"Mary.Poppins.1964.720p.BluRay.X264-AMIABLE[\u6b22\u4e50\u6ee1\u4eba\u95f4] (\u7535\u5f71(720p))","href":"http:\/\/hdwing.com\/download\/131842\/ee0bab33ebd2d9ed75736ec7f0544613\/Mary.Poppins.1964.720p.BluRay.X264-AMIABLE.torrent","guid":"http:\/\/hdwing.com\/download\/131842\/ee0bab33ebd2d9ed75736ec7f0544613\/Mary.Poppins.1964.720p.BluRay.X264-AMIABLE.torrent","errcount":0,"hash":""},{"time":null,"title":"Jobs.2013.720p.US.BluRay.x264.DTS.AC3.3Audio-HDWinG[\u4e54\u5e03\u65af\/\u8d3e\u4f2f\u65af(\u53f0)\/\u4e54\u5e03\u65af\u4f20] *\u7f8e\u7248+\u56fd\u8bed\u53cc\u8bed+\u7e41\u7b80\u82f1\u5b57\u5e55*\u6d3b\u7740\u5c31\u662f\u4e3a\u4e86\u6539\u53d8\u4e16\u754c\u2014\u2014\u4ed6\u521b\u9020\u4e86\u795e\u5947\uff0c\u8c28\u4ee5\u6b64\u7247\u5411\u4e54\u5e2e\u4e3b\u81f4\u656c\uff01* (\u7535\u5f71(720p))","href":"http:\/\/hdwing.com\/download\/131841\/ee0bab33ebd2d9ed75736ec7f0544613\/Jobs.2013.720p.US.BluRay.x264.DTS.AC3.3Audio-HDWinG.torrent","guid":"http:\/\/hdwing.com\/download\/131841\/ee0bab33ebd2d9ed75736ec7f0544613\/Jobs.2013.720p.US.BluRay.x264.DTS.AC3.3Audio-HDWinG.torrent","errcount":0,"hash":""},{"time":null,"title":"Arthur et la guerre des deux mondes.DD2.0-256Kbps.ac3 [\u4e9a\u745f\u548c\u4ed6\u7684\u8ff7\u4f60\u738b\u56fd3-\u8de8\u754c\u5bf9\u51b3CHC\u4e0a\u8bd1\u56fd\u914d] (\u8865\u5145\u97f3\u8f68)","href":"http:\/\/hdwing.com\/download\/131840\/ee0bab33ebd2d9ed75736ec7f0544613\/Arthur.and.the.Two.Worlds.War-cn-Mr-jin.ac3.torrent","guid":"http:\/\/hdwing.com\/download\/131840\/ee0bab33ebd2d9ed75736ec7f0544613\/Arthur.and.the.Two.Worlds.War-cn-Mr-jin.ac3.torrent","errcount":0,"hash":""},{"time":null,"title":"Mr.Go.2013.1080p.HK.BluRay.x264.DTS.3Audio-HDWinG[\u5927\u660e\u7329\/\u738b\u724c\u5de8\u7329(\u53f0)\/\u8d85\u7ea7\u5de8\u7329(\u6e2f) ]*\u957f\u6c5f\u4e03\u53f7\u7684\u5c0f\u7537\u5b69\u53d8\u5c11\u5973\u5566\uff0c\u5c0f\u4e03\u4ed4\u4e5f\u53d8\u5927\u7329\u7329\u54af~* (\u7535\u5f71(1080p))","href":"http:\/\/hdwing.com\/download\/131839\/ee0bab33ebd2d9ed75736ec7f0544613\/Mr.Go.2013.1080p.HK.BluRay.x264.DTS.3Audio-HDWinG.torrent","guid":"http:\/\/hdwing.com\/download\/131839\/ee0bab33ebd2d9ed75736ec7f0544613\/Mr.Go.2013.1080p.HK.BluRay.x264.DTS.3Audio-HDWinG.torrent","errcount":0,"hash":""},{"time":null,"title":"Chinese.60th.Anniversary.Chinese.Military.Celebration.2009.720p.BluRay.x264.DTS-HDWinG[\u4e2d\u534e\u4eba\u6c11\u5171\u548c\u56fd\u5efa\u56fd 60 \u5468\u5e74 \u76db\u4e16\u5927\u9605\u5175] (\u7eaa\u5f55\u7247)","href":"http:\/\/hdwing.com\/download\/131838\/ee0bab33ebd2d9ed75736ec7f0544613\/Chinese.60th.Anniversary.Chinese.Military.Celebration.2009.720p.BluRay.x264.DTS-HDWinG.torrent","guid":"http:\/\/hdwing.com\/download\/131838\/ee0bab33ebd2d9ed75736ec7f0544613\/Chinese.60th.Anniversary.Chinese.Military.Celebration.2009.720p.BluRay.x264.DTS-HDWinG.torrent","errcount":0,"hash":""},{"time":null,"title":"Mercenary.for.Justice.2006.DD2.0-256kpbs.ac3 [\u53f8\u6cd5\u96c7\u4f63\u5175 \u592e\u89c6\u957f\u8bd1\u56fd\u914d] (\u8865\u5145\u97f3\u8f68)","href":"http:\/\/hdwing.com\/download\/131837\/ee0bab33ebd2d9ed75736ec7f0544613\/\u53f8\u6cd5\u96c7\u4f63\u5175.Mercenary.for.Justice.2006.DD2.0-256kpbs.\u592e\u89c6\u957f\u8bd1.ac3.torrent","guid":"http:\/\/hdwing.com\/download\/131837\/ee0bab33ebd2d9ed75736ec7f0544613\/\u53f8\u6cd5\u96c7\u4f63\u5175.Mercenary.for.Justice.2006.DD2.0-256kpbs.\u592e\u89c6\u957f\u8bd1.ac3.torrent","errcount":0,"hash":""},{"time":null,"title":"One Tree Hill S04 720p WEB-DL AAC2.0 x264 TB (\u65e5\u5267)","href":"http:\/\/hdwing.com\/download\/131836\/ee0bab33ebd2d9ed75736ec7f0544613\/One Tree Hill S04 720p WEB-DL AAC2.0 x264 TB.torrent","guid":"http:\/\/hdwing.com\/download\/131836\/ee0bab33ebd2d9ed75736ec7f0544613\/One Tree Hill S04 720p WEB-DL AAC2.0 x264 TB.torrent","errcount":0,"hash":""},{"time":null,"title":"One Tree Hill S03 720p WEB-DL AAC2.0 x264 TB (\u65e5\u5267)","href":"http:\/\/hdwing.com\/download\/131835\/ee0bab33ebd2d9ed75736ec7f0544613\/One Tree Hill S03 720p WEB-DL AAC2.0 x264 LP.torrent","guid":"http:\/\/hdwing.com\/download\/131835\/ee0bab33ebd2d9ed75736ec7f0544613\/One Tree Hill S03 720p WEB-DL AAC2.0 x264 LP.torrent","errcount":0,"hash":""},{"time":null,"title":"HDJ China's Mega Projects EP01 20131019 HDTV 720P x264 AC3-52ysy[\u9ad8\u6e05\u7fe1\u7fe0\u53f0\uff1a\u7eaa\u5f55\u7247--\u8d85\u7ea7\u5de5\u7a0b\u7b2c1\u96c6 \u00b7 \u6e2f\u73e0\u6fb3\u5927\u6865 [\u5185\u7f6e\u7b80\u4f53\u4e2d\u6587\u786c\u5b57\u5e55]*\u4e16\u754c\u4e0a\u6700\u957f\u7684\u5927\u6865\uff0c\u5408\u4e09\u4e3a\u4e00*] (\u7eaa\u5f55\u7247)","href":"http:\/\/hdwing.com\/download\/131834\/ee0bab33ebd2d9ed75736ec7f0544613\/HDJ China's Mega Projects EP01 20131019 HDTV 720P x264 AC3-52ysy.mkv.torrent","guid":"http:\/\/hdwing.com\/download\/131834\/ee0bab33ebd2d9ed75736ec7f0544613\/HDJ China's Mega Projects EP01 20131019 HDTV 720P x264 AC3-52ysy.mkv.torrent","errcount":0,"hash":""},{"time":null,"title":"I MAESTRI Beethoven Piano Concerto NO.5&Piano Sonata NO.27\u3010I MAESTRI \u8d1d\u591a\u82ac\u7b2c5\u94a2\u7434\u534f\u594f\u66f2\u7b2c27\u94a2\u7434\u594f\u9e23\u66f2-\u53e4\u5c14\u8fbe-\u65af\u74e6\u7f57\u592b\u65af\u57fa-\u4e5f\u7eb3\u56fd\u5bb6\u6b4c\u5267\u9662\u4ea4\u54cd\u4e50\u56e2\u3011 (\u65e0\u635f\u97f3\u4e50)","href":"http:\/\/hdwing.com\/download\/131833\/ee0bab33ebd2d9ed75736ec7f0544613\/I MAESTRI  \u8d1d\u591a\u82ac\u7b2c5\u94a2\u7434\u534f\u594f\u66f2\u7b2c27\u94a2\u7434\u594f\u9e23\u66f2-\u53e4\u5c14\u8fbe-\u65af\u74e6\u7f57\u592b\u65af\u57fa-\u4e5f\u7eb3\u56fd\u5bb6\u6b4c\u5267\u9662\u4ea4\u54cd\u4e50\u56e2.torrent","guid":"http:\/\/hdwing.com\/download\/131833\/ee0bab33ebd2d9ed75736ec7f0544613\/I MAESTRI  \u8d1d\u591a\u82ac\u7b2c5\u94a2\u7434\u534f\u594f\u66f2\u7b2c27\u94a2\u7434\u594f\u9e23\u66f2-\u53e4\u5c14\u8fbe-\u65af\u74e6\u7f57\u592b\u65af\u57fa-\u4e5f\u7eb3\u56fd\u5bb6\u6b4c\u5267\u9662\u4ea4\u54cd\u4e50\u56e2.torrent","errcount":0,"hash":""},{"time":null,"title":"DragonTV.To.Ellerly.With.Love.E01-E03.HDTV.1080i.MPEG2-HDWTV[\u4e1c\u65b9\u536b\u89c6 \u8001\u6709\u6240\u4f9d \u7b2c1~3\u96c6 *\u5218\u6d9b \u5f20\u94ce \u4e54\u632f\u5b87 \u738b\u5029\u4e00*] (\u5267\u96c6(\u4e2d\u6e2f\u53f0))","href":"http:\/\/hdwing.com\/download\/131832\/ee0bab33ebd2d9ed75736ec7f0544613\/DragonTV.To.Ellerly.With.Love.E01-E03.HDTV.1080i.MPEG2-HDWTV.torrent","guid":"http:\/\/hdwing.com\/download\/131832\/ee0bab33ebd2d9ed75736ec7f0544613\/DragonTV.To.Ellerly.With.Love.E01-E03.HDTV.1080i.MPEG2-HDWTV.torrent","errcount":0,"hash":""},{"time":null,"title":"The.Good.Wife.S05E08.The.Next.Month.720p.WEB-DL.DD5.1.H.264-BS[\u50b2\u9aa8\u8d24\u59bb \u7b2c\u4e94\u5b63 \u7b2c8\u96c6 iTunes\u7248] (\u6b27\u7f8e\u5267)","href":"http:\/\/hdwing.com\/download\/131831\/ee0bab33ebd2d9ed75736ec7f0544613\/The.Good.Wife.S05E08.The.Next.Month.720p.WEB-DL.DD5.1.H.264-BS.torrent","guid":"http:\/\/hdwing.com\/download\/131831\/ee0bab33ebd2d9ed75736ec7f0544613\/The.Good.Wife.S05E08.The.Next.Month.720p.WEB-DL.DD5.1.H.264-BS.torrent","errcount":0,"hash":""},{"time":null,"title":"RCA Beethoven - Symphony No.7 & No.8\u3010RCA \u8d1d\u591a\u82ac\u7b2c7,8\u4ea4\u54cd\u66f2-\u6258\u65af\u5361\u5c3c\u5c3c-NBC\u4ea4\u54cd\u4e50\u56e2\u3011 (\u65e0\u635f\u97f3\u4e50)","href":"http:\/\/hdwing.com\/download\/131830\/ee0bab33ebd2d9ed75736ec7f0544613\/RCA  \u8d1d\u591a\u82ac\u7b2c7,8\u4ea4\u54cd\u66f2-\u6258\u65af\u5361\u5c3c\u5c3c-NBC\u4ea4\u54cd\u4e50\u56e2.torrent","guid":"http:\/\/hdwing.com\/download\/131830\/ee0bab33ebd2d9ed75736ec7f0544613\/RCA  \u8d1d\u591a\u82ac\u7b2c7,8\u4ea4\u54cd\u66f2-\u6258\u65af\u5361\u5c3c\u5c3c-NBC\u4ea4\u54cd\u4e50\u56e2.torrent","errcount":0,"hash":""},{"time":null,"title":"CCTV1-HD.We.Get.Married.E17-E18.HDTV.1080i.MPEG2-HDWTV[\u592e\u89c6\u9ad8\u6e05 \u54b1\u4eec\u7ed3\u5a5a\u5427 \u7b2c17~18\u96c6 (\u9ad8\u5706\u5706\u3001\u9ec4\u6d77\u6ce2\u3001\u5f20\u51ef\u4e3d\u3001\u67f3\u5ca9\u7b49)] (\u5267\u96c6(\u4e2d\u6e2f\u53f0))","href":"http:\/\/hdwing.com\/download\/131829\/ee0bab33ebd2d9ed75736ec7f0544613\/CCTV1-HD.We.Get.Married.E17-E18.HDTV.1080i.MPEG2-HDWTV.torrent","guid":"http:\/\/hdwing.com\/download\/131829\/ee0bab33ebd2d9ed75736ec7f0544613\/CCTV1-HD.We.Get.Married.E17-E18.HDTV.1080i.MPEG2-HDWTV.torrent","errcount":0,"hash":""}]},{"label":"chd","auto":0,"enabled":1,"hash":"f1a0746ae427da4f66004be172e25862","url":"http:\/\/chdbits.org\/torrentrss.php?myrss=1&linktype=dl&uid=92157&passkey=ba8f32114a3ddbb73438e5e88eff9bf7","items":[]},{"label":"opencd","auto":0,"enabled":1,"hash":"445d0655e27621a82858068d0a49bc56","url":"https:\/\/open.cd\/torrentrss.php?rows=10&linktype=dl&passkey=7e6a644c8159217753e3f5e7a0dfcf00&inclbookmarked=1","items":[{"time":1380638454,"title":"Avicii - True 2013 - FLAC \u5206\u8f68 - BYRBT","href":"https:\/\/open.cd\/download.php?id=35055&passkey=7e6a644c8159217753e3f5e7a0dfcf00","guid":"https:\/\/open.cd\/details.php?id=35055","errcount":0,"hash":"763D73DDBE6BC39F9DAFF4862E6DB64F831197B7"},{"time":1376356362,"title":"David Zinman & Tonhalle Orchestra Zurich - Mahler: Symphonies Nos. 1-10 (SACD ISO) 2011 - \u955c\u50cf(Mirror) Multi File","href":"https:\/\/open.cd\/download.php?id=30773&passkey=7e6a644c8159217753e3f5e7a0dfcf00","guid":"https:\/\/open.cd\/details.php?id=30773","errcount":0,"hash":"575BE7CAB0A4D74D3732FD2542E1FF268E77F556"},{"time":1374910671,"title":"Avicii - Wake Me Up 2013 - FLAC \u5206\u8f68","href":"https:\/\/open.cd\/download.php?id=30045&passkey=7e6a644c8159217753e3f5e7a0dfcf00","guid":"https:\/\/open.cd\/details.php?id=30045","errcount":0,"hash":"12E723DEF24BCF4C5730D98C52D75D3C3B273768"},{"time":1354079763,"title":"Deep Purple - Deepest Purple - The Very Best Of Deep Purple 1980 - FLAC \u5206\u8f68 - \u8f6c\u8f7d","href":"https:\/\/open.cd\/download.php?id=19745&passkey=7e6a644c8159217753e3f5e7a0dfcf00","guid":"https:\/\/open.cd\/details.php?id=19745","errcount":0,"hash":"2032C5F180F06E1D83D52CB147D38019EB7425FF"},{"time":1345563947,"title":"Eminem - Curtain Call - The Hits [2CD deluxe edition] 2005 - FLAC \u5206\u8f68 - \u539f\u6293","href":"https:\/\/open.cd\/download.php?id=16870&passkey=7e6a644c8159217753e3f5e7a0dfcf00","guid":"https:\/\/open.cd\/details.php?id=16870","errcount":0,"hash":"32CD113586000539AA067BF07283F2B88ACB2FA7"},{"time":1307242252,"title":"Eminem - Recovery 2010 - WAV\u6574\u8f68 - \u5c0f\u80d6@OpenCD","href":"https:\/\/open.cd\/download.php?id=7182&passkey=7e6a644c8159217753e3f5e7a0dfcf00","guid":"https:\/\/open.cd\/details.php?id=7182","errcount":0,"hash":"D128AEF502CD9F38F9A05D881643CF9B53E46841"}]},{"label":"TTG","auto":0,"enabled":1,"hash":"5ffa6fac493ec331a78e6f3fc1490e95","url":"http:\/\/ttg.im\/putrssmc.php?par=dnZ2OTMzODgsY2Q4YWQxNWY1MWJiMzk4NTMwZmE2ZTZmY2M1MTlhZjJ6eg==&ssl=yes","items":[]},{"label":"hds","auto":0,"enabled":1,"hash":"202070de5321b98204f293c33092d9a0","url":"http:\/\/hdsky.me\/torrentrss.php?rows=10&linktype=dl&passkey=dbecbd78905748afc7c0b66dd1724441&inclbookmarked=1","items":[{"time":1384400584,"title":"The Mask 1994 Blu-ray RE x264 720p DTS 3Audio-HDS","href":"http:\/\/hdsky.me\/download.php?id=1621&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1621","errcount":0,"hash":"580CA91C49D97A9CA4947E75366E1E51930DDFF6"},{"time":1384258240,"title":"2012Farewell.Atlantis.2009.Blu-ray.1080p.AVC.DTS-HD.MA5.1-templecn","href":"http:\/\/hdsky.me\/download.php?id=1600&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1600","errcount":0,"hash":"E4D5EA1B0545AD5E99F33B234459EF3A6214196E"},{"time":1383055933,"title":"The Jackal 1997 1080p Blu-ray VC-1 DTS-HD MA 5 1-ZOR","href":"http:\/\/hdsky.me\/download.php?id=1445&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1445","errcount":0,"hash":"5D8545FAE14EB8CC80CB8BF7F5C8A9860C14BC5F"},{"time":1383050651,"title":"The.Day.After.Tomorrow.2004.Blu-ray.1080p.AVC.DTS-HD.MA5.1-templecn","href":"http:\/\/hdsky.me\/download.php?id=1443&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1443","errcount":0,"hash":"36681F40E32EAEBDF0BDD144BB4118A82AF3F28A"},{"time":1382712878,"title":"Legendary Assassin 2008 Blu-ray 1080p AVC DTS-HD MA 5.1-DIY-114562175","href":"http:\/\/hdsky.me\/download.php?id=1397&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1397","errcount":0,"hash":"69479660BE9421E722121A3FB73A687D661BF698"},{"time":1381667976,"title":"Death On The Nile 1978&Evil Under The Sun 1982 1080p JPN BluRay x264 DTS2.0--\u51b0\u98ce@HDSky","href":"http:\/\/hdsky.me\/download.php?id=1242&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1242","errcount":0,"hash":"6CC30D95832E7DCC47505BDAF41B256383D060B8"},{"time":1381230684,"title":"Armin Van Buuren Armin Only Mirage 2010 720p BluRay DD5.1 x264-CRiSC","href":"http:\/\/hdsky.me\/download.php?id=1179&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1179","errcount":0,"hash":"135F0C00632F2D45A1ED7D9B31448918E9B21F0B"},{"time":1380542046,"title":"Mulan+Mulan2 15TH ANNIVERSARY EDITION BluRay 1080p AVC DTS-HD MA5.1 DIY-Chinagear@HDSky","href":"http:\/\/hdsky.me\/download.php?id=1008&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=1008","errcount":0,"hash":"0C2650073A14C1D773798E5F9050BC48ED2CAD07"},{"time":1379672528,"title":"FASCINATING NATURE 1996 BluRay 1080p x264 DTS-HDMA","href":"http:\/\/hdsky.me\/download.php?id=941&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=941","errcount":0,"hash":"7E6D84E23ACE907EFF5CA216661290D0D9E8E4F3"},{"time":1377654174,"title":"Iron Man 3 2013 TW Blu-ray 1080p AVC DTS-HD MA7.1-DIY@HDSky","href":"http:\/\/hdsky.me\/download.php?id=851&passkey=dbecbd78905748afc7c0b66dd1724441","guid":"http:\/\/hdsky.me\/details.php?id=851","errcount"
+
+
+
+刷新订阅
+get http://91.121.104.122/rutorrent/plugins/rss/action.php?mode=refresh&rss=f1a0746ae427da4f66004be172e25862
+
+下载
+post http://91.121.104.122/rutorrent/plugins/rss/action.php
+dir_edit	/home/robust/downloads
+mode	loadtorrents
+rss	bac5ccfd9774b64f9b899da46f2a941d
+url	http://hdwing.com/download/131887/ee0bab33ebd2d9ed75736ec7f0544613/Sleepy.Hollow.S01E08.720P.MPEG2.AC3-HDWTV.ts.torrent
+
+获取下载目录
+get http://91.121.104.122/rutorrent/plugins/_getdir/getdirs.php?dir=&btn=RSSBtn&edit=RSSdir_edit&frame=RSSdir_edit_frame&time=1384865773557
+
+
+HttpHost targetHost = new HttpHost("91.121.104.122", 80, "http");
+
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+
+		httpclient.getCredentialsProvider().setCredentials(
+				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+				new UsernamePasswordCredentials("robust", "08201127"));
+
+		// Create AuthCache instance
+		AuthCache authCache = new BasicAuthCache();
+		// Generate BASIC scheme object and add it to the local auth cache
+		BasicScheme basicAuth = new BasicScheme();
+		authCache.put(targetHost, basicAuth);
+
+		// Add AuthCache to the execution context
+		BasicHttpContext localcontext = new BasicHttpContext();
+		localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
+
+		String url = "http://91.121.104.122/rutorrent/";
+		HttpGet httpPost = new HttpGet(url);
+
+		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		// httpPost.setHeader("Accept",
+		// "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01");
+		// httpPost.setHeader("Accept-Encoding", "gzip, deflate");
+		// httpPost.setHeader("Accept-Language",
+		// "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
+		httpPost.setHeader("Cache-Control", "no-cache");
+		httpPost.setHeader("Connection", "keep-alive");
+		httpPost.setHeader("Pragma", "no-cache");
+		httpPost.setHeader("Referer", "http://91.121.104.122/rutorrent/");
+		// httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
+
+		for (int i = 0; i < 3; i++) {
+			HttpResponse response;
+			try {
+				response = httpclient.execute(targetHost, httpPost,
+						localcontext);
+				Header header = response.getFirstHeader("Authorization");
+				if (header != null) {
+					System.out.println(header.getValue());
+				}
+				HttpEntity entity = response.getEntity();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(entity.getContent()));
+				StringBuilder builder = new StringBuilder();
+				String str;
+				while ((str = reader.readLine()) != null) {
+					builder.append(str);
+				}
+				System.out.println(builder.toString());
+				EntityUtils.consume(entity);
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+
+
+
+
+{get_hash:[2:is_open, 3:is_hash_checking, 4:is_hash_checked, 5:get_state, 6:get_name, 7:get_size_bytes, 8:get_completed_chunks, 9:get_size_chunks, 10:get_bytes_done, 11:get_up_total, 12:get_ratio（3位小数）, 13:get_up_rate(速度), 14:get_down_rate, 15:get_chunk_size, 16:get_custom1, 17:get_peers_accounted, 18:get_peers_not_connected, 19:get_peers_connected, 20:get_peers_complete, 21:get_left_bytes, 22:get_priority, 23:get_state_canged, 24:get_skip_total, 25:get_hashing, 26:get_chunks_hashed 27:get_base_path, 28:get_creation_date, 29:get_tracker_focus, 30:is_active, 31:get_message, 32:get_custom2, 33:get_free_diskspace, 34:is_private, 35:is_multi_file]}

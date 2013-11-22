@@ -133,8 +133,6 @@ public class NewTopicFragment extends StackFragment {
 		final GridView grid = (GridView) v.findViewById(R.id.content);
 		final ResizeLayout root = (ResizeLayout) v
 				.findViewById(R.id.root_layout);
-		// im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-		// subject.requestFocus();
 		final LinearLayout lin = (LinearLayout) v.findViewById(R.id.smilies);
 		lin.setVisibility(View.GONE);
 		grid.setAdapter(smiles);
@@ -158,15 +156,11 @@ public class NewTopicFragment extends StackFragment {
 
 			@Override
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
-				// Log.v("check", isChecked+"");
 				if (isChecked) {
-					// sd.open();
 					lin.setVisibility(View.VISIBLE);
-					 im.hideSoftInputFromWindow(root.getWindowToken(), 0);
-//					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+					im.hideSoftInputFromWindow(root.getWindowToken(), 0);
 					smile.setBackgroundResource(R.drawable.keyboard);
 				} else {
-					// sd.close();
 					lin.setVisibility(View.GONE);
 					im.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 					smile.setBackgroundResource(R.drawable.smile);
@@ -174,7 +168,6 @@ public class NewTopicFragment extends StackFragment {
 			}
 
 		});
-		// smile.performClick();
 
 		root.setOnResizeListener(new ResizeLayout.OnResizeListener() {
 
@@ -182,16 +175,11 @@ public class NewTopicFragment extends StackFragment {
 			public void OnResize(int w, int h, int oldw, int oldh) {
 				if (h < oldh) {
 					// ¼üÅÌµ¯³ö
-					// sd.close();
-					// Log.v("resize", "resize");
 					if (smile.isChecked()) {
-						// lin.setVisibility(View.GONE);
 						im.hideSoftInputFromWindow(root.getWindowToken(), 0);
 						smile.performClick();
 						im.toggleSoftInput(0,
 								InputMethodManager.HIDE_NOT_ALWAYS);
-						// im.showSoftInput(root,
-						// InputMethodManager.HIDE_NOT_ALWAYS);
 					}
 				}
 			}
@@ -203,7 +191,6 @@ public class NewTopicFragment extends StackFragment {
 		@Override
 		public void onComplete(Void result) {
 			dialog.dismiss();
-			// detachTask();
 			Toast.makeText(getActivity(), R.string.add_topic_succeeded,
 					Toast.LENGTH_SHORT).show();
 			StackFragment f = null;
@@ -219,14 +206,12 @@ public class NewTopicFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			dialog.dismiss();
-			// detachTask();
 			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
 		public void onCancel() {
 			dialog.dismiss();
-			// detachTask();
 		}
 
 	};

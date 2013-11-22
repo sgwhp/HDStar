@@ -7,7 +7,7 @@ import android.widget.CheckBox;
 
 /**
  * 
- * @author wuhongping
+ * @author robust
  * 
  */
 public class LTACheckBox extends CheckBox {

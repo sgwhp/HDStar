@@ -13,7 +13,7 @@ import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Post;
-import org.hdstar.model.QuoteVO;
+import org.hdstar.model.FieldSetVO;
 import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.util.URLImageParser;
@@ -38,7 +38,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 public class PostAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<Post> posts;
-	private SparseArray<QuoteVO> quotes;
+	private SparseArray<FieldSetVO> quotes;
 	private WeakReference<Context> ref = null;
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
@@ -47,7 +47,7 @@ public class PostAdapter extends BaseAdapter {
 		inflater = LayoutInflater.from(context);
 		ref = new WeakReference<Context>(context);
 		this.posts = items;
-		quotes = new SparseArray<QuoteVO>();
+		quotes = new SparseArray<FieldSetVO>();
 	}
 
 	public void clearAnimListener() {
@@ -120,11 +120,11 @@ public class PostAdapter extends BaseAdapter {
 		holder.username.setText(Html.fromHtml(p.userName));
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
 				p.userClassSrc, (Context) ref.get()));
-		QuoteVO quote = quotes.get(position);
+		FieldSetVO quote = quotes.get(position);
 		if (quote == null) {
-			quote = new QuoteVO();
+			quote = new FieldSetVO();
 			quotes.put(position, quote);
-			MyTextParser.toQuoteVO(quote, p.body, 0);
+			MyTextParser.toFiledSetVO(quote, p.body, 0);
 		}
 		// if (CustomSetting.loadImage) {
 		holder.contentOuter.setText(Html.fromHtml(quote.content,
@@ -134,11 +134,11 @@ public class PostAdapter extends BaseAdapter {
 		// setMovementMethod后需要调用以下方法，不能在xml里配置
 		// holder.contentOuter.setFocusable(false);
 		// holder.contentOuter.setFocusableInTouchMode(false);
-		if (quote.quote != null) {
+		if (quote.fieldSet != null) {
 			holder.legend.setVisibility(View.VISIBLE);
 			holder.frameOuter.setVisibility(View.VISIBLE);
 			holder.legend.setText(quote.legend);
-			quote = quote.quote;
+			quote = quote.fieldSet;
 			holder.contentMiddle.setText(Html.fromHtml(quote.content,
 					new URLImageParser(holder.contentMiddle, ref.get()), null));
 			// holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
@@ -146,11 +146,11 @@ public class PostAdapter extends BaseAdapter {
 			// setMovementMethod后需要调用以下方法，不能在xml里配置
 			// holder.contentMiddle.setFocusable(false);
 			// holder.contentMiddle.setFocusableInTouchMode(false);
-			if (quote.quote != null) {
+			if (quote.fieldSet != null) {
 				holder.legendInner.setVisibility(View.VISIBLE);
 				holder.frameInner.setVisibility(View.VISIBLE);
 				holder.legendInner.setText(quote.legend);
-				quote = quote.quote;
+				quote = quote.fieldSet;
 				holder.contentInner.setText(Html.fromHtml(quote.content,
 						new URLImageParser(holder.contentInner, ref.get()),
 						null));
@@ -159,7 +159,7 @@ public class PostAdapter extends BaseAdapter {
 				// setMovementMethod后需要调用以下方法，不能在xml里配置
 				// holder.contentInner.setFocusable(false);
 				// holder.contentInner.setFocusableInTouchMode(false);
-				if (quote.quote != null) {
+				if (quote.fieldSet != null) {
 					holder.frameMore.setVisibility(View.VISIBLE);
 				} else {
 					holder.frameMore.setVisibility(View.GONE);

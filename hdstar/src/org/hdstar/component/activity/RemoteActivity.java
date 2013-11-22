@@ -96,6 +96,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private BaseAsyncTask<?> rssTask;
 	private LayoutInflater inflater;
 	private int group = -1;// 选中的rss标签位置
+	private ProgressBar disk;
+	private Button refreshDiskInfoBtn;
+	private BaseAsyncTask<long[]> diskTask;
 
 	public RemoteActivity() {
 		super(R.string.rutorrent);
@@ -120,6 +123,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		inflater = LayoutInflater.from(this);
 		init();
 		refreshView.setRefreshing(false);
+		refreshDiskInfo();
 		refreshExpandableView.setRefreshing(false);
 	}
 
@@ -151,6 +155,10 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		if (rssTask != null) {
 			rssTask.detach();
 			rssTask = null;
+		}
+		if (diskTask != null) {
+			diskTask.detach();
+			diskTask = null;
 		}
 	}
 
@@ -217,6 +225,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.close:
 			addRssWindow.dismiss();
+			break;
+		case R.id.refresh_disk_info:
+			refreshDiskInfo();
 			break;
 		}
 	}
@@ -291,6 +302,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					}
 				});
 
+		findViewById(R.id.refresh_disk_info).setOnClickListener(this);
+		refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);
+		disk = (ProgressBar) findViewById(R.id.disk_info);
 		findViewById(R.id.download).setOnClickListener(this);
 		// 初始化下载任务控制弹出窗口
 		ctrlBox = (LinearLayout) inflater.inflate(
@@ -383,8 +397,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 						@Override
 						public ArrayList<RemoteTaskInfo> parse(
 								HttpResponse res, InputStream in) {
-							if(res.getStatusLine().getStatusCode() == 401){
-								Intent intent = new Intent(RemoteActivity.this, RemoteLoginActivity.class);
+							if (res.getStatusLine().getStatusCode() == 401) {
+								Intent intent = new Intent(RemoteActivity.this,
+										RemoteLoginActivity.class);
 								startActivity(intent);
 								finish();
 								return null;
@@ -408,6 +423,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 								info.title = arr.get(4).toString();
 								info.size = arr.get(5).getAsLong();
 								info.completeSize = arr.get(8).getAsLong();
+								info.uploaded = arr.get(9).getAsLong();
 								info.ratio = arr.get(10).getAsFloat() / 1000;
 								info.upSpeed = arr.get(11).getAsLong();
 								info.dlSpeed = arr.get(12).getAsLong();
@@ -629,6 +645,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			public void onComplete(Boolean result) {
 				dialog.dismiss();
 				refreshExpandableView.setRefreshing(false);
+				refreshDiskInfo();
 			}
 
 			@Override
@@ -646,7 +663,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		attachRssTask(task);
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("mode", "loadtorrents"));
-		Editor editor = getPreferences(MODE_PRIVATE).edit();
+		Editor editor = getSharedPreferences(Const.RUTORRENT_SHARED_PREFS,
+				MODE_PRIVATE).edit();
 		editor.putString("downloadDir", dir.getText().toString());
 		editor.commit();
 		params.add(new BasicNameValuePair("dir_edit", dir.getText().toString()));
@@ -691,6 +709,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private void refreshRssLabel() {
 		final BaseAsyncTask<ArrayList<RutorrentRssLabel>> task = new BaseAsyncTask<ArrayList<RutorrentRssLabel>>();
 		task.attach(rssCallback);
+		attachRssTask(task);
 		task.execGet(
 				String.format(Const.Urls.RUTORRENT_RSS_REFRESH_URL, ip,
 						rssList.get(refreshingLabel).hash),
@@ -725,6 +744,34 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			mTask = null;
 		}
 		fetch();
+	}
+
+	/**
+	 * 刷新硬盘信息
+	 */
+	private void refreshDiskInfo() {
+		refreshDiskInfoBtn.setEnabled(false);
+		if (diskTask != null) {
+			diskTask.detach();
+		}
+		diskTask = new BaseAsyncTask<long[]>();
+		diskTask.attach(diskCallback);
+		diskTask.execGet(String.format(Const.Urls.RUTORRENT_DISK_SPACE_URL, ip)
+				+ System.currentTimeMillis(), new ResponseParser<long[]>(
+				R.string.get_disk_space_failed) {
+
+			@Override
+			public long[] parse(HttpResponse res, InputStream in) {
+				JsonParser parser = new JsonParser();
+				JsonObject obj = parser.parse(new InputStreamReader(in))
+						.getAsJsonObject();
+				long[] space = new long[2];
+				space[0] = obj.get("total").getAsLong();
+				space[1] = obj.get("free").getAsLong();
+				msgId = SUCCESS_MSG_ID;
+				return space;
+			}
+		});
 	}
 
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {
@@ -799,6 +846,27 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	};
 
+	private TaskCallback<long[]> diskCallback = new TaskCallback<long[]>() {
+
+		@Override
+		public void onComplete(long[] result) {
+			disk.setProgress((int) ((result[0] - result[1]) * 100.0 / result[0]));
+			refreshDiskInfoBtn.setEnabled(true);
+		}
+
+		@Override
+		public void onCancel() {
+			refreshDiskInfoBtn.setEnabled(true);
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			refreshDiskInfoBtn.setEnabled(true);
+			Toast.makeText(RemoteActivity.this, msgId, Toast.LENGTH_SHORT)
+					.show();
+		}
+	};
+
 	private static class ViewHolder {
 		TextView title, info;
 		ProgressBar progress;
@@ -855,7 +923,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			holder.progress
 					.setProgress((int) (item.completeSize * 100.0 / item.size));
 			holder.info.setText(String.format(taskInfo,
-					Util.formatFileSize(item.size), item.ratio,
+					Util.formatFileSize(item.size),
+					Util.formatFileSize(item.uploaded), item.ratio,
 					Util.formatFileSize(item.dlSpeed),
 					Util.formatFileSize(item.upSpeed)));
 			holder.check.setOnCheckedChangeListener(null);

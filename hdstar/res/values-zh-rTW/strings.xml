@@ -99,12 +99,14 @@
     <string name="delete_message">確定刪除？</string>
     
     <!-- remote -->
-    <string name="task_info">大小：%1$s  分享率：%2$s  下載速度：%3$s/s  上傳速度：%4$s/s</string>
+    <string name="task_info">大小：%1$s - 已上傳：%2$s（分享率：%3$s）  下載速度：%4$s/s  上傳速度：%5$/s</string>
     <string name="connecting">正在連接…</string>
     <string name="no_task_selected">請選擇一個任務</string>
     <string name="download">下載</string>
     <string name="rss">訂閱</string>
     <string name="download_dir">下載目錄</string>
     <string name="invalidate_ip">非法IP</string>
+    <string name="disk">硬碟</string>
+    <string name="get_disk_space_failed">獲取硬碟信息失敗</string>
 
 </resources>

@@ -27,6 +27,12 @@ import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 import ch.boye.httpclientandroidlib.util.EntityUtils;
 
+/**
+ * 获取验证码
+ * 
+ * @author robust
+ * 
+ */
 public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 	private boolean isInterrupted = false;
 	private WeakReference<Context> ref = null;

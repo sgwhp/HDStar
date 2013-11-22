@@ -39,12 +39,14 @@
         android:layout_centerVertical="true"
         android:src="@drawable/state_stop" />
     
-    <CheckBox
+    <org.hdstar.widget.LTACheckBox
         android:id="@+id/check"
         style="@style/CustomCheckboxTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 </RelativeLayout>

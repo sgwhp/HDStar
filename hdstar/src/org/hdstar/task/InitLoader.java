@@ -9,6 +9,12 @@ import org.hdstar.util.SoundPoolManager;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+/**
+ * 初始化个人设置等
+ * 
+ * @author robust
+ * 
+ */
 public class InitLoader extends AsyncTaskLoader<ArrayList<Topic>> {
 
 	public InitLoader(Context context) {

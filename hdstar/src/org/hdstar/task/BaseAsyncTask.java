@@ -139,6 +139,11 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		return needContent;
 	}
 
+	/**
+	 * 设置是否需要打开Response的InputStream
+	 * 
+	 * @param needContent
+	 */
 	public void setNeedContent(boolean needContent) {
 		this.needContent = needContent;
 	}

@@ -19,6 +19,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -101,7 +104,8 @@ public class SettingActivity extends BaseActivity {
 			break;
 		case R.id.clearCache:
 			ImageLoader.getInstance().clearDiscCache();
-			Toast.makeText(this, R.string.cache_cleared, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.cache_cleared, Toast.LENGTH_SHORT)
+					.show();
 			break;
 		case R.id.checkUpdate:
 			Toast.makeText(this, R.string.searching_for_update,
@@ -138,9 +142,19 @@ public class SettingActivity extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
-			String updateInfo = getString(R.string.update_info);
-			updateInfo = String.format(updateInfo, result.versionName,
-					Util.formatFileSize(result.size));
+			CharSequence updateInfo = getString(R.string.update_info);
+			CharSequence fullSize = Util.formatFileSize(result.size);
+			updateInfo = String.format(updateInfo.toString(),
+					result.versionName, fullSize);
+			if (result.patchSize != 0) {
+				// ÔöÁ¿Éý¼¶
+				SpannableString ss = new SpannableString(updateInfo.toString()
+						+ "  " + Util.formatFileSize(result.patchSize));
+				ss.setSpan(new StrikethroughSpan(), updateInfo.length()
+						- fullSize.length() - 1, updateInfo.length(),
+						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				updateInfo = ss;
+			}
 			new AlertDialog.Builder(SettingActivity.this)
 					.setTitle(R.string.update)
 					.setIcon(R.drawable.ic_launcher)

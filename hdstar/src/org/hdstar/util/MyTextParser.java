@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.common.Const;
-import org.hdstar.model.QuoteVO;
+import org.hdstar.model.FieldSetVO;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -89,6 +89,9 @@ public class MyTextParser {
 		return body;
 	}
 
+	/**
+	 * 将html转换为BBCode
+	 */
 	public static String toBBCode(String text) {
 		// 替换所有的换行
 		// text = text.replaceAll("<br\\s.*?>", "\n");
@@ -153,6 +156,9 @@ public class MyTextParser {
 		return text;
 	}
 
+	/**
+	 * 构建引用格式的回复，并将html转换BBCode
+	 */
 	public static String toQuote(String text, String username) {
 		Document doc = Jsoup.parseBodyFragment(text);
 		Elements elements = doc.getElementsByTag("div");
@@ -167,6 +173,9 @@ public class MyTextParser {
 		return text;
 	}
 
+	/**
+	 * 构建回复站内信格式的回复内容，并将html转换BBCode
+	 */
 	public static String toReplyPM(Context context, int sender, String text) {
 		text = toBBCode(text);
 		String userName = context.getSharedPreferences(
@@ -183,6 +192,9 @@ public class MyTextParser {
 		return text;
 	}
 
+	/**
+	 * 构建回复站内信格式的主题，并将html转换BBCode
+	 */
 	public static String toReplySubject(String subject) {
 		Pattern pattern = Pattern.compile("Re\\(([0-9]+)\\):");
 		Matcher matcher = pattern.matcher(subject);
@@ -204,15 +216,19 @@ public class MyTextParser {
 		return buffer.toString();
 	}
 
-	public static QuoteVO toQuoteVO(QuoteVO parent, String html, int level) {
-		QuoteVO quote = null;
+	/**
+	 * 解析html中的fieldset标签
+	 */
+	public static FieldSetVO toFiledSetVO(FieldSetVO parent, String html,
+			int level) {
+		FieldSetVO quote = null;
 		Pattern pattern = Pattern.compile(
 				"<fieldset>\\s*?<legend>([^<]*?)</legend>(.*)</fieldset>",
 				Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(html);
-		quote = new QuoteVO();
+		quote = new FieldSetVO();
 		if (matcher.find()) {
-			parent.quote = quote;
+			parent.fieldSet = quote;
 			parent.legend = matcher.group(1);
 			int index = html.indexOf(matcher.group());
 			// 截取引用以外的部分，并移除开始的几个<br>
@@ -229,7 +245,7 @@ public class MyTextParser {
 			if (level >= MAX_QUOTE_LEVEL) {
 				return quote;
 			}
-			toQuoteVO(quote, matcher.group(2), ++level);
+			toFiledSetVO(quote, matcher.group(2), ++level);
 		} else {
 			parent.content = html;
 		}

@@ -67,9 +67,9 @@ public class DownloadActivity extends SherlockActivity implements
 		} else {
 			isPatch = true;
 			downloadSize = patchSize;
-			String oriSize = Util.formatFileSize(size);
-			String patSize = Util.formatFileSize(patchSize);
-			SpannableString ss = new SpannableString(oriSize + patSize);
+			String oriSize = Util.formatFileSize(size).toString();
+			String patSize = Util.formatFileSize(patchSize).toString();
+			SpannableString ss = new SpannableString(oriSize + "  " + patSize);
 			ss.setSpan(new StrikethroughSpan(), 0, oriSize.length(),
 					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			sizeTV.setText(ss);
