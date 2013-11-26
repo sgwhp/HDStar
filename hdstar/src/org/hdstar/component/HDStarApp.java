@@ -106,6 +106,9 @@ public class HDStarApp extends Application {
 		CustomSetting.soundOn = shared.getBoolean("sound", true);
 		CustomSetting.device = shared.getString("device", CustomSetting.device);
 		CustomSetting.autoRefresh = shared.getBoolean("autoRefresh", false);
+		CustomSetting.serverAddress = shared.getString("serverAddr",
+				CustomSetting.serverAddress);
+		Const.Urls.initServerAdd(CustomSetting.serverAddress);
 		initImageLoader(context);
 		// initMemoryCache();
 		// File cacheDir = getStorageCacheDir(this, DISK_CACHE_SUBDIR);

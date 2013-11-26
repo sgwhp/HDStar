@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import org.hdstar.R;
@@ -83,9 +84,16 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 				in = response.getEntity().getContent();
 			}
 			return parser.parse(response, in);
+		} catch (SocketTimeoutException e) {
+			e.printStackTrace();
+			setMessageId(R.string.time_out);
+			HttpClientManager.getHttpClient().getConnectionManager()
+					.closeExpiredConnections();
 		} catch (ConnectTimeoutException e) {
 			setMessageId(R.string.time_out);
-			HttpClientManager.restClient();
+			HttpClientManager.getHttpClient().getConnectionManager()
+					.closeExpiredConnections();
+			// HttpClientManager.restClient();
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
 			// request.abort();
@@ -101,7 +109,6 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 				HttpClientManager.restClient();
 			}
 		} catch (IOException e) {
-			IOUtils.closeInputStreamIgnoreExceptions(in);
 			// request.abort();
 			e.printStackTrace();
 		} catch (Exception e) {

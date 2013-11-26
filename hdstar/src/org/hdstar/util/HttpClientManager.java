@@ -1,12 +1,9 @@
 package org.hdstar.util;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import ch.boye.httpclientandroidlib.HttpHost;
-import ch.boye.httpclientandroidlib.client.ClientProtocolException;
 import ch.boye.httpclientandroidlib.client.HttpClient;
-import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.params.ClientPNames;
 import ch.boye.httpclientandroidlib.conn.ClientConnectionManager;
 import ch.boye.httpclientandroidlib.conn.routing.HttpRoute;
@@ -46,16 +43,17 @@ public class HttpClientManager {
 
 	// client更新周期
 	private static final int EXPIRED_PERIOD = 5 * 60 * 1000;
+
 	// client最后一次使用时间
-	private static long latest;
-	
+	// private static long latest;
+	//
 	private static IdleConnectionMonitorThread idleThread;
 
 	private HttpClientManager() {
 	}
 
 	public static HttpClient getHttpClient() {
-//		long cur = System.currentTimeMillis();
+		// long cur = System.currentTimeMillis();
 		if (customHttpClient == null) {
 			synchronized (HttpClientManager.class) {
 				if (customHttpClient == null) {
@@ -81,55 +79,41 @@ public class HttpClientManager {
 					HttpHost localhost = new HttpHost("locahost", 80);
 					cm.setMaxPerRoute(new HttpRoute(localhost), 50);
 					customHttpClient = new DefaultHttpClient(cm, params);
-					idleThread = new IdleConnectionMonitorThread(customHttpClient.getConnectionManager());
+					idleThread = new IdleConnectionMonitorThread(
+							customHttpClient.getConnectionManager());
 					idleThread.start();
 				}
 			}
-		} 
-//		else if (cur - latest > VALIDATE_PERIOD) {
-//			// 一段时间未使用httpclient，首次使用时会出现连接超时
-//			// 这里超过5分钟（10分钟太长）未使用就新建一个测试连接并关闭它
-//			synchronized (HttpClientManager.class) {
-//				if (cur - latest > VALIDATE_PERIOD) {
-//					final HttpGet get = new HttpGet(Const.Urls.SERVER_ADDRESS);
-//					new Thread() {
-//						public void run() {
-//							try {
-//								// 连接打开后关闭并返回
-//								Thread.sleep(200);
-//								get.abort();
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
-//						}
-//					}.start();
-//					activateClient(get);
-//					latest = cur;
-//				}
-//			}
-//		}
-//
-//		latest = cur;
+		}
+		// else if (cur - latest > VALIDATE_PERIOD) {
+		// // 一段时间未使用httpclient，首次使用时会出现连接超时
+		// // 这里超过5分钟（10分钟太长）未使用就新建一个测试连接并关闭它
+		// synchronized (HttpClientManager.class) {
+		// if (cur - latest > VALIDATE_PERIOD) {
+		// final HttpGet get = new HttpGet(Const.Urls.SERVER_ADDRESS);
+		// new Thread() {
+		// public void run() {
+		// try {
+		// // 连接打开后关闭并返回
+		// Thread.sleep(200);
+		// get.abort();
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// }.start();
+		// activateClient(get);
+		// latest = cur;
+		// }
+		// }
+		// }
+		//
+		// latest = cur;
 		return customHttpClient;
 	}
 
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
-	}
-
-	/**
-	 * client一段时间不使用后，会出现长时间无法连接的情况，需要新建一个连接并关闭它。
-	 */
-	private static void activateClient(HttpGet get) {
-		try {
-			customHttpClient.execute(get);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void restClient() {
@@ -139,42 +123,42 @@ public class HttpClientManager {
 			idleThread.shutdown();
 		}
 	}
-	
-	public static class IdleConnectionMonitorThread extends Thread {
-	    
-	    private final ClientConnectionManager connMgr;
-	    private volatile boolean shutdown;
-	    
-	    public IdleConnectionMonitorThread(ClientConnectionManager connMgr) {
-	        super();
-	        this.connMgr = connMgr;
-	    }
 
-	    @Override
-	    public void run() {
-	        try {
-	            while (!shutdown) {
-	                synchronized (this) {
-	                    wait(EXPIRED_PERIOD);
-	                    // Close expired connections
-	                    connMgr.closeExpiredConnections();
-	                    // Optionally, close connections
-	                    // that have been idle longer than 30 sec
-	                    connMgr.closeIdleConnections(60, TimeUnit.SECONDS);
-	                }
-	            }
-	        } catch (InterruptedException ex) {
-	            // terminate
-	        }
-	    }
-	    
-	    public void shutdown() {
-	        shutdown = true;
-	        synchronized (this) {
-	            notifyAll();
-	        }
-	    }
-	    
+	public static class IdleConnectionMonitorThread extends Thread {
+
+		private final ClientConnectionManager connMgr;
+		private volatile boolean shutdown;
+
+		public IdleConnectionMonitorThread(ClientConnectionManager connMgr) {
+			super();
+			this.connMgr = connMgr;
+		}
+
+		@Override
+		public void run() {
+			try {
+				while (!shutdown) {
+					synchronized (this) {
+						wait(EXPIRED_PERIOD);
+						// Close expired connections
+						connMgr.closeExpiredConnections();
+						// Optionally, close connections
+						// that have been idle longer than 30 sec
+						connMgr.closeIdleConnections(60, TimeUnit.SECONDS);
+					}
+				}
+			} catch (InterruptedException ex) {
+				// terminate
+			}
+		}
+
+		public void shutdown() {
+			shutdown = true;
+			synchronized (this) {
+				notifyAll();
+			}
+		}
+
 	}
 
 	// private static void

@@ -6,11 +6,13 @@ import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DownloadImageTask;
 import org.hdstar.task.LoginTask;
 import org.hdstar.util.EncodeDecode;
+import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
 
 import android.app.AlertDialog;
@@ -24,19 +26,25 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
-public class LoginActivity extends SherlockActivity {
+public class LoginActivity extends SherlockActivity implements OnClickListener {
 	private DownloadImageTask imageTask = null;
 	private final String LOGIN_URL = Const.Urls.BASE_URL + "/login.php";
 	private LoginTask task = null;
 	private CustomDialog dialog = null;
+	private ToggleButton fetchImage;
+	private ToggleButton sound;
+	private EditText deviceName;
+	private ToggleButton autoRefresh;
+	private EditText serverAddr;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +80,8 @@ public class LoginActivity extends SherlockActivity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-//										InitActivity
-//												.exitApp(LoginActivity.this);
+										// InitActivity
+										// .exitApp(LoginActivity.this);
 										finish();
 									}
 								})
@@ -92,9 +100,8 @@ public class LoginActivity extends SherlockActivity {
 	}
 
 	void init() {
-		Button login = (Button) findViewById(R.id.login);
-		SharedPreferences user = getSharedPreferences(Const.SETTING_SHARED_PREFS,
-				MODE_PRIVATE);
+		SharedPreferences user = getSharedPreferences(
+				Const.SETTING_SHARED_PREFS, MODE_PRIVATE);
 		String username = user.getString("username", null);
 		String password = user.getString("password", null);
 		if (username != null) {
@@ -104,83 +111,6 @@ public class LoginActivity extends SherlockActivity {
 			password = EncodeDecode.decode(password);
 			((EditText) findViewById(R.id.password)).setText(password);
 		}
-		login.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (imageTask.getStatus() == AsyncTask.Status.FINISHED) {
-					String imageHash = imageTask.getHash();
-					String imageString = ((EditText) findViewById(R.id.security_code))
-							.getText().toString();
-					String id = ((EditText) findViewById(R.id.username))
-							.getText().toString();
-					String password = ((EditText) findViewById(R.id.password))
-							.getText().toString();
-					if (imageString.equals("")) {
-						Toast.makeText(LoginActivity.this,
-								R.string.input_security_code,
-								Toast.LENGTH_SHORT).show();
-						return;
-					}
-					if (id.equals("")) {
-						Toast.makeText(LoginActivity.this,
-								R.string.input_username, Toast.LENGTH_SHORT)
-								.show();
-						return;
-					}
-					if (password.equals("")) {
-						Toast.makeText(LoginActivity.this,
-								R.string.input_password, Toast.LENGTH_SHORT)
-								.show();
-						return;
-					}
-					Editor user = LoginActivity.this.getSharedPreferences(
-							Const.SETTING_SHARED_PREFS, MODE_PRIVATE).edit();
-					user.putString("username", id);
-					user.putString("password", EncodeDecode.encode(password));
-					user.commit();
-					dialog = new CustomDialog(LoginActivity.this,
-							R.string.try_to_login);
-					dialog.setOnDismissListener(new OnDismissListener() {
-
-						@Override
-						public void onDismiss(DialogInterface dialog) {
-							if (task.getStatus() != AsyncTask.Status.FINISHED)
-								task.abort();
-						}
-
-					});
-					dialog.show();
-					task = new LoginTask();
-					task.attach(mListener);
-					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-					nvp.add(new BasicNameValuePair("username", id));
-					nvp.add(new BasicNameValuePair("password", password));
-					nvp.add(new BasicNameValuePair("imagestring", imageString));
-					nvp.add(new BasicNameValuePair("imagehash", imageHash));
-					try {
-						task.execPost(Const.Urls.TAKE_LOGIN_URL, nvp, "");
-					} catch (UnsupportedEncodingException e) {
-						dialog.dismiss();
-						e.printStackTrace();
-					}
-				}
-			}
-
-		});
-
-		Button refresh = (Button) findViewById(R.id.refresh);
-		refresh.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (imageTask != null) {
-					imageTask.interrupt(true);
-				}
-				getSecurityCode();
-			}
-
-		});
 	}
 
 	/**
@@ -191,19 +121,80 @@ public class LoginActivity extends SherlockActivity {
 		imageTask.execute(LOGIN_URL);
 	}
 
-	void onBack(String cookieStr) {
-		Intent intent = new Intent(this, ForumsActivity.class);
-		Bundle bundle = new Bundle();
-		if (cookieStr != null) {
-			bundle.putString("cookies", cookieStr);
-			setResult(RESULT_OK, intent);
-		} else {
-			setResult(RESULT_OK + 1, intent);
+	private void login() {
+		if (fetchImage != null) {
+			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS,
+					MODE_PRIVATE).edit();
+			CustomSetting.loadImage = fetchImage.isChecked();
+			edit.putBoolean("loadImage", CustomSetting.loadImage);
+			CustomSetting.soundOn = sound.isChecked();
+			if (!CustomSetting.soundOn) {
+				SoundPoolManager.clear();
+			}
+			edit.putBoolean("sound", CustomSetting.soundOn);
+			CustomSetting.device = deviceName.getText().toString();
+			edit.putString("device", CustomSetting.device);
+			CustomSetting.autoRefresh = autoRefresh.isChecked();
+			edit.putBoolean("autoRefresh", CustomSetting.autoRefresh);
+			CustomSetting.serverAddress = serverAddr.getText().toString();
+			edit.putString("serverAddr", CustomSetting.serverAddress);
+			edit.commit();
+			Const.Urls.initServerAdd(CustomSetting.serverAddress);
 		}
-		intent.putExtras(bundle);
-		if (imageTask != null)
-			imageTask.interrupt(true);
-		finish();
+		if (imageTask.getStatus() == AsyncTask.Status.FINISHED) {
+			String imageHash = imageTask.getHash();
+			String imageString = ((EditText) findViewById(R.id.security_code))
+					.getText().toString();
+			String id = ((EditText) findViewById(R.id.username)).getText()
+					.toString();
+			String password = ((EditText) findViewById(R.id.password))
+					.getText().toString();
+			if (imageString.equals("")) {
+				Toast.makeText(LoginActivity.this,
+						R.string.input_security_code, Toast.LENGTH_SHORT)
+						.show();
+				return;
+			}
+			if (id.equals("")) {
+				Toast.makeText(LoginActivity.this, R.string.input_username,
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			if (password.equals("")) {
+				Toast.makeText(LoginActivity.this, R.string.input_password,
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			Editor user = LoginActivity.this.getSharedPreferences(
+					Const.SETTING_SHARED_PREFS, MODE_PRIVATE).edit();
+			user.putString("username", id);
+			user.putString("password", EncodeDecode.encode(password));
+			user.commit();
+			dialog = new CustomDialog(LoginActivity.this, R.string.try_to_login);
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					if (task.getStatus() != AsyncTask.Status.FINISHED)
+						task.abort();
+				}
+
+			});
+			dialog.show();
+			task = new LoginTask();
+			task.attach(mListener);
+			List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+			nvp.add(new BasicNameValuePair("username", id));
+			nvp.add(new BasicNameValuePair("password", password));
+			nvp.add(new BasicNameValuePair("imagestring", imageString));
+			nvp.add(new BasicNameValuePair("imagehash", imageHash));
+			try {
+				task.execPost(Const.Urls.TAKE_LOGIN_URL, nvp, "");
+			} catch (UnsupportedEncodingException e) {
+				dialog.dismiss();
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private TaskCallback<String> mListener = new TaskCallback<String>() {
@@ -217,8 +208,8 @@ public class LoginActivity extends SherlockActivity {
 			// cookieStr += "c_lang_folder=cht";
 			// }
 			HDStarApp.cookies = cookieStr;
-			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS, MODE_PRIVATE)
-					.edit();
+			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS,
+					MODE_PRIVATE).edit();
 			edit.putString("cookies", cookieStr);
 			edit.commit();
 			dialog.dismiss();
@@ -243,4 +234,35 @@ public class LoginActivity extends SherlockActivity {
 		}
 
 	};
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.login:
+			login();
+			break;
+		case R.id.refresh:
+			if (imageTask != null) {
+				imageTask.interrupt(true);
+			}
+			getSecurityCode();
+			break;
+		case R.id.setting:
+			if (fetchImage == null) {
+				ViewStub stub = (ViewStub) findViewById(R.id.setting_stub);
+				stub.inflate();
+				fetchImage = (ToggleButton) findViewById(R.id.fetchImage);
+				sound = (ToggleButton) findViewById(R.id.sound);
+				autoRefresh = (ToggleButton) findViewById(R.id.auto_refresh);
+				deviceName = (EditText) findViewById(R.id.deviceName);
+				serverAddr = (EditText) findViewById(R.id.server_addr);
+				fetchImage.setChecked(CustomSetting.loadImage);
+				sound.setChecked(CustomSetting.soundOn);
+				deviceName.setText(CustomSetting.device);
+				autoRefresh.setChecked(CustomSetting.autoRefresh);
+				serverAddr.setText(CustomSetting.serverAddress);
+			}
+			break;
+		}
+	}
 }

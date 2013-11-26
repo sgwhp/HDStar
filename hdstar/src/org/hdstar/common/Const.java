@@ -47,41 +47,24 @@ public class Const {
 				+ "/bookmark.php?torrentid=";
 
 		/** 客户端服务器地址 */
-		public static final String SERVER_ADDRESS = "http://hdstar.ap01.aws.af.cm/";
 		// public static final String SERVER_ADDRESS =
-		// "http://192.168.1.100:8080/HDStarService/";
-		public static final String SERVER_VIEW_FORUM_URL = SERVER_ADDRESS
-				+ "viewForum";
-		public static final String SERVER_VIEW_TOPIC_URL = SERVER_ADDRESS
-				+ "viewTopic";
-		public static final String SERVER_GET_IMAGE_URL = SERVER_ADDRESS
-				+ "getImage?url=";
-		public static final String SERVER_VIEW_MESSAGES_URL = SERVER_ADDRESS
-				+ "messages";
-		public static final String SERVER_SEND_BOX_URL = SERVER_ADDRESS
-				+ "sendbox";
-		public static final String SERVER_STAFF_BOX_URL = SERVER_ADDRESS
-				+ "staffbox";
-		public static final String SERVER_REPORT_BOX_URL = SERVER_ADDRESS
-				+ "reportbox";
-		public static final String SERVER_CHEATER_BOX_URL = SERVER_ADDRESS
-				+ "cheaterbox";
-		public final static String[] MESSAGE_BOX_URLS = {
-				SERVER_VIEW_MESSAGES_URL, SERVER_SEND_BOX_URL,
-				SERVER_STAFF_BOX_URL, SERVER_REPORT_BOX_URL,
-				SERVER_CHEATER_BOX_URL };
-		public final static String SERVER_VIEW_MESSAGE_URL = SERVER_ADDRESS
-				+ "viewMessage?id=";
-		public final static String COMMON_MESSAGE_BOX_URL = BASE_URL
-				+ "/messages.php";
-		public final static String SERVER_CHECK_MESSAGE_URL = SERVER_ADDRESS
-				+ "haveNewMsg";
-		public static final String SERVER_TORRENTS_URL = SERVER_ADDRESS
-				+ "torrents";
-		public static final String SERVER_DOWNLOAD_URL = SERVER_ADDRESS
-				+ "download";
-		public static final String SERVER_CHECK_UPDATE_URL = SERVER_ADDRESS
-				+ "checkVersion";
+		// "http://hdstar.ap01.aws.af.cm/";
+		public static String SERVER_ADDRESS;
+		public static String SERVER_VIEW_FORUM_URL;
+		public static String SERVER_VIEW_TOPIC_URL;
+		public static String SERVER_GET_IMAGE_URL;
+		public static String SERVER_VIEW_MESSAGES_URL;
+		public static String SERVER_SEND_BOX_URL;
+		public static String SERVER_STAFF_BOX_URL;
+		public static String SERVER_REPORT_BOX_URL;
+		public static String SERVER_CHEATER_BOX_URL;
+		public static String[] MESSAGE_BOX_URLS;
+		public static String SERVER_VIEW_MESSAGE_URL;
+		public static String COMMON_MESSAGE_BOX_URL;
+		public static String SERVER_CHECK_MESSAGE_URL;
+		public static String SERVER_TORRENTS_URL;
+		public static String SERVER_DOWNLOAD_URL;
+		public static String SERVER_CHECK_UPDATE_URL;
 
 		/** rutorrent地址 */
 		public static final String RUTORRENT_HOME_PAGE = "http://%s/rutorrent";
@@ -94,6 +77,27 @@ public class Const {
 				+ "?mode=refresh&rss=%s";
 		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/diskspace/action.php?_=";
+
+		public static void initServerAdd(final String serverAddr) {
+			SERVER_ADDRESS = serverAddr;
+			SERVER_VIEW_FORUM_URL = SERVER_ADDRESS + "viewForum";
+			SERVER_VIEW_TOPIC_URL = SERVER_ADDRESS + "viewTopic";
+			SERVER_GET_IMAGE_URL = SERVER_ADDRESS + "getImage?url=";
+			SERVER_VIEW_MESSAGES_URL = SERVER_ADDRESS + "messages";
+			SERVER_SEND_BOX_URL = SERVER_ADDRESS + "sendbox";
+			SERVER_STAFF_BOX_URL = SERVER_ADDRESS + "staffbox";
+			SERVER_REPORT_BOX_URL = SERVER_ADDRESS + "reportbox";
+			SERVER_CHEATER_BOX_URL = SERVER_ADDRESS + "cheaterbox";
+			MESSAGE_BOX_URLS = new String[] { SERVER_VIEW_MESSAGES_URL,
+					SERVER_SEND_BOX_URL, SERVER_STAFF_BOX_URL,
+					SERVER_REPORT_BOX_URL, SERVER_CHEATER_BOX_URL };
+			SERVER_VIEW_MESSAGE_URL = SERVER_ADDRESS + "viewMessage?id=";
+			COMMON_MESSAGE_BOX_URL = BASE_URL + "/messages.php";
+			SERVER_CHECK_MESSAGE_URL = SERVER_ADDRESS + "haveNewMsg";
+			SERVER_TORRENTS_URL = SERVER_ADDRESS + "torrents";
+			SERVER_DOWNLOAD_URL = SERVER_ADDRESS + "download";
+			SERVER_CHECK_UPDATE_URL = SERVER_ADDRESS + "checkVersion";
+		}
 	}
 
 	public final class ResponseCode {

@@ -85,6 +85,7 @@
     <string name="update_info">Version:%1$s\nSize:%2$s</string>
     <string name="device_name_setting_hint">Device name</string>
     <string name="auto_refresh">Auto refresh after adding a reply</string>
+    <string name="server_addr">Server</string>
     
     <string name="notification_title">HDSky\'s notification</string>
     <string name="have_new_message">You have (a) new message(s)! Click here to read.</string>

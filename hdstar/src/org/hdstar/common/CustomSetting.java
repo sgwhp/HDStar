@@ -12,5 +12,6 @@ public class CustomSetting implements Serializable {
 	public static boolean loadImage = true;
 	public static boolean soundOn = true;
 	public static boolean autoRefresh = false;
+	public static String serverAddress = "http://hdsky.eu01.aws.af.cm/";
 
 }

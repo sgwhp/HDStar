@@ -35,6 +35,7 @@ public class SettingActivity extends BaseActivity {
 	private ToggleButton sound;
 	private EditText deviceName;
 	private ToggleButton autoRefresh;
+	private EditText serverAddr;
 	private DelegateTask<NewApkInfo> task;
 
 	public SettingActivity() {
@@ -49,10 +50,12 @@ public class SettingActivity extends BaseActivity {
 		sound = (ToggleButton) findViewById(R.id.sound);
 		autoRefresh = (ToggleButton) findViewById(R.id.auto_refresh);
 		deviceName = (EditText) findViewById(R.id.deviceName);
+		serverAddr = (EditText) findViewById(R.id.server_addr);
 		fetchImage.setChecked(CustomSetting.loadImage);
 		sound.setChecked(CustomSetting.soundOn);
 		deviceName.setText(CustomSetting.device);
 		autoRefresh.setChecked(CustomSetting.autoRefresh);
+		serverAddr.setText(CustomSetting.serverAddress);
 	}
 
 	@Override
@@ -86,7 +89,10 @@ public class SettingActivity extends BaseActivity {
 		edit.putString("device", CustomSetting.device);
 		CustomSetting.autoRefresh = autoRefresh.isChecked();
 		edit.putBoolean("autoRefresh", CustomSetting.autoRefresh);
+		CustomSetting.serverAddress = serverAddr.getText().toString();
+		edit.putString("serverAddr", CustomSetting.serverAddress);
 		edit.commit();
+		Const.Urls.initServerAdd(CustomSetting.serverAddress);
 	}
 
 	public void onClick(View v) {
