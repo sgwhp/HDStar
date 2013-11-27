@@ -2,6 +2,7 @@ package org.hdstar.component.activity;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.util.Util;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.StackPagerAdapter;
 import org.hdstar.widget.fragment.MenuListFragment;
@@ -25,6 +26,8 @@ import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.jfeinstein.jazzyviewpager.JazzyViewPager;
+import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
 import com.slidingmenu.lib.SlidingMenu;
 
 public class BaseStackActivity extends SlidingFragmentActivity implements
@@ -34,7 +37,8 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	public static int newMessageNum = 0;
 	protected StackPagerAdapter stackAdapter;
 	protected int curPage = 0;
-	protected ViewPager viewPager;
+	protected JazzyViewPager viewPager;
+	private final int PAGER_MARGIN = 10;
 
 	protected BaseStackActivity(int titleRes) {
 		mTitleRes = titleRes;
@@ -76,8 +80,12 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		// bgSplit.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
 		// getSupportActionBar().setSplitBackgroundDrawable(bgSplit);
 		// }
-		viewPager = (ViewPager) findViewById(R.id.viewPager);
-		stackAdapter = new StackPagerAdapter(getSupportFragmentManager());
+		viewPager = (JazzyViewPager) findViewById(R.id.viewPager);
+		viewPager.setPageMargin(Util.dip2px(this, PAGER_MARGIN));
+		viewPager.setFadeEnabled(true);
+		viewPager.setTransitionEffect(TransitionEffect.Stack);
+		stackAdapter = new StackPagerAdapter(getSupportFragmentManager(),
+				viewPager);
 		if (savedInstanceState != null) {
 			int count = savedInstanceState.getInt("pageCount");
 			curPage = savedInstanceState.getInt("selectedPage");

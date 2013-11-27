@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.view.ViewGroup;
+
+import com.jfeinstein.jazzyviewpager.JazzyViewPager;
 
 public class StackPagerAdapter extends FragmentPagerAdapter {
 	private FragmentManager fm;
@@ -18,10 +21,12 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 	// private static final String TAG = "FragmentPagerAdapter";
 	// private static final boolean DEBUG = false;
 	private int curPosition = 0;
+	private JazzyViewPager mJazzy;
 
-	public StackPagerAdapter(FragmentManager fm) {
+	public StackPagerAdapter(FragmentManager fm, JazzyViewPager jazzy) {
 		super(fm);
 		this.fm = fm;
+		mJazzy = jazzy;
 	}
 
 	@Override
@@ -39,29 +44,13 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		return PagerAdapter.POSITION_NONE;
 	}
 
-	// @Override
-	// public Object instantiateItem(ViewGroup container, int position) {
-	// if(mCurTransaction == null){
-	// mCurTransaction = fm.beginTransaction();
-	// }
-	// final long itemId = getItemId(position);
-	// String name = makeFragmentName(container.getId(), itemId);
-	// Fragment fragment = fm.findFragmentByTag(name);
-	// if (fragment != null) {
-	// if (DEBUG) Log.v(TAG, "Attaching item #" + itemId + ": f=" + fragment);
-	// mCurTransaction.attach(fragment);
-	// } else {
-	// fragment = getItem(position);
-	// if (DEBUG) Log.v(TAG, "Adding item #" + itemId + ": f=" + fragment);
-	// mCurTransaction.add(container.getId(), fragment,
-	// makeFragmentName(container.getId(), itemId));
-	// }
-	// if (fragment != mCurrentPrimaryItem) {
-	// fragment.setMenuVisibility(false);
-	// fragment.setUserVisibleHint(false);
-	// }
-	// return fragment;
-	// }
+	@Override
+	public Object instantiateItem(ViewGroup container, int position) {
+		Object obj = super.instantiateItem(container, position);
+		mJazzy.setObjectForPosition(obj, position);
+		return obj;
+	}
+
 	//
 	// @Override
 	// public void destroyItem(ViewGroup container, int position, Object object)
@@ -119,8 +108,8 @@ public class StackPagerAdapter extends FragmentPagerAdapter {
 		fragments.get(curPosition).abort();
 		curPosition -= pages;
 	}
-	
-	public void setCurPosition(int curPosition){
+
+	public void setCurPosition(int curPosition) {
 		this.curPosition = curPosition;
 	}
 
