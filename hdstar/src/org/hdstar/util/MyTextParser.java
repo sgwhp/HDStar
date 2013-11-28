@@ -173,6 +173,19 @@ public class MyTextParser {
 		return text;
 	}
 
+	public static String toEdit(String text) {
+		Document doc = Jsoup.parseBodyFragment(text);
+		Elements elements = doc.getElementsByTag("div");
+		if (elements.size() == 0) {
+			return text;
+		}
+		text = elements.get(0).html();
+		text = toBBCode(text);
+		Spanned s = Html.fromHtml(text);
+		text = s.toString();
+		return text;
+	}
+
 	/**
 	 * 构建回复站内信格式的回复内容，并将html转换BBCode
 	 */

@@ -42,6 +42,7 @@ import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 public class ReplyFragment extends StackFragment {
 
 	private String topicID = "";
+	private String type;
 	private EditText body = null;
 	private Button button = null;
 	private CustomDialog dialog = null;
@@ -52,12 +53,13 @@ public class ReplyFragment extends StackFragment {
 	private LinearLayout lin;
 
 	public static ReplyFragment newInstance(String topicID, String text,
-			String username) {
+			String username, String type) {
 		Bundle args = new Bundle();
 		ReplyFragment fragment = new ReplyFragment();
 		args.putString("topicID", topicID);
 		args.putString("text", text);
 		args.putString("username", username);
+		args.putString("type", type);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -66,6 +68,7 @@ public class ReplyFragment extends StackFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		topicID = getArguments().getString("topicID");
+		type = getArguments().getString("type");
 	}
 
 	@Override
@@ -93,7 +96,8 @@ public class ReplyFragment extends StackFragment {
 			body.setText(text);
 			body.setSelection(text.length());
 		} else if (text != null) {
-			text = parser.toImg(text);
+			// text = parser.toImg(text);
+			text = MyTextParser.toEdit(text);
 			body.setText(text);
 		}
 		button = (Button) v.findViewById(R.id.commit);
@@ -126,7 +130,7 @@ public class ReplyFragment extends StackFragment {
 					body += "\n£® π”√" + CustomSetting.device + "ªÿ∏¥£©";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", topicID));
-					nvp.add(new BasicNameValuePair("type", "reply"));
+					nvp.add(new BasicNameValuePair("type", type));
 					nvp.add(new BasicNameValuePair("body", body));
 					try {
 						task.execPost(Const.Urls.REPLY_URL, nvp, "");

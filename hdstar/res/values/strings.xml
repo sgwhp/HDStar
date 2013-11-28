@@ -52,7 +52,10 @@
     <string name="add_topic_succeeded">发帖成功</string>
     <string name="reply_is_empty">请输入回复的内容</string>
     <string name="reply_is_adding">正在回复</string>
+    <string name="edit_succeeded">编辑成功</string>
+    <string name="committing">正在提交数据</string>
     <string name="reply_succeeded">回复完成</string>
+    <string name="edit_failed">编辑失败</string>
     <string name="reply_failed">回复失败，请重试</string>
     <string name="refresh_failed">数据获取失败，请稍后重试</string>
     <string name="commit_failed">数据提交失败，请稍后重试</string>
@@ -62,6 +65,11 @@
     <string name="newbie">新手上路</string>
     <string name="movie">电影院</string>
     <string name="music">音乐</string>
+    <string name="quote">引用</string>
+    <string name="pm">PM</string>
+    <string name="edit">编辑</string>
+    <string name="delete_post_msg">确认删除该回复？</string>
+    <string name="delete_topic_msg">确认删除该主题？</string>
     
     <string name="delete">删除</string>
     <string name="deleting">正在删除…</string>

@@ -32,15 +32,17 @@ public class OriginTask<T> extends BaseAsyncTask<T> {
 
 	@Override
 	public void execGet(String url, final Type resultType) {
-		parser = new ResponseParser<T>() {
-			@Override
-			public T parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 200) {
-					setMessageId(ResponseParser.SUCCESS_MSG_ID);
+		if (parser == null) {
+			parser = new ResponseParser<T>() {
+				@Override
+				public T parse(HttpResponse res, InputStream in) {
+					if (res.getStatusLine().getStatusCode() == 200) {
+						setMessageId(ResponseParser.SUCCESS_MSG_ID);
+					}
+					return null;
 				}
-				return null;
-			}
-		};
+			};
+		}
 		super.execGet(url, resultType);
 	}
 

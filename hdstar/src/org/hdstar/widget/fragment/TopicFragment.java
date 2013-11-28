@@ -1,5 +1,6 @@
 package org.hdstar.widget.fragment;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,19 +14,25 @@ import org.hdstar.model.Post;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
+import org.hdstar.task.OriginTask;
 import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.SoundPoolManager;
+import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.PostAdapter;
+import org.hdstar.widget.PostAdapter.OnPostClickListener;
 import org.jsoup.Jsoup;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+import ch.boye.httpclientandroidlib.HttpResponse;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -43,11 +50,12 @@ public class TopicFragment extends StackFragment {
 	private ListView listView;
 	private int topicId;
 	private String title = "";
-	// private int page = 0;
+	private int page = 0;
 	private PostAdapter adapter = null;
 
 	private boolean pauseOnScroll = false;
 	private boolean pauseOnFling = true;
+	private CustomDialog loadingDialog = null;
 
 	// private ArrayList<Post> posts;
 
@@ -77,7 +85,7 @@ public class TopicFragment extends StackFragment {
 		TopicFragment fragment = new TopicFragment();
 		Bundle args = new Bundle();
 		args.putInt("topicId", topicId);
-		// args.putInt("page", page);
+		args.putInt("page", page);
 		args.putString("title", title);
 		args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId="
 				+ topicId + "&page=" + page);
@@ -90,7 +98,7 @@ public class TopicFragment extends StackFragment {
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
 		topicId = bundle.getInt("topicId");
-		// page = getArguments().getInt("page");
+		page = getArguments().getInt("page");
 		title = bundle.getString("title");
 		if (title == null) {
 			title = "";
@@ -115,22 +123,48 @@ public class TopicFragment extends StackFragment {
 		super.onActivityCreated(savedInstanceState);
 		CustomLinkMovementMethod.attach(this);
 		if (adapter == null) {
-			adapter = new PostAdapter(getActivity(), new ArrayList<Post>());
+			adapter = new PostAdapter(getActivity(), new ArrayList<Post>(),
+					new OnPostClickListener() {
+
+						@Override
+						public void quote(Post p) {
+							String username = Jsoup.parseBodyFragment(
+									p.userName).text();
+							username = username.substring(0,
+									username.indexOf("("));
+							reply(p.body, username);
+						}
+
+						@Override
+						public void pm(int receiver) {
+
+						}
+
+						@Override
+						public void edit(Post p) {
+							TopicFragment.this.edit(p.body, p.id);
+						}
+
+						@Override
+						public void delete(int id, boolean isFirst) {
+							TopicFragment.this.delete(id, isFirst && page == 0);
+						}
+					});
 		}
 		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int position, long id) {
-				Post post = (Post) listView.getItemAtPosition(position);
-				String username = Jsoup.parseBodyFragment(post.userName).text();
-				username = username.substring(0, username.indexOf("("));
-				// listView.setFocusable(false);
-				reply(post.body, username);
-			}
-
-		});
+		// listView.setOnItemClickListener(new OnItemClickListener() {
+		//
+		// @Override
+		// public void onItemClick(AdapterView<?> arg0, View arg1,
+		// int position, long id) {
+		// Post post = (Post) listView.getItemAtPosition(position);
+		// String username = Jsoup.parseBodyFragment(post.userName).text();
+		// username = username.substring(0, username.indexOf("("));
+		// // listView.setFocusable(false);
+		// reply(post.body, username);
+		// }
+		//
+		// });
 		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), pauseOnScroll, pauseOnFling));
 		// 注册下拉列表刷新的监听器
@@ -209,8 +243,79 @@ public class TopicFragment extends StackFragment {
 	void reply(String text, String username) {
 		if (getActivity().findViewById(android.R.id.list) != null
 				&& adapter.getList() != null) {
-			push(ReplyFragment.newInstance(topicId + "", text, username));
+			push(ReplyFragment.newInstance(topicId + "", text, username,
+					"reply"));
 		}
+	}
+
+	void edit(String text, int id) {
+		if (getActivity().findViewById(android.R.id.list) != null
+				&& adapter.getList() != null) {
+			push(ReplyFragment.newInstance(id + "", text, null, "edit"));
+		}
+	}
+
+	@SuppressLint("DefaultLocale")
+	private void delete(int id, boolean isTopic) {
+		final String url;
+		int msg;
+		if (isTopic) {
+			msg = R.string.delete_topic_msg;
+			url = String.format(Const.Urls.DELETE_TOPIC_URL, topicId);
+		} else {
+			msg = R.string.delete_post_msg;
+			url = String.format(Const.Urls.DELETE_POST_URL, id);
+		}
+		new AlertDialog.Builder(getActivity())
+				.setTitle(R.string.confirm)
+				.setIcon(R.drawable.ic_launcher)
+				.setMessage(msg)
+				.setPositiveButton(R.string.delete,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								loadingDialog = new CustomDialog(getActivity(),
+										R.string.deleting);
+								loadingDialog
+										.setOnDismissListener(new OnDismissListener() {
+
+											@Override
+											public void onDismiss(
+													DialogInterface arg0) {
+												detachTask();
+											}
+										});
+								loadingDialog.show();
+								OriginTask<Void> task = OriginTask
+										.newInstance(HDStarApp.cookies);
+								task.attach(delCallback);
+								attachTask(task);
+								task.execGet(
+										url,
+										new org.hdstar.task.ResponseParser<Void>() {
+
+											@Override
+											public Void parse(HttpResponse res,
+													InputStream in) {
+												if (res.getStatusLine()
+														.getStatusCode() == 302) {
+													msgId = SUCCESS_MSG_ID;
+												}
+												return null;
+											}
+										});
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+							}
+						}).create().show();
 	}
 
 	private TaskCallback<List<Post>> mCallback = new TaskCallback<List<Post>>() {
@@ -239,6 +344,26 @@ public class TopicFragment extends StackFragment {
 			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			detachTask();
+		}
+	};
+
+	private TaskCallback<Void> delCallback = new TaskCallback<Void>() {
+
+		@Override
+		public void onComplete(Void result) {
+			loadingDialog.dismiss();
+			refreshView.setRefreshing(true);
+		}
+
+		@Override
+		public void onCancel() {
+			loadingDialog.dismiss();
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			loadingDialog.dismiss();
+			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
 		}
 	};
 }

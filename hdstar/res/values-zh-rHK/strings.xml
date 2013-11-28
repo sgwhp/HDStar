@@ -43,6 +43,9 @@
     <string name="reply_is_adding">正在回覆</string>
     <string name="reply_succeeded">回覆完成</string>
     <string name="reply_failed">回覆失敗，請重試</string>
+    <string name="edit_succeeded">編輯成功</string>
+    <string name="committing">正在提交數據</string>
+    <string name="edit_failed">編輯失敗</string>
     <string name="refresh_failed">數據獲取失敗，請稍後重試</string>
     <string name="commit_failed">數據提交失敗，請稍後重試</string>
     <string name="connection_refused">無法連接到服務器</string>
@@ -51,6 +54,11 @@
     <string name="newbie">新手上路</string>
     <string name="movie">電影院</string>
     <string name="music">音樂</string>
+    <string name="quote">引用</string>
+    <string name="pm">PM</string>
+    <string name="edit">編輯</string>
+    <string name="delete_post_msg">確認刪除該回復？</string>
+    <string name="delete_topic_msg">確認刪除該主題？</string>
     
     <string name="delete">刪除</string>
     <string name="deleting">正在刪除…</string>

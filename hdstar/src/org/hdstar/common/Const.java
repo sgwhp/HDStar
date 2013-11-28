@@ -45,6 +45,10 @@ public class Const {
 		public static final String REPLY_PM_URL = BASE_URL + "/takemessage.php";
 		public static final String BOOKMARK_URL = BASE_URL
 				+ "/bookmark.php?torrentid=";
+		public static final String DELETE_POST_URL = FORUM_BASE_URL
+				+ "?action=deletepost&postid=%d&sure=1";
+		public static final String DELETE_TOPIC_URL = FORUM_BASE_URL
+				+ "?action=deletetopic&topicid=%d&sure=1";
 
 		/** 客户端服务器地址 */
 		// public static final String SERVER_ADDRESS =

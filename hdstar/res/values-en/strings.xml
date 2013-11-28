@@ -43,6 +43,9 @@
     <string name="reply_is_adding">Reply is adding</string>
     <string name="reply_succeeded">Reply completed</string>
     <string name="reply_failed">Reply failed</string>
+    <string name="edit_succeeded">Edit Succeeded</string>
+    <string name="committing">Committing</string>
+    <string name="edit_failed">Edit failed</string>
     <string name="refresh_failed">Fetching data failed</string>
     <string name="commit_failed">Commit failed</string>
     <string name="connection_refused">Connection refused</string>
@@ -51,6 +54,11 @@
     <string name="newbie">Fresher tutorials</string>
     <string name="movie">Movie</string>
     <string name="music">Music</string>
+    <string name="quote">Quote</string>
+    <string name="pm">PM</string>
+    <string name="edit">Edit</string>
+    <string name="delete_post_msg">You are about to delete a post.</string>
+    <string name="delete_topic_msg">You are about to delete a topic.</string>
     
     <string name="delete">delete</string>
     <string name="deleting">processing delete request…</string>

@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
-import org.hdstar.model.Post;
 import org.hdstar.model.FieldSetVO;
+import org.hdstar.model.Post;
 import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.util.URLImageParser;
@@ -25,6 +25,7 @@ import android.text.Html;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -40,14 +41,17 @@ public class PostAdapter extends BaseAdapter {
 	private List<Post> posts;
 	private SparseArray<FieldSetVO> quotes;
 	private WeakReference<Context> ref = null;
+	private OnPostClickListener mListener;
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
-	public PostAdapter(Context context, List<Post> items) {
+	public PostAdapter(Context context, List<Post> items,
+			OnPostClickListener listener) {
 		inflater = LayoutInflater.from(context);
 		ref = new WeakReference<Context>(context);
 		this.posts = items;
 		quotes = new SparseArray<FieldSetVO>();
+		this.mListener = listener;
 	}
 
 	public void clearAnimListener() {
@@ -106,7 +110,7 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup par) {
+	public View getView(final int position, View convertView, ViewGroup par) {
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.post, null);
@@ -116,7 +120,7 @@ public class PostAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Post p = posts.get(position);
+		final Post p = posts.get(position);
 		holder.username.setText(Html.fromHtml(p.userName));
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
 				p.userClassSrc, (Context) ref.get()));
@@ -192,12 +196,54 @@ public class PostAdapter extends BaseAdapter {
 		// holder.main.setText(Html.fromHtml(p.body));
 		// }
 		holder.info.setText(p.info);
+		holder.pm.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mListener.pm(p.uid);
+			}
+		});
+		holder.quote.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mListener.quote(p);
+			}
+		});
+		if (p.edit) {
+			holder.edit.setVisibility(View.VISIBLE);
+			holder.edit.setEnabled(true);
+			holder.edit.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					mListener.edit(p);
+				}
+			});
+		} else {
+			holder.edit.setVisibility(View.INVISIBLE);
+			holder.edit.setClickable(false);
+		}
+		if (p.delete) {
+			holder.delete.setVisibility(View.VISIBLE);
+			holder.delete.setEnabled(true);
+			holder.delete.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					mListener.delete(p.id, position == 0);
+				}
+			});
+		} else {
+			holder.delete.setVisibility(View.INVISIBLE);
+			holder.delete.setClickable(false);
+		}
 		return convertView;
 	}
 
 	private class ViewHolder {
 		TextView username, info, contentOuter, legend, contentInner,
-				legendInner, contentMiddle, frameMore;
+				legendInner, contentMiddle, frameMore, pm, quote, edit, delete;
 		View frameOuter, frameInner;
 		ImageView userClass;
 		ImageView avatar;
@@ -219,6 +265,11 @@ public class PostAdapter extends BaseAdapter {
 			contentInner.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
 			frameMore = (TextView) v.findViewById(R.fieldset.frame_more);
+
+			pm = (TextView) v.findViewById(R.id.pm);
+			quote = (TextView) v.findViewById(R.id.quote);
+			edit = (TextView) v.findViewById(R.id.edit);
+			delete = (TextView) v.findViewById(R.id.delete);
 			username = (TextView) v.findViewById(R.id.username);
 			userClass = (ImageView) v.findViewById(R.id.user_class);
 			info = (TextView) v.findViewById(R.id.info);
@@ -244,6 +295,16 @@ public class PostAdapter extends BaseAdapter {
 				}
 			}
 		}
+	}
+
+	public static interface OnPostClickListener {
+		public void quote(Post p);
+
+		public void pm(int receiver);
+
+		public void edit(Post p);
+
+		public void delete(int id, boolean isFirst);
 	}
 
 }

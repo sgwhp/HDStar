@@ -83,7 +83,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		viewPager = (JazzyViewPager) findViewById(R.id.viewPager);
 		viewPager.setPageMargin(Util.dip2px(this, PAGER_MARGIN));
 		viewPager.setFadeEnabled(true);
-		viewPager.setTransitionEffect(TransitionEffect.Stack);
+		viewPager.setTransitionEffect(TransitionEffect.CubeIn);
 		stackAdapter = new StackPagerAdapter(getSupportFragmentManager(),
 				viewPager);
 		if (savedInstanceState != null) {

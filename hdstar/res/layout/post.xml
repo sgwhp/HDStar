@@ -3,8 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/chat_bg_sel"
-    android:descendantFocusability="blocksDescendants"
-    android:baselineAligned="false" >
+    android:baselineAligned="false"
+    android:descendantFocusability="blocksDescendants" >
 
     <!-- 设置scaleType为centerCrop，否则在ListView中使用UIL的圆角功能时，图片可能会被缩小 -->
 
@@ -29,14 +29,14 @@
         android:id="@+id/user_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="36dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/avatar"
         android:layout_below="@+id/avatar"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:minHeight="36dp"
         android:src="@drawable/user" />
-    
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -52,6 +52,13 @@
         android:layout_below="@+id/divider"
         layout="@layout/field_set_layout" />
 
+    <View
+        android:id="@+id/main_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/main"
+        android:background="@color/white" />
+
     <TextView
         android:id="@+id/info"
         android:layout_width="fill_parent"
@@ -61,5 +68,90 @@
         android:layout_toRightOf="@+id/avatar"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_divider" >
+
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:drawableLeft="@drawable/delete_post"
+            android:gravity="center"
+            android:text="@string/delete"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:background="@drawable/post_btn_bg_sel"
+            android:enabled="false" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:drawableLeft="@drawable/edit_post"
+            android:gravity="center"
+            android:text="@string/edit"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:background="@drawable/post_btn_bg_sel"
+            android:enabled="false" />
+        
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/quote"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:drawableLeft="@drawable/quote_post"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/post_btn_bg_sel"
+            android:text="@string/quote" />
+        
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/pm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:drawableLeft="@drawable/pm"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/post_btn_bg_sel"
+            android:text="@string/pm" />
+    </LinearLayout>
 
 </RelativeLayout>

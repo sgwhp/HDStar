@@ -4,7 +4,8 @@
   <color name="white">#FFFFFFFF</color>
   <color name="black">#FF000000</color>
   <color name="half_transparent">#bb000000</color>
-  <color name= "transparent">#00000000</color>
+  <color name="half_transparent_white">#b0ffffff</color>
+  <color name="transparent">#00000000</color>
   <color name="dark">#ff2f445f</color>
   <color name="loadingtext">#ff5d6069</color>
   <color name="listSelected_color">#ff4154a3</color>
