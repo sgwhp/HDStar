@@ -137,7 +137,7 @@ public class TopicFragment extends StackFragment {
 
 						@Override
 						public void pm(int receiver) {
-
+							push(PMFragment.newInstance(receiver));
 						}
 
 						@Override

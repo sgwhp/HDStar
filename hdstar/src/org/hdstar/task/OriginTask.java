@@ -60,7 +60,7 @@ public class OriginTask<T> extends BaseAsyncTask<T> {
 			public T parse(HttpResponse res, InputStream in) {
 				if (res.getStatusLine().getStatusCode() == 302
 						&& (location.equals("") || location.equals(res
-								.getFirstHeader("Location")))) {
+								.getFirstHeader("Location").getValue()))) {
 					setMessageId(ResponseParser.SUCCESS_MSG_ID);
 				}
 				return null;

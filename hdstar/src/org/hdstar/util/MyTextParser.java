@@ -209,14 +209,14 @@ public class MyTextParser {
 	 * 构建回复站内信格式的主题，并将html转换BBCode
 	 */
 	public static String toReplySubject(String subject) {
-		Pattern pattern = Pattern.compile("Re\\(([0-9]+)\\):");
+		Pattern pattern = Pattern.compile("Re\\((\\d+)\\)");
 		Matcher matcher = pattern.matcher(subject);
 		StringBuffer buffer = new StringBuffer();
 		if (matcher.find()) {
 			int num = Integer.parseInt(matcher.group(1));
 			num++;
 
-			matcher.appendReplacement(buffer, "Re(" + num + "):");
+			matcher.appendReplacement(buffer, "Re(" + num + ")");
 			matcher.appendTail(buffer);
 		} else {
 			buffer.append(subject);

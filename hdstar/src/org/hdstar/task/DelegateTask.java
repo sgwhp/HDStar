@@ -58,7 +58,7 @@ public class DelegateTask<T> extends BaseAsyncTask<T> {
 			@Override
 			public T parse(HttpResponse res, InputStream in) {
 				if (location != null
-						&& location.equals(res.getFirstHeader("Location"))) {
+						&& location.equals(res.getFirstHeader("Location").getValue())) {
 					return null;
 				}
 				setMessageId(ResponseParser.SUCCESS_MSG_ID);

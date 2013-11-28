@@ -39,27 +39,35 @@ import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
-public class ReplyPMFragment extends StackFragment {
+public class PMFragment extends StackFragment {
 
 	private int msgId;
 	private int senderId;
 	private int receiverId;
 	private String subject;
 	private String text;
-	private EditText body = null;
-	private Button button = null;
-	private CustomDialog dialog = null;
+	private EditText body, subjectEt;
+	private Button button;
+	private CustomDialog dialog;
 	private View v;
 
-	public static ReplyPMFragment newInstance(int msgId, String subject,
+	public static PMFragment newInstance(int msgId, String subject,
 			MessageContent content) {
 		Bundle args = new Bundle();
-		ReplyPMFragment fragment = new ReplyPMFragment();
+		PMFragment fragment = new PMFragment();
 		args.putInt("msgId", msgId);
 		args.putInt("senderId", content.senderId);
 		args.putString("subject", subject);
 		args.putString("text", content.content);
 		args.putInt("receiverId", content.receiverId);
+		fragment.setArguments(args);
+		return fragment;
+	}
+	
+	public static PMFragment newInstance(int receiverId){
+		Bundle args = new Bundle();
+		PMFragment fragment = new PMFragment();
+		args.putInt("receiverId", receiverId);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -78,7 +86,7 @@ public class ReplyPMFragment extends StackFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		v = inflater.inflate(R.layout.reply, null);
+		v = inflater.inflate(R.layout.new_topic, null);
 		return v;
 	}
 
@@ -94,10 +102,14 @@ public class ReplyPMFragment extends StackFragment {
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
-		text = MyTextParser.toReplyPM(getActivity(), senderId, text);
-		body.setText(text);
-		body.setSelection(text.length());
-		body.clearFocus();
+		subjectEt = (EditText) v.findViewById(R.id.subject);
+		if (text != null) {
+			text = MyTextParser.toReplyPM(getActivity(), senderId, text);
+			subjectEt.setVisibility(View.GONE);
+			body.setText(text);
+			body.setSelection(text.length());
+			body.clearFocus();
+		}
 		button = (Button) v.findViewById(R.id.commit);
 		button.setOnClickListener(new OnClickListener() {
 
@@ -106,45 +118,55 @@ public class ReplyPMFragment extends StackFragment {
 				if (body.getText().toString().equals("")) {
 					Toast.makeText(context, R.string.reply_is_empty,
 							Toast.LENGTH_SHORT).show();
-				} else {
-					dialog = new CustomDialog(context, R.string.reply_is_adding);
-					dialog.setOnDismissListener(new OnDismissListener() {
+					return;
+				} else if (msgId == 0 && subjectEt.getText().toString().equals("")) {
+					Toast.makeText(context, R.string.subject_is_empty,
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
+				dialog = new CustomDialog(context, R.string.reply_is_adding);
+				dialog.setOnDismissListener(new OnDismissListener() {
 
-						@Override
-						public void onDismiss(DialogInterface arg0) {
-							detachTask();
-						}
-					});
-					dialog.show();
-					detachTask();
-					OriginTask<Void> task = OriginTask
-							.newInstance(HDStarApp.cookies);
-					task.attach(mCallback);
-					attachTask(task);
-					String body = ((EditText) v.findViewById(R.id.body))
-							.getText().toString();
-					body = parser.toImg(body);
-					// body += "\n（使用" + CustomSetting.DEVICE + "回复）";
-					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+					@Override
+					public void onDismiss(DialogInterface arg0) {
+						detachTask();
+					}
+				});
+				dialog.show();
+				detachTask();
+				OriginTask<Void> task = OriginTask
+						.newInstance(HDStarApp.cookies);
+				task.attach(mCallback);
+				attachTask(task);
+				String body = ((EditText) v.findViewById(R.id.body)).getText()
+						.toString();
+				body = parser.toImg(body);
+				// body += "\n（使用" + CustomSetting.DEVICE + "回复）";
+				List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+				if (msgId != 0) {
+					//回复
 					nvp.add(new BasicNameValuePair("origmsg", msgId + ""));
-					nvp.add(new BasicNameValuePair("body", body));
-					nvp.add(new BasicNameValuePair("color", 0 + ""));
-					nvp.add(new BasicNameValuePair("delete", "yes"));
-					nvp.add(new BasicNameValuePair("font", 0 + ""));
-					nvp.add(new BasicNameValuePair("receiver", receiverId + ""));
-					nvp.add(new BasicNameValuePair("size", 0 + ""));
 					nvp.add(new BasicNameValuePair("subject", "Re: "
 							+ MyTextParser.toReplySubject(subject)));
-					nvp.add(new BasicNameValuePair("returnto",
-							Const.Urls.VIEW_MESSAGE_URL + msgId));
-					try {
-						task.execPost(Const.Urls.REPLY_PM_URL, nvp, "");
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
+				} else {
+					//新增
+					nvp.add(new BasicNameValuePair("subject", subjectEt
+							.getText().toString()));
+				}
+				nvp.add(new BasicNameValuePair("body", body));
+				nvp.add(new BasicNameValuePair("color", 0 + ""));
+				nvp.add(new BasicNameValuePair("delete", "yes"));
+				nvp.add(new BasicNameValuePair("font", 0 + ""));
+				nvp.add(new BasicNameValuePair("receiver", receiverId + ""));
+				nvp.add(new BasicNameValuePair("size", 0 + ""));
+				nvp.add(new BasicNameValuePair("returnto",
+						Const.Urls.HOME_PAGE));
+				try {
+					task.execPost(Const.Urls.REPLY_PM_URL, nvp, Const.Urls.HOME_PAGE);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
 				}
 			}
-
 		});
 
 		final SmilesAdapter smiles = new SmilesAdapter(context);

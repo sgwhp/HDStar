@@ -34,6 +34,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
@@ -89,6 +90,9 @@ public class ReplyFragment extends StackFragment {
 		final Context context = getActivity();
 		im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		if("edit".equals(type)){
+			((TextView)v.findViewById(R.id.title)).setText(R.string.edit);
+		}
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
 		if (username != null) {

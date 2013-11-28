@@ -162,7 +162,7 @@ public class ViewMessageFragment extends StackFragment {
 	}
 
 	void reply() {
-		push(ReplyPMFragment.newInstance(messageId, subject, content));
+		push(PMFragment.newInstance(messageId, subject, content));
 	}
 
 	TaskCallback<MessageContent> fetchCallback = new TaskCallback<MessageContent>() {
