@@ -94,6 +94,21 @@
     <string name="update_info">版本：%1$s\n新版大小： %2$s</string>
     <string name="device_name_setting_hint">設備名</string>
     <string name="server_addr">服務器地址</string>
+    <string name="animation">動畫</string>
+    <string name="anim_fade">Fade</string>
+    <string name="anim_standard">Standard</string>
+    <string name="anim_tablet">Tablet</string>
+    <string name="anim_cube_in">CubeIn</string>
+    <string name="anim_cube_out">CubeOut</string>
+    <string name="anim_flip_vertical">FlipVertical</string>
+    <string name="anim_flip_horizontal">FlipHorizontal</string>
+    <string name="anim_stack">Stack</string>
+    <string name="anim_zoom_in">ZoomIn</string>
+    <string name="anim_zoom_out">ZoomOut</string>
+    <string name="anim_rotate_up">RotateUp</string>
+    <string name="anim_rotate_down">RotateDown</string>
+    <string name="anim_accordion">Accordion</string>
+    <string name="apply">應用</string>
     
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未讀消息，點擊查看</string>

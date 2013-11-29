@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="customProgressStyle" parent="@android:style/Widget.ProgressBar.Large">
         <item name="android:minWidth">32dip</item>
@@ -75,5 +75,10 @@
     <style name="CustomEditTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/input_bg_sel</item> 
     </style>
+    
+    <style name="customRadioButtonStyle">
+	    <item name="android:button">@drawable/radiobutton_bg_sel</item>
+	    <item name="android:paddingLeft">30dp</item>
+	</style>
 
 </resources>

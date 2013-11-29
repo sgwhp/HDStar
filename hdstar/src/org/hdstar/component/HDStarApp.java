@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.gson.reflect.TypeToken;
+import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -108,6 +109,9 @@ public class HDStarApp extends Application {
 		CustomSetting.autoRefresh = shared.getBoolean("autoRefresh", false);
 		CustomSetting.serverAddress = shared.getString("serverAddr",
 				CustomSetting.serverAddress);
+		CustomSetting.fade = shared.getBoolean("fade", false);
+		CustomSetting.anim = CustomSetting.stringToAnim(shared.getString(
+				"anim", TransitionEffect.CubeIn.name()));
 		Const.Urls.initServerAdd(CustomSetting.serverAddress);
 		initImageLoader(context);
 		// initMemoryCache();

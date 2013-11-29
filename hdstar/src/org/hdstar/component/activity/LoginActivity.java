@@ -80,8 +80,6 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										// InitActivity
-										// .exitApp(LoginActivity.this);
 										finish();
 									}
 								})

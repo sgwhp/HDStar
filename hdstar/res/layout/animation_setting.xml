@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="5dip" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/setting_strip_bg_sel" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dip"
+                android:text="@string/anim_fade" />
+
+            <org.hdstar.widget.LTAToggleButton
+                android:id="@+id/fade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/transparent_checkbox_bg_sel"
+                android:textOff=""
+                android:textOn="" />
+        </LinearLayout>
+        
+        <RadioGroup
+            android:id="@+id/animations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <RadioButton
+                android:id="@+id/standard"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:background="@drawable/setting_strip_top"
+                android:text="@string/anim_standard" />
+            
+            <RadioButton
+                android:id="@+id/tablet"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_tablet" />
+            
+            <RadioButton
+                android:id="@+id/cube_in"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_cube_in" />
+            
+            <RadioButton
+                android:id="@+id/cube_out"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_cube_out" />
+            
+            <RadioButton
+                android:id="@+id/flip_vertical"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_flip_vertical" />
+            
+            <RadioButton
+                android:id="@+id/flip_horizontal"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_flip_horizontal" />
+            
+            <RadioButton
+                android:id="@+id/stack"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_stack" />
+            
+            <RadioButton
+                android:id="@+id/zoom_in"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_zoom_in" />
+            
+            <RadioButton
+                android:id="@+id/zoom_out"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_zoom_out" />
+            
+            <RadioButton
+                android:id="@+id/rotate_up"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_rotate_up" />
+            
+            <RadioButton
+                android:id="@+id/rotate_down"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_rotate_down" />
+            
+            <RadioButton
+                android:id="@+id/accordion"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_bottom"
+                android:text="@string/anim_accordion" />
+            
+        </RadioGroup>
+
+    </LinearLayout>
+
+</ScrollView>

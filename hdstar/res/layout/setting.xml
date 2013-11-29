@@ -14,6 +14,18 @@
         <include layout="@layout/setting_sub" />
 
         <TextView
+            android:id="@+id/animation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/setting_strip_bg_sel"
+            android:clickable="true"
+            android:drawableRight="@drawable/zebra_arrow_bg_sel"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:text="@string/animation" />
+
+        <TextView
             android:id="@+id/clearCache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +33,6 @@
             android:background="@drawable/setting_strip_top_sel"
             android:clickable="true"
             android:gravity="center_vertical"
-            android:onClick="onClick"
             android:paddingLeft="5dip"
             android:text="@string/clear_cache" />
 
@@ -38,7 +49,6 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:onClick="onClick"
                 android:paddingLeft="5dip"
                 android:text="@string/check_update" />
 
@@ -47,7 +57,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/download_task_icon_sel"
-                android:onClick="onClick"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -57,7 +66,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
             android:background="@drawable/log_out_btn_sel"
-            android:onClick="onClick"
             android:text="@string/log_out" />
     </LinearLayout>
 

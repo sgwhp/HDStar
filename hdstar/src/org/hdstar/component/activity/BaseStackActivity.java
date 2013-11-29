@@ -2,6 +2,7 @@ package org.hdstar.component.activity;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.common.CustomSetting;
 import org.hdstar.util.Util;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.StackPagerAdapter;
@@ -27,7 +28,6 @@ import android.widget.ArrayAdapter;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager;
-import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
 import com.slidingmenu.lib.SlidingMenu;
 
 public class BaseStackActivity extends SlidingFragmentActivity implements
@@ -82,8 +82,8 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		// }
 		viewPager = (JazzyViewPager) findViewById(R.id.viewPager);
 		viewPager.setPageMargin(Util.dip2px(this, PAGER_MARGIN));
-		viewPager.setFadeEnabled(true);
-		viewPager.setTransitionEffect(TransitionEffect.CubeIn);
+		viewPager.setFadeEnabled(CustomSetting.fade);
+		viewPager.setTransitionEffect(CustomSetting.anim);
 		stackAdapter = new StackPagerAdapter(getSupportFragmentManager(),
 				viewPager);
 		if (savedInstanceState != null) {
