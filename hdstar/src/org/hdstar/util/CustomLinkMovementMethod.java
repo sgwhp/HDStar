@@ -2,6 +2,7 @@ package org.hdstar.util;
 
 import org.hdstar.common.Const;
 import org.hdstar.widget.fragment.ForumFragment;
+import org.hdstar.widget.fragment.PMFragment;
 import org.hdstar.widget.fragment.StackFragment;
 import org.hdstar.widget.fragment.TopicFragment;
 
@@ -34,11 +35,23 @@ public class CustomLinkMovementMethod extends LinkMovementMethod {
 
 			URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
 			if (link.length != 0) {
+				StackFragment f;
 				String url = link[0].getURL();
 				if (url.startsWith(Const.Urls.VIEW_FORUM_BASE_URL)) {
-					mFragment.push(ForumFragment.newInstance(url));
+					f = ForumFragment.newInstance(url);
+					if (f != null) {
+						mFragment.push(f);
+					}
 				} else if (url.startsWith(Const.Urls.VIEW_TOPIC_BASE_URL)) {
-					mFragment.push(TopicFragment.newInstance(url));
+					f = TopicFragment.newInstance(url);
+					if (f != null) {
+						mFragment.push(f);
+					}
+				} else if (url.startsWith(Const.Urls.SEND_PM_URL)) {
+					f = PMFragment.newInstance(url);
+					if (f != null) {
+						mFragment.push(f);
+					}
 				}
 				// else if (url.contains("tel"))
 				// {
@@ -53,7 +66,7 @@ public class CustomLinkMovementMethod extends LinkMovementMethod {
 	}
 
 	public static void attach(StackFragment stackFragment) {
-		if(mFragment == null){
+		if (mFragment == null) {
 			mFragment = stackFragment;
 		}
 	}

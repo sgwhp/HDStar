@@ -43,6 +43,8 @@ public class Const {
 		public static final String VIEW_MESSAGE_URL = FORUM_BASE_URL
 				+ "/messages.php?action=viewmessage&id=";
 		public static final String REPLY_PM_URL = BASE_URL + "/takemessage.php";
+		public static final String SEND_PM_URL = BASE_URL
+				+ "/sendmessage.php?reciever=";
 		public static final String BOOKMARK_URL = BASE_URL
 				+ "/bookmark.php?torrentid=";
 		public static final String DELETE_POST_URL = FORUM_BASE_URL

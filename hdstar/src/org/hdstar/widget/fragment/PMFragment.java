@@ -3,6 +3,8 @@ package org.hdstar.widget.fragment;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
@@ -63,13 +65,22 @@ public class PMFragment extends StackFragment {
 		fragment.setArguments(args);
 		return fragment;
 	}
-	
-	public static PMFragment newInstance(int receiverId){
+
+	public static PMFragment newInstance(int receiverId) {
 		Bundle args = new Bundle();
 		PMFragment fragment = new PMFragment();
 		args.putInt("receiverId", receiverId);
 		fragment.setArguments(args);
 		return fragment;
+	}
+
+	public static PMFragment newInstance(String url) {
+		Pattern pattern = Pattern.compile(Const.Urls.SEND_PM_URL + "(\\d)");
+		Matcher matcher = pattern.matcher(url);
+		if (matcher.find()) {
+			return newInstance(Integer.parseInt(matcher.group(1)));
+		}
+		return null;
 	}
 
 	@Override
@@ -119,7 +130,8 @@ public class PMFragment extends StackFragment {
 					Toast.makeText(context, R.string.reply_is_empty,
 							Toast.LENGTH_SHORT).show();
 					return;
-				} else if (msgId == 0 && subjectEt.getText().toString().equals("")) {
+				} else if (msgId == 0
+						&& subjectEt.getText().toString().equals("")) {
 					Toast.makeText(context, R.string.subject_is_empty,
 							Toast.LENGTH_SHORT).show();
 					return;
@@ -144,12 +156,12 @@ public class PMFragment extends StackFragment {
 				// body += "\n（使用" + CustomSetting.DEVICE + "回复）";
 				List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 				if (msgId != 0) {
-					//回复
+					// 回复
 					nvp.add(new BasicNameValuePair("origmsg", msgId + ""));
 					nvp.add(new BasicNameValuePair("subject", "Re: "
 							+ MyTextParser.toReplySubject(subject)));
 				} else {
-					//新增
+					// 新增
 					nvp.add(new BasicNameValuePair("subject", subjectEt
 							.getText().toString()));
 				}
@@ -159,10 +171,10 @@ public class PMFragment extends StackFragment {
 				nvp.add(new BasicNameValuePair("font", 0 + ""));
 				nvp.add(new BasicNameValuePair("receiver", receiverId + ""));
 				nvp.add(new BasicNameValuePair("size", 0 + ""));
-				nvp.add(new BasicNameValuePair("returnto",
-						Const.Urls.HOME_PAGE));
+				nvp.add(new BasicNameValuePair("returnto", Const.Urls.HOME_PAGE));
 				try {
-					task.execPost(Const.Urls.REPLY_PM_URL, nvp, Const.Urls.HOME_PAGE);
+					task.execPost(Const.Urls.REPLY_PM_URL, nvp,
+							Const.Urls.HOME_PAGE);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
