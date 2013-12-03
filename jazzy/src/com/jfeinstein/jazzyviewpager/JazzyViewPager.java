@@ -48,7 +48,7 @@ public class JazzyViewPager extends ViewPager {
 		this(context, null);
 	}
 
-	@SuppressWarnings("incomplete-switch")
+	// @SuppressWarnings("incomplete-switch")
 	public JazzyViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setClipChildren(false);
@@ -65,17 +65,17 @@ public class JazzyViewPager extends ViewPager {
 				R.styleable.JazzyViewPager_outlineEnabled, false));
 		setOutlineColor(ta.getColor(R.styleable.JazzyViewPager_outlineColor,
 				Color.WHITE));
-		switch (mEffect) {
-		case Stack:
-		case ZoomOut:
-			setFadeEnabled(true);
-		}
+		// switch (mEffect) {
+		// case Stack:
+		// case ZoomOut:
+		// setFadeEnabled(true);
+		// }
 		ta.recycle();
 	}
 
 	public void setTransitionEffect(TransitionEffect effect) {
 		mEffect = effect;
-		// reset();
+		reset();
 	}
 
 	public void setPagingEnabled(boolean enabled) {
@@ -158,40 +158,44 @@ public class JazzyViewPager extends ViewPager {
 		IDLE, GOING_LEFT, GOING_RIGHT
 	}
 
-	// public void reset() {
-	// resetPrivate();
-	// int curr = getCurrentItem();
-	// onPageScrolled(curr, 0.0f, 0);
-	// }
-	//
-	// private void resetPrivate() {
-	// for (int i = 0; i < getChildCount(); i++) {
-	// View v = getChildAt(i);
-	// // ViewHelper.setRotation(v, -ViewHelper.getRotation(v));
-	// // ViewHelper.setRotationX(v, -ViewHelper.getRotationX(v));
-	// // ViewHelper.setRotationY(v, -ViewHelper.getRotationY(v));
-	// //
-	// // ViewHelper.setTranslationX(v, -ViewHelper.getTranslationX(v));
-	// // ViewHelper.setTranslationY(v, -ViewHelper.getTranslationY(v));
-	//
-	// ViewHelper.setRotation(v, 0);
-	// ViewHelper.setRotationX(v, 0);
-	// ViewHelper.setRotationY(v, 0);
-	//
-	// ViewHelper.setTranslationX(v, 0);
-	// ViewHelper.setTranslationY(v, 0);
-	//
-	// ViewHelper.setAlpha(v, 1.0f);
-	//
-	// ViewHelper.setScaleX(v, 1.0f);
-	// ViewHelper.setScaleY(v, 1.0f);
-	//
-	// ViewHelper.setPivotX(v, 0);
-	// ViewHelper.setPivotY(v, 0);
-	//
-	// logState(v, "Child " + i);
-	// }
-	// }
+	public void reset() {
+		int curr = getCurrentItem();
+		onPageScrolled(curr, 0.0f, 0);
+		resetPrivate();
+	}
+
+	private void resetPrivate() {
+		for (int i = 0; i < getChildCount(); i++) {
+			View v = getChildAt(i);
+			// ViewHelper.setRotation(v, -ViewHelper.getRotation(v));
+			// ViewHelper.setRotationX(v, -ViewHelper.getRotationX(v));
+			// ViewHelper.setRotationY(v, -ViewHelper.getRotationY(v));
+			//
+			// ViewHelper.setTranslationX(v, -ViewHelper.getTranslationX(v));
+			// ViewHelper.setTranslationY(v, -ViewHelper.getTranslationY(v));
+
+			if (v.getVisibility() == View.INVISIBLE) {
+				v.setVisibility(View.VISIBLE);
+			}
+
+			ViewHelper.setRotation(v, 0);
+			ViewHelper.setRotationX(v, 0);
+			ViewHelper.setRotationY(v, 0);
+
+			ViewHelper.setTranslationX(v, 0);
+			ViewHelper.setTranslationY(v, 0);
+
+			ViewHelper.setAlpha(v, 1.0f);
+
+			ViewHelper.setScaleX(v, 1.0f);
+			ViewHelper.setScaleY(v, 1.0f);
+
+			ViewHelper.setPivotX(v, 0);
+			ViewHelper.setPivotY(v, 0);
+
+			// logState(v, "Child " + i);
+		}
+	}
 
 	private void logState(View v, String title) {
 		Log.v(TAG,
@@ -290,6 +294,10 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setPivotY(left, left.getMeasuredHeight() * 0.5f);
 				ViewHelper.setScaleX(left, mScale);
 				ViewHelper.setScaleY(left, mScale);
+				if (!in) {
+					mTrans = -left.getMeasuredWidth() * positionOffset / 4;
+					ViewHelper.setTranslationX(left, mTrans);
+				}
 			}
 			if (right != null) {
 				manageLayer(right, true);
@@ -299,6 +307,11 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setPivotY(right, right.getMeasuredHeight() * 0.5f);
 				ViewHelper.setScaleX(right, mScale);
 				ViewHelper.setScaleY(right, mScale);
+				if (!in) {
+					mTrans = right.getMeasuredWidth() * (1 - positionOffset)
+							/ 4;
+					ViewHelper.setTranslationX(right, mTrans);
+				}
 			}
 		}
 	}

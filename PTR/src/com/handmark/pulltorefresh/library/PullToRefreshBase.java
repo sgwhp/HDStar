@@ -1557,6 +1557,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 
 	}
 
+	public static interface OnCancelListener<V extends View> {
+		public void onCancel(final PullToRefreshBase<V> refreshView);
+	}
+
 	/**
 	 * Simple Listener to listen for any callbacks to Refresh.
 	 * 

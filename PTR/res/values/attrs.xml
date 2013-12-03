@@ -77,6 +77,8 @@
         <attr name="ptrFooterPullText" format="reference|string" />
         <attr name="ptrFooterReleaseText" format="reference|string" />
         <attr name="ptrFooterRefreshingText" format="reference|string" />
+        
+        <attr name="ptrCancelable" format="reference|boolean" />
 
         <!-- BELOW HERE ARE DEPRECEATED. DO NOT USE. -->
         <attr name="ptrAdapterViewBackground" format="reference|color" />
