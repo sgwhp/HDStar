@@ -19,6 +19,7 @@
         ptr:ptrFooterPullText="@string/pull_to_add_next_page"
         ptr:ptrFooterReleaseText="@string/release_to_add_next_page"
         ptr:ptrAnimationStyle="flip"
-        ptr:ptrMode="both" />
+        ptr:ptrMode="both"
+        ptr:ptrCancelable="true" />
 
 </LinearLayout>

@@ -36,7 +36,8 @@
         ptr:ptrFooterPullText="@string/pull_to_add_next_page"
         ptr:ptrFooterReleaseText="@string/release_to_add_next_page"
         ptr:ptrHeaderBackground="@android:color/darker_gray"
-        ptr:ptrHeaderTextColor="@android:color/white" />
+        ptr:ptrHeaderTextColor="@android:color/white"
+        ptr:ptrCancelable="true" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -66,6 +66,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -254,6 +255,15 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				doRefresh();
 			}
 		});
+		
+		refreshView.setOnCancelListener(new OnCancelListener(){
+
+			@Override
+			public void onCancel() {
+				if(mTask != null){
+					mTask.detach();
+				}
+			}});
 
 		rssAdapter = new RssAdapter();
 		rssListView.setAdapter(rssAdapter);
@@ -302,6 +312,15 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 						}
 					}
 				});
+		
+		refreshExpandableView.setOnCancelListener(new OnCancelListener(){
+
+			@Override
+			public void onCancel() {
+				if(rssTask != null){
+					rssTask.detach();
+				}
+			}});
 
 		findViewById(R.id.refresh_disk_info).setOnClickListener(this);
 		refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);

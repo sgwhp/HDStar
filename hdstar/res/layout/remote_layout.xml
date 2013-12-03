@@ -17,7 +17,8 @@
         android:headerDividersEnabled="false"
         ptr:ptrHeaderBackground="@android:color/darker_gray"
         ptr:ptrHeaderTextColor="@android:color/white"
-        ptr:ptrAnimationStyle="flip" />
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrCancelable="true" />
     
     <include
         android:id="@+id/empty"

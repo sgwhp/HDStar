@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 
@@ -126,6 +127,12 @@ public class TorrentListFragment extends StackFragment {
 					}
 
 				});
+		refreshView.setOnCancelListener(new OnCancelListener(){
+
+			@Override
+			public void onCancel() {
+				detachTask();
+			}});
 	}
 
 	void fetch() {

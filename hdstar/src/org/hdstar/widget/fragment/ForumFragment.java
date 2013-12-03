@@ -37,6 +37,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -222,6 +223,13 @@ public class ForumFragment extends StackFragment {
 			}
 
 		});
+		
+		refreshView.setOnCancelListener(new OnCancelListener(){
+
+			@Override
+			public void onCancel() {
+				detachTask();
+			}});
 	}
 
 	void viewTopic(int topicId, int page, String title) {

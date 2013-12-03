@@ -68,6 +68,7 @@ public abstract class LoadingLayout extends FrameLayout implements
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
 
+	private boolean mCancelable;
 	private OnCancelListener mCancelListener;
 
 	public LoadingLayout(Context context, final Mode mode,
@@ -165,14 +166,15 @@ public abstract class LoadingLayout extends FrameLayout implements
 		}
 
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrCancelable)) {
-			if (attrs
-					.getBoolean(R.styleable.PullToRefresh_ptrCancelable, false)) {
-				mCancelBtn.setVisibility(View.VISIBLE);
+			if ((mCancelable = attrs
+					.getBoolean(R.styleable.PullToRefresh_ptrCancelable, false))) {
 				mCancelBtn.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-
+						if(mCancelListener != null){
+							mCancelListener.onCancel();
+						}
 					}
 				});
 			}
@@ -331,6 +333,10 @@ public abstract class LoadingLayout extends FrameLayout implements
 		if (null != mSubHeaderText) {
 			mSubHeaderText.setVisibility(View.GONE);
 		}
+		
+		if(mCancelable){
+			mCancelBtn.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public final void releaseToRefresh() {
@@ -361,6 +367,10 @@ public abstract class LoadingLayout extends FrameLayout implements
 			} else {
 				mSubHeaderText.setVisibility(View.VISIBLE);
 			}
+		}
+		
+		if(mCancelable){
+			mCancelBtn.setVisibility(View.GONE);
 		}
 	}
 
@@ -471,6 +481,17 @@ public abstract class LoadingLayout extends FrameLayout implements
 		}
 		if (null != mSubHeaderText) {
 			mSubHeaderText.setTextColor(color);
+		}
+	}
+	
+	public void setOnCancelListener(OnCancelListener listener){
+		mCancelListener = listener;
+	}
+	
+	public void setCancelable(boolean cancelable){
+		mCancelable = cancelable;
+		if(!cancelable){
+			mCancelListener = null;
 		}
 	}
 

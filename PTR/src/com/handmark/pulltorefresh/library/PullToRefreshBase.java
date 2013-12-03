@@ -458,6 +458,15 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 		mOnRefreshListener2 = listener;
 		mOnRefreshListener = null;
 	}
+	
+	public void setOnCancelListener(OnCancelListener listener){
+		if(mHeaderLayout != null){
+			mHeaderLayout.setOnCancelListener(listener);
+		}
+		if(mFooterLayout != null){
+			mFooterLayout.setOnCancelListener(listener);
+		}
+	}
 
 	/**
 	 * @deprecated You should now call this method on the result of
@@ -1557,8 +1566,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 
 	}
 
-	public static interface OnCancelListener<V extends View> {
-		public void onCancel(final PullToRefreshBase<V> refreshView);
+	public static interface OnCancelListener {
+		public void onCancel();
 	}
 
 	/**

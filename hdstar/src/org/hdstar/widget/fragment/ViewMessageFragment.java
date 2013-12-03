@@ -27,6 +27,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
@@ -112,6 +113,13 @@ public class ViewMessageFragment extends StackFragment {
 		if (content == null) {
 			refreshView.setRefreshing(false);
 		}
+		
+		refreshView.setOnCancelListener(new OnCancelListener(){
+
+			@Override
+			public void onCancel() {
+				detachTask();
+			}});
 	}
 
 	@Override

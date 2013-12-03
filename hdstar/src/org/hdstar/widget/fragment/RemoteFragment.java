@@ -54,6 +54,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -114,6 +115,13 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		} else {
 			adapter.notifyDataSetChanged();
 		}
+		
+		refreshView.setOnCancelListener(new OnCancelListener(){
+
+			@Override
+			public void onCancel() {
+				detachTask();
+			}});
 	}
 
 	@Override
