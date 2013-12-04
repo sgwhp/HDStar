@@ -115,13 +115,14 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		} else {
 			adapter.notifyDataSetChanged();
 		}
-		
-		refreshView.setOnCancelListener(new OnCancelListener(){
+
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				detachTask();
-			}});
+				abort();
+			}
+		});
 	}
 
 	@Override
@@ -231,7 +232,8 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		params.add(new BasicNameValuePair("cmd", "d.get_custom=addtime"));
 		params.add(new BasicNameValuePair("mode", "list"));
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
+			task.execPost(
+					String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					params, new ResponseParser<ArrayList<RemoteTaskInfo>>() {
 
 						@Override
@@ -292,7 +294,8 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
+			task.execPost(
+					String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("start"), new ResponseParser<Boolean>() {
 
 						@Override
@@ -328,7 +331,8 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
+			task.execPost(
+					String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("pause"), new ResponseParser<Boolean>() {
 
 						@Override
@@ -364,7 +368,8 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
+			task.execPost(
+					String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("stop"), new ResponseParser<Boolean>() {
 
 						@Override
@@ -400,7 +405,8 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 		task.attach(processCallback);
 		attachTask(task);
 		try {
-			task.execPost(String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
+			task.execPost(
+					String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
 					buildParams("remove"), new ResponseParser<Boolean>() {
 
 						@Override

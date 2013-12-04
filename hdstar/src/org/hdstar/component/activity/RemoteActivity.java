@@ -255,15 +255,16 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				doRefresh();
 			}
 		});
-		
-		refreshView.setOnCancelListener(new OnCancelListener(){
+
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				if(mTask != null){
-					mTask.detach();
+				if (mTask != null) {
+					mTask.abort();
 				}
-			}});
+			}
+		});
 
 		rssAdapter = new RssAdapter();
 		rssListView.setAdapter(rssAdapter);
@@ -312,15 +313,16 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 						}
 					}
 				});
-		
-		refreshExpandableView.setOnCancelListener(new OnCancelListener(){
+
+		refreshExpandableView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				if(rssTask != null){
-					rssTask.detach();
+				if (rssTask != null) {
+					rssTask.abort();
 				}
-			}});
+			}
+		});
 
 		findViewById(R.id.refresh_disk_info).setOnClickListener(this);
 		refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);

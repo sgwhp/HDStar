@@ -182,13 +182,14 @@ public class TopicFragment extends StackFragment {
 		} else {
 			refreshView.setRefreshing(false);
 		}
-		
-		refreshView.setOnCancelListener(new OnCancelListener(){
+
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				detachTask();
-			}});
+				abort();
+			}
+		});
 	}
 
 	@Override

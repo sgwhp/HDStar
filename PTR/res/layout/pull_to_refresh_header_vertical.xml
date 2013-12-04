@@ -55,14 +55,13 @@
                 android:visibility="gone" />
         </LinearLayout>
         
-        <TextView
+        <Button
             android:id="@+id/pull_to_refresh_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:background="@drawable/btn_cancel_bg_sel"
-            android:visibility="gone"
-            android:clickable="true" />
+            android:visibility="invisible" />
     </FrameLayout>
 
 </merge>

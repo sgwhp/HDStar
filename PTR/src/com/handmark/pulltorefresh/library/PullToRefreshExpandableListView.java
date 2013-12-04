@@ -259,6 +259,17 @@ public class PullToRefreshExpandableListView extends
 		}
 	}
 
+	@Override
+	public void setOnCancelListener(
+			com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener listener) {
+		if (mHeaderLoadingView != null) {
+			mHeaderLoadingView.setOnCancelListener(listener);
+		}
+		if (mFooterLoadingView != null) {
+			mFooterLoadingView.setOnCancelListener(listener);
+		}
+	}
+
 	class InternalExpandableListView extends ExpandableListView implements
 			EmptyViewMethodAccessor {
 		private boolean mAddedLvFooter = false;

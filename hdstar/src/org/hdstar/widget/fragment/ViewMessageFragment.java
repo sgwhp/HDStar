@@ -113,13 +113,14 @@ public class ViewMessageFragment extends StackFragment {
 		if (content == null) {
 			refreshView.setRefreshing(false);
 		}
-		
-		refreshView.setOnCancelListener(new OnCancelListener(){
+
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				detachTask();
-			}});
+				abort();
+			}
+		});
 	}
 
 	@Override

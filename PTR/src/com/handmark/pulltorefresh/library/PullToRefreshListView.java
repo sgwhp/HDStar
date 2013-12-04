@@ -265,6 +265,17 @@ public class PullToRefreshListView extends
 		}
 	}
 
+	@Override
+	public void setOnCancelListener(
+			com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener listener) {
+		if (mHeaderLoadingView != null) {
+			mHeaderLoadingView.setOnCancelListener(listener);
+		}
+		if (mFooterLoadingView != null) {
+			mFooterLoadingView.setOnCancelListener(listener);
+		}
+	}
+
 	@TargetApi(9)
 	final class InternalListViewSDK9 extends InternalListView {
 

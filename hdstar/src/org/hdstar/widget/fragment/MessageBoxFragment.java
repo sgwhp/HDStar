@@ -169,13 +169,14 @@ public class MessageBoxFragment extends StackFragment {
 				doRefresh();
 			}
 		});
-		
-		refreshView.setOnCancelListener(new OnCancelListener(){
+
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				detachTask();
-			}});
+				abort();
+			}
+		});
 	}
 
 	private void fetch() {

@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -59,7 +60,7 @@ public abstract class LoadingLayout extends FrameLayout implements
 	private final TextView mHeaderText;
 	private final TextView mSubHeaderText;
 
-	private final TextView mCancelBtn;
+	private Button mCancelBtn;
 
 	protected final Mode mMode;
 	protected final Orientation mScrollDirection;
@@ -98,7 +99,7 @@ public abstract class LoadingLayout extends FrameLayout implements
 				.findViewById(R.id.pull_to_refresh_sub_text);
 		mHeaderImage = (ImageView) mInnerLayout
 				.findViewById(R.id.pull_to_refresh_image);
-		mCancelBtn = (TextView) mInnerLayout
+		mCancelBtn = (Button) mInnerLayout
 				.findViewById(R.id.pull_to_refresh_cancel);
 
 		FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInnerLayout
@@ -166,17 +167,15 @@ public abstract class LoadingLayout extends FrameLayout implements
 		}
 
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrCancelable)) {
-			if ((mCancelable = attrs
-					.getBoolean(R.styleable.PullToRefresh_ptrCancelable, false))) {
-				mCancelBtn.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						if(mCancelListener != null){
-							mCancelListener.onCancel();
-						}
-					}
-				});
+			if ((mCancelable = attrs.getBoolean(
+					R.styleable.PullToRefresh_ptrCancelable, false))) {
+				// mCancelBtn.setOnClickListener(new OnClickListener() {
+				//
+				// @Override
+				// public void onClick(View v) {
+				// System.out.println("--> clicked");
+				// }
+				// });
 			}
 		}
 
@@ -333,8 +332,8 @@ public abstract class LoadingLayout extends FrameLayout implements
 		if (null != mSubHeaderText) {
 			mSubHeaderText.setVisibility(View.GONE);
 		}
-		
-		if(mCancelable){
+
+		if (mCancelable) {
 			mCancelBtn.setVisibility(View.VISIBLE);
 		}
 	}
@@ -368,9 +367,9 @@ public abstract class LoadingLayout extends FrameLayout implements
 				mSubHeaderText.setVisibility(View.VISIBLE);
 			}
 		}
-		
-		if(mCancelable){
-			mCancelBtn.setVisibility(View.GONE);
+
+		if (mCancelable) {
+			mCancelBtn.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -483,14 +482,23 @@ public abstract class LoadingLayout extends FrameLayout implements
 			mSubHeaderText.setTextColor(color);
 		}
 	}
-	
-	public void setOnCancelListener(OnCancelListener listener){
+
+	public void setOnCancelListener(final OnCancelListener listener) {
 		mCancelListener = listener;
+		mCancelBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mCancelListener != null) {
+					mCancelListener.onCancel();
+				}
+			}
+		});
 	}
-	
-	public void setCancelable(boolean cancelable){
+
+	public void setCancelable(boolean cancelable) {
 		mCancelable = cancelable;
-		if(!cancelable){
+		if (!cancelable) {
 			mCancelListener = null;
 		}
 	}

@@ -223,13 +223,14 @@ public class ForumFragment extends StackFragment {
 			}
 
 		});
-		
-		refreshView.setOnCancelListener(new OnCancelListener(){
+
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				detachTask();
-			}});
+				abort();
+			}
+		});
 	}
 
 	void viewTopic(int topicId, int page, String title) {

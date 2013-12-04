@@ -127,12 +127,13 @@ public class TorrentListFragment extends StackFragment {
 					}
 
 				});
-		refreshView.setOnCancelListener(new OnCancelListener(){
+		refreshView.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				detachTask();
-			}});
+				abort();
+			}
+		});
 	}
 
 	void fetch() {
