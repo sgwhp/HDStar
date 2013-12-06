@@ -90,8 +90,8 @@ public class ReplyFragment extends StackFragment {
 		final Context context = getActivity();
 		im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
-		if("edit".equals(type)){
-			((TextView)v.findViewById(R.id.title)).setText(R.string.edit);
+		if ("edit".equals(type)) {
+			((TextView) v.findViewById(R.id.title)).setText(R.string.edit);
 		}
 		final MyTextParser parser = new MyTextParser(context);
 		body = (EditText) v.findViewById(R.id.body);
@@ -216,7 +216,8 @@ public class ReplyFragment extends StackFragment {
 			if (CustomSetting.autoRefresh) {
 				f = getStackAdapter().preItem();
 			}
-			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
+			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1,
+					true);
 			if (f != null) {
 				f.refresh();
 			}

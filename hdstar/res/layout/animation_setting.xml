@@ -8,13 +8,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_bg_sel" >
+            android:background="@drawable/setting_strip_bg_sel"
+            android:gravity="center_vertical" >
 
             <TextView
                 android:layout_width="0dp"
@@ -33,7 +34,7 @@
                 android:textOff=""
                 android:textOn="" />
         </LinearLayout>
-        
+
         <RadioGroup
             android:id="@+id/animations"
             android:layout_width="match_parent"
@@ -45,10 +46,10 @@
                 style="@style/customRadioButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:background="@drawable/setting_strip_top"
+                android:checked="true"
                 android:text="@string/anim_standard" />
-            
+
             <RadioButton
                 android:id="@+id/tablet"
                 style="@style/customRadioButtonStyle"
@@ -56,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_tablet" />
-            
+
             <RadioButton
                 android:id="@+id/cube_in"
                 style="@style/customRadioButtonStyle"
@@ -64,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_cube_in" />
-            
+
             <RadioButton
                 android:id="@+id/cube_out"
                 style="@style/customRadioButtonStyle"
@@ -72,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_cube_out" />
-            
+
             <RadioButton
                 android:id="@+id/flip_vertical"
                 style="@style/customRadioButtonStyle"
@@ -80,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_flip_vertical" />
-            
+
             <RadioButton
                 android:id="@+id/flip_horizontal"
                 style="@style/customRadioButtonStyle"
@@ -88,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_flip_horizontal" />
-            
+
             <RadioButton
                 android:id="@+id/stack"
                 style="@style/customRadioButtonStyle"
@@ -96,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_stack" />
-            
+
             <RadioButton
                 android:id="@+id/zoom_in"
                 style="@style/customRadioButtonStyle"
@@ -104,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_zoom_in" />
-            
+
             <RadioButton
                 android:id="@+id/zoom_out"
                 style="@style/customRadioButtonStyle"
@@ -112,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_zoom_out" />
-            
+
             <RadioButton
                 android:id="@+id/rotate_up"
                 style="@style/customRadioButtonStyle"
@@ -120,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_rotate_up" />
-            
+
             <RadioButton
                 android:id="@+id/rotate_down"
                 style="@style/customRadioButtonStyle"
@@ -128,17 +129,23 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_rotate_down" />
-            
+
             <RadioButton
                 android:id="@+id/accordion"
                 style="@style/customRadioButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/setting_strip_bottom"
+                android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_accordion" />
             
+            <RadioButton
+                android:id="@+id/go_ex"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_bottom"
+                android:text="go" />
         </RadioGroup>
-
     </LinearLayout>
 
 </ScrollView>

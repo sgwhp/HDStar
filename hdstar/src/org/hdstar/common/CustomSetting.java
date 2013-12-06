@@ -85,6 +85,9 @@ public class CustomSetting implements Serializable {
 		if ("Accordion".equals(name)) {
 			return TransitionEffect.Accordion;
 		}
+		if ("GoEX".equals(name)) {
+			return TransitionEffect.GoEX;
+		}
 		return TransitionEffect.Standard;
 	}
 

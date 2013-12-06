@@ -197,7 +197,8 @@ public class NewTopicFragment extends StackFragment {
 			if (CustomSetting.autoRefresh) {
 				f = getStackAdapter().preItem();
 			}
-			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
+			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1,
+					true);
 			if (f != null) {
 				f.refresh();
 			}

@@ -245,7 +245,8 @@ public class PMFragment extends StackFragment {
 			dialog.dismiss();
 			Toast.makeText(getActivity(), R.string.reply_succeeded,
 					Toast.LENGTH_SHORT).show();
-			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1);
+			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1,
+					true);
 		}
 
 		@Override

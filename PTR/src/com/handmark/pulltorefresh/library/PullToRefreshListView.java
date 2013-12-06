@@ -74,7 +74,7 @@ public class PullToRefreshListView extends
 		if (!mListViewExtrasEnabled || !getShowViewWhileRefreshing()
 				|| null == adapter || adapter.isEmpty()) {
 			super.onRefreshing(doScroll);
-			//在refreshview绘制完成之前调用了setRefreshing()方法，若此处直接返回，则refreshview不能正常显示
+			// 在refreshview绘制完成之前调用了setRefreshing()方法，若此处直接返回，则refreshview不能正常显示
 			// return;
 		} else {
 			super.onRefreshing(false);
@@ -113,8 +113,7 @@ public class PullToRefreshListView extends
 		listViewLoadingView.setVisibility(View.VISIBLE);
 		listViewLoadingView.refreshing();
 
-		//此处如果adapter没有数据，则不能调用smoothScrollTo()方法，否则无法触发onRefresh回调
-		if (doScroll && null != adapter && !adapter.isEmpty()) {
+		if (doScroll) {
 			// We need to disable the automatic visibility changes for now
 			disableLoadingLayoutVisibilityChanges();
 
@@ -126,9 +125,17 @@ public class PullToRefreshListView extends
 			// header/footer
 			mRefreshableView.setSelection(selection);
 
-			// Smooth scroll as normal
-			smoothScrollTo(0);
+			// 此处如果adapter没有数据，则不能调用smoothScrollTo()方法，否则无法触发onRefresh回调
+			if (null != adapter && !adapter.isEmpty()) {
+				// Smooth scroll as normal
+				smoothScrollTo(0);
+			}
 		}
+	}
+
+	@Override
+	public void setRefreshingInit() {
+		setRefreshing(false);
 	}
 
 	@Override

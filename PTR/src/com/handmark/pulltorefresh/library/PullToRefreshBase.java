@@ -18,6 +18,7 @@ package com.handmark.pulltorefresh.library;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -458,12 +461,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 		mOnRefreshListener2 = listener;
 		mOnRefreshListener = null;
 	}
-	
-	public void setOnCancelListener(OnCancelListener listener){
-		if(mHeaderLayout != null){
+
+	public void setOnCancelListener(OnCancelListener listener) {
+		if (mHeaderLayout != null) {
 			mHeaderLayout.setOnCancelListener(listener);
 		}
-		if(mFooterLayout != null){
+		if (mFooterLayout != null) {
 			mFooterLayout.setOnCancelListener(listener);
 		}
 	}
@@ -498,6 +501,34 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 	@Override
 	public final void setPullToRefreshOverScrollEnabled(boolean enabled) {
 		mOverScrollEnabled = enabled;
+	}
+
+	public void setRefreshingInit() {
+		ViewTreeObserver vto = getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onGlobalLayout() {
+				// refreshLoadingViewsSize();
+				LoadingLayout loading;
+				if (mMode == Mode.BOTH || mMode == Mode.PULL_FROM_START) {
+					loading = mHeaderLayout;
+				} else {
+					loading = mFooterLayout;
+				}
+				if (loading.getContentSize() != 0) {
+					ViewTreeObserver obs = getViewTreeObserver();
+
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+						obs.removeOnGlobalLayoutListener(this);
+					} else {
+						obs.removeGlobalOnLayoutListener(this);
+					}
+					setRefreshing(true);
+				}
+			}
+		});
 	}
 
 	@Override

@@ -110,9 +110,6 @@ public class ViewMessageFragment extends StackFragment {
 		contentTV.setMovementMethod(CustomLinkMovementMethod.getInstance());
 		// ((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		init();
-		if (content == null) {
-			refreshView.setRefreshing(false);
-		}
 
 		refreshView.setOnCancelListener(new OnCancelListener() {
 
@@ -121,6 +118,9 @@ public class ViewMessageFragment extends StackFragment {
 				abort();
 			}
 		});
+		if (content == null) {
+			refreshView.setRefreshingInit();
+		}
 	}
 
 	@Override

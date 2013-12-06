@@ -30,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -60,7 +59,7 @@ public abstract class LoadingLayout extends FrameLayout implements
 	private final TextView mHeaderText;
 	private final TextView mSubHeaderText;
 
-	private Button mCancelBtn;
+	private TextView mCancelBtn;
 
 	protected final Mode mMode;
 	protected final Orientation mScrollDirection;
@@ -99,7 +98,7 @@ public abstract class LoadingLayout extends FrameLayout implements
 				.findViewById(R.id.pull_to_refresh_sub_text);
 		mHeaderImage = (ImageView) mInnerLayout
 				.findViewById(R.id.pull_to_refresh_image);
-		mCancelBtn = (Button) mInnerLayout
+		mCancelBtn = (TextView) mInnerLayout
 				.findViewById(R.id.pull_to_refresh_cancel);
 
 		FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInnerLayout
