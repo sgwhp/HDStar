@@ -110,9 +110,9 @@
     <string name="animation">动画</string>
     <string name="anim_fade">淡入淡出</string>
     <string name="anim_standard">标准</string>
-    <string name="anim_tablet">翻页</string>
-    <string name="anim_cube_in">内立方体</string>
-    <string name="anim_cube_out">外立方体</string>
+    <string name="anim_tablet">面板</string>
+    <string name="anim_cube_in">盒子（内）</string>
+    <string name="anim_cube_out">盒子（外）</string>
     <string name="anim_flip_vertical">垂直翻动</string>
     <string name="anim_flip_horizontal">水平翻动</string>
     <string name="anim_stack">栈</string>
@@ -121,6 +121,9 @@
     <string name="anim_rotate_up">向上旋转</string>
     <string name="anim_rotate_down">向下旋转</string>
     <string name="anim_accordion">手风琴</string>
+    <string name="anim_window">窗</string>
+    <string name="anim_jump_up">向上跳跃</string>
+    <string name="anim_jump_down">向下跳跃</string>
     <string name="apply">应用</string>
     
     <string name="notification_title">HDSky提醒</string>

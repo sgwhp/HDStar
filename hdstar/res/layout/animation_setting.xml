@@ -139,12 +139,28 @@
                 android:text="@string/anim_accordion" />
             
             <RadioButton
-                android:id="@+id/go_ex"
+                android:id="@+id/window"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_window" />
+            
+            <RadioButton
+                android:id="@+id/jump_down"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_middle"
+                android:text="@string/anim_jump_down" />
+            
+            <RadioButton
+                android:id="@+id/jump_up"
                 style="@style/customRadioButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_bottom"
-                android:text="go" />
+                android:text="@string/anim_jump_up" />
         </RadioGroup>
     </LinearLayout>
 

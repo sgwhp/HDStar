@@ -108,6 +108,9 @@
     <string name="anim_rotate_up">RotateUp</string>
     <string name="anim_rotate_down">RotateDown</string>
     <string name="anim_accordion">Accordion</string>
+    <string name="anim_window">Window</string>
+    <string name="anim_jump_up">JumpUp</string>
+    <string name="anim_jump_down">JumpDown</string>
     <string name="apply">Apply</string>
     
     <string name="notification_title">HDSky\'s notification</string>

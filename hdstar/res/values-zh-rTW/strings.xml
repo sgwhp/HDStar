@@ -108,6 +108,9 @@
     <string name="anim_rotate_up">RotateUp</string>
     <string name="anim_rotate_down">RotateDown</string>
     <string name="anim_accordion">Accordion</string>
+    <string name="anim_window">窗</string>
+    <string name="anim_jump_up">向上跳躍</string>
+    <string name="anim_jump_down">向下跳躍</string>
     <string name="apply">應用</string>
     
     <string name="notification_title">HDSky提醒</string>

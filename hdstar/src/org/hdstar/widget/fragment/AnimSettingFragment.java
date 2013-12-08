@@ -26,6 +26,7 @@ public class AnimSettingFragment extends StackFragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.animation_setting, null);
 		fade = (ToggleButton) v.findViewById(R.id.fade);
+		fade.setChecked(CustomSetting.fade);
 		fade.setOnCheckedChangeListener(boxCheckedListener);
 		RadioGroup radio = (RadioGroup) v.findViewById(R.id.animations);
 		radio.setOnCheckedChangeListener(radioCheckedListener);
@@ -106,8 +107,14 @@ public class AnimSettingFragment extends StackFragment {
 			case R.id.accordion:
 				CustomSetting.anim = TransitionEffect.Accordion;
 				break;
-			case R.id.go_ex:
-				CustomSetting.anim = TransitionEffect.GoEX;
+			case R.id.window:
+				CustomSetting.anim = TransitionEffect.Window;
+				break;
+			case R.id.jump_down:
+				CustomSetting.anim = TransitionEffect.JumpDown;
+				break;
+			case R.id.jump_up:
+				CustomSetting.anim = TransitionEffect.JumpUp;
 			}
 			JazzyViewPager vp = (JazzyViewPager) getViewPager();
 			vp.setTransitionEffect(CustomSetting.anim);

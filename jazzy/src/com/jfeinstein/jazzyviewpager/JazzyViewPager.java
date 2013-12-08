@@ -36,7 +36,8 @@ public class JazzyViewPager extends ViewPager {
 	private static final float ROT_MAX = 15.0f;
 
 	public enum TransitionEffect {
-		Standard, Tablet, CubeIn, CubeOut, FlipVertical, FlipHorizontal, Stack, ZoomIn, ZoomOut, RotateUp, RotateDown, Accordion
+		Standard, Tablet, CubeIn, CubeOut, FlipVertical, FlipHorizontal, Stack
+		, ZoomIn, ZoomOut, RotateUp, RotateDown, Accordion, Window, JumpDown, JumpUp;
 	}
 
 	private static final boolean API_11;
@@ -245,6 +246,60 @@ public class JazzyViewPager extends ViewPager {
 			}
 		}
 	}
+	
+	private void animateGoEX(View left, View right, float positionOffset){
+		if (mState != State.IDLE) {
+			if (left != null) {
+				manageLayer(left, true);
+				mScale = ZOOM_MAX + (1 - ZOOM_MAX) * (1 - positionOffset);
+				mRot = 30.0f * positionOffset;
+				mTrans = getOffsetXForRotation(mRot, left.getMeasuredWidth(),
+						left.getMeasuredHeight());
+				ViewHelper.setPivotX(left, left.getMeasuredWidth() / 2);
+				ViewHelper.setPivotY(left, left.getMeasuredHeight() / 2);
+				ViewHelper.setTranslationX(left, mTrans);
+				ViewHelper.setRotationY(left, mRot);
+				ViewHelper.setScaleX(left, mScale);
+				ViewHelper.setScaleY(left, mScale);
+			}if (right != null) {
+				manageLayer(right, true);
+				mScale = ZOOM_MAX + (1 - ZOOM_MAX) * positionOffset;
+				mRot = -30.0f * (1 - positionOffset);
+				mTrans = getOffsetXForRotation(mRot, right.getMeasuredWidth(),
+						right.getMeasuredHeight());
+				ViewHelper.setPivotX(right, right.getMeasuredWidth() * 0.5f);
+				ViewHelper.setPivotY(right, right.getMeasuredHeight() * 0.5f);
+				ViewHelper.setTranslationX(right, mTrans);
+				ViewHelper.setRotationY(right, mRot);
+				ViewHelper.setScaleX(right, mScale);
+				ViewHelper.setScaleY(right, mScale);
+			}
+		}
+	}
+	
+	private void animateJumpDown(View left, View right, float positionOffset){
+		if (mState != State.IDLE) {
+			if (left != null) {
+				manageLayer(left, true);
+				ViewHelper.setTranslationY(left, positionOffset * getMeasuredHeight());
+			}if (right != null) {
+				manageLayer(right, true);
+				ViewHelper.setTranslationY(right, (1- positionOffset) * getMeasuredHeight());
+			}
+		}
+	}
+	
+	private void animateJumpUp(View left, View right, float positionOffset){
+		if (mState != State.IDLE) {
+			if (left != null) {
+				manageLayer(left, true);
+				ViewHelper.setTranslationY(left, -positionOffset * getMeasuredHeight());
+			}if (right != null) {
+				manageLayer(right, true);
+				ViewHelper.setTranslationY(right, -(1- positionOffset) * getMeasuredHeight());
+			}
+		}
+	}
 
 	private void animateCube(View left, View right, float positionOffset,
 			boolean in) {
@@ -295,7 +350,7 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setScaleX(left, mScale);
 				ViewHelper.setScaleY(left, mScale);
 				if (!in) {
-					mTrans = -left.getMeasuredWidth() * positionOffset / 4;
+					mTrans = -left.getMeasuredWidth() * positionOffset / 2;
 					ViewHelper.setTranslationX(left, mTrans);
 				}
 			}
@@ -309,7 +364,7 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setScaleY(right, mScale);
 				if (!in) {
 					mTrans = right.getMeasuredWidth() * (1 - positionOffset)
-							/ 4;
+							/ 2;
 					ViewHelper.setTranslationX(right, mTrans);
 				}
 			}
@@ -391,6 +446,7 @@ public class JazzyViewPager extends ViewPager {
 				mRot = 180.0f * positionOffset;
 				if (mRot > 90.0f) {
 					left.setVisibility(View.INVISIBLE);
+					left.clearAnimation();
 				} else {
 					if (left.getVisibility() == View.INVISIBLE)
 						left.setVisibility(View.VISIBLE);
@@ -406,6 +462,7 @@ public class JazzyViewPager extends ViewPager {
 				mRot = -180.0f * (1 - positionOffset);
 				if (mRot < -90.0f) {
 					right.setVisibility(View.INVISIBLE);
+					right.clearAnimation();
 				} else {
 					if (right.getVisibility() == View.INVISIBLE)
 						right.setVisibility(View.VISIBLE);
@@ -570,6 +627,15 @@ public class JazzyViewPager extends ViewPager {
 			break;
 		case Accordion:
 			animateAccordion(mLeft, mRight, effectOffset);
+			break;
+		case Window:
+			animateGoEX(mLeft, mRight, effectOffset);
+			break;
+		case JumpDown:
+			animateJumpDown(mLeft, mRight, effectOffset);
+			break;
+		case JumpUp:
+			animateJumpUp(mLeft, mRight, effectOffset);
 			break;
 		}
 
