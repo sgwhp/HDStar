@@ -107,7 +107,7 @@ public class CommonSettingFragment extends StackFragment implements
 		CustomSetting.serverAddress = serverAddr.getText().toString();
 		edit.putString("serverAddr", CustomSetting.serverAddress);
 		edit.commit();
-		Const.Urls.initServerAdd(CustomSetting.serverAddress);
+		Const.Urls.initServerAddr(CustomSetting.serverAddress);
 	}
 
 	@Override

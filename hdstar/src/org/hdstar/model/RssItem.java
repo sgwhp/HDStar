@@ -2,7 +2,7 @@ package org.hdstar.model;
 
 import java.io.Serializable;
 
-public class RutorrentRssItem implements Serializable {
+public class RssItem implements Serializable {
 
 	/**
 	 * 

@@ -68,6 +68,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 
 	public void abort() {
 		interrupted = true;
+		parser = null;
 		if (request != null) {
 			request.abort();
 		}
@@ -83,7 +84,9 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 			if (needContent) {
 				in = response.getEntity().getContent();
 			}
-			return parser.parse(response, in);
+			if (parser != null) {
+				return parser.parse(response, in);
+			}
 		} catch (SocketTimeoutException e) {
 			e.printStackTrace();
 			setMessageId(R.string.time_out);

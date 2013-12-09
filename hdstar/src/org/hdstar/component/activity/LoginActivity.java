@@ -137,7 +137,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			CustomSetting.serverAddress = serverAddr.getText().toString();
 			edit.putString("serverAddr", CustomSetting.serverAddress);
 			edit.commit();
-			Const.Urls.initServerAdd(CustomSetting.serverAddress);
+			Const.Urls.initServerAddr(CustomSetting.serverAddress);
 		}
 		if (imageTask.getStatus() == AsyncTask.Status.FINISHED) {
 			String imageHash = imageTask.getHash();

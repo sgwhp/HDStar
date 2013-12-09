@@ -36,8 +36,7 @@ public class JazzyViewPager extends ViewPager {
 	private static final float ROT_MAX = 15.0f;
 
 	public enum TransitionEffect {
-		Standard, Tablet, CubeIn, CubeOut, FlipVertical, FlipHorizontal, Stack
-		, ZoomIn, ZoomOut, RotateUp, RotateDown, Accordion, Window, JumpDown, JumpUp;
+		Standard, Tablet, CubeIn, CubeOut, FlipVertical, FlipHorizontal, Stack, ZoomIn, ZoomOut, RotateUp, RotateDown, Accordion, Window, JumpDown, JumpUp;
 	}
 
 	private static final boolean API_11;
@@ -76,6 +75,7 @@ public class JazzyViewPager extends ViewPager {
 
 	public void setTransitionEffect(TransitionEffect effect) {
 		mEffect = effect;
+		// 改变动画后，要重置之前已经应用的动画效果
 		reset();
 	}
 
@@ -246,8 +246,8 @@ public class JazzyViewPager extends ViewPager {
 			}
 		}
 	}
-	
-	private void animateGoEX(View left, View right, float positionOffset){
+
+	private void animateWindow(View left, View right, float positionOffset) {
 		if (mState != State.IDLE) {
 			if (left != null) {
 				manageLayer(left, true);
@@ -261,7 +261,8 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setRotationY(left, mRot);
 				ViewHelper.setScaleX(left, mScale);
 				ViewHelper.setScaleY(left, mScale);
-			}if (right != null) {
+			}
+			if (right != null) {
 				manageLayer(right, true);
 				mScale = ZOOM_MAX + (1 - ZOOM_MAX) * positionOffset;
 				mRot = -30.0f * (1 - positionOffset);
@@ -276,27 +277,33 @@ public class JazzyViewPager extends ViewPager {
 			}
 		}
 	}
-	
-	private void animateJumpDown(View left, View right, float positionOffset){
+
+	private void animateJumpDown(View left, View right, float positionOffset) {
 		if (mState != State.IDLE) {
 			if (left != null) {
 				manageLayer(left, true);
-				ViewHelper.setTranslationY(left, positionOffset * getMeasuredHeight());
-			}if (right != null) {
+				ViewHelper.setTranslationY(left, positionOffset
+						* getMeasuredHeight());
+			}
+			if (right != null) {
 				manageLayer(right, true);
-				ViewHelper.setTranslationY(right, (1- positionOffset) * getMeasuredHeight());
+				ViewHelper.setTranslationY(right, (1 - positionOffset)
+						* getMeasuredHeight());
 			}
 		}
 	}
-	
-	private void animateJumpUp(View left, View right, float positionOffset){
+
+	private void animateJumpUp(View left, View right, float positionOffset) {
 		if (mState != State.IDLE) {
 			if (left != null) {
 				manageLayer(left, true);
-				ViewHelper.setTranslationY(left, -positionOffset * getMeasuredHeight());
-			}if (right != null) {
+				ViewHelper.setTranslationY(left, -positionOffset
+						* getMeasuredHeight());
+			}
+			if (right != null) {
 				manageLayer(right, true);
-				ViewHelper.setTranslationY(right, -(1- positionOffset) * getMeasuredHeight());
+				ViewHelper.setTranslationY(right, -(1 - positionOffset)
+						* getMeasuredHeight());
 			}
 		}
 	}
@@ -350,6 +357,7 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setScaleX(left, mScale);
 				ViewHelper.setScaleY(left, mScale);
 				if (!in) {
+					// 被放大后，原来的移动距离不能保证该view被移出屏幕范围
 					mTrans = -left.getMeasuredWidth() * positionOffset / 2;
 					ViewHelper.setTranslationX(left, mTrans);
 				}
@@ -363,6 +371,7 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setScaleX(right, mScale);
 				ViewHelper.setScaleY(right, mScale);
 				if (!in) {
+					// 被放大后，原来的移动距离不能保证该view被移出屏幕范围
 					mTrans = right.getMeasuredWidth() * (1 - positionOffset)
 							/ 2;
 					ViewHelper.setTranslationX(right, mTrans);
@@ -446,6 +455,7 @@ public class JazzyViewPager extends ViewPager {
 				mRot = 180.0f * positionOffset;
 				if (mRot > 90.0f) {
 					left.setVisibility(View.INVISIBLE);
+					// 3.0以下版本的invisible无效，需调用以下方法
 					left.clearAnimation();
 				} else {
 					if (left.getVisibility() == View.INVISIBLE)
@@ -629,7 +639,7 @@ public class JazzyViewPager extends ViewPager {
 			animateAccordion(mLeft, mRight, effectOffset);
 			break;
 		case Window:
-			animateGoEX(mLeft, mRight, effectOffset);
+			animateWindow(mLeft, mRight, effectOffset);
 			break;
 		case JumpDown:
 			animateJumpDown(mLeft, mRight, effectOffset);

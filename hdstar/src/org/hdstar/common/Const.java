@@ -84,7 +84,20 @@ public class Const {
 		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/diskspace/action.php?_=";
 
-		public static void initServerAdd(final String serverAddr) {
+		/**
+		 * μtorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位
+		 */
+		public static final String UTORRENT_HOME_PAGE = "http://%s/gui";
+		public static final String UTORRENT_TOKEN_URL = UTORRENT_HOME_PAGE
+				+ "/token.html";
+		public static final String UTORRENT_BASE_REQ_URL = UTORRENT_HOME_PAGE
+				+ "/?token=%s";
+		public static final String UTORRENT_GET_LIST_URL = UTORRENT_BASE_REQ_URL
+				+ "&list=1";
+		public static final String UTORRENT_ACTION_URL = UTORRENT_BASE_REQ_URL
+				+ "&action=%s";
+
+		public static void initServerAddr(final String serverAddr) {
 			SERVER_ADDRESS = serverAddr;
 			SERVER_VIEW_FORUM_URL = SERVER_ADDRESS + "viewForum";
 			SERVER_VIEW_TOPIC_URL = SERVER_ADDRESS + "viewTopic";

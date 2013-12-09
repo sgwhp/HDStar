@@ -112,7 +112,7 @@ public class HDStarApp extends Application {
 		CustomSetting.fade = shared.getBoolean("fade", false);
 		CustomSetting.anim = CustomSetting.stringToAnim(shared.getString(
 				"anim", TransitionEffect.CubeIn.name()));
-		Const.Urls.initServerAdd(CustomSetting.serverAddress);
+		Const.Urls.initServerAddr(CustomSetting.serverAddress);
 		initImageLoader(context);
 		// initMemoryCache();
 		// File cacheDir = getStorageCacheDir(this, DISK_CACHE_SUBDIR);
