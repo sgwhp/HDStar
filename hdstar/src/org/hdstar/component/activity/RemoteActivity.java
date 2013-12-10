@@ -1,7 +1,5 @@
 package org.hdstar.component.activity;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.hdstar.R;
@@ -9,11 +7,10 @@ import org.hdstar.common.Const;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssItem;
 import org.hdstar.model.RssLabel;
-import org.hdstar.remote.IRemote;
-import org.hdstar.remote.RutorrentRemote;
+import org.hdstar.remote.RemoteBase;
+import org.hdstar.remote.RemoteFactory;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.ResponseParser;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
@@ -50,16 +47,9 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import ch.boye.httpclientandroidlib.HttpResponse;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -96,7 +86,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private TextProgressBar disk;
 	private Button refreshDiskInfoBtn;
 	private BaseAsyncTask<long[]> diskTask;
-	private IRemote remote;
+	private RemoteBase remote;
 
 	public RemoteActivity() {
 		super(R.string.rutorrent);
@@ -119,7 +109,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		rssListView = refreshExpandableView.getRefreshableView();
 
 		inflater = LayoutInflater.from(this);
-		remote = new RutorrentRemote();
 		init();
 		refreshView.setRefreshing(false);
 		refreshDiskInfo();
@@ -235,6 +224,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		SharedPreferences share = getSharedPreferences(
 				Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
 		ip = share.getString("ip", null);
+		remote = RemoteFactory.newInstanceByName(getIntent().getStringExtra(
+				"remote"));
+		remote.setIp(getIntent().getStringExtra("ip"));
 		listView = refreshView.getRefreshableView();
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
@@ -359,9 +351,10 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	// }
 
 	private void refreshRss() {
-		BaseAsyncTask<ArrayList<RssLabel>> task = remote.fetchRssList(
-				rssCallback, ip);
+		BaseAsyncTask<ArrayList<RssLabel>> task = remote.fetchRssList();
+		task.attach(rssCallback);
 		attachRssTask(task);
+		task.execute("");
 		// BaseAsyncTask<ArrayList<RssLabel>> task = BaseAsyncTask
 		// .newInstance();
 		// attachRssTask(task);
@@ -400,9 +393,10 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		if (mTask != null) {
 			return;
 		}
-		BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = remote.fetchList(
-				mCallback, ip, this);
+		BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = remote.fetchList(this);
+		task.attach(mCallback);
 		attachTask(task);
+		task.execute("");
 		// BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = BaseAsyncTask
 		// .newInstance();
 		// task.attach(mCallback);
@@ -491,11 +485,13 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		final BaseAsyncTask<Boolean> task = remote.start(processCallback, ip,
-				this, selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.start(selectedHashes());
 		if (task == null) {
 			return;
 		}
+		task.attach(processCallback);
+		attachTask(task);
+		task.execute("");
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -513,11 +509,13 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		final BaseAsyncTask<Boolean> task = remote.pause(processCallback, ip,
-				this, selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.pause(selectedHashes());
 		if (task == null) {
 			return;
 		}
+		task.attach(processCallback);
+		attachTask(task);
+		task.execute("");
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -535,11 +533,13 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		final BaseAsyncTask<Boolean> task = remote.stop(processCallback, ip,
-				this, selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.stop(selectedHashes());
 		if (task == null) {
 			return;
 		}
+		task.attach(processCallback);
+		attachTask(task);
+		task.execute("");
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -557,11 +557,13 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		final BaseAsyncTask<Boolean> task = remote.delete(processCallback, ip,
-				this, selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.delete(selectedHashes());
 		if (task == null) {
 			return;
 		}
+		task.attach(processCallback);
+		attachTask(task);
+		task.execute("");
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -650,31 +652,34 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				hrefs.add(label.items.get(i).href);
 			}
 		}
-		final BaseAsyncTask<Boolean> task = remote.download(
-				new TaskCallback<Boolean>() {
-
-					@Override
-					public void onComplete(Boolean result) {
-						dialog.dismiss();
-						refreshExpandableView.setRefreshing(false);
-						refreshDiskInfo();
-					}
-
-					@Override
-					public void onCancel() {
-						dialog.dismiss();
-					}
-
-					@Override
-					public void onFail(Integer msgId) {
-						dialog.dismiss();
-						Toast.makeText(getApplicationContext(), msgId,
-								Toast.LENGTH_SHORT).show();
-					}
-				}, this, ip, dir.getText().toString(), label.hash, hrefs);
+		final BaseAsyncTask<Boolean> task = remote.download(dir.getText()
+				.toString(), label.hash, hrefs);
 		if (task == null) {
 			return;
 		}
+		task.attach(new TaskCallback<Boolean>() {
+
+			@Override
+			public void onComplete(Boolean result) {
+				dialog.dismiss();
+				refreshExpandableView.setRefreshing(false);
+				refreshDiskInfo();
+			}
+
+			@Override
+			public void onCancel() {
+				dialog.dismiss();
+			}
+
+			@Override
+			public void onFail(Integer msgId) {
+				dialog.dismiss();
+				Toast.makeText(getApplicationContext(), msgId,
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+		attachRssTask(task);
+		task.execute("");
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -754,30 +759,36 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	 * Ë¢ÐÂÑ¡ÖÐ¶©ÔÄ
 	 */
 	private void refreshRssLabel() {
-		final BaseAsyncTask<ArrayList<RssLabel>> task = new BaseAsyncTask<ArrayList<RssLabel>>();
-		task.attach(rssCallback);
+		final BaseAsyncTask<ArrayList<RssLabel>> task = remote
+				.refreshRssLabel(rssList.get(refreshingLabel).hash);
 		attachRssTask(task);
-		task.execGet(
-				String.format(Const.Urls.RUTORRENT_RSS_REFRESH_URL, ip,
-						rssList.get(refreshingLabel).hash),
-				new ResponseParser<ArrayList<RssLabel>>() {
-
-					@Override
-					public ArrayList<RssLabel> parse(HttpResponse res,
-							InputStream in) {
-						JsonParser parser = new JsonParser();
-						JsonElement element = parser
-								.parse(new InputStreamReader(in));
-						JsonArray arr = element.getAsJsonObject()
-								.getAsJsonArray("list");
-						Gson gson = new Gson();
-						ArrayList<RssLabel> result = gson.fromJson(arr,
-								new TypeToken<ArrayList<RssLabel>>() {
-								}.getType());
-						msgId = SUCCESS_MSG_ID;
-						return result;
-					}
-				});
+		task.attach(rssCallback);
+		task.execute("");
+		// final BaseAsyncTask<ArrayList<RssLabel>> task = new
+		// BaseAsyncTask<ArrayList<RssLabel>>();
+		// task.attach(rssCallback);
+		// attachRssTask(task);
+		// task.execGet(
+		// String.format(Const.Urls.RUTORRENT_RSS_REFRESH_URL, ip,
+		// rssList.get(refreshingLabel).hash),
+		// new ResponseParser<ArrayList<RssLabel>>() {
+		//
+		// @Override
+		// public ArrayList<RssLabel> parse(HttpResponse res,
+		// InputStream in) {
+		// JsonParser parser = new JsonParser();
+		// JsonElement element = parser
+		// .parse(new InputStreamReader(in));
+		// JsonArray arr = element.getAsJsonObject()
+		// .getAsJsonArray("list");
+		// Gson gson = new Gson();
+		// ArrayList<RssLabel> result = gson.fromJson(arr,
+		// new TypeToken<ArrayList<RssLabel>>() {
+		// }.getType());
+		// msgId = SUCCESS_MSG_ID;
+		// return result;
+		// }
+		// });
 	}
 
 	private void doRefresh() {
@@ -800,24 +811,31 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		if (diskTask != null) {
 			diskTask.detach();
 		}
-		diskTask = new BaseAsyncTask<long[]>();
+		diskTask = remote.getDiskInfo();
 		diskTask.attach(diskCallback);
-		diskTask.execGet(String.format(Const.Urls.RUTORRENT_DISK_SPACE_URL, ip)
-				+ System.currentTimeMillis(), new ResponseParser<long[]>(
-				R.string.get_disk_space_failed) {
-
-			@Override
-			public long[] parse(HttpResponse res, InputStream in) {
-				JsonParser parser = new JsonParser();
-				JsonObject obj = parser.parse(new InputStreamReader(in))
-						.getAsJsonObject();
-				long[] space = new long[2];
-				space[0] = obj.get("total").getAsLong();
-				space[1] = obj.get("free").getAsLong();
-				msgId = SUCCESS_MSG_ID;
-				return space;
-			}
-		});
+		// refreshDiskInfoBtn.setEnabled(false);
+		// if (diskTask != null) {
+		// diskTask.detach();
+		// }
+		// diskTask = new BaseAsyncTask<long[]>();
+		// diskTask.attach(diskCallback);
+		// diskTask.execGet(String.format(Const.Urls.RUTORRENT_DISK_SPACE_URL,
+		// ip)
+		// + System.currentTimeMillis(), new ResponseParser<long[]>(
+		// R.string.get_disk_space_failed) {
+		//
+		// @Override
+		// public long[] parse(HttpResponse res, InputStream in) {
+		// JsonParser parser = new JsonParser();
+		// JsonObject obj = parser.parse(new InputStreamReader(in))
+		// .getAsJsonObject();
+		// long[] space = new long[2];
+		// space[0] = obj.get("total").getAsLong();
+		// space[1] = obj.get("free").getAsLong();
+		// msgId = SUCCESS_MSG_ID;
+		// return space;
+		// }
+		// });
 	}
 
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {

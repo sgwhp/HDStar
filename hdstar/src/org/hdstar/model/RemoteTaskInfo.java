@@ -18,5 +18,6 @@ public class RemoteTaskInfo implements Serializable {
 	public long completeSize;
 	public int open;
 	public int state;
+	public String label;
 
 }

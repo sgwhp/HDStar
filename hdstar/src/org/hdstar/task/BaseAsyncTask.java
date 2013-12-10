@@ -41,6 +41,16 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		this.cookie = cookie;
 	}
 
+	public BaseAsyncTask(String cookie, ResponseParser<T> parser) {
+		this.cookie = cookie;
+		this.parser = parser;
+	}
+
+	public BaseAsyncTask(HttpRequestBase request, ResponseParser<T> parser) {
+		this.request = request;
+		this.parser = parser;
+	}
+
 	public static <T> BaseAsyncTask<T> newInstance() {
 		return new BaseAsyncTask<T>();
 	}
@@ -49,9 +59,9 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		return new BaseAsyncTask<T>(cookie);
 	}
 
-	public BaseAsyncTask(String cookie, ResponseParser<T> parser) {
-		this.cookie = cookie;
-		this.parser = parser;
+	public static <T> BaseAsyncTask<T> newInstance(HttpRequestBase request,
+			ResponseParser<T> parser) {
+		return new BaseAsyncTask<T>(request, parser);
 	}
 
 	public void attach(TaskCallback<T> callbacks) {
