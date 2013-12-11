@@ -139,12 +139,10 @@ public class RemoteLoginActivity extends BaseActivity implements
 		@Override
 		public void onComplete(Boolean result) {
 			dialog.dismiss();
-			HDStarApp.loginRemote = true;
+			HDStarApp.remoteType = type;
 			Intent intent = new Intent(RemoteLoginActivity.this,
 					RemoteActivity.class);
 			intent.putExtra("remote", type.name());
-			intent.putExtra("ip", ipET.getText().toString());
-			intent.putExtra("downloadDir", setting.getDownloadDir(""));
 			startActivity(intent);
 			finish();
 		}

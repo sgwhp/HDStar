@@ -3,7 +3,7 @@ package org.hdstar.component.activity;
 import java.util.ArrayList;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.RemoteSetting;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssItem;
 import org.hdstar.model.RssLabel;
@@ -19,7 +19,6 @@ import org.hdstar.widget.TextProgressBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -221,10 +220,12 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	protected void init() {
 		// SharedPreferences share = getSharedPreferences(
 		// Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
-		remote = RemoteFactory.newInstanceByName(getIntent().getStringExtra(
-				"remote"));
-		remote.setIpNPort(getIntent().getStringExtra("ip"));
-		downloadDir = getIntent().getStringExtra("downloadDir");
+		String remoteName = getIntent().getStringExtra(
+				"remote");
+		remote = RemoteFactory.newInstanceByName(remoteName);
+		RemoteSetting setting = new RemoteSetting(this, remoteName);
+		remote.setIpNPort(setting.getIp());
+		downloadDir = setting.getDownloadDir();
 		listView = refreshView.getRefreshableView();
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
@@ -500,10 +501,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	 */
 	private void download() {
 		dialog = new CustomDialog(this, R.string.connecting);
-		Editor editor = getSharedPreferences(Const.RUTORRENT_SHARED_PREFS,
-				MODE_PRIVATE).edit();
-		editor.putString("downloadDir", dir.getText().toString());
-		editor.commit();
+		RemoteSetting setting = new RemoteSetting(this, remote.getRemoteType());
+		setting.saveDownloadDir(dir.getText().toString());
 		RssLabel label = rssList.get(group);
 		ArrayList<String> hrefs = new ArrayList<String>();
 		for (int i = 0; i < label.items.size(); i++) {
@@ -582,6 +581,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		diskTask = remote.getDiskInfo();
 		diskTask.attach(diskCallback);
+		diskTask.execute("");
 	}
 
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {

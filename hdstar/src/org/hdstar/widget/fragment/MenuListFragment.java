@@ -54,6 +54,7 @@ public class MenuListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		Intent intent = new Intent();
 		@SuppressWarnings("rawtypes")
 		Class klass = null;
 		switch (position) {
@@ -64,8 +65,9 @@ public class MenuListFragment extends ListFragment {
 			klass = TorrentActivity.class;
 			break;
 		case 2:
-			if (HDStarApp.loginRemote) {
+			if (HDStarApp.remoteType != null) {
 				klass = RemoteActivity.class;
+				intent.putExtra("remote", HDStarApp.remoteType.name());
 			} else {
 				klass = RemoteLoginActivity.class;
 			}
@@ -90,7 +92,7 @@ public class MenuListFragment extends ListFragment {
 				.getActivity();
 		sliding.toggle();
 		if (!klass.isInstance(sliding)) {
-			Intent intent = new Intent(this.getActivity(), klass);
+			intent.setClass(this.getActivity(), klass);
 			this.startActivity(intent);
 			this.getActivity().finish();
 		}

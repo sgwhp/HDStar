@@ -8,7 +8,7 @@ import android.content.SharedPreferences.Editor;
 
 public class RemoteSetting {
 	private SharedPreferences shared;
-	private RemoteType type;
+	private String remoteName;
 	private static final String IP = "IP";
 	private static final String USERNAME = "Username";
 	private static final String PASSWORD = "Password";
@@ -17,7 +17,13 @@ public class RemoteSetting {
 	public RemoteSetting(Context context, RemoteType type) {
 		shared = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
 				Context.MODE_PRIVATE);
-		this.type = type;
+		this.remoteName = type.name();
+	}
+	
+	public RemoteSetting(Context context, String remoteName){
+		shared = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
+				Context.MODE_PRIVATE);
+		this.remoteName = remoteName;
 	}
 
 	public String getIp() {
@@ -37,43 +43,43 @@ public class RemoteSetting {
 	}
 
 	public String getIp(String defValue) {
-		return shared.getString(type.name() + IP, defValue);
+		return shared.getString(remoteName + IP, defValue);
 	}
 
 	public String getUsername(String defValue) {
-		return shared.getString(type.name() + USERNAME, defValue);
+		return shared.getString(remoteName + USERNAME, defValue);
 	}
 
 	public String getPassword(String defValue) {
-		return EncodeDecode.decode(shared.getString(type.name() + PASSWORD,
+		return EncodeDecode.decode(shared.getString(remoteName + PASSWORD,
 				defValue));
 	}
 
 	public String getDownloadDir(String defValue) {
-		return shared.getString(type.name() + DOWNLOAD_DIR, defValue);
+		return shared.getString(remoteName + DOWNLOAD_DIR, defValue);
 	}
 
 	public void saveIp(String ip) {
 		Editor editor = shared.edit();
-		editor.putString(type.name() + IP, ip);
+		editor.putString(remoteName + IP, ip);
 		editor.commit();
 	}
 
 	public void saveUsername(String username) {
 		Editor editor = shared.edit();
-		editor.putString(type.name() + USERNAME, username);
+		editor.putString(remoteName + USERNAME, username);
 		editor.commit();
 	}
 
 	public void savePassword(String password) {
 		Editor editor = shared.edit();
-		editor.putString(type.name() + PASSWORD, EncodeDecode.encode(password));
+		editor.putString(remoteName + PASSWORD, EncodeDecode.encode(password));
 		editor.commit();
 	}
 
 	public void saveDownloadDir(String downloadDir) {
 		Editor editor = shared.edit();
-		editor.putString(type.name() + DOWNLOAD_DIR, downloadDir);
+		editor.putString(remoteName + DOWNLOAD_DIR, downloadDir);
 		editor.commit();
 	}
 }

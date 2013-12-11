@@ -243,7 +243,7 @@ public class RuTorrentRemote extends RemoteBase {
 			}
 		};
 		try {
-			post.setEntity(new UrlEncodedFormEntity(buildParams(mode),
+			post.setEntity(new UrlEncodedFormEntity(buildParams(mode, hashes),
 					Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
 					parser);

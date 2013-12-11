@@ -17,6 +17,10 @@ public abstract class RemoteBase {
 	public RemoteBase(RemoteType type) {
 		this.type = type;
 	}
+	
+	public RemoteType getRemoteType(){
+		return type;
+	}
 
 	public void setIpNPort(String ipNPort) {
 		this.ipNPort = ipNPort;
