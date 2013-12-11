@@ -37,7 +37,6 @@ import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Orientation;
 import com.handmark.pulltorefresh.library.R;
 
@@ -69,7 +68,6 @@ public abstract class LoadingLayout extends FrameLayout implements
 	private CharSequence mReleaseLabel;
 
 	private boolean mCancelable;
-	private OnCancelListener mCancelListener;
 
 	public LoadingLayout(Context context, final Mode mode,
 			final Orientation scrollDirection, TypedArray attrs) {
@@ -166,16 +164,8 @@ public abstract class LoadingLayout extends FrameLayout implements
 		}
 
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrCancelable)) {
-			if ((mCancelable = attrs.getBoolean(
-					R.styleable.PullToRefresh_ptrCancelable, false))) {
-				// mCancelBtn.setOnClickListener(new OnClickListener() {
-				//
-				// @Override
-				// public void onClick(View v) {
-				// System.out.println("--> clicked");
-				// }
-				// });
-			}
+			mCancelable = attrs.getBoolean(
+					R.styleable.PullToRefresh_ptrCancelable, false);
 		}
 
 		if (attrs.hasValue(R.styleable.PullToRefresh_ptrHeaderBackground)) {
@@ -482,24 +472,16 @@ public abstract class LoadingLayout extends FrameLayout implements
 		}
 	}
 
-	public void setOnCancelListener(final OnCancelListener listener) {
-		mCancelListener = listener;
-		mCancelBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mCancelListener != null) {
-					mCancelListener.onCancel();
-				}
-			}
-		});
-	}
-
 	public void setCancelable(boolean cancelable) {
 		mCancelable = cancelable;
-		if (!cancelable) {
-			mCancelListener = null;
-		}
+	}
+
+	public boolean cancelable() {
+		return mCancelable;
+	}
+
+	public void setOnCancelClickListener(OnClickListener listener) {
+		mCancelBtn.setOnClickListener(listener);
 	}
 
 }

@@ -16,11 +16,9 @@ import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.TextProgressBar;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -58,7 +56,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.slidingmenu.lib.SlidingMenu;
 
 public class RemoteActivity extends BaseActivity implements OnClickListener {
-	private String ip;
 	private PullToRefreshListView refreshView;
 	private PullToRefreshExpandableListView refreshExpandableView;
 	private View root;
@@ -76,6 +73,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private int selectedCount;// 选中的下载任务数
 	private PopupWindow window = null;
 	private PopupWindow addRssWindow;
+	private String downloadDir;
 	private EditText dir;
 	private LinearLayout ctrlBox;
 	private CustomDialog dialog = null;
@@ -221,12 +219,12 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	}
 
 	protected void init() {
-		SharedPreferences share = getSharedPreferences(
-				Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
-		ip = share.getString("ip", null);
+		// SharedPreferences share = getSharedPreferences(
+		// Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
 		remote = RemoteFactory.newInstanceByName(getIntent().getStringExtra(
 				"remote"));
-		remote.setIp(getIntent().getStringExtra("ip"));
+		remote.setIpNPort(getIntent().getStringExtra("ip"));
+		downloadDir = getIntent().getStringExtra("downloadDir");
 		listView = refreshView.getRefreshableView();
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
@@ -250,7 +248,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onCancel() {
 				if (mTask != null) {
-					mTask.abort();
+					mTask.detach();
 				}
 			}
 		});
@@ -308,7 +306,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onCancel() {
 				if (rssTask != null) {
-					rssTask.abort();
+					rssTask.detach();
 				}
 			}
 		});
@@ -338,7 +336,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		addRssLayout.findViewById(R.id.add_rss).setOnClickListener(this);
 		addRssLayout.findViewById(R.id.close).setOnClickListener(this);
 		dir = (EditText) addRssLayout.findViewById(R.id.dir);
-		dir.setText(share.getString("downloadDir", ""));
+		dir.setText(downloadDir);
 		addRssWindow = new PopupWindow(addRssLayout, LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT, true);
 		addRssWindow.setBackgroundDrawable(getResources().getDrawable(
@@ -355,38 +353,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		task.attach(rssCallback);
 		attachRssTask(task);
 		task.execute("");
-		// BaseAsyncTask<ArrayList<RssLabel>> task = BaseAsyncTask
-		// .newInstance();
-		// attachRssTask(task);
-		// task.attach(rssCallback);
-		// List<NameValuePair> params = new ArrayList<NameValuePair>();
-		// params.add(new BasicNameValuePair("mode", "get"));
-		// try {
-		// task.execPost(
-		// String.format(Const.Urls.RUTORRENT_RSS_ACTION_URL, ip),
-		// params, new ResponseParser<ArrayList<RssLabel>>() {
-		//
-		// @Override
-		// public ArrayList<RssLabel> parse(
-		// HttpResponse res, InputStream in) {
-		// JsonParser parser = new JsonParser();
-		// JsonElement element = parser
-		// .parse(new InputStreamReader(in));
-		// JsonArray arr = element.getAsJsonObject()
-		// .getAsJsonArray("list");
-		// Gson gson = new Gson();
-		// ArrayList<RssLabel> result = gson
-		// .fromJson(
-		// arr,
-		// new TypeToken<ArrayList<RssLabel>>() {
-		// }.getType());
-		// msgId = SUCCESS_MSG_ID;
-		// return result;
-		// }
-		// });
-		// } catch (UnsupportedEncodingException e) {
-		// e.printStackTrace();
-		// }
 	}
 
 	void fetch() {
@@ -397,77 +363,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		task.attach(mCallback);
 		attachTask(task);
 		task.execute("");
-		// BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = BaseAsyncTask
-		// .newInstance();
-		// task.attach(mCallback);
-		// attachTask(task);
-		// List<NameValuePair> params = new ArrayList<NameValuePair>();
-		// params.add(new BasicNameValuePair("cmd", "d.get_throttle_name="));
-		// params.add(new BasicNameValuePair("cmd", "d.get_custom=sch_ignore"));
-		// params.add(new BasicNameValuePair("cmd", "cat=$d.views="));
-		// params.add(new BasicNameValuePair("cmd",
-		// "d.get_custom=seedingtime"));
-		// params.add(new BasicNameValuePair("cmd", "d.get_custom=addtime"));
-		// params.add(new BasicNameValuePair("mode", "list"));
-		// try {
-		// task.execPost(
-		// String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
-		// params, new ResponseParser<ArrayList<RemoteTaskInfo>>() {
-		//
-		// @Override
-		// public ArrayList<RemoteTaskInfo> parse(
-		// HttpResponse res, InputStream in) {
-		// if (res.getStatusLine().getStatusCode() == 401) {
-		// Intent intent = new Intent(RemoteActivity.this,
-		// RemoteLoginActivity.class);
-		// startActivity(intent);
-		// finish();
-		// return null;
-		// }
-		// JsonParser parser = new JsonParser();
-		// JsonElement element = parser
-		// .parse(new InputStreamReader(in));
-		// JsonObject obj = element.getAsJsonObject()
-		// .getAsJsonObject("t");
-		// Set<Entry<String, JsonElement>> set = obj
-		// .entrySet();
-		// ArrayList<RemoteTaskInfo> result = new ArrayList<RemoteTaskInfo>();
-		// RemoteTaskInfo info;
-		// JsonArray arr;
-		// for (Entry<String, JsonElement> entry : set) {
-		// info = new RemoteTaskInfo();
-		// arr = entry.getValue().getAsJsonArray();
-		// info.hash = entry.getKey();
-		// info.open = arr.get(0).getAsInt();
-		// info.state = arr.get(3).getAsInt();
-		// info.title = arr.get(4).toString();
-		// info.size = arr.get(5).getAsLong();
-		// info.completeSize = arr.get(8).getAsLong();
-		// info.uploaded = arr.get(9).getAsLong();
-		// info.ratio = arr.get(10).getAsFloat() / 1000;
-		// info.upSpeed = arr.get(11).getAsLong();
-		// info.dlSpeed = arr.get(12).getAsLong();
-		// result.add(info);
-		// }
-		// msgId = SUCCESS_MSG_ID;
-		// return result;
-		// }
-		// });
-		// } catch (UnsupportedEncodingException e) {
-		// e.printStackTrace();
-		// }
 	}
-
-	// private List<NameValuePair> buildParams(String mode) {
-	// List<NameValuePair> params = new ArrayList<NameValuePair>();
-	// params.add(new BasicNameValuePair("mode", mode));
-	// for (int i = 0; i < list.size(); i++) {
-	// if (selected[i]) {
-	// params.add(new BasicNameValuePair("hash", list.get(i).hash));
-	// }
-	// }
-	// return params;
-	// }
 
 	private String[] selectedHashes() {
 		String[] hashes = new String[selectedCount];
@@ -575,43 +471,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		dialog.show();
 	}
 
-	// private void ctrlTask(String mode) {
-	// if (selectedCount == 0) {
-	// Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
-	// .show();
-	// return;
-	// }
-	// dialog = new CustomDialog(this, R.string.connecting);
-	// final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
-	// task.attach(processCallback);
-	// attachTask(task);
-	// try {
-	// task.execPost(
-	// String.format(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip),
-	// buildParams(mode), new ResponseParser<Boolean>() {
-	//
-	// @Override
-	// public Boolean parse(HttpResponse res, InputStream in) {
-	// if (res.getStatusLine().getStatusCode() == 200) {
-	// msgId = SUCCESS_MSG_ID;
-	// return true;
-	// }
-	// return false;
-	// }
-	// });
-	// dialog.setOnDismissListener(new OnDismissListener() {
-	//
-	// @Override
-	// public void onDismiss(DialogInterface dialog) {
-	// task.detach();
-	// }
-	// });
-	// dialog.show();
-	// } catch (UnsupportedEncodingException e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 	/**
 	 * 展示下载确认窗口
 	 */
@@ -688,71 +547,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 		dialog.show();
-		// dialog = new CustomDialog(this, R.string.connecting);
-		// final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
-		// task.attach(new TaskCallback<Boolean>() {
-		//
-		// @Override
-		// public void onComplete(Boolean result) {
-		// dialog.dismiss();
-		// refreshExpandableView.setRefreshing(false);
-		// refreshDiskInfo();
-		// }
-		//
-		// @Override
-		// public void onCancel() {
-		// dialog.dismiss();
-		// }
-		//
-		// @Override
-		// public void onFail(Integer msgId) {
-		// dialog.dismiss();
-		// Toast.makeText(getApplicationContext(), msgId,
-		// Toast.LENGTH_SHORT).show();
-		// }
-		// });
-		// attachRssTask(task);
-		// List<NameValuePair> params = new ArrayList<NameValuePair>();
-		// params.add(new BasicNameValuePair("mode", "loadtorrents"));
-		// Editor editor = getSharedPreferences(Const.RUTORRENT_SHARED_PREFS,
-		// MODE_PRIVATE).edit();
-		// editor.putString("downloadDir", dir.getText().toString());
-		// editor.commit();
-		// params.add(new BasicNameValuePair("dir_edit",
-		// dir.getText().toString()));
-		// RssLabel label = rssList.get(group);
-		// params.add(new BasicNameValuePair("rss", label.hash));
-		// for (int i = 0; i < label.items.size(); i++) {
-		// if (selectedRss[i]) {
-		// params.add(new BasicNameValuePair("url",
-		// label.items.get(i).href));
-		// }
-		// }
-		// try {
-		// task.execPost(
-		// String.format(Const.Urls.RUTORRENT_RSS_ACTION_URL, ip),
-		// params, new ResponseParser<Boolean>() {
-		//
-		// @Override
-		// public Boolean parse(HttpResponse res, InputStream in) {
-		// if (res.getStatusLine().getStatusCode() == 200) {
-		// msgId = SUCCESS_MSG_ID;
-		// return true;
-		// }
-		// return false;
-		// }
-		// });
-		// dialog.setOnDismissListener(new OnDismissListener() {
-		//
-		// @Override
-		// public void onDismiss(DialogInterface dialog) {
-		// task.detach();
-		// }
-		// });
-		// dialog.show();
-		// } catch (UnsupportedEncodingException e) {
-		// e.printStackTrace();
-		// }
 	}
 
 	/**
@@ -764,31 +558,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		attachRssTask(task);
 		task.attach(rssCallback);
 		task.execute("");
-		// final BaseAsyncTask<ArrayList<RssLabel>> task = new
-		// BaseAsyncTask<ArrayList<RssLabel>>();
-		// task.attach(rssCallback);
-		// attachRssTask(task);
-		// task.execGet(
-		// String.format(Const.Urls.RUTORRENT_RSS_REFRESH_URL, ip,
-		// rssList.get(refreshingLabel).hash),
-		// new ResponseParser<ArrayList<RssLabel>>() {
-		//
-		// @Override
-		// public ArrayList<RssLabel> parse(HttpResponse res,
-		// InputStream in) {
-		// JsonParser parser = new JsonParser();
-		// JsonElement element = parser
-		// .parse(new InputStreamReader(in));
-		// JsonArray arr = element.getAsJsonObject()
-		// .getAsJsonArray("list");
-		// Gson gson = new Gson();
-		// ArrayList<RssLabel> result = gson.fromJson(arr,
-		// new TypeToken<ArrayList<RssLabel>>() {
-		// }.getType());
-		// msgId = SUCCESS_MSG_ID;
-		// return result;
-		// }
-		// });
 	}
 
 	private void doRefresh() {
@@ -813,29 +582,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		diskTask = remote.getDiskInfo();
 		diskTask.attach(diskCallback);
-		// refreshDiskInfoBtn.setEnabled(false);
-		// if (diskTask != null) {
-		// diskTask.detach();
-		// }
-		// diskTask = new BaseAsyncTask<long[]>();
-		// diskTask.attach(diskCallback);
-		// diskTask.execGet(String.format(Const.Urls.RUTORRENT_DISK_SPACE_URL,
-		// ip)
-		// + System.currentTimeMillis(), new ResponseParser<long[]>(
-		// R.string.get_disk_space_failed) {
-		//
-		// @Override
-		// public long[] parse(HttpResponse res, InputStream in) {
-		// JsonParser parser = new JsonParser();
-		// JsonObject obj = parser.parse(new InputStreamReader(in))
-		// .getAsJsonObject();
-		// long[] space = new long[2];
-		// space[0] = obj.get("total").getAsLong();
-		// space[1] = obj.get("free").getAsLong();
-		// msgId = SUCCESS_MSG_ID;
-		// return space;
-		// }
-		// });
 	}
 
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {

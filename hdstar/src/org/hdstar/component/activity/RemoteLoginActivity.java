@@ -1,11 +1,13 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.RemoteSetting;
+import org.hdstar.common.RemoteType;
 import org.hdstar.component.HDStarApp;
+import org.hdstar.remote.RemoteBase;
+import org.hdstar.remote.RemoteFactory;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.RemoteLoginTask;
-import org.hdstar.util.EncodeDecode;
 import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
 
@@ -13,8 +15,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +30,9 @@ public class RemoteLoginActivity extends BaseActivity implements
 		OnNavigationListener, OnClickListener {
 	private EditText ipET, accET, pwdET;
 	private CustomDialog dialog = null;
-	private RemoteLoginTask task;
+	private BaseAsyncTask<Boolean> task;
+	private RemoteType type;
+	private RemoteSetting setting;
 
 	public RemoteLoginActivity() {
 		super(R.string.remote);
@@ -50,11 +52,11 @@ public class RemoteLoginActivity extends BaseActivity implements
 		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		getSupportActionBar().setListNavigationCallbacks(list, this);
-		SharedPreferences share = getSharedPreferences(
-				Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
-		ipET.setText(share.getString("ip", ""));
-		accET.setText(share.getString("username", ""));
-		pwdET.setText(EncodeDecode.decode(share.getString("password", "")));
+		// SharedPreferences share = getSharedPreferences(
+		// Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
+		// ipET.setText(share.getString("ip", ""));
+		// accET.setText(share.getString("username", ""));
+		// pwdET.setText(EncodeDecode.decode(share.getString("password", "")));
 	}
 
 	@Override
@@ -67,6 +69,15 @@ public class RemoteLoginActivity extends BaseActivity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		switch (itemPosition) {
+		case 0:
+			type = RemoteType.RuTorrentRemote;
+			break;
+		case 1:
+			type = RemoteType.UTorrentRemote;
+			break;
+		}
+		initInputField();
 		return false;
 	}
 
@@ -81,13 +92,16 @@ public class RemoteLoginActivity extends BaseActivity implements
 		String acc = accET.getText().toString();
 		String pwd = pwdET.getText().toString();
 
-		SharedPreferences share = getSharedPreferences(
-				Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
-		Editor editor = share.edit();
-		editor.putString("ip", ip);
-		editor.putString("username", acc);
-		editor.putString("password", EncodeDecode.encode(pwd));
-		editor.commit();
+		// SharedPreferences share = getSharedPreferences(
+		// Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
+		// Editor editor = share.edit();
+		// editor.putString("ip", ip);
+		// editor.putString("username", acc);
+		// editor.putString("password", EncodeDecode.encode(pwd));
+		// editor.commit();
+		setting.saveIp(ip);
+		setting.saveUsername(acc);
+		setting.savePassword(pwd);
 
 		dialog = new CustomDialog(this, R.string.try_to_login);
 		dialog.setOnDismissListener(new OnDismissListener() {
@@ -100,14 +114,24 @@ public class RemoteLoginActivity extends BaseActivity implements
 
 		});
 		dialog.show();
-		task = new RemoteLoginTask();
+		RemoteBase remote = RemoteFactory.newInstanceByName(type.name());
+		remote.setIpNPort(ip);
+		task = remote.login(acc, pwd);
 		task.attach(mCallback);
-		if (ip.contains(":")) {
-			int port = Integer.parseInt(ip.substring(ip.indexOf(':') + 1));
-			task.auth(ip, port, acc, pwd);
-		} else {
-			task.auth(ip, acc, pwd);
-		}
+		task.execute("");
+		// if (ip.contains(":")) {
+		// int port = Integer.parseInt(ip.substring(ip.indexOf(':') + 1));
+		// task.auth(ip, port, acc, pwd);
+		// } else {
+		// task.auth(ip, acc, pwd);
+		// }
+	}
+
+	private void initInputField() {
+		setting = new RemoteSetting(this, type);
+		ipET.setText(setting.getIp(""));
+		accET.setText(setting.getUsername(""));
+		pwdET.setText(setting.getPassword(""));
 	}
 
 	private TaskCallback<Boolean> mCallback = new TaskCallback<Boolean>() {
@@ -118,8 +142,9 @@ public class RemoteLoginActivity extends BaseActivity implements
 			HDStarApp.loginRemote = true;
 			Intent intent = new Intent(RemoteLoginActivity.this,
 					RemoteActivity.class);
-			intent.putExtra("remote", "RutorrentRemote");
+			intent.putExtra("remote", type.name());
 			intent.putExtra("ip", ipET.getText().toString());
+			intent.putExtra("downloadDir", setting.getDownloadDir(""));
 			startActivity(intent);
 			finish();
 		}

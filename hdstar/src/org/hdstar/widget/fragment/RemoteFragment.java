@@ -120,7 +120,7 @@ public class RemoteFragment extends StackFragment implements OnClickListener {
 
 			@Override
 			public void onCancel() {
-				abort();
+				detachTask();
 			}
 		});
 	}

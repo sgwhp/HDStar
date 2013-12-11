@@ -2,6 +2,7 @@ package org.hdstar.remote;
 
 import java.util.ArrayList;
 
+import org.hdstar.common.RemoteType;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssLabel;
 import org.hdstar.task.BaseAsyncTask;
@@ -9,17 +10,28 @@ import org.hdstar.task.BaseAsyncTask;
 import android.app.Activity;
 
 public abstract class RemoteBase {
-	protected String ip;
+	protected RemoteType type;
+	// 包括ip和端口
+	protected String ipNPort;
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public RemoteBase(RemoteType type) {
+		this.type = type;
 	}
 
-	public String getIp() {
-		return ip;
+	public void setIpNPort(String ipNPort) {
+		this.ipNPort = ipNPort;
 	}
 
-	public abstract String getTitle();
+	public String getIpNPort() {
+		return ipNPort;
+	}
+
+	public String getTitle() {
+		return "";
+	}
+
+	public abstract BaseAsyncTask<Boolean> login(String username,
+			String password);
 
 	public abstract BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList(
 			Activity context);
@@ -47,7 +59,7 @@ public abstract class RemoteBase {
 	/**
 	 * 
 	 * @param callback
-	 * @param ip
+	 * @param ipNPort
 	 * @return 数组长度为2，分别是总空间和可用空间
 	 */
 	public abstract BaseAsyncTask<long[]> getDiskInfo();

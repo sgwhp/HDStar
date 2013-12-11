@@ -4,7 +4,9 @@ public class EncodeDecode {
 
 	// ‘› ±œ»”√
 	public static String encode(String s) {
-		// TODO Delete Me....
+		if (s == null) {
+			return null;
+		}
 		String s1 = "";
 		String s2 = "";
 		if (!s.equals("")) {
@@ -102,6 +104,9 @@ public class EncodeDecode {
 	}
 
 	public static String decode(String s) {
+		if (s == null) {
+			return null;
+		}
 		String s1 = "";
 		String s2 = "";
 		if (!s.equals("")) {

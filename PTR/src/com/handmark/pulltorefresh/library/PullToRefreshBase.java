@@ -103,6 +103,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 
 	private SmoothScrollRunnable mCurrentSmoothScrollRunnable;
 
+	private OnCancelListener mOnCanceListener;
+	private OnClickListener mOnCancelClickListener;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -284,7 +287,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 						mLastMotionY = y;
 						mLastMotionX = x;
 						mIsBeingDragged = true;
-						if (mMode == Mode.BOTH) {
+						// 正在刷新不更新当前模式，否则会导致无法隐藏loadinglayout
+						if (mMode == Mode.BOTH && !isRefreshing()) {
 							mCurrentMode = Mode.PULL_FROM_START;
 						}
 					} else if (mMode.showFooterLoadingLayout() && diff <= -1f
@@ -292,7 +296,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 						mLastMotionY = y;
 						mLastMotionX = x;
 						mIsBeingDragged = true;
-						if (mMode == Mode.BOTH) {
+						// 正在刷新不更新当前模式，否则会导致无法隐藏loadinglayout
+						if (mMode == Mode.BOTH && !isRefreshing()) {
 							mCurrentMode = Mode.PULL_FROM_END;
 						}
 					}
@@ -463,12 +468,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 	}
 
 	public void setOnCancelListener(OnCancelListener listener) {
-		if (mHeaderLayout != null) {
-			mHeaderLayout.setOnCancelListener(listener);
-		}
-		if (mFooterLayout != null) {
-			mFooterLayout.setOnCancelListener(listener);
-		}
+		mOnCanceListener = listener;
 	}
 
 	/**
@@ -647,6 +647,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 		LoadingLayout layout = mLoadingAnimationStyle.createLoadingLayout(
 				context, mode, getPullToRefreshScrollDirection(), attrs);
 		layout.setVisibility(View.INVISIBLE);
+		if (layout.cancelable()) {
+			layout.setOnCancelClickListener(mOnCancelClickListener);
+		}
 		return layout;
 	}
 
@@ -1193,6 +1196,16 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 		mRefreshableView = createRefreshableView(context, attrs);
 		addRefreshableView(context, mRefreshableView);
 
+		mOnCancelClickListener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onRefreshComplete();
+				if (mOnCanceListener != null) {
+					mOnCanceListener.onCancel();
+				}
+			}
+		};
 		// We need to create now layouts now
 		mHeaderLayout = createLoadingLayout(context, Mode.PULL_FROM_START, a);
 		mFooterLayout = createLoadingLayout(context, Mode.PULL_FROM_END, a);
@@ -1380,6 +1393,30 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 			} else {
 				post(mCurrentSmoothScrollRunnable);
 			}
+		}
+	}
+
+	public final void smoothScrollWithNoCallback(int newScrollValue) {
+		final int oldScrollValue;
+		switch (getPullToRefreshScrollDirection()) {
+		case HORIZONTAL:
+			oldScrollValue = getScrollX();
+			break;
+		case VERTICAL:
+		default:
+			oldScrollValue = getScrollY();
+			break;
+		}
+
+		if (oldScrollValue != newScrollValue) {
+			if (null == mScrollAnimationInterpolator) {
+				// Default interpolator is a Decelerate Interpolator
+				mScrollAnimationInterpolator = new DecelerateInterpolator();
+			}
+			mCurrentSmoothScrollRunnable = new SmoothScrollRunnable(
+					oldScrollValue, newScrollValue,
+					getPullToRefreshScrollDuration(), null);
+			post(mCurrentSmoothScrollRunnable);
 		}
 	}
 

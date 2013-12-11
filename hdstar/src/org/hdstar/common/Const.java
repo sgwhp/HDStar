@@ -130,6 +130,7 @@ public class Const {
 	public static final String SETTING_SHARED_PREFS = "setting";
 	public static final String DOWNLOAD_SHARED_PREFS = "download";
 	public static final String RUTORRENT_SHARED_PREFS = "rutorrent";
+	public static final String REMOTE_SHARED_PREFS = "remote";
 	public static final String DOWNLOAD_DIR = Environment
 			.getExternalStorageDirectory().getPath()
 			+ File.separator
@@ -146,7 +147,7 @@ public class Const {
 	/**
 	 * 种子优惠类型
 	 * 
-	 * @author wuhongping
+	 * @author robust
 	 * 
 	 */
 	public static final class FreeType {

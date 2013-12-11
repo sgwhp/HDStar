@@ -187,7 +187,7 @@ public class TopicFragment extends StackFragment {
 
 			@Override
 			public void onCancel() {
-				abort();
+				detachTask();
 			}
 		});
 	}

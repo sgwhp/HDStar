@@ -1,5 +1,7 @@
 package org.hdstar.remote;
 
+import org.hdstar.common.RemoteType;
+
 public class RemoteFactory {
 
 	public static RemoteBase newInstanceByName(String className) {
@@ -14,6 +16,10 @@ public class RemoteFactory {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static RemoteBase newInstanceByType(RemoteType type) {
+		return newInstanceByName(type.name());
 	}
 
 }

@@ -174,7 +174,7 @@ public class MessageBoxFragment extends StackFragment {
 
 			@Override
 			public void onCancel() {
-				abort();
+				detachTask();
 			}
 		});
 	}

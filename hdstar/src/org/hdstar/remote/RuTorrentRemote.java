@@ -10,19 +10,25 @@ import java.util.Set;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.common.RemoteType;
 import org.hdstar.component.activity.RemoteLoginActivity;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssLabel;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.ResponseParser;
+import org.hdstar.util.HttpClientManager;
 
 import android.app.Activity;
 import android.content.Intent;
+import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
+import ch.boye.httpclientandroidlib.auth.AuthScope;
+import ch.boye.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
+import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.google.gson.Gson;
@@ -32,7 +38,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-public class RutorrentRemote extends RemoteBase {
+public class RuTorrentRemote extends RemoteBase {
+
+	public RuTorrentRemote() {
+		super(RemoteType.RuTorrentRemote);
+	}
 
 	@Override
 	public String getTitle() {
@@ -43,7 +53,7 @@ public class RutorrentRemote extends RemoteBase {
 	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList(
 			final Activity context) {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RPC_ACTION_URL, ip));
+				Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
 		ResponseParser<ArrayList<RemoteTaskInfo>> parser = new ResponseParser<ArrayList<RemoteTaskInfo>>() {
 
 			@Override
@@ -125,7 +135,7 @@ public class RutorrentRemote extends RemoteBase {
 	public BaseAsyncTask<Boolean> download(String dir, String hash,
 			ArrayList<String> urls) {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RSS_ACTION_URL, ip));
+				Const.Urls.RUTORRENT_RSS_ACTION_URL, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 			@Override
@@ -163,7 +173,7 @@ public class RutorrentRemote extends RemoteBase {
 	@Override
 	public BaseAsyncTask<ArrayList<RssLabel>> fetchRssList() {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RSS_ACTION_URL, ip));
+				Const.Urls.RUTORRENT_RSS_ACTION_URL, ipNPort));
 		ResponseParser<ArrayList<RssLabel>> parser = new ResponseParser<ArrayList<RssLabel>>() {
 
 			@Override
@@ -196,7 +206,7 @@ public class RutorrentRemote extends RemoteBase {
 	@Override
 	public BaseAsyncTask<ArrayList<RssLabel>> refreshRssLabel(String hash) {
 		HttpGet get = new HttpGet(String.format(
-				Const.Urls.RUTORRENT_RSS_REFRESH_URL, ip, hash));
+				Const.Urls.RUTORRENT_RSS_REFRESH_URL, ipNPort, hash));
 		ResponseParser<ArrayList<RssLabel>> parser = new ResponseParser<ArrayList<RssLabel>>() {
 
 			@Override
@@ -220,7 +230,7 @@ public class RutorrentRemote extends RemoteBase {
 
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RPC_ACTION_URL, ip));
+				Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 			@Override
@@ -261,7 +271,7 @@ public class RutorrentRemote extends RemoteBase {
 	@Override
 	public BaseAsyncTask<long[]> getDiskInfo() {
 		HttpGet get = new HttpGet(String.format(
-				Const.Urls.RUTORRENT_DISK_SPACE_URL, ip)
+				Const.Urls.RUTORRENT_DISK_SPACE_URL, ipNPort)
 				+ System.currentTimeMillis());
 		ResponseParser<long[]> parser = new ResponseParser<long[]>(
 				R.string.get_disk_space_failed) {
@@ -280,6 +290,41 @@ public class RutorrentRemote extends RemoteBase {
 		};
 		BaseAsyncTask<long[]> diskTask = BaseAsyncTask.newInstance(get, parser);
 		return diskTask;
+	}
+
+	@Override
+	public BaseAsyncTask<Boolean> login(String username, String password) {
+		String ip;
+		int port;
+		String[] sa = ipNPort.split(":");
+		ip = sa[0];
+		if (sa.length == 2) {
+			port = Integer.parseInt(sa[1]);
+		} else {
+			port = 80;
+		}
+		HttpHost targetHost = new HttpHost(ip, port, "http");
+		DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
+				.getHttpClient();
+		client.getCredentialsProvider().setCredentials(
+				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+				new UsernamePasswordCredentials(username, password));
+		HttpGet request = new HttpGet(String.format(
+				Const.Urls.RUTORRENT_HOME_PAGE, ipNPort));
+		ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
+				R.string.login_error) {
+
+			@Override
+			public Boolean parse(HttpResponse res, InputStream in) {
+				if (res.getStatusLine().getStatusCode() == 301) {
+					msgId = SUCCESS_MSG_ID;
+					return true;
+				}
+
+				return false;
+			}
+		};
+		return new BaseAsyncTask<Boolean>(request, parser);
 	}
 
 }

@@ -129,6 +129,8 @@ public class PullToRefreshListView extends
 			if (null != adapter && !adapter.isEmpty()) {
 				// Smooth scroll as normal
 				smoothScrollTo(0);
+			} else {
+				smoothScrollWithNoCallback(0);
 			}
 		}
 	}
@@ -271,17 +273,6 @@ public class PullToRefreshListView extends
 			if (!a.hasValue(R.styleable.PullToRefresh_ptrScrollingWhileRefreshingEnabled)) {
 				setScrollingWhileRefreshingEnabled(true);
 			}
-		}
-	}
-
-	@Override
-	public void setOnCancelListener(
-			com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener listener) {
-		if (mHeaderLoadingView != null) {
-			mHeaderLoadingView.setOnCancelListener(listener);
-		}
-		if (mFooterLoadingView != null) {
-			mFooterLoadingView.setOnCancelListener(listener);
 		}
 	}
 

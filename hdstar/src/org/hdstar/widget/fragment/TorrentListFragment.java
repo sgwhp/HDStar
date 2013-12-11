@@ -131,7 +131,7 @@ public class TorrentListFragment extends StackFragment {
 
 			@Override
 			public void onCancel() {
-				abort();
+				detachTask();
 			}
 		});
 	}

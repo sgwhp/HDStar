@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.hdstar.common.Const;
+import org.hdstar.common.RemoteType;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssLabel;
 import org.hdstar.task.BaseAsyncTask;
@@ -13,7 +14,11 @@ import org.hdstar.task.UtorrentTask;
 import android.app.Activity;
 import ch.boye.httpclientandroidlib.HttpResponse;
 
-public class UtorrentRemote extends RemoteBase {
+public class UTorrentRemote extends RemoteBase {
+
+	public UTorrentRemote() {
+		super(RemoteType.UTorrentRemote);
+	}
 
 	@Override
 	public String getTitle() {
@@ -24,7 +29,7 @@ public class UtorrentRemote extends RemoteBase {
 	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList(
 			final Activity context) {
 		UtorrentTask<ArrayList<RemoteTaskInfo>> task = UtorrentTask
-				.newInstance(ip);
+				.newInstance(ipNPort);
 		return task;
 	}
 
@@ -40,7 +45,7 @@ public class UtorrentRemote extends RemoteBase {
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		final BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>();
 		task.execGet(
-				buildParams(Const.Urls.RUTORRENT_RPC_ACTION_URL, ip, mode,
+				buildParams(Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort, mode,
 						hashes), new ResponseParser<Boolean>() {
 
 					@Override
@@ -103,6 +108,12 @@ public class UtorrentRemote extends RemoteBase {
 
 	@Override
 	public BaseAsyncTask<long[]> getDiskInfo() {
+		return null;
+	}
+
+	@Override
+	public BaseAsyncTask<Boolean> login(String username, String password) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
