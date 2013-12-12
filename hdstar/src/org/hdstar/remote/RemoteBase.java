@@ -9,6 +9,13 @@ import org.hdstar.task.BaseAsyncTask;
 
 import android.app.Activity;
 
+/**
+ * 子类命名要与RemoteType中的一致
+ * 
+ * @see org.hdstar.common.RemoteType
+ * @author robust
+ * 
+ */
 public abstract class RemoteBase {
 	protected RemoteType type;
 	// 包括ip和端口
@@ -17,8 +24,8 @@ public abstract class RemoteBase {
 	public RemoteBase(RemoteType type) {
 		this.type = type;
 	}
-	
-	public RemoteType getRemoteType(){
+
+	public RemoteType getRemoteType() {
 		return type;
 	}
 
@@ -46,9 +53,9 @@ public abstract class RemoteBase {
 
 	public abstract BaseAsyncTask<Boolean> stop(String... hashes);
 
-	public abstract BaseAsyncTask<Boolean> delete(String... hashes);
+	public abstract BaseAsyncTask<Boolean> remove(String... hashes);
 
-	public abstract BaseAsyncTask<Boolean> download(String dir, String hash,
+	public abstract BaseAsyncTask<Boolean> add(String dir, String hash,
 			ArrayList<String> urls);
 
 	public abstract boolean rssEnable();
@@ -62,8 +69,6 @@ public abstract class RemoteBase {
 
 	/**
 	 * 
-	 * @param callback
-	 * @param ipNPort
 	 * @return 数组长度为2，分别是总空间和可用空间
 	 */
 	public abstract BaseAsyncTask<long[]> getDiskInfo();

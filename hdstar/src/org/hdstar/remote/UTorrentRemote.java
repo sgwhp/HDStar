@@ -76,12 +76,12 @@ public class UTorrentRemote extends RemoteBase {
 	}
 
 	@Override
-	public BaseAsyncTask<Boolean> delete(String... hashes) {
+	public BaseAsyncTask<Boolean> remove(String... hashes) {
 		return null;
 	}
 
 	@Override
-	public BaseAsyncTask<Boolean> download(String dir, String hash,
+	public BaseAsyncTask<Boolean> add(String dir, String hash,
 			ArrayList<String> urls) {
 		return null;
 	}

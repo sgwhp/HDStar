@@ -454,7 +454,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		final BaseAsyncTask<Boolean> task = remote.delete(selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.remove(selectedHashes());
 		if (task == null) {
 			return;
 		}
@@ -510,7 +510,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				hrefs.add(label.items.get(i).href);
 			}
 		}
-		final BaseAsyncTask<Boolean> task = remote.download(dir.getText()
+		final BaseAsyncTask<Boolean> task = remote.add(dir.getText()
 				.toString(), label.hash, hrefs);
 		if (task == null) {
 			return;
