@@ -11,14 +11,15 @@ import android.view.View;
 
 class LTAController {
 	private static final int TOUCH_ADDITION = 20;
-	int mTouchAdditionBottom = 0;
-	int mTouchAdditionLeft = 0;
-	int mTouchAdditionRight = 0;
-	int mTouchAdditionTop = 0;
-	int mPreviousLeft = -1;
-	int mPreviousRight = -1;
-	int mPreviousBottom = -1;
-	int mPreviousTop = -1;
+	private int mTouchAdditionBottom = 0;
+	private int mTouchAdditionLeft = 0;
+	private int mTouchAdditionRight = 0;
+	private int mTouchAdditionTop = 0;
+	private int mPreviousLeft = -1;
+	private int mPreviousRight = -1;
+	private int mPreviousBottom = -1;
+	private int mPreviousTop = -1;
+	private TouchDelegate mDelegate;
 
 	LTAController() {
 	}
@@ -68,9 +69,13 @@ class LTAController {
 			mPreviousRight = right;
 			mPreviousBottom = bottom;
 			final View parent = (View) v.getParent();
-			parent.setTouchDelegate(new TouchDelegate(new Rect(left
+			if(parent instanceof ILTAViewGroup){
+				((ILTAViewGroup) parent).removeDelegate(mDelegate);
+			}
+			mDelegate = new TouchDelegate(new Rect(left
 					- mTouchAdditionLeft, top - mTouchAdditionTop, right
-					+ mTouchAdditionRight, bottom + mTouchAdditionBottom), v));
+					+ mTouchAdditionRight, bottom + mTouchAdditionBottom), v);
+			parent.setTouchDelegate(mDelegate);
 		}
 	}
 
@@ -126,5 +131,4 @@ class LTAController {
 	public void setAdditionTop(int additionTop) {
 		mTouchAdditionTop = additionTop;
 	}
-
 }
