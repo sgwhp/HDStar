@@ -112,18 +112,40 @@ public class CommonSettingFragment extends StackFragment implements
 
 	@Override
 	public void onClick(View v) {
-		Activity act = getActivity();
+		final Activity act = getActivity();
 		switch (v.getId()) {
 		case R.id.logOut:
-			HttpClientManager.restClient();
-			Editor edit = act.getSharedPreferences(Const.SETTING_SHARED_PREFS,
-					Activity.MODE_PRIVATE).edit();
-			edit.remove("cookies");
-			edit.commit();
-			HDStarApp.cookies = null;
-			Intent intent = new Intent(act, LoginActivity.class);
-			startActivity(intent);
-			act.finish();
+			new AlertDialog.Builder(getActivity())
+					.setTitle(R.string.log_out)
+					.setIcon(R.drawable.ic_launcher)
+					.setMessage(R.string.log_out_message)
+					.setPositiveButton(R.string.update,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									HttpClientManager.restClient();
+									Editor edit = act.getSharedPreferences(
+											Const.SETTING_SHARED_PREFS,
+											Activity.MODE_PRIVATE).edit();
+									edit.remove("cookies");
+									edit.commit();
+									HDStarApp.cookies = null;
+									Intent intent = new Intent(act,
+											LoginActivity.class);
+									startActivity(intent);
+									act.finish();
+								}
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+								}
+							}).create().show();
 			break;
 		case R.id.clearCache:
 			ImageLoader.getInstance().clearDiscCache();

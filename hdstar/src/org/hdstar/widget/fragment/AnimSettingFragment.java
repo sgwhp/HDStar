@@ -107,14 +107,18 @@ public class AnimSettingFragment extends StackFragment {
 			case R.id.accordion:
 				CustomSetting.anim = TransitionEffect.Accordion;
 				break;
-			case R.id.window:
-				CustomSetting.anim = TransitionEffect.Window;
+			case R.id.panel:
+				CustomSetting.anim = TransitionEffect.Panel;
 				break;
 			case R.id.jump_down:
 				CustomSetting.anim = TransitionEffect.JumpDown;
 				break;
 			case R.id.jump_up:
 				CustomSetting.anim = TransitionEffect.JumpUp;
+				break;
+			case R.id.window:
+				CustomSetting.anim = TransitionEffect.Window;
+				break;
 			}
 			JazzyViewPager vp = (JazzyViewPager) getViewPager();
 			vp.setTransitionEffect(CustomSetting.anim);

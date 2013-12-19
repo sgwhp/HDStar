@@ -139,12 +139,12 @@
                 android:text="@string/anim_accordion" />
             
             <RadioButton
-                android:id="@+id/window"
+                android:id="@+id/panel"
                 style="@style/customRadioButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/setting_strip_middle"
-                android:text="@string/anim_window" />
+                android:text="@string/anim_panel" />
             
             <RadioButton
                 android:id="@+id/jump_down"
@@ -159,8 +159,16 @@
                 style="@style/customRadioButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/setting_strip_bottom"
+                android:background="@drawable/setting_strip_middle"
                 android:text="@string/anim_jump_up" />
+            
+            <RadioButton
+                android:id="@+id/window"
+                style="@style/customRadioButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/setting_strip_bottom"
+                android:text="@string/anim_window" />
         </RadioGroup>
     </LinearLayout>
 
