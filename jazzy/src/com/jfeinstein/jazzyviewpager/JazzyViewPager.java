@@ -36,7 +36,7 @@ public class JazzyViewPager extends ViewPager {
 	private static final float ROT_MAX = 15.0f;
 
 	public enum TransitionEffect {
-		Standard, Tablet, CubeIn, CubeOut, FlipVertical, FlipHorizontal, Window, Stack, ZoomIn, ZoomOut, RotateUp, RotateDown, Accordion, Panel, JumpDown, JumpUp;
+		Standard, Tablet, CubeIn, CubeOut, FlipVertical, FlipHorizontal, Stack, ZoomIn, ZoomOut, RotateUp, RotateDown, Accordion, Panel, JumpDown, JumpUp, Window;
 	}
 
 	private static final boolean API_11;
@@ -536,6 +536,8 @@ public class JazzyViewPager extends ViewPager {
 				manageLayer(right, true);
 				mScale = (1 - SCALE_MAX) * positionOffset + SCALE_MAX;
 				mTrans = -getWidth() - getPageMargin() + positionOffsetPixels;
+				ViewHelper.setPivotX(right, right.getMeasuredWidth() * 0.5f);
+				ViewHelper.setPivotY(right, right.getMeasuredHeight() * 0.5f);
 				ViewHelper.setScaleX(right, mScale);
 				ViewHelper.setScaleY(right, mScale);
 				ViewHelper.setTranslationX(right, mTrans);
@@ -723,5 +725,4 @@ public class JazzyViewPager extends ViewPager {
 		}
 		return null;
 	}
-
 }

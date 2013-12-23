@@ -30,6 +30,7 @@ public class AnimSettingFragment extends StackFragment {
 		fade.setOnCheckedChangeListener(boxCheckedListener);
 		RadioGroup radio = (RadioGroup) v.findViewById(R.id.animations);
 		radio.setOnCheckedChangeListener(radioCheckedListener);
+		// 注意保持界面动画的顺序与枚举类型中的顺序保持一致
 		((RadioButton) radio.getChildAt(CustomSetting.anim.ordinal()))
 				.setChecked(true);
 		return v;
@@ -93,9 +94,6 @@ public class AnimSettingFragment extends StackFragment {
 				CustomSetting.anim = TransitionEffect.ZoomIn;
 				break;
 			case R.id.zoom_out:
-				// if (!CustomSetting.fade) {
-				// fade.setChecked(true);
-				// }
 				CustomSetting.anim = TransitionEffect.ZoomOut;
 				break;
 			case R.id.rotate_up:
