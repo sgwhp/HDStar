@@ -13,6 +13,8 @@ import android.support.v4.app.ListFragment;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+
 public class BaseActivity extends SlidingFragmentActivity {
 
 	private int mTitleRes;
@@ -55,6 +57,12 @@ public class BaseActivity extends SlidingFragmentActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onDestroy() {
+		Crouton.cancelAllCroutons();
+		super.onDestroy();
 	}
 
 	@Override

@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -30,6 +29,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ViewMessageFragment extends StackFragment {
 	// private int boxType;
@@ -189,7 +191,7 @@ public class ViewMessageFragment extends StackFragment {
 		public void onFail(Integer msgId) {
 			// progress.setVisibility(View.GONE);
 			refreshView.onRefreshComplete();
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override

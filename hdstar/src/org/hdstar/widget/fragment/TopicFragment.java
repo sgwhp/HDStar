@@ -31,7 +31,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 import ch.boye.httpclientandroidlib.HttpResponse;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -44,6 +43,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TopicFragment extends StackFragment {
 
@@ -345,7 +347,7 @@ public class TopicFragment extends StackFragment {
 			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			// listView.setSelection(1);
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
@@ -372,7 +374,7 @@ public class TopicFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			loadingDialog.dismiss();
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 	};
 }

@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.gson.reflect.TypeToken;
@@ -29,6 +28,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TorrentListFragment extends StackFragment {
 	private View view;
@@ -188,7 +190,7 @@ public class TorrentListFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshView.onRefreshComplete();
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
@@ -207,8 +209,8 @@ public class TorrentListFragment extends StackFragment {
 				torrents.addAll((ArrayList<Torrent>) list);
 				adapter.notifyDataSetChanged();
 			} else {
-				Toast.makeText(getActivity(), R.string.no_more_data,
-						Toast.LENGTH_SHORT).show();
+				Crouton.makeText(getActivity(), R.string.no_more_data,
+						Style.CONFIRM).show();
 			}
 			// ((TextView) view.findViewById(R.id.loading_next_page_text))
 			// .setText(R.string.next_page);
@@ -223,7 +225,7 @@ public class TorrentListFragment extends StackFragment {
 			// .setText(R.string.next_page);
 			// view.findViewById(R.id.loading_next_page_progressBar)
 			// .setVisibility(View.GONE);
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override

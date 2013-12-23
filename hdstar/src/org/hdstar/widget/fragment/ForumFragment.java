@@ -30,7 +30,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -40,6 +39,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ForumFragment extends StackFragment {
 	private View view;
@@ -291,7 +293,7 @@ public class ForumFragment extends StackFragment {
 		public void onFail(Integer msgId) {
 			refreshView.onRefreshComplete();
 			// listView.setSelection(1);
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
@@ -309,8 +311,8 @@ public class ForumFragment extends StackFragment {
 				adapter.itemsAddAll((ArrayList<Topic>) list);
 				adapter.notifyDataSetChanged();
 			} else {
-				Toast.makeText(getActivity(), R.string.no_more_data,
-						Toast.LENGTH_SHORT).show();
+				Crouton.makeText(getActivity(), R.string.no_more_data,
+						Style.CONFIRM).show();
 			}
 		}
 
@@ -318,7 +320,7 @@ public class ForumFragment extends StackFragment {
 		public void onFail(Integer msgId) {
 			--curPage;
 			refreshView.onRefreshComplete();
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override

@@ -64,6 +64,7 @@
     <string name="delete">刪除</string>
     <string name="deleting">正在刪除…</string>
     <string name="markAsRead">標記為已讀</string>
+    <string name="no_msg_selected">請選擇站內信</string>
     
     <string name="forum_settings">論壇設定</string>
     <string name="topics_per_page">每頁主題數</string>

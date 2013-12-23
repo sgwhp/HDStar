@@ -21,10 +21,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class RemoteLoginActivity extends BaseActivity implements
 		OnNavigationListener, OnClickListener {
@@ -64,6 +66,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 		if (task != null) {
 			task.detach();
 		}
+		Crouton.cancelAllCroutons();
 		super.onDestroy();
 	}
 
@@ -85,8 +88,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 	public void onClick(View v) {
 		String ip = ipET.getText().toString();
 		if (!Util.isIp(ip)) {
-			Toast.makeText(this, R.string.invalidate_ip, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(this, R.string.invalidate_ip, Style.ALERT).show();
 			return;
 		}
 		String acc = accET.getText().toString();
@@ -155,7 +157,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 		@Override
 		public void onFail(Integer msgId) {
 			dialog.dismiss();
-			Toast.makeText(RemoteLoginActivity.this, msgId, Toast.LENGTH_SHORT)
+			Crouton.makeText(RemoteLoginActivity.this, msgId, Style.ALERT)
 					.show();
 		}
 

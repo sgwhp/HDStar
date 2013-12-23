@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
@@ -43,6 +42,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MessageBoxFragment extends StackFragment {
 	private int boxType;
@@ -203,8 +205,8 @@ public class MessageBoxFragment extends StackFragment {
 
 	private void delete() {
 		if (adapter.getSelectedCount() == 0) {
-			Toast.makeText(getActivity(), "没有选择任何消息记录", Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(getActivity(), R.string.no_msg_selected,
+					Style.CONFIRM).show();
 			return;
 		}
 		dialog = new CustomDialog(getActivity(), R.string.deleting);
@@ -263,7 +265,7 @@ public class MessageBoxFragment extends StackFragment {
 			// listView.onRefreshComplete();
 			refreshView.onRefreshComplete();
 			listView.setSelection(1);
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
@@ -290,7 +292,7 @@ public class MessageBoxFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			dialog.dismiss();
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 	};

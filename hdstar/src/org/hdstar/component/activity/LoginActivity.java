@@ -28,12 +28,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.actionbarsherlock.app.SherlockActivity;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class LoginActivity extends SherlockActivity implements OnClickListener {
 	private DownloadImageTask imageTask = null;
@@ -60,6 +62,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 		if (task != null) {
 			task.detach();
 		}
+		Crouton.cancelAllCroutons();
 		super.onDestroy();
 	}
 
@@ -148,19 +151,18 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			String password = ((EditText) findViewById(R.id.password))
 					.getText().toString();
 			if (imageString.equals("")) {
-				Toast.makeText(LoginActivity.this,
-						R.string.input_security_code, Toast.LENGTH_SHORT)
-						.show();
+				Crouton.makeText(LoginActivity.this,
+						R.string.input_security_code, Style.CONFIRM).show();
 				return;
 			}
 			if (id.equals("")) {
-				Toast.makeText(LoginActivity.this, R.string.input_username,
-						Toast.LENGTH_SHORT).show();
+				Crouton.makeText(LoginActivity.this, R.string.input_username,
+						Style.CONFIRM).show();
 				return;
 			}
 			if (password.equals("")) {
-				Toast.makeText(LoginActivity.this, R.string.input_password,
-						Toast.LENGTH_SHORT).show();
+				Crouton.makeText(LoginActivity.this, R.string.input_password,
+						Style.CONFIRM).show();
 				return;
 			}
 			Editor user = LoginActivity.this.getSharedPreferences(
@@ -222,8 +224,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 		@Override
 		public void onFail(Integer msgId) {
 			dialog.dismiss();
-			Toast.makeText(LoginActivity.this, msgId, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(LoginActivity.this, msgId, Style.ALERT).show();
 		}
 
 		@Override

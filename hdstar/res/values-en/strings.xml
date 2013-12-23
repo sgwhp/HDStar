@@ -64,6 +64,7 @@
     <string name="delete">delete</string>
     <string name="deleting">processing delete request…</string>
     <string name="markAsRead">mark as read</string>
+    <string name="no_msg_selected">No Message Selected!</string>
     
     <string name="forum_settings">Forum Settings</string>
     <string name="topics_per_page">Topics per page</string>

@@ -16,7 +16,6 @@ import org.hdstar.widget.ResizeLayout;
 import org.hdstar.widget.SmilesAdapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
@@ -35,10 +34,11 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ReplyFragment extends StackFragment {
 
@@ -87,7 +87,7 @@ public class ReplyFragment extends StackFragment {
 	}
 
 	void init(String text, String username) {
-		final Context context = getActivity();
+		final Activity context = getActivity();
 		im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		if ("edit".equals(type)) {
@@ -110,8 +110,8 @@ public class ReplyFragment extends StackFragment {
 			@Override
 			public void onClick(View arg0) {
 				if (body.getText().toString().equals("")) {
-					Toast.makeText(context, R.string.reply_is_empty,
-							Toast.LENGTH_SHORT).show();
+					Crouton.makeText(context, R.string.reply_is_empty,
+							Style.CONFIRM).show();
 				} else {
 					dialog = new CustomDialog(context, R.string.reply_is_adding);
 					dialog.setOnDismissListener(new OnDismissListener() {
@@ -210,8 +210,8 @@ public class ReplyFragment extends StackFragment {
 		@Override
 		public void onComplete(Void result) {
 			dialog.dismiss();
-			Toast.makeText(getActivity(), R.string.reply_succeeded,
-					Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), R.string.reply_succeeded,
+					Style.INFO).show();
 			StackFragment f = null;
 			if (CustomSetting.autoRefresh) {
 				f = getStackAdapter().preItem();
@@ -226,7 +226,7 @@ public class ReplyFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			dialog.dismiss();
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override

@@ -43,7 +43,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -53,6 +52,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.slidingmenu.lib.SlidingMenu;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private PullToRefreshListView refreshView;
@@ -220,8 +222,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	protected void init() {
 		// SharedPreferences share = getSharedPreferences(
 		// Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
-		String remoteName = getIntent().getStringExtra(
-				"remote");
+		String remoteName = getIntent().getStringExtra("remote");
 		remote = RemoteFactory.newInstanceByName(remoteName);
 		RemoteSetting setting = new RemoteSetting(this, remoteName);
 		remote.setIpNPort(setting.getIp());
@@ -378,7 +379,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 	private void start() {
 		if (selectedCount == 0) {
-			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
+			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
 					.show();
 			return;
 		}
@@ -402,7 +403,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 	private void pause() {
 		if (selectedCount == 0) {
-			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
+			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
 					.show();
 			return;
 		}
@@ -426,7 +427,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 	private void stop() {
 		if (selectedCount == 0) {
-			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
+			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
 					.show();
 			return;
 		}
@@ -450,7 +451,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 
 	private void delete() {
 		if (selectedCount == 0) {
-			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
+			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
 					.show();
 			return;
 		}
@@ -477,8 +478,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	 */
 	private void showDownloadWindow() {
 		if (selectedRss == null) {
-			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM,
+					(ViewGroup) rssListView.getParent()).show();
 			return;
 		}
 		int i = selectedRss.length - 1;
@@ -488,8 +489,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			}
 		}
 		if (i < 0) {
-			Toast.makeText(this, R.string.no_task_selected, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM,
+					(ViewGroup) rssListView.getParent()).show();
 			return;
 		}
 		addRssWindow.update();
@@ -510,8 +511,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				hrefs.add(label.items.get(i).href);
 			}
 		}
-		final BaseAsyncTask<Boolean> task = remote.add(dir.getText()
-				.toString(), label.hash, hrefs);
+		final BaseAsyncTask<Boolean> task = remote.add(
+				dir.getText().toString(), label.hash, hrefs);
 		if (task == null) {
 			return;
 		}
@@ -532,8 +533,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onFail(Integer msgId) {
 				dialog.dismiss();
-				Toast.makeText(getApplicationContext(), msgId,
-						Toast.LENGTH_SHORT).show();
+				Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT)
+						.show();
 			}
 		});
 		attachRssTask(task);
@@ -607,8 +608,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshView.onRefreshComplete();
-			Toast.makeText(RemoteActivity.this, msgId, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
 		}
 	};
 
@@ -651,8 +651,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshExpandableView.onRefreshComplete();
-			Toast.makeText(RemoteActivity.this, msgId, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
 		}
 	};
 
@@ -672,8 +671,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshDiskInfoBtn.setEnabled(true);
-			Toast.makeText(RemoteActivity.this, msgId, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
 		}
 	};
 
