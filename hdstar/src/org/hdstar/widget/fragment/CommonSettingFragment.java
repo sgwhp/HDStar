@@ -31,11 +31,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CommonSettingFragment extends StackFragment implements
 		OnClickListener {
@@ -149,12 +151,11 @@ public class CommonSettingFragment extends StackFragment implements
 			break;
 		case R.id.clearCache:
 			ImageLoader.getInstance().clearDiscCache();
-			Toast.makeText(act, R.string.cache_cleared, Toast.LENGTH_SHORT)
-					.show();
+			Crouton.makeText(act, R.string.cache_cleared, Style.INFO).show();
 			break;
 		case R.id.checkUpdate:
-			Toast.makeText(act, R.string.searching_for_update,
-					Toast.LENGTH_LONG).show();
+			Crouton.makeText(act, R.string.searching_for_update, Style.INFO)
+					.show();
 			DelegateTask<NewApkInfo> task = DelegateTask.newInstance("");
 			task.attach(mCallback);
 			attachTask(task);
@@ -187,8 +188,8 @@ public class CommonSettingFragment extends StackFragment implements
 		@Override
 		public void onComplete(final NewApkInfo result) {
 			if (result == null) {
-				Toast.makeText(getActivity(), R.string.latest_version,
-						Toast.LENGTH_SHORT).show();
+				Crouton.makeText(getActivity(), R.string.latest_version,
+						Style.CONFIRM).show();
 				return;
 			}
 			CharSequence updateInfo = getString(R.string.update_info);
@@ -266,7 +267,7 @@ public class CommonSettingFragment extends StackFragment implements
 
 		@Override
 		public void onFail(Integer msgId) {
-			Toast.makeText(getActivity(), msgId, Toast.LENGTH_SHORT).show();
+			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 	};

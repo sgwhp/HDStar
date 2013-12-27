@@ -76,7 +76,7 @@ public class UTorrentRemote extends RemoteBase {
 	}
 
 	@Override
-	public BaseAsyncTask<Boolean> remove(String... hashes) {
+	public BaseAsyncTask<Boolean> remove(boolean rmFile, String... hashes) {
 		return null;
 	}
 

@@ -131,9 +131,9 @@ public class RemoteLoginActivity extends BaseActivity implements
 
 	private void initInputField() {
 		setting = new RemoteSetting(this, type);
-		ipET.setText(setting.getIp(""));
-		accET.setText(setting.getUsername(""));
-		pwdET.setText(setting.getPassword(""));
+		ipET.setText(setting.ip);
+		accET.setText(setting.username);
+		pwdET.setText(setting.password);
 	}
 
 	private TaskCallback<Boolean> mCallback = new TaskCallback<Boolean>() {

@@ -83,7 +83,7 @@ public class ViewMessageFragment extends StackFragment {
 		timeTV.setText(getArguments().getString("time"));
 		refreshView = (PullToRefreshScrollView) v
 				.findViewById(R.id.pull_refresh_scrollview);
-		// refreshView.setScrollingWhileRefreshingEnabled(true);
+		refreshView.setScrollingWhileRefreshingEnabled(true);
 		refreshView.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
 
 			@Override

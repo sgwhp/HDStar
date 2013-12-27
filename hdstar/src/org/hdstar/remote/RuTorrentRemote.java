@@ -1,7 +1,9 @@
 package org.hdstar.remote;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +19,11 @@ import org.hdstar.model.RssLabel;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.util.HttpClientManager;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Xml;
 import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
@@ -28,6 +32,7 @@ import ch.boye.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
+import ch.boye.httpclientandroidlib.entity.StringEntity;
 import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
@@ -127,8 +132,81 @@ public class RuTorrentRemote extends RemoteBase {
 	}
 
 	@Override
-	public BaseAsyncTask<Boolean> remove(String... hashes) {
-		return ctrlTask("remove", hashes);
+	public BaseAsyncTask<Boolean> remove(boolean rmFile, String... hashes) {
+		if (!rmFile) {
+			return ctrlTask("remove", hashes);
+		} else {
+			XmlSerializer serializer = Xml.newSerializer();
+			StringWriter writer = new StringWriter();
+			try {
+				serializer.setOutput(writer);
+				serializer.startDocument("UTF-8", true);
+				serializer.startTag("", "methodCall");
+				serializer.startTag("", "methodName");
+				serializer.text("system.multicall");
+				serializer.endTag("", "methodName");
+				serializer.startTag("", "params");
+				serializer.startTag("", "param");
+				serializer.startTag("", "value");
+				serializer.startTag("", "array");
+				serializer.startTag("", "data");
+				for (String hash : hashes) {
+					serializer.startTag("", "value");
+					serializer.startTag("", "struct");
+					buildMemberMethod(serializer, "d.set_custom5");
+					buildMemberParams(serializer, hash, "1");
+					serializer.endTag("", "struct");
+					serializer.endTag("", "value");
+
+					serializer.startTag("", "value");
+					serializer.startTag("", "struct");
+					buildMemberMethod(serializer, "d.delete_tied");
+					buildMemberParams(serializer, hash);
+					serializer.endTag("", "struct");
+					serializer.endTag("", "value");
+
+					serializer.startTag("", "value");
+					serializer.startTag("", "struct");
+					buildMemberMethod(serializer, "d.erase");
+					buildMemberParams(serializer, hash);
+					serializer.endTag("", "struct");
+					serializer.endTag("", "value");
+
+				}
+				serializer.endTag("", "data");
+				serializer.endTag("", "array");
+				serializer.endTag("", "value");
+				serializer.endTag("", "param");
+				serializer.endTag("", "params");
+				serializer.endTag("", "methodCall");
+				serializer.flush();
+
+				HttpPost post = new HttpPost(String.format(
+						Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
+				ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
+
+					@Override
+					public Boolean parse(HttpResponse res, InputStream in) {
+						if (res.getStatusLine().getStatusCode() == 200) {
+							msgId = SUCCESS_MSG_ID;
+							return true;
+						}
+						return false;
+					}
+				};
+				post.setEntity(new StringEntity(writer.toString()));
+				final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(
+						post, parser);
+				return task;
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
 	}
 
 	@Override
@@ -325,6 +403,42 @@ public class RuTorrentRemote extends RemoteBase {
 			}
 		};
 		return new BaseAsyncTask<Boolean>(request, parser);
+	}
+
+	private void buildMemberMethod(XmlSerializer serializer, String methodName)
+			throws IllegalArgumentException, IllegalStateException, IOException {
+		serializer.startTag("", "member");
+		serializer.startTag("", "name");
+		serializer.text("methodName");
+		serializer.endTag("", "name");
+		serializer.startTag("", "value");
+		serializer.startTag("", "string");
+		serializer.text(methodName);
+		serializer.endTag("", "string");
+		serializer.endTag("", "value");
+		serializer.endTag("", "member");
+	}
+
+	private void buildMemberParams(XmlSerializer serializer, String... params)
+			throws IllegalArgumentException, IllegalStateException, IOException {
+		serializer.startTag("", "member");
+		serializer.startTag("", "name");
+		serializer.text("params");
+		serializer.endTag("", "name");
+		serializer.startTag("", "value");
+		serializer.startTag("", "array");
+		serializer.startTag("", "data");
+		for (String param : params) {
+			serializer.startTag("", "value");
+			serializer.startTag("", "string");
+			serializer.text(param);
+			serializer.endTag("", "string");
+			serializer.endTag("", "value");
+		}
+		serializer.endTag("", "data");
+		serializer.endTag("", "array");
+		serializer.endTag("", "value");
+		serializer.endTag("", "member");
 	}
 
 }

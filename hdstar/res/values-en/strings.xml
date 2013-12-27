@@ -134,6 +134,7 @@
     <string name="no_task_selected">Please select a task.</string>
     <string name="download">Load</string>
     <string name="rss">rss</string>
+    <string name="remove_file">Remove file.</string>
     <string name="download_dir">Download directory</string>
     <string name="invalidate_ip">Invalidate IP</string>
     <string name="disk">Disk</string>

@@ -39,8 +39,9 @@ public class HDStarApp extends Application {
 
 	public static String cookies = null;
 	public static boolean hasNewMessage = false;
-//	public static boolean loginRemote = false;
+	// public static boolean loginRemote = false;
 	public static RemoteType remoteType = null;
+	public static DisplayImageOptions roundedDisplayOptions;
 	public static DisplayImageOptions displayOptions;
 	// private LruCache<String, Bitmap> mImageMemoryCache = null;
 	// private DiskLruCache mDiskCache = null;
@@ -94,10 +95,16 @@ public class HDStarApp extends Application {
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
 		displayOptions = new DisplayImageOptions.Builder()
-				.showStubImage(R.drawable.url_image_loading)
+				.showImageOnLoading(R.drawable.url_image_loading)
 				.showImageForEmptyUri(R.drawable.url_image_loading)
 				.showImageOnFail(R.drawable.url_image_failed)
-				.cacheInMemory(true).cacheOnDisc(true)
+				.cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
+				.build();
+		roundedDisplayOptions = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.url_image_loading)
+				.showImageForEmptyUri(R.drawable.url_image_loading)
+				.showImageOnFail(R.drawable.url_image_failed)
+				.cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
 				.displayer(new RoundedBitmapDisplayer(20)).build();
 	}
 

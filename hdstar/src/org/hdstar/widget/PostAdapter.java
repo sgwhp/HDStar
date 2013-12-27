@@ -186,7 +186,7 @@ public class PostAdapter extends BaseAdapter {
 			ImageLoader.getInstance().displayImage(
 					Const.Urls.SERVER_GET_IMAGE_URL
 							+ URLEncoder.encode(p.avatarSrc, Const.CHARSET),
-					holder.avatar, HDStarApp.displayOptions,
+					holder.avatar, HDStarApp.roundedDisplayOptions,
 					animateFirstListener);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

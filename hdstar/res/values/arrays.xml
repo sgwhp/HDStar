@@ -17,7 +17,7 @@
     
     <string-array name="remoteClient">
         <item>ruTorrent</item>
-        <item>μTorrent</item>
-        <item>transmission</item>
+        <!-- <item>μTorrent</item>
+        <item>transmission</item> -->
     </string-array>
 </resources>

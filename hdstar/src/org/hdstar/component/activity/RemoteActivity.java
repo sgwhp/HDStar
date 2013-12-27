@@ -19,6 +19,7 @@ import org.hdstar.widget.TextProgressBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -86,6 +87,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private Button refreshDiskInfoBtn;
 	private BaseAsyncTask<long[]> diskTask;
 	private RemoteBase remote;
+	private RemoteSetting setting;
 
 	public RemoteActivity() {
 		super(R.string.rutorrent);
@@ -183,7 +185,17 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.confirm)
 					.setIcon(R.drawable.ic_launcher)
-					.setMessage(R.string.exit_message)
+					.setMultiChoiceItems(
+							new String[] { getString(R.string.remove_file) },
+							new boolean[] { setting.isRemoveFile() },
+							new OnMultiChoiceClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which, boolean isChecked) {
+									setting.rmFile = isChecked;
+								}
+							})
 					.setPositiveButton(R.string.delete,
 							new DialogInterface.OnClickListener() {
 
@@ -224,9 +236,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		// Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
 		String remoteName = getIntent().getStringExtra("remote");
 		remote = RemoteFactory.newInstanceByName(remoteName);
-		RemoteSetting setting = new RemoteSetting(this, remoteName);
-		remote.setIpNPort(setting.getIp());
-		downloadDir = setting.getDownloadDir();
+		setting = new RemoteSetting(this, remoteName);
+		remote.setIpNPort(setting.ip);
+		downloadDir = setting.downloadDir;
 		listView = refreshView.getRefreshableView();
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
@@ -455,7 +467,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		final BaseAsyncTask<Boolean> task = remote.remove(selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.remove(setting.rmFile,
+				selectedHashes());
 		if (task == null) {
 			return;
 		}
@@ -533,8 +546,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onFail(Integer msgId) {
 				dialog.dismiss();
-				Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT)
-						.show();
+				Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT,
+						(ViewGroup) rssListView.getParent()).show();
 			}
 		});
 		attachRssTask(task);
@@ -651,7 +664,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshExpandableView.onRefreshComplete();
-			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT,
+					(ViewGroup) rssListView.getParent()).show();
 		}
 	};
 
@@ -671,7 +685,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onFail(Integer msgId) {
 			refreshDiskInfoBtn.setEnabled(true);
-			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT,
+					(ViewGroup) rssListView.getParent()).show();
 		}
 	};
 

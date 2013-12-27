@@ -13,33 +13,54 @@ public class RemoteSetting {
 	private static final String USERNAME = "Username";
 	private static final String PASSWORD = "Password";
 	private static final String DOWNLOAD_DIR = "DownloadDir";
+	private static final String RM_FILE = "RemoveFile";
+
+	public String ip;
+	public String username;
+	public String password;
+	public String downloadDir;
+	public boolean rmFile;
 
 	public RemoteSetting(Context context, RemoteType type) {
 		shared = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
 				Context.MODE_PRIVATE);
 		this.remoteName = type.name();
+		init();
 	}
-	
-	public RemoteSetting(Context context, String remoteName){
+
+	public RemoteSetting(Context context, String remoteName) {
 		shared = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
 				Context.MODE_PRIVATE);
 		this.remoteName = remoteName;
+		init();
 	}
 
-	public String getIp() {
-		return getIp(null);
+	private void init() {
+		ip = getIp("");
+		username = getUsername("");
+		password = getPassword("");
+		downloadDir = getDownloadDir("");
+		rmFile = isRemoveFile(false);
 	}
 
-	public String getUsername() {
-		return getUsername(null);
-	}
+	// public String getIp() {
+	// return ip;
+	// }
+	//
+	// public String getUsername() {
+	// return username;
+	// }
+	//
+	// public String getPassword() {
+	// return password;
+	// }
+	//
+	// public String getDownloadDir() {
+	// return downloadDir;
+	// }
 
-	public String getPassword() {
-		return getPassword(null);
-	}
-
-	public String getDownloadDir() {
-		return getDownloadDir(null);
+	public boolean isRemoveFile() {
+		return rmFile;
 	}
 
 	public String getIp(String defValue) {
@@ -57,6 +78,10 @@ public class RemoteSetting {
 
 	public String getDownloadDir(String defValue) {
 		return shared.getString(remoteName + DOWNLOAD_DIR, defValue);
+	}
+
+	public boolean isRemoveFile(boolean defValue) {
+		return shared.getBoolean(remoteName + RM_FILE, defValue);
 	}
 
 	public void saveIp(String ip) {
@@ -80,6 +105,12 @@ public class RemoteSetting {
 	public void saveDownloadDir(String downloadDir) {
 		Editor editor = shared.edit();
 		editor.putString(remoteName + DOWNLOAD_DIR, downloadDir);
+		editor.commit();
+	}
+
+	public void saveRemoveFile(boolean removeFile) {
+		Editor editor = shared.edit();
+		editor.putBoolean(remoteName + RM_FILE, removeFile);
 		editor.commit();
 	}
 }

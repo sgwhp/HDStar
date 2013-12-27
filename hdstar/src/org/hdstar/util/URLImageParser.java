@@ -41,7 +41,7 @@ public class URLImageParser implements ImageGetter {
 	}
 
 	public Drawable getDrawable(String source) {
-		if(!CustomSetting.loadImage){
+		if (!CustomSetting.loadImage) {
 			return null;
 		}
 		if (source.startsWith("pic/smilies/")) {
@@ -69,25 +69,17 @@ public class URLImageParser implements ImageGetter {
 		final URLDrawable urlDrawable = new URLDrawable(c.getResources());
 		urlDrawable.setDrawable(c.getResources().getDrawable(
 				R.drawable.url_image_loading));
-		// get the actual source
-		// ImageGetterAsyncTask asyncTask =
-		// new ImageGetterAsyncTask( urlDrawable);
-		//
-		// asyncTask.execute(source);
-
-		// return reference to URLDrawable where I will change with actual image
-		// from
-		// the src tag
+		// 此处不能使用圆角的图片显示配置
 		ImageLoader.getInstance().loadImage(source, HDStarApp.displayOptions,
 				new SimpleImageLoadingListener() {
-					@SuppressWarnings("unused")
-					private View mView;
+					// private View mView;
 
 					@Override
 					public void onLoadingStarted(String imageUri, View view) {
+						// 以下bug已在UIL.1.9中修复
 						// see bug:
 						// https://github.com/nostra13/Android-Universal-Image-Loader/issues/356
-						mView = view;
+						// mView = view;
 						super.onLoadingStarted(imageUri, view);
 					}
 
@@ -107,15 +99,8 @@ public class URLImageParser implements ImageGetter {
 							URLImageParser.this.container.setText(container
 									.getText());
 						}
-						mView = null;
+						// mView = null;
 					}
-
-					// @Override
-					// public void onLoadingCancelled(String imageUri, View
-					// view) {
-					// super.onLoadingCancelled(imageUri, view);
-					// Log.v("whp", (imageUri + " load image canceled"));
-					// }
 
 					@Override
 					public void onLoadingFailed(String imageUri, View view,
@@ -127,8 +112,7 @@ public class URLImageParser implements ImageGetter {
 
 						URLImageParser.this.container.setText(container
 								.getText());
-						// Log.v("whp", imageUri + " load image failed");
-						mView = null;
+						// mView = null;
 					}
 				});
 

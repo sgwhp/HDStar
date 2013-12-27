@@ -53,7 +53,8 @@ public abstract class RemoteBase {
 
 	public abstract BaseAsyncTask<Boolean> stop(String... hashes);
 
-	public abstract BaseAsyncTask<Boolean> remove(String... hashes);
+	public abstract BaseAsyncTask<Boolean> remove(boolean rmFile,
+			String... hashes);
 
 	public abstract BaseAsyncTask<Boolean> add(String dir, String hash,
 			ArrayList<String> urls);
