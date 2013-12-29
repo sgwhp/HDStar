@@ -14,6 +14,6 @@ public class RssLabel implements Serializable {
 	public int enabled;// 布尔值，只有0,1
 	public String hash;
 	public String url;
-	public ArrayList<RssItem> items;
+	public ArrayList<RuTorrentRssItem> items;
 
 }

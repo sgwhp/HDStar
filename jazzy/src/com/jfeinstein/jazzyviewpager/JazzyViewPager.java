@@ -455,6 +455,7 @@ public class JazzyViewPager extends ViewPager {
 				manageLayer(left, true);
 				mRot = 180.0f * positionOffset;
 				if (mRot > 90.0f) {
+					left.clearAnimation();
 					left.setVisibility(View.INVISIBLE);
 				} else {
 					if (left.getVisibility() == View.INVISIBLE)
@@ -470,6 +471,7 @@ public class JazzyViewPager extends ViewPager {
 				manageLayer(right, true);
 				mRot = -180.0f * (1 - positionOffset);
 				if (mRot < -90.0f) {
+					right.clearAnimation();
 					right.setVisibility(View.INVISIBLE);
 				} else {
 					if (right.getVisibility() == View.INVISIBLE)

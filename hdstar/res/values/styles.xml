@@ -80,5 +80,10 @@
 	    <item name="android:button">@drawable/radiobutton_bg_sel</item>
 	    <item name="android:paddingLeft">30dp</item>
 	</style>
+	
+    <style name="spinnerListItemTopStyle">
+        <item name="android:background">@drawable/setting_strip_top_sel</item>
+	    <item name="android:paddingLeft">5dp</item>
+    </style>
 
 </resources>

@@ -14,11 +14,33 @@
         <include layout="@layout/setting_sub" />
 
         <TextView
-            android:id="@+id/animation"
+            android:id="@+id/remote_server"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
-            android:background="@drawable/setting_strip_bg_sel"
+            android:background="@drawable/setting_strip_top_sel"
+            android:drawableRight="@drawable/zebra_arrow_bg_sel"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:text="@string/remote_server" />
+
+        <TextView
+            android:id="@+id/rss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/setting_strip_middle_sel"
+            android:drawableRight="@drawable/zebra_arrow_bg_sel"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:text="@string/rss" />
+
+        <TextView
+            android:id="@+id/animation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/setting_strip_bottom_sel"
             android:clickable="true"
             android:drawableRight="@drawable/zebra_arrow_bg_sel"
             android:gravity="center_vertical"

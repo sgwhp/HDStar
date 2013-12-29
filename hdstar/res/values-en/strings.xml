@@ -84,6 +84,7 @@
 
     <string name="download_image">Download image</string>
     <string name="sound_on">Sound on</string>
+    <string name="remote_server">Remote Server</string>
     <string name="clear_cache">Clear cache</string>
     <string name="cache_cleared">Cache is cleared</string>
     <string name="log_out">Log out</string>
@@ -115,6 +116,8 @@
     <string name="anim_jump_up">JumpUp</string>
     <string name="anim_jump_down">JumpDown</string>
     <string name="apply">Apply</string>
+    <string name="name">Name</string>
+    <string name="ip_port">IP &amp; Port</string>
     
     <string name="notification_title">HDSky\'s notification</string>
     <string name="have_new_message">You have (a) new message(s)! Click here to read.</string>

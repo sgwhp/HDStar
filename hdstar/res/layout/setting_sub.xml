@@ -74,16 +74,14 @@
             android:textOn="" />
     </LinearLayout>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <EditText
             android:id="@+id/deviceName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
             android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
             android:gravity="right|center_vertical"
@@ -95,23 +93,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical|left"
             android:paddingLeft="5dip"
             android:text="@string/device_name_setting_hint" />
-    </RelativeLayout>
+    </FrameLayout>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <EditText
             android:id="@+id/server_addr"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
             android:background="@drawable/setting_strip_bottom_sel"
             android:ems="10"
             android:gravity="right|center_vertical"
@@ -123,11 +117,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical|left"
             android:paddingLeft="5dip"
             android:text="@string/server_addr" />
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

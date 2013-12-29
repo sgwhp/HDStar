@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.hdstar.R;
 import org.hdstar.common.RemoteSetting;
 import org.hdstar.model.RemoteTaskInfo;
-import org.hdstar.model.RssItem;
 import org.hdstar.model.RssLabel;
+import org.hdstar.model.RuTorrentRssItem;
 import org.hdstar.remote.RemoteBase;
 import org.hdstar.remote.RemoteFactory;
 import org.hdstar.task.BaseAsyncTask;
@@ -467,6 +467,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
+		setting.saveRemoveFile(setting.rmFile);
 		final BaseAsyncTask<Boolean> task = remote.remove(setting.rmFile,
 				selectedHashes());
 		if (task == null) {
@@ -923,7 +924,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			} else {
 				holder = (RssItemViewHolder) convertView.getTag();
 			}
-			RssItem item = rssList.get(groupPosition).items.get(childPosition);
+			RuTorrentRssItem item = rssList.get(groupPosition).items.get(childPosition);
 			holder.title.setText(item.title);
 			holder.check.setOnCheckedChangeListener(null);
 			holder.check.setChecked(selectedRss[childPosition]);

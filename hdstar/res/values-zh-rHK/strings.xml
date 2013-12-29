@@ -84,6 +84,7 @@
     
     <string name="download_image">獲取網絡圖片</string>
     <string name="sound_on">提示音</string>
+    <string name="remote_server">遠程服務器</string>
     <string name="clear_cache">清除緩存</string>
     <string name="cache_cleared">緩存已清除</string>
     <string name="log_out">註銷</string>
@@ -103,7 +104,7 @@
     <string name="anim_cube_out">盒子（外）</string>
     <string name="anim_flip_vertical">垂直翻動</string>
     <string name="anim_flip_horizontal">水平翻動</string>
-    <string name="anim_stack">棧</string>
+    <string name="anim_stack">堆疊</string>
     <string name="anim_zoom_in">放大</string>
     <string name="anim_zoom_out">縮小</string>
     <string name="anim_rotate_up">向上旋轉</string>
@@ -113,6 +114,8 @@
     <string name="anim_jump_up">向上跳躍</string>
     <string name="anim_jump_down">向下跳躍</string>
     <string name="apply">應用</string>
+    <string name="name">名稱</string>
+    <string name="ip_port">IP端口</string>
     
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未讀消息，點擊查看</string>
