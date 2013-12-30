@@ -5,112 +5,98 @@ import org.hdstar.util.EncodeDecode;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class RemoteSetting {
-	private SharedPreferences shared;
-	private String remoteName;
-	private static final String IP = "IP";
-	private static final String USERNAME = "Username";
-	private static final String PASSWORD = "Password";
-	private static final String DOWNLOAD_DIR = "DownloadDir";
-	private static final String RM_FILE = "RemoveFile";
-
+public class RemoteSetting implements Parcelable{
+	public int order;
+	public String type;
+	public String name;
 	public String ip;
 	public String username;
 	public String password;
 	public String downloadDir;
 	public boolean rmFile;
-
-	public RemoteSetting(Context context, RemoteType type) {
-		shared = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
-				Context.MODE_PRIVATE);
-		this.remoteName = type.name();
-		init();
+	
+	public RemoteSetting(){}
+	
+	public RemoteSetting(Parcel in){
+		order = in.readInt();
+		type = in.readString();
+		name = in.readString();
+		ip = in.readString();
+		username = in.readString();
+		password = in.readString();
+		downloadDir = in.readString();
+		rmFile = in.readByte() != 0;
 	}
-
-	public RemoteSetting(Context context, String remoteName) {
-		shared = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
-				Context.MODE_PRIVATE);
-		this.remoteName = remoteName;
-		init();
+	
+	@Override
+	public int describeContents() {
+		return 0;
 	}
-
-	private void init() {
-		ip = getIp("");
-		username = getUsername("");
-		password = getPassword("");
-		downloadDir = getDownloadDir("");
-		rmFile = isRemoveFile(false);
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(order);
+		dest.writeString(type);
+		dest.writeString(name);
+		dest.writeString(ip);
+		dest.writeString(username);
+		dest.writeString(password);
+		dest.writeString(downloadDir);
+		dest.writeByte((byte)(rmFile ? 1 : 0));
 	}
+	
+	public static final Parcelable.Creator<RemoteSetting> CREATOR = new Parcelable.Creator<RemoteSetting>(){
 
-	// public String getIp() {
-	// return ip;
-	// }
-	//
-	// public String getUsername() {
-	// return username;
-	// }
-	//
-	// public String getPassword() {
-	// return password;
-	// }
-	//
-	// public String getDownloadDir() {
-	// return downloadDir;
-	// }
+		@Override
+		public RemoteSetting createFromParcel(Parcel source) {
+			return new RemoteSetting(source);
+		}
 
-	public boolean isRemoveFile() {
-		return rmFile;
-	}
+		@Override
+		public RemoteSetting[] newArray(int size) {
+			return new RemoteSetting[size];
+		}};
+		
+		public void saveIp(Context context) {
+			SharedPreferences prefs = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
+					Context.MODE_PRIVATE);
+			Editor editor = prefs.edit();
+			editor.putString(RemoteSettingManager.IP + order, ip);
+			editor.commit();
+		}
+	
+		public void saveUsername(Context context) {
+			SharedPreferences prefs = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
+					Context.MODE_PRIVATE);
+			Editor editor = prefs.edit();
+			editor.putString(RemoteSettingManager.USERNAME + order, username);
+			editor.commit();
+		}
+	
+		public void savePassword(Context context) {
+			SharedPreferences prefs = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
+					Context.MODE_PRIVATE);
+			Editor editor = prefs.edit();
+			editor.putString(RemoteSettingManager.PASSWORD + order, EncodeDecode.encode(password));
+			editor.commit();
+		}
+		
+		public void saveRemoveFile(Context context){
+			SharedPreferences prefs = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
+					Context.MODE_PRIVATE);
+			Editor editor = prefs.edit();
+			editor.putBoolean(RemoteSettingManager.RM_FILE + order, rmFile);
+			editor.commit();
+		}
+		
+		public void saveDownloadDir(Context context) {
+			SharedPreferences prefs = context.getSharedPreferences(Const.REMOTE_SHARED_PREFS,
+					Context.MODE_PRIVATE);
+			Editor editor = prefs.edit();
+			editor.putString(RemoteSettingManager.DOWNLOAD_DIR + order, downloadDir);
+			editor.commit();
+		}
 
-	public String getIp(String defValue) {
-		return shared.getString(remoteName + IP, defValue);
-	}
-
-	public String getUsername(String defValue) {
-		return shared.getString(remoteName + USERNAME, defValue);
-	}
-
-	public String getPassword(String defValue) {
-		return EncodeDecode.decode(shared.getString(remoteName + PASSWORD,
-				defValue));
-	}
-
-	public String getDownloadDir(String defValue) {
-		return shared.getString(remoteName + DOWNLOAD_DIR, defValue);
-	}
-
-	public boolean isRemoveFile(boolean defValue) {
-		return shared.getBoolean(remoteName + RM_FILE, defValue);
-	}
-
-	public void saveIp(String ip) {
-		Editor editor = shared.edit();
-		editor.putString(remoteName + IP, ip);
-		editor.commit();
-	}
-
-	public void saveUsername(String username) {
-		Editor editor = shared.edit();
-		editor.putString(remoteName + USERNAME, username);
-		editor.commit();
-	}
-
-	public void savePassword(String password) {
-		Editor editor = shared.edit();
-		editor.putString(remoteName + PASSWORD, EncodeDecode.encode(password));
-		editor.commit();
-	}
-
-	public void saveDownloadDir(String downloadDir) {
-		Editor editor = shared.edit();
-		editor.putString(remoteName + DOWNLOAD_DIR, downloadDir);
-		editor.commit();
-	}
-
-	public void saveRemoveFile(boolean removeFile) {
-		Editor editor = shared.edit();
-		editor.putBoolean(remoteName + RM_FILE, removeFile);
-		editor.commit();
-	}
 }

@@ -1,7 +1,10 @@
 package org.hdstar.component.activity;
 
+import java.util.ArrayList;
+
 import org.hdstar.R;
 import org.hdstar.common.RemoteSetting;
+import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RemoteType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.remote.RemoteBase;
@@ -35,6 +38,8 @@ public class RemoteLoginActivity extends BaseActivity implements
 	private BaseAsyncTask<Boolean> task;
 	private RemoteType type;
 	private RemoteSetting setting;
+	private ArrayList<RemoteSetting> list;
+	int order;
 
 	public RemoteLoginActivity() {
 		super(R.string.remote);
@@ -49,6 +54,8 @@ public class RemoteLoginActivity extends BaseActivity implements
 		pwdET = (EditText) findViewById(R.id.password);
 
 		Context context = getSupportActionBar().getThemedContext();
+		RemoteSettingManager setting = new RemoteSettingManager();
+		list = setting.getAll(context);
 		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(
 				context, R.array.remoteClient, R.layout.sherlock_spinner_item);
 		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
@@ -72,14 +79,8 @@ public class RemoteLoginActivity extends BaseActivity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		switch (itemPosition) {
-		case 0:
-			type = RemoteType.RuTorrentRemote;
-			break;
-		case 1:
-			type = RemoteType.UTorrentRemote;
-			break;
-		}
+		order = itemPosition;
+		setting = list.get(itemPosition);
 		initInputField();
 		return false;
 	}
@@ -91,8 +92,9 @@ public class RemoteLoginActivity extends BaseActivity implements
 			Crouton.makeText(this, R.string.invalidate_ip, Style.ALERT).show();
 			return;
 		}
-		String acc = accET.getText().toString();
-		String pwd = pwdET.getText().toString();
+		setting.ip = ip;
+		setting.username = accET.getText().toString();
+		setting.password = pwdET.getText().toString();
 
 		// SharedPreferences share = getSharedPreferences(
 		// Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
@@ -101,9 +103,9 @@ public class RemoteLoginActivity extends BaseActivity implements
 		// editor.putString("username", acc);
 		// editor.putString("password", EncodeDecode.encode(pwd));
 		// editor.commit();
-		setting.saveIp(ip);
-		setting.saveUsername(acc);
-		setting.savePassword(pwd);
+		setting.saveIp(this);
+		setting.saveUsername(this);
+		setting.savePassword(this);
 
 		dialog = new CustomDialog(this, R.string.try_to_login);
 		dialog.setOnDismissListener(new OnDismissListener() {
@@ -117,8 +119,8 @@ public class RemoteLoginActivity extends BaseActivity implements
 		});
 		dialog.show();
 		RemoteBase remote = RemoteFactory.newInstanceByName(type.name());
-		remote.setIpNPort(ip);
-		task = remote.login(acc, pwd);
+		remote.setIpNPort(setting.ip);
+		task = remote.login(setting.username, setting.password);
 		task.attach(mCallback);
 		task.execute("");
 		// if (ip.contains(":")) {
@@ -130,7 +132,6 @@ public class RemoteLoginActivity extends BaseActivity implements
 	}
 
 	private void initInputField() {
-		setting = new RemoteSetting(this, type);
 		ipET.setText(setting.ip);
 		accET.setText(setting.username);
 		pwdET.setText(setting.password);

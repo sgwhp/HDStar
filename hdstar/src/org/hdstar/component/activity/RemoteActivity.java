@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.hdstar.R;
 import org.hdstar.common.RemoteSetting;
+import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssLabel;
 import org.hdstar.model.RuTorrentRssItem;
@@ -187,7 +188,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.setIcon(R.drawable.ic_launcher)
 					.setMultiChoiceItems(
 							new String[] { getString(R.string.remove_file) },
-							new boolean[] { setting.isRemoveFile() },
+							new boolean[] { setting.rmFile },
 							new OnMultiChoiceClickListener() {
 
 								@Override
@@ -234,9 +235,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	protected void init() {
 		// SharedPreferences share = getSharedPreferences(
 		// Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
-		String remoteName = getIntent().getStringExtra("remote");
-		remote = RemoteFactory.newInstanceByName(remoteName);
-		setting = new RemoteSetting(this, remoteName);
+		setting = getIntent().getParcelableExtra("remote");
+		remote = RemoteFactory.newInstanceByName(setting.type);
 		remote.setIpNPort(setting.ip);
 		downloadDir = setting.downloadDir;
 		listView = refreshView.getRefreshableView();
@@ -467,7 +467,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 					.show();
 			return;
 		}
-		setting.saveRemoveFile(setting.rmFile);
+		setting.saveRemoveFile(this);
 		final BaseAsyncTask<Boolean> task = remote.remove(setting.rmFile,
 				selectedHashes());
 		if (task == null) {
@@ -516,8 +516,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	 */
 	private void download() {
 		dialog = new CustomDialog(this, R.string.connecting);
-		RemoteSetting setting = new RemoteSetting(this, remote.getRemoteType());
-		setting.saveDownloadDir(dir.getText().toString());
+		setting.downloadDir = dir.getText().toString();
+		setting.saveDownloadDir(this);
 		RssLabel label = rssList.get(group);
 		ArrayList<String> hrefs = new ArrayList<String>();
 		for (int i = 0; i < label.items.size(); i++) {
