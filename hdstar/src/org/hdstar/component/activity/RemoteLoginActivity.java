@@ -14,6 +14,7 @@ import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -38,7 +39,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 	private BaseAsyncTask<Boolean> task;
 	private RemoteType type;
 	private RemoteSetting setting;
-	private ArrayList<RemoteSetting> list;
+	private ArrayList<RemoteSetting> settings;
 	int order;
 
 	public RemoteLoginActivity() {
@@ -54,18 +55,49 @@ public class RemoteLoginActivity extends BaseActivity implements
 		pwdET = (EditText) findViewById(R.id.password);
 
 		Context context = getSupportActionBar().getThemedContext();
-		RemoteSettingManager setting = new RemoteSettingManager();
-		list = setting.getAll(context);
-		ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(
-				context, R.array.remoteClient, R.layout.sherlock_spinner_item);
-		list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		getSupportActionBar().setListNavigationCallbacks(list, this);
-		// SharedPreferences share = getSharedPreferences(
-		// Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
-		// ipET.setText(share.getString("ip", ""));
-		// accET.setText(share.getString("username", ""));
-		// pwdET.setText(EncodeDecode.decode(share.getString("password", "")));
+		settings = RemoteSettingManager.getAll(context);
+		if (settings.size() > 0) {
+			String[] servers = new String[settings.size()];
+			for (int i = 0; i < settings.size(); i++) {
+				servers[i] = settings.get(i).name;
+			}
+			ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
+					context, R.layout.sherlock_spinner_item, servers);
+			// ArrayAdapter<CharSequence> list =
+			// ArrayAdapter.createFromResource(
+			// context, R.array.remoteClient, R.layout.sherlock_spinner_item);
+			list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+			getSupportActionBar().setNavigationMode(
+					ActionBar.NAVIGATION_MODE_LIST);
+			getSupportActionBar().setListNavigationCallbacks(list, this);
+		} else {
+			findViewById(R.id.login).setEnabled(false);
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.confirm)
+					.setIcon(R.drawable.ic_launcher)
+					.setMessage(R.string.no_remote_setting)
+					.setPositiveButton(R.string.add,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									Intent intent = new Intent(
+											RemoteLoginActivity.this,
+											SettingActivity.class);
+									startActivity(intent);
+									finish();
+								}
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+								}
+							}).create().show();
+		}
 	}
 
 	@Override
@@ -80,7 +112,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		order = itemPosition;
-		setting = list.get(itemPosition);
+		setting = settings.get(itemPosition);
 		initInputField();
 		return false;
 	}
@@ -96,13 +128,6 @@ public class RemoteLoginActivity extends BaseActivity implements
 		setting.username = accET.getText().toString();
 		setting.password = pwdET.getText().toString();
 
-		// SharedPreferences share = getSharedPreferences(
-		// Const.RUTORRENT_SHARED_PREFS, MODE_PRIVATE);
-		// Editor editor = share.edit();
-		// editor.putString("ip", ip);
-		// editor.putString("username", acc);
-		// editor.putString("password", EncodeDecode.encode(pwd));
-		// editor.commit();
 		setting.saveIp(this);
 		setting.saveUsername(this);
 		setting.savePassword(this);
@@ -123,12 +148,6 @@ public class RemoteLoginActivity extends BaseActivity implements
 		task = remote.login(setting.username, setting.password);
 		task.attach(mCallback);
 		task.execute("");
-		// if (ip.contains(":")) {
-		// int port = Integer.parseInt(ip.substring(ip.indexOf(':') + 1));
-		// task.auth(ip, port, acc, pwd);
-		// } else {
-		// task.auth(ip, acc, pwd);
-		// }
 	}
 
 	private void initInputField() {

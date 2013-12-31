@@ -70,6 +70,8 @@ public class CommonSettingFragment extends StackFragment implements
 		v.findViewById(R.id.clearCache).setOnClickListener(this);
 		v.findViewById(R.id.checkUpdate).setOnClickListener(this);
 		v.findViewById(R.id.animation).setOnClickListener(this);
+		v.findViewById(R.id.remote_server).setOnClickListener(this);
+		v.findViewById(R.id.rss).setOnClickListener(this);
 		return v;
 	}
 
@@ -179,6 +181,9 @@ public class CommonSettingFragment extends StackFragment implements
 			break;
 		case R.id.animation:
 			push(new AnimSettingFragment());
+			break;
+		case R.id.remote_server:
+			push(new RemoteListFragment());
 			break;
 		}
 	}

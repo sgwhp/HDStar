@@ -15,9 +15,10 @@
         <item>作弊者</item> -->
     </string-array>
     
+    <!-- 命名要与RemoteType保持一致 -->
     <string-array name="remoteClient">
+        <item>μTorrent</item>
         <item>ruTorrent</item>
-        <!-- <item>μTorrent</item>
-        <item>transmission</item> -->
+     <!--    <item>transmission</item> -->
     </string-array>
 </resources>

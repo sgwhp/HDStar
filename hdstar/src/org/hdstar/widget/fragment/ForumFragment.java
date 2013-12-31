@@ -140,9 +140,7 @@ public class ForumFragment extends StackFragment {
 	public void onActionBarClick(int MenuItemId) {
 		if (getActivity().findViewById(android.R.id.list) != null
 				&& adapter.getList() != null && !url.equals("")) {
-			getStackAdapter().forward(NewTopicFragment.newInstance(forumId));
-			getViewPager().setCurrentItem(getViewPager().getCurrentItem() + 1,
-					true);
+			push(NewTopicFragment.newInstance(forumId));
 		}
 	}
 

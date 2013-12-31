@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.hdstar.R;
 import org.hdstar.common.RemoteSetting;
-import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssLabel;
 import org.hdstar.model.RuTorrentRssItem;
@@ -924,7 +923,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			} else {
 				holder = (RssItemViewHolder) convertView.getTag();
 			}
-			RuTorrentRssItem item = rssList.get(groupPosition).items.get(childPosition);
+			RuTorrentRssItem item = rssList.get(groupPosition).items
+					.get(childPosition);
 			holder.title.setText(item.title);
 			holder.check.setOnCheckedChangeListener(null);
 			holder.check.setChecked(selectedRss[childPosition]);

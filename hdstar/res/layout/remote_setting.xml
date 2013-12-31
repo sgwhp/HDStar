@@ -33,9 +33,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
-            android:gravity="right|center_vertical"
             android:inputType="text"
-            android:paddingLeft="80dip"
+            android:paddingLeft="40dip"
             android:paddingRight="5dp"
             android:singleLine="true" />
 
@@ -46,7 +45,7 @@
             android:paddingLeft="5dip"
             android:text="@string/name" />
     </FrameLayout>
-    
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -57,9 +56,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
-            android:gravity="right|center_vertical"
             android:inputType="text"
-            android:paddingLeft="80dip"
+            android:paddingLeft="48dip"
             android:paddingRight="5dp"
             android:singleLine="true" />
 
@@ -70,7 +68,7 @@
             android:paddingLeft="5dip"
             android:text="@string/ip_port" />
     </FrameLayout>
-    
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -81,7 +79,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
-            android:gravity="right|center_vertical"
             android:inputType="text"
             android:paddingLeft="42dip"
             android:paddingRight="5dp"
@@ -94,7 +91,7 @@
             android:paddingLeft="5dip"
             android:src="@drawable/account_ic" />
     </FrameLayout>
-    
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -103,9 +100,8 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_bottom_sel"
+            android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
-            android:gravity="right|center_vertical"
             android:inputType="textPassword"
             android:paddingLeft="42dip"
             android:paddingRight="5dp"
@@ -118,5 +114,37 @@
             android:paddingLeft="5dip"
             android:src="@drawable/password_ic" />
     </FrameLayout>
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/downloadDir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/setting_strip_bottom_sel"
+            android:ems="10"
+            android:inputType="text"
+            android:paddingLeft="64dip"
+            android:paddingRight="5dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:paddingLeft="5dip"
+            android:text="@string/download_dir" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/log_out_btn_sel"
+        android:text="@string/delete"
+        android:visibility="gone" />
 
 </LinearLayout>
