@@ -11,11 +11,11 @@
         android:layout_height="wrap_content" >
 
         <EditText
-            android:id="@+id/rss_name"
+            android:id="@+id/rss_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:gravity="right|center_vertical"
+            android:gravity="center_vertical"
             android:inputType="text"
             android:paddingLeft="42dip"
             android:paddingRight="5dp"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|left"
             android:paddingLeft="5dip"
-            android:text="@string/name" />
+            android:text="@string/label" />
     </FrameLayout>
     
     <FrameLayout
@@ -34,12 +34,12 @@
         android:layout_height="wrap_content" >
 
         <EditText
-            android:id="@+id/url"
+            android:id="@+id/rss_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setting_strip_bottom_sel"
             android:ems="10"
-            android:gravity="right|center_vertical"
+            android:gravity="center_vertical"
             android:inputType="textUri"
             android:paddingLeft="42dip"
             android:paddingRight="5dp"
@@ -50,7 +50,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|left"
             android:paddingLeft="5dip"
-            android:text="@string/rss" />"
+            android:text="@string/rss" />
     </FrameLayout>
+    
+     <Button
+        android:id="@+id/remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/log_out_btn_sel"
+        android:text="@string/delete"
+        android:visibility="gone" />
+    
 
 </LinearLayout>

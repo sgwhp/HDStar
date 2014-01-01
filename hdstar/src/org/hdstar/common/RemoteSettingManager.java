@@ -2,6 +2,7 @@ package org.hdstar.common;
 
 import java.util.ArrayList;
 
+import org.hdstar.model.RemoteSetting;
 import org.hdstar.util.EncodeDecode;
 
 import android.content.Context;
@@ -43,7 +44,7 @@ public class RemoteSettingManager {
 		setting.password = EncodeDecode.decode(prefs.getString(
 				PASSWORD + order, ""));
 		setting.downloadDir = prefs.getString(DOWNLOAD_DIR + order, "");
-		setting.rmFile = prefs.getBoolean(RM_FILE, false);
+		setting.rmFile = prefs.getBoolean(RM_FILE + order, false);
 		return setting;
 	}
 

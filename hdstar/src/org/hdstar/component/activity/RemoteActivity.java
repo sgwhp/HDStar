@@ -3,7 +3,7 @@ package org.hdstar.component.activity;
 import java.util.ArrayList;
 
 import org.hdstar.R;
-import org.hdstar.common.RemoteSetting;
+import org.hdstar.model.RemoteSetting;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.RssLabel;
 import org.hdstar.model.RuTorrentRssItem;

@@ -3,25 +3,28 @@ package org.hdstar.widget.fragment;
 import java.util.ArrayList;
 
 import org.hdstar.R;
-import org.hdstar.common.RemoteSettingManager;
-import org.hdstar.model.RemoteSetting;
+import org.hdstar.common.Const;
+import org.hdstar.common.RssSettingManager;
+import org.hdstar.component.HDStarApp;
+import org.hdstar.model.RssSetting;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-public class RemoteListFragment extends StackFragment implements
-		OnClickListener {
+public class RssListFragment extends StackFragment implements OnClickListener {
 	private LinearLayout mContainer;
-	private ArrayList<RemoteSetting> settings;
+	private ArrayList<RssSetting> settings;
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
 
@@ -46,7 +49,7 @@ public class RemoteListFragment extends StackFragment implements
 	}
 
 	private void init() {
-		settings = RemoteSettingManager.getAll(getActivity());
+		settings = RssSettingManager.getAll(getActivity());
 		if (settings.size() == 0) {
 			return;
 		}
@@ -61,7 +64,7 @@ public class RemoteListFragment extends StackFragment implements
 		v = createChild(context, settings.get(0), ID);
 		v.setBackgroundResource(R.drawable.setting_strip_top_sel);
 		mContainer.addView(v);
-		RemoteSetting setting;
+		RssSetting setting;
 		for (int i = 1; i < settings.size() - 1; i++) {
 			setting = settings.get(i);
 			v = createChild(context, setting, ID + i);
@@ -84,16 +87,19 @@ public class RemoteListFragment extends StackFragment implements
 
 	@Override
 	public void onActionBarClick(int MenuItemId) {
-		push(RemoteSettingFragment.newInstance(RemoteSettingFragment.MODE_ADD,
-				null));
+		push(RssSettingFragment.newInstance(RssSettingFragment.MODE_ADD, null));
 	}
 
-	private View createChild(Context context, RemoteSetting setting, int id) {
-		View v = mInflater.inflate(R.layout.remote_setting_item, null);
-		TextView text = (TextView) v.findViewById(R.id.name);
-		text.setText(setting.name);
-		text = (TextView) v.findViewById(R.id.ip);
-		text.setText("http://" + setting.ip);
+	private View createChild(Context context, RssSetting setting, int id) {
+		View v = mInflater.inflate(R.layout.rss_setting_item, null);
+		TextView text = (TextView) v.findViewById(R.id.rss_label);
+		text.setText(setting.label);
+		text = (TextView) v.findViewById(R.id.rss_link);
+		text.setText("http://" + setting.link);
+		ImageView icon = (ImageView) v.findViewById(R.id.rss_icon);
+		ImageLoader.getInstance().displayImage(
+				String.format(Const.Urls.GETFVO_URL, setting.link), icon,
+				HDStarApp.roundedDisplayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;
@@ -101,8 +107,6 @@ public class RemoteListFragment extends StackFragment implements
 
 	@Override
 	public void onClick(View v) {
-		push(RemoteSettingFragment.newInstance(RemoteSettingFragment.MODE_EDIT,
-				settings.get(v.getId() - ID)));
+		push(RssSettingFragment.newInstance(RssSettingFragment.MODE_EDIT, settings.get(v.getId() - ID)));
 	}
-
 }

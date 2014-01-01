@@ -185,6 +185,9 @@ public class CommonSettingFragment extends StackFragment implements
 		case R.id.remote_server:
 			push(new RemoteListFragment());
 			break;
+		case R.id.rss:
+			push(new RssListFragment());
+			break;
 		}
 	}
 

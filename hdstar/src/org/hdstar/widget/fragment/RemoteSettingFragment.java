@@ -1,9 +1,9 @@
 package org.hdstar.widget.fragment;
 
 import org.hdstar.R;
-import org.hdstar.common.RemoteSetting;
 import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RemoteType;
+import org.hdstar.model.RemoteSetting;
 import org.hdstar.util.Util;
 
 import android.os.Bundle;
@@ -157,7 +157,11 @@ public class RemoteSettingFragment extends StackFragment {
 		setting.username = usernameStr;
 		setting.password = passwordStr;
 		setting.downloadDir = dir;
-		RemoteSettingManager.add(getActivity(), setting);
+		if(mMode == MODE_ADD){
+			RemoteSettingManager.add(getActivity(), setting);
+		} else {
+			RemoteSettingManager.save(getActivity(), setting);
+		}
 		StackFragment f = getStackAdapter().preItem();
 		getViewPager()
 				.setCurrentItem(getViewPager().getCurrentItem() - 1, true);

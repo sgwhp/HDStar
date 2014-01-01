@@ -1,5 +1,7 @@
-package org.hdstar.common;
+package org.hdstar.model;
 
+import org.hdstar.common.Const;
+import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.util.EncodeDecode;
 
 import android.content.Context;

@@ -3,10 +3,10 @@ package org.hdstar.component.activity;
 import java.util.ArrayList;
 
 import org.hdstar.R;
-import org.hdstar.common.RemoteSetting;
 import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RemoteType;
 import org.hdstar.component.HDStarApp;
+import org.hdstar.model.RemoteSetting;
 import org.hdstar.remote.RemoteBase;
 import org.hdstar.remote.RemoteFactory;
 import org.hdstar.task.BaseAsyncTask;

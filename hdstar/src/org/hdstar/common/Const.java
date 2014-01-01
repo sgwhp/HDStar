@@ -96,6 +96,8 @@ public class Const {
 				+ "&list=1";
 		public static final String UTORRENT_ACTION_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=%s";
+		
+		public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
 		public static void initServerAddr(final String serverAddr) {
 			SERVER_ADDRESS = serverAddr;
@@ -129,8 +131,8 @@ public class Const {
 
 	public static final String SETTING_SHARED_PREFS = "setting";
 	public static final String DOWNLOAD_SHARED_PREFS = "download";
-//	public static final String RUTORRENT_SHARED_PREFS = "rutorrent";
 	public static final String REMOTE_SHARED_PREFS = "remote";
+	public static final String RSS_SHARED_PREFS = "rss";
 	public static final String DOWNLOAD_DIR = Environment
 			.getExternalStorageDirectory().getPath()
 			+ File.separator
