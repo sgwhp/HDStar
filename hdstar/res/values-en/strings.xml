@@ -123,6 +123,7 @@
     <string name="no_remote_setting">Please add remote server first.</string>
     <string name="saved">Saved.</string>
     <string name="label">Label</string>
+    <string name="scan">Scan QRCode</string>
     
     <string name="notification_title">HDSky\'s notification</string>
     <string name="have_new_message">You have (a) new message(s)! Click here to read.</string>

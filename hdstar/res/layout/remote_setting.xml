@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|left"
             android:paddingLeft="5dip"
-            android:text="@string/name" />
+            android:text="@string/label" />
     </FrameLayout>
 
     <FrameLayout

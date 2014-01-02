@@ -99,7 +99,7 @@
     <string name="animation">動畫</string>
     <string name="anim_fade">淡入淡出</string>
     <string name="anim_standard">標準</string>
-    <string name="anim_tablet">面板</string>
+    <string name="anim_tablet">板塊</string>
     <string name="anim_cube_in">盒子（內）</string>
     <string name="anim_cube_out">盒子（外）</string>
     <string name="anim_flip_vertical">垂直翻動</string>
@@ -121,6 +121,7 @@
     <string name="no_remote_setting">請先添加遠程服務器 </string>
     <string name="saved">保存成功</string>
     <string name="label">標籤</string>
+    <string name="scan">掃描二維碼</string>
     
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未讀消息，點擊查看</string>

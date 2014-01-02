@@ -52,12 +52,19 @@
             android:paddingLeft="5dip"
             android:text="@string/rss" />
     </FrameLayout>
+
+    <Button
+        android:id="@+id/scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/btn_bg_sel"
+        android:text="@string/scan" />
     
      <Button
         android:id="@+id/remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
         android:background="@drawable/log_out_btn_sel"
         android:text="@string/delete"
         android:visibility="gone" />

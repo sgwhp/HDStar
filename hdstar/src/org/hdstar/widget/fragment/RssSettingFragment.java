@@ -5,31 +5,33 @@ import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RssSettingManager;
 import org.hdstar.model.RssSetting;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-
-public class RssSettingFragment extends StackFragment {
+public class RssSettingFragment extends StackFragment implements
+		OnClickListener {
 	public static final int MODE_ADD = 0;
 	public static final int MODE_EDIT = 1;
-	
+
 	private int mMode;
 	private RssSetting setting;
 	private EditText label;
 	private EditText link;
 	private Button remove;
-	
-	public static RssSettingFragment newInstance(int mode, RssSetting setting){
+	private Button scan;
+
+	public static RssSettingFragment newInstance(int mode, RssSetting setting) {
 		RssSettingFragment f = new RssSettingFragment();
 		Bundle args = new Bundle();
 		args.putInt("mode", mode);
@@ -39,7 +41,7 @@ public class RssSettingFragment extends StackFragment {
 		f.setArguments(args);
 		return f;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,11 +51,11 @@ public class RssSettingFragment extends StackFragment {
 			setting = b.getParcelable("setting");
 		} else {
 			setting = new RssSetting();
-			setting.order = RssSettingManager
-					.getMaxRss(RssSettingManager.getPrefs(getActivity()));
+			setting.order = RssSettingManager.getMaxRss(RssSettingManager
+					.getPrefs(getActivity()));
 		}
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -61,9 +63,10 @@ public class RssSettingFragment extends StackFragment {
 		label = (EditText) v.findViewById(R.id.rss_label);
 		link = (EditText) v.findViewById(R.id.rss_link);
 		remove = (Button) v.findViewById(R.id.remove);
+		scan = (Button) v.findViewById(R.id.scan);
 		return v;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -71,38 +74,30 @@ public class RssSettingFragment extends StackFragment {
 			label.setText(setting.label);
 			link.setText(setting.link);
 			remove.setVisibility(View.VISIBLE);
-			remove.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					RemoteSettingManager.removeRemoteSettings(getActivity(),
-							setting.order);
-					getViewPager().setCurrentItem(
-							getViewPager().getCurrentItem() - 1, true);
-				}
-			});
+			remove.setOnClickListener(this);
+			scan.setOnClickListener(this);
 		}
 	}
-	
+
 	@Override
 	public void initActionBar(Menu menu) {
 		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.save);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
-	
+
 	@Override
 	public void onActionBarClick(int MenuItemId) {
 		String labelStr = label.getText().toString();
 		String linkStr = link.getText().toString();
-		if("".equals(labelStr) || "".equals(linkStr)){
+		if ("".equals(labelStr) || "".equals(linkStr)) {
 			Crouton.makeText(getActivity(), R.string.fill_in_the_blanks,
 					Style.CONFIRM).show();
 			return;
 		}
 		setting.label = labelStr;
 		setting.link = linkStr;
-		if(mMode == MODE_ADD){
+		if (mMode == MODE_ADD) {
 			RssSettingManager.add(getActivity(), setting);
 		} else {
 			RssSettingManager.save(getActivity(), setting);
@@ -114,6 +109,20 @@ public class RssSettingFragment extends StackFragment {
 			f.refresh();
 		}
 		Crouton.makeText(getActivity(), R.string.saved, Style.INFO).show();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.remove:
+			RemoteSettingManager.removeRemoteSettings(getActivity(),
+					setting.order);
+			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1,
+					true);
+			break;
+		case R.id.scan:
+			break;
+		}
 	}
 
 }
