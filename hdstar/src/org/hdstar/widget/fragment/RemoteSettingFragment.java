@@ -97,7 +97,7 @@ public class RemoteSettingFragment extends StackFragment {
 				}
 				for (RemoteType type : RemoteType.values()) {
 					if (type.getName().equals(typeName)) {
-						setting.type = typeName;
+						setting.type = type.name();
 						return;
 					}
 				}

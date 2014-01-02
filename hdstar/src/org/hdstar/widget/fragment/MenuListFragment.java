@@ -65,9 +65,9 @@ public class MenuListFragment extends ListFragment {
 			klass = TorrentActivity.class;
 			break;
 		case 2:
-			if (HDStarApp.remoteType != null) {
+			if (HDStarApp.remote != null) {
 				klass = RemoteActivity.class;
-				intent.putExtra("remote", HDStarApp.remoteType.name());
+				intent.putExtra("remote", HDStarApp.remote);
 			} else {
 				klass = RemoteLoginActivity.class;
 			}

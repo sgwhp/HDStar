@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ZXing authors
+ * Copyright (C) 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android.encode;
+package com.google.zxing.client.android.camera.open;
+
+import android.hardware.Camera;
 
 /**
- * Encapsulates some simple formatting logic, to aid refactoring in {@link ContactEncoder}.
- *
- * @author Sean Owen
+ * Default implementation for Android before API 9 / Gingerbread.
  */
-interface Formatter {
-  
-  String format(String source);
+final class DefaultOpenCameraInterface implements OpenCameraInterface {
+
+  /**
+   * Calls {@link Camera#open()}.
+   */
+  @Override
+  public Camera open() {
+    return Camera.open();
+  }
   
 }

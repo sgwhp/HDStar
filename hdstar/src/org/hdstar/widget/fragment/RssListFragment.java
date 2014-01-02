@@ -45,6 +45,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 
 	@Override
 	public void refresh() {
+		mContainer.removeAllViews();
 		init();
 	}
 

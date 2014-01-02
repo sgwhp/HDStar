@@ -24,7 +24,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.client.android.camera.open.OpenCameraInterface;
+import com.google.zxing.client.android.camera.open.OpenCameraManager;
 
 import java.io.IOException;
 
@@ -41,8 +41,8 @@ public final class CameraManager {
 
   private static final int MIN_FRAME_WIDTH = 240;
   private static final int MIN_FRAME_HEIGHT = 240;
-  private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
-  private static final int MAX_FRAME_HEIGHT = 675; // = 5/8 * 1080
+  private static final int MAX_FRAME_WIDTH = 960; // = 1920/2
+  private static final int MAX_FRAME_HEIGHT = 540; // = 1080/2
 
   private final Context context;
   private final CameraConfigurationManager configManager;
@@ -75,7 +75,7 @@ public final class CameraManager {
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
     if (theCamera == null) {
-      theCamera = OpenCameraInterface.open();
+      theCamera = new OpenCameraManager().build().open();
       if (theCamera == null) {
         throw new IOException();
       }
@@ -225,7 +225,7 @@ public final class CameraManager {
   }
   
   private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
-    int dim = 5 * resolution / 8; // Target 5/8 of each dimension
+    int dim = resolution / 2; // Target 50% of each dimension
     if (dim < hardMin) {
       return hardMin;
     }

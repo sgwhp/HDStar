@@ -52,8 +52,8 @@ final class DecodeFormatManager {
   private DecodeFormatManager() {}
 
   static Collection<BarcodeFormat> parseDecodeFormats(Intent intent) {
-    Iterable<String> scanFormats = null;
-    CharSequence scanFormatsString = intent.getStringExtra(Intents.Scan.FORMATS);
+    List<String> scanFormats = null;
+    String scanFormatsString = intent.getStringExtra(Intents.Scan.FORMATS);
     if (scanFormatsString != null) {
       scanFormats = Arrays.asList(COMMA_PATTERN.split(scanFormatsString));
     }

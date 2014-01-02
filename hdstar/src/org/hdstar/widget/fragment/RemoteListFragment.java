@@ -42,6 +42,7 @@ public class RemoteListFragment extends StackFragment implements
 
 	@Override
 	public void refresh() {
+		mContainer.removeAllViews();
 		init();
 	}
 

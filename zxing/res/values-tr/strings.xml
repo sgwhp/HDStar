@@ -15,17 +15,19 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barkod Tarayıcısı</string>
   <string name="app_picker_name">Uygulamalar</string>
   <string name="bookmark_picker_name">Yer imleri</string>
   <string name="button_add_calendar">Takvime ekle</string>
   <string name="button_add_contact">Kişi ekle</string>
+  <string name="button_back">Geri</string>
   <string name="button_book_search">Kitap Arama</string>
   <string name="button_cancel">İptal</string>
   <string name="button_custom_product_search">Özel arama</string>
   <string name="button_dial">Numaraya çağrı</string>
+  <string name="button_done">Tamam</string>
   <string name="button_email">Email gönder</string>
   <string name="button_get_directions">Yön bilgisi al</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS gönder</string>
   <string name="button_ok">Tamam</string>
   <string name="button_open_browser">Tarayıcıyı aç</string>
@@ -69,8 +71,10 @@
   <string name="msg_default_time">Süre</string>
   <string name="msg_default_type">Tür</string>
   <string name="msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
-  <string name="msg_google_books">Google</string>
-  <string name="msg_google_product">Google</string>
+  <string name="msg_google_books">Google Kitap Arama</string>
+  <string name="msg_google_product">Google Ürün Arama</string>
+  <string name="msg_google_shopper_missing">Google Shopper yüklü değil</string>
+  <string name="msg_install_google_shopper">Google Shopper, tarayıcıyı açmanıza gerek kalmadan barkod taraması, çevrimiçi ve yerel fiyatlar ile gözden geçirme ve diğer özellikten yararlanmanızı sağlar. Denemek ister misiniz?</string>
   <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içeriği geçersiz olabilir.</string>
   <string name="msg_redirect">Yönlendirme</string>
   <string name="msg_sbc_book_not_searchable">Üzgünüz, bu kitapla ilgili arama yapılamıyor.</string>
@@ -80,7 +84,9 @@
   <string name="msg_sbc_results">Sonuçlar</string>
   <string name="msg_sbc_searching_book">Kitap aranıyor\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Parçacık yok</string>
+  <string name="msg_sbc_unknown_page">Bilinmeyen sayfa</string>
   <string name="msg_share_explanation">Ekranınızda görüntülediğiniz barkodu başka bir telefonla tarayarak veri paylaşabilirsiniz.</string>
+  <string name="msg_share_subject_line">Taranan barkodun içeriği</string>
   <string name="msg_share_text">Veya yazın bazı metin</string>
   <string name="msg_sure">Emin misin?</string>
   <string name="msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>

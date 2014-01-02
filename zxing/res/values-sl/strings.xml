@@ -15,17 +15,19 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barcode Scanner</string>
   <string name="app_picker_name">Aplikacije</string>
   <string name="bookmark_picker_name">Zaznamki</string>
   <string name="button_add_calendar">Dodaj v koledar</string>
   <string name="button_add_contact">Dodaj kontakt</string>
+  <string name="button_back">Nazaj</string>
   <string name="button_book_search">Išči knjigo</string>
   <string name="button_cancel">Prekliči</string>
   <string name="button_custom_product_search">Iskanje po meri</string>
   <string name="button_dial">Pokliči številko</string>
+  <string name="button_done">Končano</string>
   <string name="button_email">Pošlji e-mail</string>
   <string name="button_get_directions">Dobi smer</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Pošlji MMS</string>
   <string name="button_ok">V redu</string>
   <string name="button_open_browser">Odpri brskalnik</string>
@@ -69,8 +71,10 @@
   <string name="msg_default_time">Čas</string>
   <string name="msg_default_type">Tip</string>
   <string name="msg_encode_contents_failed">Ni bilo mogoče narediti črtne kode iz podanih podatkov</string>
-  <string name="msg_google_books">Google</string>
-  <string name="msg_google_product">Google</string>
+  <string name="msg_google_books">Google Books</string>
+  <string name="msg_google_product">Google Product Search</string>
+  <string name="msg_google_shopper_missing">Google Shopper ni nameščen</string>
+  <string name="msg_install_google_shopper">Google Shopper kombinira branje črtnih kod s cenami lokalnih ter spletnih trgovin, ocenami izdelkov in več brez odpiranja spletnega brskalnika. Ga želite preizkusiti?</string>
   <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>
   <string name="msg_redirect">Preusmeritev</string>
   <string name="msg_sbc_book_not_searchable">Oprostite, po tej knjigi se ne da iskati.</string>
@@ -80,7 +84,9 @@
   <string name="msg_sbc_results">Rezultati</string>
   <string name="msg_sbc_searching_book">Iščem knjigo\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Košček ni na voljo</string>
+  <string name="msg_sbc_unknown_page">Neznana stran</string>
   <string name="msg_share_explanation">Lahko delite podatke s prikazom črtne kode na vašem zaslonu in branju le-te z drugim mobilnim telefonom.</string>
+  <string name="msg_share_subject_line">Tu je vsebina prebrane črtne kode</string>
   <string name="msg_share_text">Ali vnesite nekaj besedila</string>
   <string name="msg_sure">Ali ste prepričani?</string>
   <string name="msg_unmount_usb">Oprostite, do SD kartice ni možno dostopati</string>

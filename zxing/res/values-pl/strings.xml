@@ -15,17 +15,19 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">Barcode Scanner</string>
   <string name="app_picker_name">Aplikacje</string>
   <string name="bookmark_picker_name">Zakładki</string>
   <string name="button_add_calendar">Dodaj do kalendarza</string>
   <string name="button_add_contact">Dodaj kontakt</string>
+  <string name="button_back">Wstecz</string>
   <string name="button_book_search">Szukaj książek</string>
   <string name="button_cancel">Anuluj</string>
   <string name="button_custom_product_search">Wyszukiwanie indywidualne</string>
   <string name="button_dial">Zadzwoń</string>
+  <string name="button_done">Gotowe</string>
   <string name="button_email">Wyślij email</string>
   <string name="button_get_directions">Wskazówki</string>
+  <string name="button_google_shopper">Sklep</string>
   <string name="button_mms">Wyślij MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otwórz przeglądarkę</string>
@@ -69,8 +71,10 @@
   <string name="msg_default_time">Czas</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
-  <string name="msg_google_books">Google</string>
-  <string name="msg_google_product">Google</string>
+  <string name="msg_google_books">Google Książki</string>
+  <string name="msg_google_product">Wyszukiwarka produktów Google</string>
+  <string name="msg_google_shopper_missing">Google Shopper nie jest zainstalowany</string>
+  <string name="msg_install_google_shopper">Google Shopper łączy skanowanie kodów paskowych z cenami, recenzjami, itp. bez otwierania przeglądarki. Czy chcesz go wypróbować?</string>
   <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
   <string name="msg_redirect">Przekierowanie</string>
   <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>
@@ -80,7 +84,9 @@
   <string name="msg_sbc_results">Wyniki</string>
   <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
+  <string name="msg_sbc_unknown_page">Nieznana strona</string>
   <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie i skanując go innym telefonem.</string>
+  <string name="msg_share_subject_line">Oto zawartość kodu paskowego który został zeskanowany</string>
   <string name="msg_share_text">Albo wpisz tekst</string>
   <string name="msg_sure">Czy na pewno?</string>
   <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępna.</string>

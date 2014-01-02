@@ -23,103 +23,87 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.util.Log;
 
+import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
+
 /**
- * Finishes an activity after a period of inactivity if the device is on battery
- * power.
+ * Finishes an activity after a period of inactivity if the device is on battery power.
  */
 final class InactivityTimer {
 
-	private static final String TAG = InactivityTimer.class.getSimpleName();
+  private static final String TAG = InactivityTimer.class.getSimpleName();
 
-	private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
+  private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
 
-	private final Activity activity;
-	private final BroadcastReceiver powerStatusReceiver;
-	private boolean registered;
-	private AsyncTask<?, ?, ?> inactivityTask;
+  private final Activity activity;
+  private final AsyncTaskExecInterface taskExec;
+  private final BroadcastReceiver powerStatusReceiver;
+  private InactivityAsyncTask inactivityTask;
 
-	InactivityTimer(Activity activity) {
-		this.activity = activity;
-		powerStatusReceiver = new PowerStatusReceiver();
-		registered = false;
-		onActivity();
-	}
+  InactivityTimer(Activity activity) {
+    this.activity = activity;
+    taskExec = new AsyncTaskExecManager().build();
+    powerStatusReceiver = new PowerStatusReceiver();
+    onActivity();
+  }
 
-	synchronized void onActivity() {
-		cancel();
-		inactivityTask = new InactivityAsyncTask();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		} else {
-			inactivityTask.execute();
-		}
-	}
+  synchronized void onActivity() {
+    cancel();
+    inactivityTask = new InactivityAsyncTask();
+    taskExec.execute(inactivityTask);
+  }
 
-	public synchronized void onPause() {
-		cancel();
-		if (registered) {
-			activity.unregisterReceiver(powerStatusReceiver);
-			registered = false;
-		} else {
-			Log.w(TAG, "PowerStatusReceiver was never registered?");
-		}
-	}
+  public void onPause() {
+    cancel();
+    activity.unregisterReceiver(powerStatusReceiver);
+  }
 
-	public synchronized void onResume() {
-		if (registered) {
-			Log.w(TAG, "PowerStatusReceiver was already registered?");
-		} else {
-			activity.registerReceiver(powerStatusReceiver, new IntentFilter(
-					Intent.ACTION_BATTERY_CHANGED));
-			registered = true;
-		}
-		onActivity();
-	}
+  public void onResume(){
+    activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    onActivity();
+  }
 
-	private synchronized void cancel() {
-		AsyncTask<?, ?, ?> task = inactivityTask;
-		if (task != null) {
-			task.cancel(true);
-			inactivityTask = null;
-		}
-	}
+  private synchronized  void cancel() {
+    AsyncTask<?,?,?> task = inactivityTask;
+    if (task != null) {
+      task.cancel(true);
+      inactivityTask = null;
+    }
+  }
 
-	void shutdown() {
-		cancel();
-	}
+  void shutdown() {
+    cancel();
+  }
 
-	private final class PowerStatusReceiver extends BroadcastReceiver {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-				// 0 indicates that we're on battery
-				boolean onBatteryNow = intent.getIntExtra(
-						BatteryManager.EXTRA_PLUGGED, -1) <= 0;
-				if (onBatteryNow) {
-					InactivityTimer.this.onActivity();
-				} else {
-					InactivityTimer.this.cancel();
-				}
-			}
-		}
-	}
+  private final class PowerStatusReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent){
+      if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+        // 0 indicates that we're on battery
+        boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;
+        if (onBatteryNow) {
+          InactivityTimer.this.onActivity();
+        } else {
+          InactivityTimer.this.cancel();
+        }
+      }
+    }
+  }
 
-	private final class InactivityAsyncTask extends
-			AsyncTask<Object, Object, Object> {
-		@Override
-		protected Object doInBackground(Object... objects) {
-			try {
-				Thread.sleep(INACTIVITY_DELAY_MS);
-				Log.i(TAG, "Finishing activity due to inactivity");
-				activity.finish();
-			} catch (InterruptedException e) {
-				// continue without killing
-			}
-			return null;
-		}
-	}
+  private final class InactivityAsyncTask extends AsyncTask<Object,Object,Object> {
+    @Override
+    protected Object doInBackground(Object... objects) {
+      try {
+        Thread.sleep(INACTIVITY_DELAY_MS);
+        Log.i(TAG, "Finishing activity due to inactivity");
+        activity.finish();
+      } catch (InterruptedException e) {
+        // continue without killing
+      }
+      return null;
+    }
+  }
 
 }

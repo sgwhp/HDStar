@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.hdstar.R;
 import org.hdstar.common.RemoteSettingManager;
-import org.hdstar.common.RemoteType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.RemoteSetting;
 import org.hdstar.remote.RemoteBase;
@@ -37,7 +36,6 @@ public class RemoteLoginActivity extends BaseActivity implements
 	private EditText ipET, accET, pwdET;
 	private CustomDialog dialog = null;
 	private BaseAsyncTask<Boolean> task;
-	private RemoteType type;
 	private RemoteSetting setting;
 	private ArrayList<RemoteSetting> settings;
 	int order;
@@ -143,7 +141,7 @@ public class RemoteLoginActivity extends BaseActivity implements
 
 		});
 		dialog.show();
-		RemoteBase remote = RemoteFactory.newInstanceByName(type.name());
+		RemoteBase remote = RemoteFactory.newInstanceByName(setting.type);
 		remote.setIpNPort(setting.ip);
 		task = remote.login(setting.username, setting.password);
 		task.attach(mCallback);
@@ -161,10 +159,10 @@ public class RemoteLoginActivity extends BaseActivity implements
 		@Override
 		public void onComplete(Boolean result) {
 			dialog.dismiss();
-			HDStarApp.remoteType = type;
+			HDStarApp.remote = setting;
 			Intent intent = new Intent(RemoteLoginActivity.this,
 					RemoteActivity.class);
-			intent.putExtra("remote", type.name());
+			intent.putExtra("remote", setting);
 			startActivity(intent);
 			finish();
 		}

@@ -5,6 +5,9 @@ import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RssSettingManager;
 import org.hdstar.model.RssSetting;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.EditText;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.zxing.client.android.CaptureActivity;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -78,6 +82,16 @@ public class RssSettingFragment extends StackFragment implements
 			scan.setOnClickListener(this);
 		}
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(resultCode){
+		case Activity.RESULT_OK:
+			link.setText(data.getStringExtra("result"));
+			break;
+		}
+	}
 
 	@Override
 	public void initActionBar(Menu menu) {
@@ -121,6 +135,10 @@ public class RssSettingFragment extends StackFragment implements
 					true);
 			break;
 		case R.id.scan:
+			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+			intent.setComponent(new ComponentName("com.google.zxing.client.android", 
+                    "com.google.zxing.client.android.CaptureActivity"));
+			startActivityForResult(intent, 1);
 			break;
 		}
 	}

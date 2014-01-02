@@ -15,17 +15,19 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_name">바코드 스캐너</string>
   <string name="app_picker_name">어플리케이션</string>
   <string name="bookmark_picker_name">즐겨찾기</string>
   <string name="button_add_calendar">일정에 추가하기</string>
   <string name="button_add_contact">연락처에 추가하기</string>
+  <string name="button_back">뒤로</string>
   <string name="button_book_search">책 검색</string>
   <string name="button_cancel">취소</string>
   <string name="button_custom_product_search">사용자 지정 검색</string>
   <string name="button_dial">전화 걸기</string>
+  <string name="button_done">완료</string>
   <string name="button_email">이메일 보내기</string>
   <string name="button_get_directions">방향을 찾기</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS 보내기</string>
   <string name="button_ok">확인</string>
   <string name="button_open_browser">웹브라우저로 열기</string>
@@ -69,8 +71,10 @@
   <string name="msg_default_time">시간</string>
   <string name="msg_default_type">종류</string>
   <string name="msg_encode_contents_failed">주어진 데이터로 바코드를 만들지 못하였습니다.</string>
-  <string name="msg_google_books">Google</string>
-  <string name="msg_google_product">Google</string>
+  <string name="msg_google_books">Google 도서</string>
+  <string name="msg_google_product">Google 상품 검색</string>
+  <string name="msg_google_shopper_missing">Google Shopper가 설치되어 있지 않습니다.</string>
+  <string name="msg_install_google_shopper">Google Shopper는 바코드 스캐닝을 이용하여 인터넷을 열지 않고 가격, 리뷰 등을 열람하는 기능을 제공합니다. 사용해 보시겠습니까?</string>
   <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못 되었을 수도 있습니다.</string>
   <string name="msg_redirect">리디렉션</string>
   <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 되지 않습니다.</string>
@@ -80,7 +84,9 @@
   <string name="msg_sbc_results">결과</string>
   <string name="msg_sbc_searching_book">책 검색중\u2026</string>
   <string name="msg_sbc_snippet_unavailable">내용이 열람되지 않습니다.</string>
+  <string name="msg_sbc_unknown_page">알수 없는 페이지</string>
   <string name="msg_share_explanation">해당 기기의 바코드를 다른 기기로 스캔해서 데이터를 공유할 수 있습니다.</string>
+  <string name="msg_share_subject_line">제가 스캔한 바코드 목록입니다.</string>
   <string name="msg_share_text">입력하거나 텍스트</string>
   <string name="msg_sure">계속하시겠습니까?</string>
   <string name="msg_unmount_usb">죄송합니다. SD카드를 사용할 수 없습니다.</string>

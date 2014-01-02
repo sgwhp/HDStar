@@ -5,7 +5,7 @@ import java.io.File;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
-import org.hdstar.common.RemoteType;
+import org.hdstar.model.RemoteSetting;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
@@ -40,7 +40,7 @@ public class HDStarApp extends Application {
 	public static String cookies = null;
 	public static boolean hasNewMessage = false;
 	// public static boolean loginRemote = false;
-	public static RemoteType remoteType = null;
+	public static RemoteSetting remote = null;
 	public static DisplayImageOptions roundedDisplayOptions;
 	public static DisplayImageOptions displayOptions;
 	// private LruCache<String, Bitmap> mImageMemoryCache = null;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ZXing authors
+ * Copyright (C) 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android.wifi;
+package com.google.zxing.client.android.common.executor;
 
-enum NetworkType {
+import android.os.AsyncTask;
 
-  WEP,
-  WPA,
-  NO_PASSWORD;
+public interface AsyncTaskExecInterface {
 
-  static NetworkType forIntentValue(String networkTypeString) {
-    if (networkTypeString == null) {
-      return NO_PASSWORD;
-    }
-    if ("WPA".equals(networkTypeString)) {
-      return WPA;
-    }
-    if ("WEP".equals(networkTypeString)) {
-      return WEP;
-    }
-    if ("nopass".equals(networkTypeString)) {
-      return NO_PASSWORD;
-    }
-    throw new IllegalArgumentException(networkTypeString);
-  }
+  <T> void execute(AsyncTask<T,?,?> task, T... args);
 
 }
