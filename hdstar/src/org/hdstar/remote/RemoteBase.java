@@ -59,6 +59,8 @@ public abstract class RemoteBase {
 	public abstract BaseAsyncTask<Boolean> add(String dir, String hash,
 			ArrayList<String> urls);
 
+	public abstract BaseAsyncTask<Boolean> addByUrl(String dir, String url);
+
 	public abstract boolean rssEnable();
 
 	public abstract BaseAsyncTask<ArrayList<RssLabel>> fetchRssList();

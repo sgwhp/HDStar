@@ -117,4 +117,10 @@ public class UTorrentRemote extends RemoteBase {
 		return null;
 	}
 
+	@Override
+	public BaseAsyncTask<Boolean> addByUrl(String dir, String url) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

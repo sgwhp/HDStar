@@ -18,6 +18,12 @@
         android:layout_height="wrap_content"
         android:indeterminateDrawable="@drawable/custom_dialog_style"
         android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/rss_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="42dp" />
 
     <TextView
         android:id="@+id/label"

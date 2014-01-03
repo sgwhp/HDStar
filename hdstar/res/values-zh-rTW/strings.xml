@@ -144,6 +144,7 @@
     <string name="rss">訂閱</string>
     <string name="remove_file">刪除文件</string>
     <string name="download_dir">下載目錄</string>
+    <string name="download_link">下載鏈接</string>
     <string name="invalidate_ip">非法IP</string>
     <string name="disk">硬碟</string>
     <string name="get_disk_space_failed">獲取硬碟信息失敗</string>

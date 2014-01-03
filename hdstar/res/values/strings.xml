@@ -162,6 +162,7 @@
     <string name="download">下载</string>
     <string name="rss">订阅</string>
     <string name="download_dir">下载目录</string>
+    <string name="download_link">下载链接</string>
     <string name="invalidate_ip">非法IP</string>
     <string name="disk">硬盘</string>
     <string name="get_disk_space_failed">获取硬盘信息失败</string>

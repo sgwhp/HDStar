@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/rss_icon" />
+        android:maxWidth="42dp" />
 
     <TextView
         android:id="@+id/rss_label"

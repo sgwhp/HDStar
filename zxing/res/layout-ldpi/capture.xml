@@ -84,25 +84,6 @@
 
           <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/msg_default_type"
-                    android:textColor="@color/result_minor_text"
-                    android:textStyle="bold"
-                    android:paddingRight="@dimen/half_padding"/>
-
-          <TextView android:id="@+id/type_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/result_minor_text"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-          android:orientation="horizontal"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
-
-          <TextView android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@string/msg_default_time"
                     android:textColor="@color/result_minor_text"
                     android:textStyle="bold"
@@ -155,15 +136,6 @@
                     android:paddingLeft="12dip"
                     android:autoLink="web"/>
 
-          <TextView android:id="@+id/contents_supplement_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/result_text"
-                    android:textColorLink="@color/result_text"
-                    android:paddingLeft="12dip"
-                    android:autoLink="web"
-                    android:clickable="true"/>
-
         </LinearLayout>
 
       </ScrollView>
@@ -176,33 +148,17 @@
                   android:layout_height="wrap_content"
                   android:gravity="center">
 
-      <Button android:layout_width="0dip"
+      <Button android:id="@+id/result_button_ok"
+          android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:visibility="gone"/>
+              android:text="@android:string/ok"/>
 
-      <Button android:layout_width="0dip"
+      <Button android:id="@+id/result_button_cancel" 
+          android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:visibility="gone"/>
-
-      <Button android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:visibility="gone"/>
-
-      <Button android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:visibility="gone"/>
-
-      <Button android:id="@+id/shopper_button"
-              android:layout_width="0dip"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:drawableLeft="@drawable/shopper_icon"
-              android:text="@string/button_google_shopper"
-              android:visibility="gone"/>
+              android:text="@android:string/cancel"/>
 
     </LinearLayout>
 

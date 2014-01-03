@@ -145,6 +145,7 @@
     <string name="rss">rss</string>
     <string name="remove_file">Remove file.</string>
     <string name="download_dir">Download directory</string>
+    <string name="download_link">Download Link</string>
     <string name="invalidate_ip">Invalidate IP</string>
     <string name="disk">Disk</string>
     <string name="get_disk_space_failed">Get disk space failed.</string>

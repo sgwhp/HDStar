@@ -441,4 +441,9 @@ public class RuTorrentRemote extends RemoteBase {
 		serializer.endTag("", "member");
 	}
 
+	@Override
+	public BaseAsyncTask<Boolean> addByUrl(String dir, String url) {
+		return null;
+	}
+
 }

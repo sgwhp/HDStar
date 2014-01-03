@@ -70,6 +70,14 @@ url	http://hdwing.com/download/131887/ee0bab33ebd2d9ed75736ec7f0544613/Sleepy.Ho
 
 post http://91.121.104.122/rutorrent/php/addtorrent.php? 302
 url=http%3A%2F%2Fhdsky.me%2Fdownload.php%3Fid%3D1884%26passkey%3Ddbecbd78905748afc7c0b66dd1724441
+响应
+Connection	keep-alive
+Content-Type	text/html
+Date	Fri, 03 Jan 2014 09:51:06 GMT
+Location	/rutorrent/php/addtorrent.php?result[]=Success&name[]=http://hdsky.me/download.php?id=2158&passkey=dbecbd78905748afc7c0b66dd1724441&
+Server	nginx/1.2.5
+Transfer-Encoding	chunked
+X-Powered-By	PHP/5.3.10-1ubuntu3.7
 
 获取下载目录
 get http://91.121.104.122/rutorrent/plugins/_getdir/getdirs.php?dir=&btn=RSSBtn&edit=RSSdir_edit&frame=RSSdir_edit_frame&time=1384865773557

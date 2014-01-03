@@ -23,8 +23,7 @@
             android:textColor="@color/white" />
     </LinearLayout>
 
-    <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    <ExpandableListView
         android:id="@+id/rss_list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -32,13 +31,7 @@
         android:cacheColorHint="#00000000"
         android:fastScrollEnabled="true"
         android:groupIndicator="@null"
-        android:headerDividersEnabled="false"
-        ptr:ptrAnimationStyle="flip"
-        ptr:ptrFooterPullText="@string/pull_to_add_next_page"
-        ptr:ptrFooterReleaseText="@string/release_to_add_next_page"
-        ptr:ptrHeaderBackground="@android:color/darker_gray"
-        ptr:ptrHeaderTextColor="@android:color/white"
-        ptr:ptrCancelable="true" />
+        android:headerDividersEnabled="false" />
 
     <LinearLayout
         android:layout_width="match_parent"

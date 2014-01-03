@@ -6,19 +6,19 @@
 
     <EditText
         style="@style/CustomEditTextStyle"
-        android:id="@+id/dir"
+        android:id="@+id/url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:singleLine="true"
-        android:hint="@string/download_dir" />
+        android:hint="@string/download_link" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/add_rss"
+            android:id="@+id/add_torrent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
