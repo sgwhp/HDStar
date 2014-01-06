@@ -5,24 +5,6 @@
     android:background="@color/background"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/rss_header"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/abs__action_bar_default_height"
-        android:background="@drawable/action_bar_bg"
-        android:gravity="center_vertical|right" >
-
-        <Button
-            android:id="@+id/download"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_bg_sel"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/download"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
     <ExpandableListView
         android:id="@+id/rss_list"
         android:layout_width="fill_parent"
@@ -33,33 +15,10 @@
         android:groupIndicator="@null"
         android:headerDividersEnabled="false" />
 
-    <LinearLayout
+    <ViewStub
+        android:id="@+id/disk_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="@string/disk"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <org.hdstar.widget.TextProgressBar
-            android:id="@+id/disk_info"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:progressDrawable="@drawable/custom_hor_progress_bar_bg" />
-
-        <org.hdstar.widget.LTAButton
-            android:id="@+id/refresh_disk_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:enabled="false"
-            android:background="@drawable/refresh_btn_sel" />
-    </LinearLayout>
+        android:layout="@layout/disk_info" />
 
 </LinearLayout>

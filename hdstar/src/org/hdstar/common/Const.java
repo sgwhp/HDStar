@@ -83,6 +83,8 @@ public class Const {
 				+ "?mode=refresh&rss=%s";
 		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/diskspace/action.php?_=";
+		public static final String RUTORRENT_ADD_URL = RUTORRENT_HOME_PAGE
+				+ "php/addtorrent.php?";
 
 		/**
 		 * μtorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位
@@ -96,7 +98,7 @@ public class Const {
 				+ "&list=1";
 		public static final String UTORRENT_ACTION_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=%s";
-		
+
 		public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
 		public static void initServerAddr(final String serverAddr) {

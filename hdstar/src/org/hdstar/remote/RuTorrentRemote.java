@@ -443,6 +443,30 @@ public class RuTorrentRemote extends RemoteBase {
 
 	@Override
 	public BaseAsyncTask<Boolean> addByUrl(String dir, String url) {
+		HttpPost post = new HttpPost(String.format(
+				Const.Urls.RUTORRENT_ADD_URL, ipNPort));
+		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
+
+			@Override
+			public Boolean parse(HttpResponse res, InputStream in) {
+				if (res.getFirstHeader("Loction").getValue()
+						.contains("result[]=Success")) {
+					msgId = SUCCESS_MSG_ID;
+					return true;
+				}
+				return false;
+			}
+		};
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("url", url));
+		try {
+			post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));
+			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
+					parser);
+			return task;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

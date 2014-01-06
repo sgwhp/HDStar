@@ -79,8 +79,8 @@ public class RssSettingFragment extends StackFragment implements
 			link.setText(setting.link);
 			remove.setVisibility(View.VISIBLE);
 			remove.setOnClickListener(this);
-			scan.setOnClickListener(this);
 		}
+		scan.setOnClickListener(this);
 	}
 
 	@Override
@@ -136,7 +136,6 @@ public class RssSettingFragment extends StackFragment implements
 			break;
 		case R.id.scan:
 			Intent intent = new Intent(getActivity(), CaptureActivity.class);
-			;
 			startActivityForResult(intent, 1);
 			break;
 		}
