@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,6 +96,19 @@ public class RemoteListFragment extends StackFragment implements
 		text.setText(setting.name);
 		text = (TextView) v.findViewById(R.id.ip);
 		text.setText("http://" + setting.ip);
+		ImageView icon = (ImageView) v.findViewById(R.id.remote_icon);
+		int iconId = -1;
+		switch(RemoteSetting.getRemoteType(setting.type)){
+		case RuTorrent:
+			iconId = R.drawable.rtorrent_icon;
+			break;
+		case UTorrent:
+			iconId = R.drawable.utorrent_icon;
+			break;
+		}
+		if(iconId != -1){
+			icon.setImageResource(iconId);
+		}
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;

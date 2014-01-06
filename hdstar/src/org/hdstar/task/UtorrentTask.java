@@ -8,6 +8,8 @@ import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
@@ -29,9 +31,19 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 	public UtorrentTask(String ip) {
 		this.ip = ip;
 	}
+	
+	public UtorrentTask(String ip, String url, ResponseParser<T> parser){
+		this.ip = ip;
+		this.url = url;
+		this.parser = parser;
+	}
 
 	public static <T> UtorrentTask<T> newInstance(String ip) {
 		return new UtorrentTask<T>(ip);
+	}
+	
+	public static <T> UtorrentTask<T> newInstance(String ip, String url, ResponseParser<T> parser) {
+		return new UtorrentTask<T>(ip, url, parser);
 	}
 
 	@Override
@@ -93,6 +105,17 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 	@Override
 	public void execGet(String url, final Type resultType) {
 		this.url = url;
+		if (parser == null) {
+			parser = new ResponseParser<T>() {
+				@Override
+				public T parse(HttpResponse res, InputStream in) {
+					if (res.getStatusLine().getStatusCode() == 200) {
+						setMessageId(ResponseParser.SUCCESS_MSG_ID);
+					}
+					return null;
+				}
+			};
+		}
 		this.execute("");
 	}
 
@@ -117,8 +140,11 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 		String result = IOUtils.inputStream2String(response.getEntity()
 				.getContent());
 		request.abort();
-		token = result.substring(result.indexOf(">") + 1,
-				result.lastIndexOf("<"));
+		Pattern pattern = Pattern.compile("<div id='token'.*?>(.*?)</div>");
+		Matcher matcher = pattern.matcher(result);
+		if(matcher.find()){
+			token = matcher.group(1);
+		}
 		return token;
 	}
 

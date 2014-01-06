@@ -100,7 +100,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		ImageView icon = (ImageView) v.findViewById(R.id.rss_icon);
 		ImageLoader.getInstance().displayImage(
 				String.format(Const.Urls.GETFVO_URL, setting.link), icon,
-				HDStarApp.roundedDisplayOptions);
+				HDStarApp.displayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;

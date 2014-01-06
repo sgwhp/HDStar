@@ -68,7 +68,7 @@ mode	loadtorrents
 rss	bac5ccfd9774b64f9b899da46f2a941d
 url	http://hdwing.com/download/131887/ee0bab33ebd2d9ed75736ec7f0544613/Sleepy.Hollow.S01E08.720P.MPEG2.AC3-HDWTV.ts.torrent
 
-post http://91.121.104.122/rutorrent/php/addtorrent.php? 302
+http://91.121.104.122/rutorrent/php/addtorrent.php?dir_edit=%2Fhome%2Frobust%2Fdownloads& 302
 url=http%3A%2F%2Fhdsky.me%2Fdownload.php%3Fid%3D1884%26passkey%3Ddbecbd78905748afc7c0b66dd1724441
 œÏ”¶
 Connection	keep-alive

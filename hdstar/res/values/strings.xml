@@ -136,6 +136,7 @@
     <string name="saved">保存成功</string>
     <string name="label">标签</string>
     <string name="scan">扫描二维码</string>
+    <string name="optional">可选</string>
     
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未读消息，点击查看</string>

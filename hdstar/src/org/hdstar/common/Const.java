@@ -84,7 +84,7 @@ public class Const {
 		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/diskspace/action.php?_=";
 		public static final String RUTORRENT_ADD_URL = RUTORRENT_HOME_PAGE
-				+ "php/addtorrent.php?";
+				+ "/php/addtorrent.php?";
 
 		/**
 		 * μtorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位

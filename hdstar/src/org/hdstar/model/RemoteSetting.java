@@ -2,6 +2,7 @@ package org.hdstar.model;
 
 import org.hdstar.common.Const;
 import org.hdstar.common.RemoteSettingManager;
+import org.hdstar.common.RemoteType;
 import org.hdstar.util.EncodeDecode;
 
 import android.content.Context;
@@ -42,6 +43,15 @@ public class RemoteSetting implements Parcelable {
 		password = in.readString();
 		downloadDir = in.readString();
 		rmFile = in.readByte() != 0;
+	}
+	
+	public static RemoteType getRemoteType(String typeStr){
+		for(RemoteType type : RemoteType.values()){
+			if(type.name().equals(typeStr)){
+				return type;
+			}
+		}
+		return null;
 	}
 
 	@Override

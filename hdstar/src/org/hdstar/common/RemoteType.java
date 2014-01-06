@@ -1,7 +1,7 @@
 package org.hdstar.common;
 
 public enum RemoteType {
-	UTorrentRemote("¦ÌTorrent"), RuTorrentRemote("ruTorrent");
+	UTorrent("¦ÌTorrent"), RuTorrent("ruTorrent");
 	private final String name;
 
 	public String getName() {

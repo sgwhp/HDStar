@@ -508,8 +508,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private void download() {
 		dialog = new CustomDialog(this, R.string.connecting);
 		String dir = dirEt.getText().toString();
-		final BaseAsyncTask<Boolean> task = remote.addByUrl(
-				selectedRssItem.getTheLink(), dir);
+		final BaseAsyncTask<Boolean> task = remote.addByUrl(dir
+				, selectedRssItem.getTheLink());
 		if (task == null) {
 			return;
 		}
@@ -561,6 +561,9 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	 * À¢–¬”≤≈Ã–≈œ¢
 	 */
 	private void refreshDiskInfo() {
+		if(!remote.diskEnable()){
+			return;
+		}
 		refreshDiskInfoBtn.setEnabled(false);
 		if (diskTask != null) {
 			diskTask.detach();
@@ -848,7 +851,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			ImageLoader.getInstance().displayImage(
 					String.format(Const.Urls.GETFVO_URL,
 							rssSettings.get(groupPosition).link), holder.icon,
-					HDStarApp.roundedDisplayOptions);
+					HDStarApp.displayOptions);
 			TaskStatus status = rssStatus[groupPosition];
 			if (status == TaskStatus.Refreshing) {
 				holder.progress.setVisibility(View.VISIBLE);

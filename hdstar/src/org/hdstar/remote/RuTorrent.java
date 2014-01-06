@@ -43,15 +43,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-public class RuTorrentRemote extends RemoteBase {
+public class RuTorrent extends RemoteBase {
 
-	public RuTorrentRemote() {
-		super(RemoteType.RuTorrentRemote);
+	public RuTorrent() {
+		super(RemoteType.RuTorrent);
 	}
 
 	@Override
 	public String getTitle() {
-		return "rutorrent";
+		return "ruTorrent";
 	}
 
 	@Override
@@ -449,7 +449,7 @@ public class RuTorrentRemote extends RemoteBase {
 
 			@Override
 			public Boolean parse(HttpResponse res, InputStream in) {
-				if (res.getFirstHeader("Loction").getValue()
+				if (res.getFirstHeader("Location").getValue()
 						.contains("result[]=Success")) {
 					msgId = SUCCESS_MSG_ID;
 					return true;
@@ -458,6 +458,9 @@ public class RuTorrentRemote extends RemoteBase {
 			}
 		};
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		if(dir != null && !"".equals(dir)){
+			params.add(new BasicNameValuePair("dir_edit", dir));
+		}
 		params.add(new BasicNameValuePair("url", url));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));

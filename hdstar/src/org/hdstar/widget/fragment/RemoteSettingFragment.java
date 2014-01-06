@@ -147,7 +147,7 @@ public class RemoteSettingFragment extends StackFragment {
 		String passwordStr = password.getText().toString();
 		String dir = downloadDir.getText().toString();
 		if ("".equals(nameStr) || "".equals(usernameStr)
-				|| "".equals(passwordStr) || "".equals(dir)) {
+				|| "".equals(passwordStr)) {
 			Crouton.makeText(getActivity(), R.string.fill_in_the_blanks,
 					Style.CONFIRM).show();
 			return;
