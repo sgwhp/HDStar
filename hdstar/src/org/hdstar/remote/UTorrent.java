@@ -1,7 +1,7 @@
 package org.hdstar.remote;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import org.hdstar.task.DefaultGetParser;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.task.UtorrentTask;
 import org.hdstar.util.HttpClientManager;
+import org.hdstar.util.IOUtils;
 
 import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -68,32 +69,42 @@ public class UTorrent extends RemoteBase {
 			@Override
 			public ArrayList<RemoteTaskInfo> parse(HttpResponse res,
 					InputStream in) {
-				JsonParser parser = new JsonParser();
-				JsonElement element = parser.parse(new InputStreamReader(in));
-				JsonArray arr = element.getAsJsonObject().getAsJsonArray(
-						"torrents");
-				ArrayList<RemoteTaskInfo> result = new ArrayList<RemoteTaskInfo>();
-				JsonArray torrent;
-				RemoteTaskInfo info;
-				for (int i = 0; i < arr.size(); i++) {
-					torrent = arr.get(i).getAsJsonArray();
-					info = new RemoteTaskInfo();
-					info.hash = torrent.get(0).getAsString();
-					info.title = torrent.get(2).getAsString();
-					info.size = torrent.get(3).getAsLong();
-					info.completeSize = torrent.get(4).getAsLong();
-					info.status = convertUtorrentStatus(torrent.get(1)
-							.getAsInt(), info.completeSize == 1000);
-					info.uploaded = torrent.get(5).getAsLong();
-					info.ratio = torrent.get(6).getAsFloat() / 1000;
-					info.upSpeed = torrent.get(7).getAsLong();
-					info.dlSpeed = torrent.get(8).getAsLong();
-					// 9 eta
-					info.label = torrent.get(10).getAsString();
-					result.add(info);
+				try {
+					JsonParser parser = new JsonParser();
+					JsonElement element = parser.parse(IOUtils.inputStream2String(in));
+					JsonArray arr = element.getAsJsonObject().getAsJsonArray(
+							"torrents");
+					ArrayList<RemoteTaskInfo> result = new ArrayList<RemoteTaskInfo>();
+					JsonArray torrent;
+					RemoteTaskInfo info;
+					for (int i = 0; i < arr.size(); i++) {
+						torrent = arr.get(i).getAsJsonArray();
+						info = new RemoteTaskInfo();
+						info.hash = torrent.get(0).getAsString();
+						info.title = torrent.get(2).getAsString();
+						info.size = torrent.get(3).getAsLong();
+						//完成比例（0-1000）
+						info.progress = torrent.get(4).getAsInt() / 10;
+						//已下载
+						info.downloaded = torrent.get(5).getAsLong();
+						info.status = convertUtorrentStatus(torrent.get(1)
+								.getAsInt(), info.progress == 100);
+						info.uploaded = torrent.get(6).getAsLong();
+						info.ratio = torrent.get(7).getAsFloat() / 1000;
+						info.upSpeed = torrent.get(8).getAsLong();
+						info.dlSpeed = torrent.get(9).getAsLong();
+						// 10 eta
+						info.label = torrent.get(11).getAsString();
+						//13 peers
+						//14 seeds
+						result.add(info);
+					}
+					msgId = SUCCESS_MSG_ID;
+					return result;
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				msgId = SUCCESS_MSG_ID;
-				return result;
+				return null;
 			}
 		};
 

@@ -294,6 +294,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		login = false;
 		list.clear();
 		adapter.notifyDataSetChanged();
 		setting = settings.get(itemPosition);
@@ -809,8 +810,12 @@ public class RemoteActivity extends BaseActivity implements
 			}
 			RemoteTaskInfo item = list.get(position);
 			holder.title.setText(item.title);
-			holder.progress
-					.setProgress((int) (item.completeSize * 100.0 / item.size));
+			if (item.progress == -1) {
+				holder.progress
+						.setProgress((int) (item.downloaded * 100.0 / item.size));
+			} else {
+				holder.progress.setProgress(item.progress);
+			}
 			holder.info.setText(String.format(taskInfo,
 					Util.formatFileSize(item.size),
 					Util.formatFileSize(item.uploaded), item.ratio,

@@ -12,10 +12,11 @@ public class RemoteTaskInfo implements Serializable {
 	public String title;
 	public long size;
 	public long uploaded;
+	public long downloaded;
 	public float ratio;
 	public long upSpeed;
 	public long dlSpeed;
-	public long completeSize;
+	public int progress = -1;//0-100
 	// public int open;
 	public TorrentStatus status;
 	public String label;

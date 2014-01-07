@@ -90,10 +90,10 @@ public class RuTorrent extends RemoteBase {
 					info.hash = entry.getKey();
 					info.title = arr.get(4).toString();
 					info.size = arr.get(5).getAsLong();
-					info.completeSize = arr.get(8).getAsLong();
+					info.progress = (int) (arr.get(8).getAsLong() * 100 / info.size);
 					info.status = convertRutorrentStatus(arr.get(0).getAsInt(),
 							arr.get(1).getAsInt(), arr.get(3).getAsInt(),
-							info.completeSize == info.size);
+							info.downloaded == 100);
 					info.uploaded = arr.get(9).getAsLong();
 					info.ratio = arr.get(10).getAsFloat() / 1000;
 					info.upSpeed = arr.get(11).getAsLong();

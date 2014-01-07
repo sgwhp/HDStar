@@ -96,7 +96,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		TextView text = (TextView) v.findViewById(R.id.rss_label);
 		text.setText(setting.label);
 		text = (TextView) v.findViewById(R.id.rss_link);
-		text.setText("http://" + setting.link);
+		text.setText(setting.link);
 		ImageView icon = (ImageView) v.findViewById(R.id.rss_icon);
 		ImageLoader.getInstance().displayImage(
 				String.format(Const.Urls.GETFVO_URL, setting.link), icon,

@@ -8,8 +8,8 @@
         android:id="@+id/rss_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="5dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop" />
