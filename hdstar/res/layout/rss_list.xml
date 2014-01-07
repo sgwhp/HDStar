@@ -15,10 +15,9 @@
         android:groupIndicator="@null"
         android:headerDividersEnabled="false" />
 
-    <ViewStub
-        android:id="@+id/disk_info"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout="@layout/disk_info" />
+        layout="@layout/disk_info" />
 
 </LinearLayout>

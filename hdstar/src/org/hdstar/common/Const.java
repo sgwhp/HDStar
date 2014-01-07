@@ -98,6 +98,8 @@ public class Const {
 				+ "&list=1";
 		public static final String UTORRENT_ACTION_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=%s";
+		public static final String UTORRENT_ADD_URL = UTORRENT_BASE_REQ_URL
+				+ "&action=add-url&s=%s";
 
 		public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
@@ -273,7 +275,6 @@ public class Const {
 			USER_CLASS.put("uploader", R.drawable.uploader);
 			USER_CLASS.put("seeder", R.drawable.seeder);
 			USER_CLASS.put("encoder", R.drawable.encoder);
-			;
 			USER_CLASS.put("vip", R.drawable.vip);
 			USER_CLASS.put("forummoderator", R.drawable.forummoderator);
 			USER_CLASS.put("moderator", R.drawable.moderator);

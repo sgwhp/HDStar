@@ -12,7 +12,7 @@
         android:paddingRight="2dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/rss_label"

@@ -503,6 +503,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout
 		mOverScrollEnabled = enabled;
 	}
 
+	/**
+	 * 没有数据绑定到ptr之前，可调用此方法刷新，否则正在刷新界面无法正常显示
+	 * 
+	 */
 	public void setRefreshingInit() {
 		ViewTreeObserver vto = getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {

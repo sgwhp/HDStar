@@ -13,10 +13,6 @@ import android.os.Build;
 import android.os.Environment;
 
 public class IOUtils {
-	public static final int IO_BUFFER_SIZE = 8 * 1024;
-
-	private IOUtils() {
-	};
 
 	@SuppressLint("NewApi")
 	public static boolean isExternalStorageRemovable() {

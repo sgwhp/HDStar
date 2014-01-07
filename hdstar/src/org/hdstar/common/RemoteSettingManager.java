@@ -11,6 +11,7 @@ import android.content.SharedPreferences.Editor;
 
 public class RemoteSettingManager {
 	public static final String MAX = "max";
+	public static final String DEFAULT = "default";
 	public static final String REMOTE_TYPE = "RemoteType";
 	public static final String IP = "IP";
 	public static final String NAME = "Name";
@@ -27,6 +28,11 @@ public class RemoteSettingManager {
 			list.add(get(prefs, i));
 		}
 		return list;
+	}
+
+	public static int getDefault(Context context) {
+		SharedPreferences prefs = getPrefs(context);
+		return prefs.getInt(DEFAULT, 0);
 	}
 
 	public static SharedPreferences getPrefs(Context context) {
@@ -92,9 +98,13 @@ public class RemoteSettingManager {
 		removeRemoteSettings(getPrefs(context), order);
 	}
 
-	public static void save(Context context, RemoteSetting setting) {
+	public static void save(Context context, RemoteSetting setting,
+			boolean isDefault) {
 		SharedPreferences prefs = getPrefs(context);
 		Editor edit = prefs.edit();
+		if (isDefault) {
+			edit.putInt(DEFAULT, setting.order);
+		}
 		edit.putString(NAME + setting.order, setting.name);
 		edit.putString(REMOTE_TYPE + setting.order, setting.type);
 		edit.putString(IP + setting.order, setting.ip);
@@ -106,9 +116,13 @@ public class RemoteSettingManager {
 		edit.commit();
 	}
 
-	public static void add(Context context, RemoteSetting setting) {
+	public static void add(Context context, RemoteSetting setting,
+			boolean isDefault) {
 		SharedPreferences prefs = getPrefs(context);
 		Editor edit = prefs.edit();
+		if (isDefault) {
+			edit.putInt(DEFAULT, setting.order);
+		}
 		edit.putString(NAME + setting.order, setting.name);
 		edit.putString(REMOTE_TYPE + setting.order, setting.type);
 		edit.putString(IP + setting.order, setting.ip);

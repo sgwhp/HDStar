@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.ToggleButton;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -38,6 +39,7 @@ public class RemoteSettingFragment extends StackFragment {
 	private EditText password;
 	private EditText downloadDir;
 	private Button remove;
+	private ToggleButton setDefault;
 
 	public static RemoteSettingFragment newInstance(int mode,
 			RemoteSetting setting) {
@@ -54,15 +56,6 @@ public class RemoteSettingFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Bundle b = getArguments();
-		mMode = b.getInt("mode");
-		if (mMode == MODE_EDIT) {
-			setting = b.getParcelable("setting");
-		} else {
-			setting = new RemoteSetting();
-			setting.order = RemoteSettingManager
-					.getMaxRemote(RemoteSettingManager.getPrefs(getActivity()));
-		}
 	}
 
 	@Override
@@ -76,37 +69,26 @@ public class RemoteSettingFragment extends StackFragment {
 		password = (EditText) v.findViewById(R.id.password);
 		downloadDir = (EditText) v.findViewById(R.id.downloadDir);
 		remove = (Button) v.findViewById(R.id.remove);
+		setDefault = (ToggleButton) v.findViewById(R.id.set_as_defalut);
 		return v;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		Bundle b = getArguments();
+		mMode = b.getInt("mode");
+		if (mMode == MODE_EDIT) {
+			setting = b.getParcelable("setting");
+		} else {
+			setting = new RemoteSetting();
+			setting.order = RemoteSettingManager
+					.getMaxRemote(RemoteSettingManager.getPrefs(getActivity()));
+		}
 		typeStr = getResources().getStringArray(R.array.remoteClient);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_spinner_item, typeStr);
 		typeSpn.setAdapter(adapter);
-		typeSpn.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				String typeName = typeStr[position];
-				if (mMode == MODE_ADD) {
-					name.setText(typeName);
-				}
-				for (RemoteType type : RemoteType.values()) {
-					if (type.getName().equals(typeName)) {
-						setting.type = type.name();
-						return;
-					}
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
 		if (mMode == MODE_EDIT) {
 			name.setText(setting.name);
 			ip.setText(setting.ip);
@@ -124,7 +106,36 @@ public class RemoteSettingFragment extends StackFragment {
 							getViewPager().getCurrentItem() - 1, true);
 				}
 			});
+			for (RemoteType type : RemoteType.values()) {
+				if (type.name().equals(setting.type)) {
+					typeSpn.setSelection(type.ordinal());
+					break;
+				}
+			}
 		}
+		typeSpn.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				String typeName = typeStr[position];
+				if (name.getText().toString().equals("")) {
+					name.setText(typeName);
+				}
+				for (RemoteType type : RemoteType.values()) {
+					if (type.getName().equals(typeName)) {
+						setting.type = type.name();
+						return;
+					}
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
+		setDefault.setChecked(setting.order == RemoteSettingManager
+				.getDefault(getActivity()));
 	}
 
 	@Override
@@ -157,10 +168,12 @@ public class RemoteSettingFragment extends StackFragment {
 		setting.username = usernameStr;
 		setting.password = passwordStr;
 		setting.downloadDir = dir;
-		if(mMode == MODE_ADD){
-			RemoteSettingManager.add(getActivity(), setting);
+		if (mMode == MODE_ADD) {
+			RemoteSettingManager.add(getActivity(), setting,
+					setDefault.isChecked());
 		} else {
-			RemoteSettingManager.save(getActivity(), setting);
+			RemoteSettingManager.save(getActivity(), setting,
+					setDefault.isChecked());
 		}
 		StackFragment f = getStackAdapter().preItem();
 		getViewPager()

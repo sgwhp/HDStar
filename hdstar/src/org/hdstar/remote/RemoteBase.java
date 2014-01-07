@@ -4,10 +4,7 @@ import java.util.ArrayList;
 
 import org.hdstar.common.RemoteType;
 import org.hdstar.model.RemoteTaskInfo;
-import org.hdstar.model.RssLabel;
 import org.hdstar.task.BaseAsyncTask;
-
-import android.app.Activity;
 
 /**
  * 子类命名要与RemoteType中的一致
@@ -37,15 +34,10 @@ public abstract class RemoteBase {
 		return ipNPort;
 	}
 
-	public String getTitle() {
-		return "";
-	}
-
 	public abstract BaseAsyncTask<Boolean> login(String username,
 			String password);
 
-	public abstract BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList(
-			Activity context);
+	public abstract BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList();
 
 	public abstract BaseAsyncTask<Boolean> start(String... hashes);
 
@@ -60,13 +52,6 @@ public abstract class RemoteBase {
 			ArrayList<String> urls);
 
 	public abstract BaseAsyncTask<Boolean> addByUrl(String dir, String url);
-
-	public abstract boolean rssEnable();
-
-	public abstract BaseAsyncTask<ArrayList<RssLabel>> fetchRssList();
-
-	public abstract BaseAsyncTask<ArrayList<RssLabel>> refreshRssLabel(
-			String hash);
 
 	public abstract boolean diskEnable();
 

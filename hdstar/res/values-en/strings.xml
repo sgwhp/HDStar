@@ -118,6 +118,7 @@
     <string name="apply">Apply</string>
     <string name="name">Name</string>
     <string name="ip_port">IP &amp; Port</string>
+    <string name="set_as_default">Set as default</string>
     <string name="fill_in_the_blanks">Fill in the blanks</string>
     <string name="add">Add</string>
     <string name="no_remote_setting">Please add remote server first.</string>

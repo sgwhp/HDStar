@@ -33,6 +33,7 @@ import com.slidingmenu.lib.SlidingMenu;
 public class BaseStackActivity extends SlidingFragmentActivity implements
 		StackHook {
 	private int mTitleRes;
+	private String mTitle;
 	protected ListFragment mFrag;
 	public static int newMessageNum = 0;
 	protected StackPagerAdapter stackAdapter;
@@ -44,10 +45,19 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		mTitleRes = titleRes;
 	}
 
+	protected BaseStackActivity(String title) {
+		mTitle = title;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(mTitleRes);
+		if (mTitleRes != 0) {
+			setTitle(mTitleRes);
+		}
+		if (mTitle != null) {
+			setTitle(mTitle);
+		}
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
 		FragmentTransaction t = this.getSupportFragmentManager()

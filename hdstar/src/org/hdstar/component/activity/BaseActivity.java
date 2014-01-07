@@ -18,17 +18,30 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 public class BaseActivity extends SlidingFragmentActivity {
 
 	private int mTitleRes;
+	private String mTitle;
 	protected ListFragment mFrag;
+
+	public BaseActivity() {
+	}
 
 	public BaseActivity(int titleRes) {
 		mTitleRes = titleRes;
+	}
+
+	public BaseActivity(String title) {
+		mTitle = title;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setTitle(mTitleRes);
+		if (mTitleRes != 0) {
+			setTitle(mTitleRes);
+		}
+		if (mTitle != null) {
+			setTitle(mTitle);
+		}
 
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);

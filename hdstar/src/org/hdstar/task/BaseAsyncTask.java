@@ -25,7 +25,12 @@ import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
 import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 
+import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
+
 public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
+	public static final AsyncTaskExecInterface taskExec = new AsyncTaskExecManager()
+			.build();
 	protected String cookie;
 	protected HttpRequestBase request = null;
 	protected TaskCallback<T> mCallback;
@@ -170,7 +175,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 
 	public void execGet(String url, final Type resultType) {
 		request = new HttpGet(url);
-		this.execute("");
+		taskExec.execute(this);
 	}
 
 	public void execGet(String url, ResponseParser<T> parser) {
@@ -189,7 +194,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		HttpPost post = new HttpPost(url);
 		post.setEntity(new UrlEncodedFormEntity(nvp, Const.CHARSET));
 		request = post;
-		this.execute("");
+		taskExec.execute(this);
 	}
 
 	public void execPost(String url, List<NameValuePair> nvp,

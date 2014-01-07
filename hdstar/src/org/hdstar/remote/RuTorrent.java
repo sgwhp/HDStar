@@ -13,16 +13,13 @@ import java.util.Set;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.RemoteType;
-import org.hdstar.component.activity.RemoteLoginActivity;
 import org.hdstar.model.RemoteTaskInfo;
-import org.hdstar.model.RssLabel;
+import org.hdstar.model.TorrentStatus;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.util.HttpClientManager;
 import org.xmlpull.v1.XmlSerializer;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.util.Xml;
 import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -36,12 +33,10 @@ import ch.boye.httpclientandroidlib.entity.StringEntity;
 import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 public class RuTorrent extends RemoteBase {
 
@@ -49,14 +44,25 @@ public class RuTorrent extends RemoteBase {
 		super(RemoteType.RuTorrent);
 	}
 
-	@Override
-	public String getTitle() {
-		return "ruTorrent";
+	private TorrentStatus convertRutorrentStatus(int open, int checking,
+			int rStatus, boolean finished) {
+		if (open == 0) {
+			return TorrentStatus.Waiting;
+		}
+		if (checking == 1) {
+			return TorrentStatus.Checking;
+		}
+		if (rStatus == 1) {
+			if (finished) {
+				return TorrentStatus.Seeding;
+			}
+			return TorrentStatus.Downloading;
+		}
+		return TorrentStatus.Paused;
 	}
 
 	@Override
-	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList(
-			final Activity context) {
+	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList() {
 		HttpPost post = new HttpPost(String.format(
 				Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
 		ResponseParser<ArrayList<RemoteTaskInfo>> parser = new ResponseParser<ArrayList<RemoteTaskInfo>>() {
@@ -64,13 +70,13 @@ public class RuTorrent extends RemoteBase {
 			@Override
 			public ArrayList<RemoteTaskInfo> parse(HttpResponse res,
 					InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 401) {
-					Intent intent = new Intent(context,
-							RemoteLoginActivity.class);
-					context.startActivity(intent);
-					context.finish();
-					return null;
-				}
+				// if (res.getStatusLine().getStatusCode() == 401) {
+				// Intent intent = new Intent(context,
+				// RemoteLoginActivity.class);
+				// context.startActivity(intent);
+				// context.finish();
+				// return null;
+				// }
 				JsonParser parser = new JsonParser();
 				JsonElement element = parser.parse(new InputStreamReader(in));
 				JsonObject obj = element.getAsJsonObject().getAsJsonObject("t");
@@ -82,11 +88,12 @@ public class RuTorrent extends RemoteBase {
 					info = new RemoteTaskInfo();
 					arr = entry.getValue().getAsJsonArray();
 					info.hash = entry.getKey();
-					info.open = arr.get(0).getAsInt();
-					info.state = arr.get(3).getAsInt();
 					info.title = arr.get(4).toString();
 					info.size = arr.get(5).getAsLong();
 					info.completeSize = arr.get(8).getAsLong();
+					info.status = convertRutorrentStatus(arr.get(0).getAsInt(),
+							arr.get(1).getAsInt(), arr.get(3).getAsInt(),
+							info.completeSize == info.size);
 					info.uploaded = arr.get(9).getAsLong();
 					info.ratio = arr.get(10).getAsFloat() / 1000;
 					info.upSpeed = arr.get(11).getAsLong();
@@ -243,68 +250,65 @@ public class RuTorrent extends RemoteBase {
 		return null;
 	}
 
-	@Override
-	public boolean rssEnable() {
-		return true;
-	}
-
-	@Override
-	public BaseAsyncTask<ArrayList<RssLabel>> fetchRssList() {
-		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RSS_ACTION_URL, ipNPort));
-		ResponseParser<ArrayList<RssLabel>> parser = new ResponseParser<ArrayList<RssLabel>>() {
-
-			@Override
-			public ArrayList<RssLabel> parse(HttpResponse res, InputStream in) {
-				JsonParser parser = new JsonParser();
-				JsonElement element = parser.parse(new InputStreamReader(in));
-				JsonArray arr = element.getAsJsonObject()
-						.getAsJsonArray("list");
-				Gson gson = new Gson();
-				ArrayList<RssLabel> result = gson.fromJson(arr,
-						new TypeToken<ArrayList<RssLabel>>() {
-						}.getType());
-				msgId = SUCCESS_MSG_ID;
-				return result;
-			}
-		};
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("mode", "get"));
-		try {
-			post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));
-			BaseAsyncTask<ArrayList<RssLabel>> task = BaseAsyncTask
-					.newInstance(post, parser);
-			return task;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
-	public BaseAsyncTask<ArrayList<RssLabel>> refreshRssLabel(String hash) {
-		HttpGet get = new HttpGet(String.format(
-				Const.Urls.RUTORRENT_RSS_REFRESH_URL, ipNPort, hash));
-		ResponseParser<ArrayList<RssLabel>> parser = new ResponseParser<ArrayList<RssLabel>>() {
-
-			@Override
-			public ArrayList<RssLabel> parse(HttpResponse res, InputStream in) {
-				JsonParser parser = new JsonParser();
-				JsonElement element = parser.parse(new InputStreamReader(in));
-				JsonArray arr = element.getAsJsonObject()
-						.getAsJsonArray("list");
-				Gson gson = new Gson();
-				ArrayList<RssLabel> result = gson.fromJson(arr,
-						new TypeToken<ArrayList<RssLabel>>() {
-						}.getType());
-				msgId = SUCCESS_MSG_ID;
-				return result;
-			}
-		};
-		final BaseAsyncTask<ArrayList<RssLabel>> task = BaseAsyncTask
-				.newInstance(get, parser);
-		return task;
-	}
+	// @Override
+	// public BaseAsyncTask<ArrayList<RssLabel>> fetchRssList() {
+	// HttpPost post = new HttpPost(String.format(
+	// Const.Urls.RUTORRENT_RSS_ACTION_URL, ipNPort));
+	// ResponseParser<ArrayList<RssLabel>> parser = new
+	// ResponseParser<ArrayList<RssLabel>>() {
+	//
+	// @Override
+	// public ArrayList<RssLabel> parse(HttpResponse res, InputStream in) {
+	// JsonParser parser = new JsonParser();
+	// JsonElement element = parser.parse(new InputStreamReader(in));
+	// JsonArray arr = element.getAsJsonObject()
+	// .getAsJsonArray("list");
+	// Gson gson = new Gson();
+	// ArrayList<RssLabel> result = gson.fromJson(arr,
+	// new TypeToken<ArrayList<RssLabel>>() {
+	// }.getType());
+	// msgId = SUCCESS_MSG_ID;
+	// return result;
+	// }
+	// };
+	// List<NameValuePair> params = new ArrayList<NameValuePair>();
+	// params.add(new BasicNameValuePair("mode", "get"));
+	// try {
+	// post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));
+	// BaseAsyncTask<ArrayList<RssLabel>> task = BaseAsyncTask
+	// .newInstance(post, parser);
+	// return task;
+	// } catch (UnsupportedEncodingException e) {
+	// e.printStackTrace();
+	// }
+	// return null;
+	// }
+	//
+	// @Override
+	// public BaseAsyncTask<ArrayList<RssLabel>> refreshRssLabel(String hash) {
+	// HttpGet get = new HttpGet(String.format(
+	// Const.Urls.RUTORRENT_RSS_REFRESH_URL, ipNPort, hash));
+	// ResponseParser<ArrayList<RssLabel>> parser = new
+	// ResponseParser<ArrayList<RssLabel>>() {
+	//
+	// @Override
+	// public ArrayList<RssLabel> parse(HttpResponse res, InputStream in) {
+	// JsonParser parser = new JsonParser();
+	// JsonElement element = parser.parse(new InputStreamReader(in));
+	// JsonArray arr = element.getAsJsonObject()
+	// .getAsJsonArray("list");
+	// Gson gson = new Gson();
+	// ArrayList<RssLabel> result = gson.fromJson(arr,
+	// new TypeToken<ArrayList<RssLabel>>() {
+	// }.getType());
+	// msgId = SUCCESS_MSG_ID;
+	// return result;
+	// }
+	// };
+	// final BaseAsyncTask<ArrayList<RssLabel>> task = BaseAsyncTask
+	// .newInstance(get, parser);
+	// return task;
+	// }
 
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		HttpPost post = new HttpPost(String.format(
@@ -458,7 +462,7 @@ public class RuTorrent extends RemoteBase {
 			}
 		};
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if(dir != null && !"".equals(dir)){
+		if (dir != null && !"".equals(dir)) {
 			params.add(new BasicNameValuePair("dir_edit", dir));
 		}
 		params.add(new BasicNameValuePair("url", url));

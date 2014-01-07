@@ -19,6 +19,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:layout_gravity="center_vertical|right"
             android:src="@drawable/zebra_arrow_down" />
     </FrameLayout>
@@ -123,7 +124,7 @@
             android:id="@+id/downloadDir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_bottom_sel"
+            android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
             android:inputType="text"
             android:paddingLeft="64dip"
@@ -138,6 +139,29 @@
             android:paddingLeft="5dip"
             android:text="@string/download_dir" />
     </FrameLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/setting_strip_bottom_sel" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:text="@string/set_as_default" />
+
+        <org.hdstar.widget.LTAToggleButton
+            android:id="@+id/set_as_defalut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/transparent_checkbox_bg_sel"
+            android:textOff=""
+            android:textOn="" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/remove"

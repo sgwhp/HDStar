@@ -117,6 +117,7 @@
     <string name="apply">應用</string>
     <string name="name">名稱</string>
     <string name="ip_port">IP端口</string>
+    <string name="set_as_default">設置為默認</string>
     <string name="fill_in_the_blanks">請填寫空白處</string>
     <string name="add">添加</string>
     <string name="no_remote_setting">請先添加遠程服務器 </string>

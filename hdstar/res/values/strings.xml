@@ -130,6 +130,7 @@
     <string name="apply">应用</string>
     <string name="name">名称</string>
     <string name="ip_port">IP端口</string>
+    <string name="set_as_default">设置为默认</string>
     <string name="fill_in_the_blanks">请填写空白处</string>
     <string name="add">添加</string>
     <string name="no_remote_setting">请先添加远程服务器</string>

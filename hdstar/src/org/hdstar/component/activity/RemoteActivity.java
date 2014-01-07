@@ -10,6 +10,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RssSettingManager;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.RemoteSetting;
@@ -31,9 +32,11 @@ import org.hdstar.widget.TextProgressBar;
 import org.xml.sax.SAXException;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.SparseArray;
@@ -43,7 +46,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.ViewStub;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -62,6 +65,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import ch.boye.httpclientandroidlib.HttpResponse;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -74,7 +79,8 @@ import com.slidingmenu.lib.SlidingMenu;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class RemoteActivity extends BaseActivity implements OnClickListener {
+public class RemoteActivity extends BaseActivity implements
+		OnNavigationListener, OnClickListener {
 	private PullToRefreshListView refreshView;
 	private View root;
 	private View empty;
@@ -100,13 +106,15 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private Button refreshDiskInfoBtn;
 	private BaseAsyncTask<long[]> diskTask;
 	private RemoteBase remote;
+	private ArrayList<RemoteSetting> settings;
 	private RemoteSetting setting;
 	private ArrayList<RssSetting> rssSettings;
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
+	private boolean login;
 
 	public RemoteActivity() {
-		super(R.string.rutorrent);
+		super(R.string.remote);
 	}
 
 	@Override
@@ -125,9 +133,51 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		rssListView = (ExpandableListView) findViewById(R.id.rss_list);
 
 		inflater = LayoutInflater.from(this);
+		settings = RemoteSettingManager.getAll(this);
 		init();
-		refreshView.setRefreshing(false);
-		refreshDiskInfo();
+		Context context = getSupportActionBar().getThemedContext();
+		if (settings.size() > 0) {
+			String[] servers = new String[settings.size()];
+			for (int i = 0; i < settings.size(); i++) {
+				servers[i] = settings.get(i).name;
+			}
+			ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
+					context, R.layout.sherlock_spinner_item, servers);
+			list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+			ActionBar actionbar = getSupportActionBar();
+			actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+			actionbar.setSelectedNavigationItem(RemoteSettingManager
+					.getDefault(this));
+			actionbar.setListNavigationCallbacks(list, this);
+		} else {
+			findViewById(R.id.login).setEnabled(false);
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.confirm)
+					.setIcon(R.drawable.ic_launcher)
+					.setMessage(R.string.no_remote_setting)
+					.setPositiveButton(R.string.add,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									Intent intent = new Intent(
+											RemoteActivity.this,
+											SettingActivity.class);
+									startActivity(intent);
+									finish();
+								}
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+								}
+							}).create().show();
+			return;
+		}
 	}
 
 	@Override
@@ -242,17 +292,34 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		list.clear();
+		adapter.notifyDataSetChanged();
+		setting = settings.get(itemPosition);
+		remote = RemoteFactory.newInstanceByName(setting.type);
+		remote.setIpNPort(setting.ip);
+		dirEt.setText(setting.downloadDir);
+		if (remote.diskEnable()) {
+			findViewById(R.id.disk_info).setVisibility(View.VISIBLE);
+			findViewById(R.id.refresh_disk_info).setOnClickListener(this);
+			refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);
+			disk = (TextProgressBar) findViewById(R.id.disk_size);
+		} else {
+			findViewById(R.id.disk_info).setVisibility(View.GONE);
+		}
+
+		refreshView.setRefreshing(false);
+		refreshDiskInfo();
+		return false;
+	}
+
 	protected void init() {
 		rssSettings = RssSettingManager.getAll(this);
 		rssStatus = new TaskStatus[rssSettings.size()];
 		for (int i = rssSettings.size() - 1; i >= 0; i--) {
 			rssStatus[i] = TaskStatus.Normal;
 		}
-		// SharedPreferences share = getSharedPreferences(
-		// Const.RUTORRENT_SHARED_PREFS, Activity.MODE_PRIVATE);
-		setting = getIntent().getParcelableExtra("remote");
-		remote = RemoteFactory.newInstanceByName(setting.type);
-		remote.setIpNPort(setting.ip);
 		listView = refreshView.getRefreshableView();
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
@@ -307,13 +374,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				return false;
 			}
 		});
-
-		if (remote.diskEnable()) {
-			((ViewStub) findViewById(R.id.disk_info)).inflate();
-			findViewById(R.id.refresh_disk_info).setOnClickListener(this);
-			refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);
-			disk = (TextProgressBar) findViewById(R.id.disk_size);
-		}
 		// 初始化下载任务控制弹出窗口
 		ctrlBox = (LinearLayout) inflater.inflate(
 				R.layout.remote_task_ctrl_layout, null);
@@ -337,7 +397,6 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 				.setOnClickListener(this);
 		addTorrentLayout.findViewById(R.id.close).setOnClickListener(this);
 		dirEt = (EditText) addTorrentLayout.findViewById(R.id.download_dir);
-		dirEt.setText(setting.downloadDir);
 		addTorrentWindow = new PopupWindow(addTorrentLayout,
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
 		addTorrentWindow.setBackgroundDrawable(getResources().getDrawable(
@@ -380,10 +439,10 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		if (mTask != null) {
 			return;
 		}
-		BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = remote.fetchList(this);
+		BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = remote.fetchList();
 		task.attach(mCallback);
 		attachTask(task);
-		task.execute("");
+		BaseAsyncTask.taskExec.execute(task);
 	}
 
 	private String[] selectedHashes() {
@@ -408,7 +467,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		task.execute("");
+		BaseAsyncTask.taskExec.execute(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -432,7 +491,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		task.execute("");
+		BaseAsyncTask.taskExec.execute(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -456,7 +515,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		task.execute("");
+		BaseAsyncTask.taskExec.execute(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -482,7 +541,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		task.execute("");
+		BaseAsyncTask.taskExec.execute(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -508,8 +567,8 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 	private void download() {
 		dialog = new CustomDialog(this, R.string.connecting);
 		String dir = dirEt.getText().toString();
-		final BaseAsyncTask<Boolean> task = remote.addByUrl(dir
-				, selectedRssItem.getTheLink());
+		final BaseAsyncTask<Boolean> task = remote.addByUrl(dir,
+				selectedRssItem.getTheLink());
 		if (task == null) {
 			return;
 		}
@@ -534,7 +593,7 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 		attachRssTask(task);
-		task.execute("");
+		BaseAsyncTask.taskExec.execute(task);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -554,14 +613,22 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			mTask.detach();
 			mTask = null;
 		}
-		fetch();
+		if (login) {
+			fetch();
+		} else {
+			BaseAsyncTask<Boolean> task = remote.login(setting.username,
+					setting.password);
+			task.attach(loginCallback);
+			BaseAsyncTask.taskExec.execute(task);
+			attachTask(task);
+		}
 	}
 
 	/**
 	 * 刷新硬盘信息
 	 */
 	private void refreshDiskInfo() {
-		if(!remote.diskEnable()){
+		if (!remote.diskEnable()) {
 			return;
 		}
 		refreshDiskInfoBtn.setEnabled(false);
@@ -570,8 +637,29 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 		}
 		diskTask = remote.getDiskInfo();
 		diskTask.attach(diskCallback);
-		diskTask.execute("");
+		BaseAsyncTask.taskExec.execute(diskTask);
 	}
+
+	private TaskCallback<Boolean> loginCallback = new TaskCallback<Boolean>() {
+
+		@Override
+		public void onComplete(Boolean result) {
+			login = true;
+			detachTask();
+			fetch();
+		}
+
+		@Override
+		public void onCancel() {
+			refreshView.onRefreshComplete();
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			refreshView.onRefreshComplete();
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
+		}
+	};
 
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {
 
@@ -754,17 +842,30 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 							notifyDataSetChanged();
 						}
 					});
-			if (item.open == 0) {
-				holder.state.setImageResource(R.drawable.state_stop);
-			} else if (item.state == 0) {
+			switch (item.status) {
+			case Seeding:
+				holder.state.setImageResource(R.drawable.state_seeding);
+				break;
+			case Downloading:
+				holder.state.setImageResource(R.drawable.state_leaching);
+				break;
+			case Paused:
 				holder.state.setImageResource(R.drawable.state_pause);
-			} else if (item.state == 1) {
-				if (item.completeSize == item.size) {
-					holder.state.setImageResource(R.drawable.state_seeding);
-				} else {
-					holder.state.setImageResource(R.drawable.state_leaching);
-				}
+				break;
+			default:
+				holder.state.setImageResource(R.drawable.state_stop);
 			}
+			// if (item.open == 0) {
+			// holder.state.setImageResource(R.drawable.state_stop);
+			// } else if (item.status == TorrentStatus.Paused) {
+			// holder.state.setImageResource(R.drawable.state_pause);
+			// } else if (item.state == 1) {
+			// if (item.completeSize == item.size) {
+			// holder.state.setImageResource(R.drawable.state_seeding);
+			// } else {
+			// holder.state.setImageResource(R.drawable.state_leaching);
+			// }
+			// }
 			return convertView;
 		}
 
@@ -894,5 +995,5 @@ public class RemoteActivity extends BaseActivity implements OnClickListener {
 			return true;
 		}
 
-	};
+	}
 }
