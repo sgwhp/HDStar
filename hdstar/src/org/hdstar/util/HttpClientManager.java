@@ -35,7 +35,7 @@ public class HttpClientManager {
 	/**
 	 * 连接超时时间
 	 */
-	public final static int CONNECT_TIMEOUT = 60 * 1000;
+	public final static int CONNECT_TIMEOUT = 90 * 1000;
 	/**
 	 * 读取超时时间
 	 */

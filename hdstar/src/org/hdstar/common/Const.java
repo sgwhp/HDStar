@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 
 public class Const {
+	public static final String TAG = "*HDStar*";
 	public static final int APP_CODE = 1;
 
 	public static final class Urls {

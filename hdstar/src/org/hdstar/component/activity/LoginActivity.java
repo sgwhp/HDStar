@@ -11,7 +11,7 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DownloadImageTask;
 import org.hdstar.task.LoginTask;
-import org.hdstar.util.EncodeDecode;
+import org.hdstar.util.DES;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
 
@@ -109,8 +109,12 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			((EditText) findViewById(R.id.username)).setText(username);
 		}
 		if (password != null) {
-			password = EncodeDecode.decode(password);
-			((EditText) findViewById(R.id.password)).setText(password);
+			try {
+				password = DES.decryptDES(password, Const.TAG);
+				((EditText) findViewById(R.id.password)).setText(password);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -165,10 +169,14 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 						Style.CONFIRM).show();
 				return;
 			}
-			Editor user = LoginActivity.this.getSharedPreferences(
-					Const.SETTING_SHARED_PREFS, MODE_PRIVATE).edit();
+			Editor user = getSharedPreferences(Const.SETTING_SHARED_PREFS,
+					MODE_PRIVATE).edit();
 			user.putString("username", id);
-			user.putString("password", EncodeDecode.encode(password));
+			try {
+				user.putString("password", DES.encryptDES(password, Const.TAG));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 			user.commit();
 			dialog = new CustomDialog(LoginActivity.this, R.string.try_to_login);
 			dialog.setOnDismissListener(new OnDismissListener() {

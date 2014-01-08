@@ -3,7 +3,7 @@ package org.hdstar.common;
 import java.util.ArrayList;
 
 import org.hdstar.model.RemoteSetting;
-import org.hdstar.util.EncodeDecode;
+import org.hdstar.util.DES;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -42,15 +42,19 @@ public class RemoteSettingManager {
 
 	public static RemoteSetting get(SharedPreferences prefs, int order) {
 		RemoteSetting setting = new RemoteSetting();
-		setting.order = order;
-		setting.type = prefs.getString(REMOTE_TYPE + order, "");
-		setting.name = prefs.getString(NAME + order, "");
-		setting.ip = prefs.getString(IP + order, "");
-		setting.username = prefs.getString(USERNAME + order, "");
-		setting.password = EncodeDecode.decode(prefs.getString(
-				PASSWORD + order, ""));
-		setting.downloadDir = prefs.getString(DOWNLOAD_DIR + order, "");
-		setting.rmFile = prefs.getBoolean(RM_FILE + order, false);
+		try {
+			setting.order = order;
+			setting.type = prefs.getString(REMOTE_TYPE + order, "");
+			setting.name = prefs.getString(NAME + order, "");
+			setting.ip = prefs.getString(IP + order, "");
+			setting.username = prefs.getString(USERNAME + order, "");
+			setting.password = DES.decryptDES(
+					prefs.getString(PASSWORD + order, ""), Const.TAG);
+			setting.downloadDir = prefs.getString(DOWNLOAD_DIR + order, "");
+			setting.rmFile = prefs.getBoolean(RM_FILE + order, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return setting;
 	}
 
@@ -100,38 +104,46 @@ public class RemoteSettingManager {
 
 	public static void save(Context context, RemoteSetting setting,
 			boolean isDefault) {
-		SharedPreferences prefs = getPrefs(context);
-		Editor edit = prefs.edit();
-		if (isDefault) {
-			edit.putInt(DEFAULT, setting.order);
+		try {
+			SharedPreferences prefs = getPrefs(context);
+			Editor edit = prefs.edit();
+			if (isDefault) {
+				edit.putInt(DEFAULT, setting.order);
+			}
+			edit.putString(NAME + setting.order, setting.name);
+			edit.putString(REMOTE_TYPE + setting.order, setting.type);
+			edit.putString(IP + setting.order, setting.ip);
+			edit.putString(USERNAME + setting.order, setting.username);
+			edit.putString(PASSWORD + setting.order,
+					DES.encryptDES(setting.password, Const.TAG));
+			edit.putString(DOWNLOAD_DIR + setting.order, setting.downloadDir);
+			edit.putBoolean(RM_FILE + setting.order, setting.rmFile);
+			edit.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		edit.putString(NAME + setting.order, setting.name);
-		edit.putString(REMOTE_TYPE + setting.order, setting.type);
-		edit.putString(IP + setting.order, setting.ip);
-		edit.putString(USERNAME + setting.order, setting.username);
-		edit.putString(PASSWORD + setting.order,
-				EncodeDecode.encode(setting.password));
-		edit.putString(DOWNLOAD_DIR + setting.order, setting.downloadDir);
-		edit.putBoolean(RM_FILE + setting.order, setting.rmFile);
-		edit.commit();
 	}
 
 	public static void add(Context context, RemoteSetting setting,
 			boolean isDefault) {
-		SharedPreferences prefs = getPrefs(context);
-		Editor edit = prefs.edit();
-		if (isDefault) {
-			edit.putInt(DEFAULT, setting.order);
+		try {
+			SharedPreferences prefs = getPrefs(context);
+			Editor edit = prefs.edit();
+			if (isDefault) {
+				edit.putInt(DEFAULT, setting.order);
+			}
+			edit.putString(NAME + setting.order, setting.name);
+			edit.putString(REMOTE_TYPE + setting.order, setting.type);
+			edit.putString(IP + setting.order, setting.ip);
+			edit.putString(USERNAME + setting.order, setting.username);
+			edit.putString(PASSWORD + setting.order,
+					DES.decryptDES(setting.password, Const.TAG));
+			edit.putString(DOWNLOAD_DIR + setting.order, setting.downloadDir);
+			edit.putBoolean(RM_FILE + setting.order, setting.rmFile);
+			edit.putInt(MAX, setting.order + 1);
+			edit.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		edit.putString(NAME + setting.order, setting.name);
-		edit.putString(REMOTE_TYPE + setting.order, setting.type);
-		edit.putString(IP + setting.order, setting.ip);
-		edit.putString(USERNAME + setting.order, setting.username);
-		edit.putString(PASSWORD + setting.order,
-				EncodeDecode.encode(setting.password));
-		edit.putString(DOWNLOAD_DIR + setting.order, setting.downloadDir);
-		edit.putBoolean(RM_FILE + setting.order, setting.rmFile);
-		edit.putInt(MAX, setting.order + 1);
-		edit.commit();
 	}
 }

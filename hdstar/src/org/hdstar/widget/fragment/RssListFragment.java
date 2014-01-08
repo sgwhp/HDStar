@@ -8,19 +8,19 @@ import org.hdstar.common.RssSettingManager;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.RssSetting;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class RssListFragment extends StackFragment implements OnClickListener {
 	private LinearLayout mContainer;
@@ -98,9 +98,11 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		text = (TextView) v.findViewById(R.id.rss_link);
 		text.setText(setting.link);
 		ImageView icon = (ImageView) v.findViewById(R.id.rss_icon);
+		// 获取图标，去掉订阅地址的所有参数，避免泄露passkey
 		ImageLoader.getInstance().displayImage(
-				String.format(Const.Urls.GETFVO_URL, setting.link), icon,
-				HDStarApp.displayOptions);
+				String.format(Const.Urls.GETFVO_URL,
+						setting.link.substring(0, setting.link.indexOf('?'))),
+				icon, HDStarApp.displayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;
@@ -108,6 +110,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		push(RssSettingFragment.newInstance(RssSettingFragment.MODE_EDIT, settings.get(v.getId() - ID)));
+		push(RssSettingFragment.newInstance(RssSettingFragment.MODE_EDIT,
+				settings.get(v.getId() - ID)));
 	}
 }
