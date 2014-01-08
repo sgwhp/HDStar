@@ -114,7 +114,7 @@ public class RemoteActivity extends BaseActivity implements
 	private boolean login;
 
 	public RemoteActivity() {
-		super(R.string.remote);
+//		super(R.string.remote);
 	}
 
 	@Override
@@ -294,6 +294,8 @@ public class RemoteActivity extends BaseActivity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		detachTask();
+		refreshView.onRefreshComplete();
 		login = false;
 		list.clear();
 		adapter.notifyDataSetChanged();
@@ -704,6 +706,7 @@ public class RemoteActivity extends BaseActivity implements
 
 		@Override
 		public void onFail(Integer msgId) {
+			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
 			dialog.dismiss();
 		}
 

@@ -119,7 +119,7 @@ public class UTorrent extends RemoteBase {
 			String... hashes) {
 		String params = String.format(url, ip, "%s", mode);
 		for (String hash : hashes) {
-			params += "&hash=" + hash;
+			params = params + "&hash=" + hash;
 		}
 		return params;
 	}
@@ -127,7 +127,7 @@ public class UTorrent extends RemoteBase {
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		ResponseParser<Boolean> parser = new DefaultGetParser();
 		UtorrentTask<Boolean> task = UtorrentTask.newInstance(ipNPort,
-				buildParams(Const.Urls.UTORRENT_ACTION_URL, ipNPort, mode),
+				buildParams(Const.Urls.UTORRENT_ACTION_URL, ipNPort, mode, hashes),
 				parser);
 		return task;
 	}

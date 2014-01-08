@@ -39,7 +39,7 @@ public class HttpClientManager {
 	/**
 	 * 读取超时时间
 	 */
-	public final static int READ_TIMEOUT = 10000;
+	public final static int READ_TIMEOUT = 30 * 1000;
 
 	// client更新周期
 	private static final int EXPIRED_PERIOD = 5 * 60 * 1000;
