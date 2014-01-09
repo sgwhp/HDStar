@@ -148,6 +148,7 @@ public class HttpClientManager {
 					}
 				}
 			} catch (InterruptedException ex) {
+				ex.printStackTrace();
 				// terminate
 			}
 		}
