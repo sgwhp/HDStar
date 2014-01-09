@@ -23,6 +23,10 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
@@ -85,6 +89,33 @@ public class TorrentListFragment extends StackFragment {
 		// View v = listView.getChildAt(0);
 		// top = v == null ? 0 : v.getTop();
 		super.onDestroyView();
+	}
+
+	@Override
+	public void initActionBar(Menu menu) {
+		final SearchView search = new SearchView(
+				((SherlockFragmentActivity) getActivity())
+						.getSupportActionBar().getThemedContext());
+		search.setSubmitButtonEnabled(true);
+		search.setOnQueryTextListener(new OnQueryTextListener(){
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}});
+		menu.add(0, Menu.FIRST, 0, android.R.string.search_go)
+		.setIcon(android.R.drawable.ic_search_category_default)
+		.setActionView(search)
+		.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+	}
+
+	@Override
+	public void onActionBarClick(int menuItemId) {
 	}
 
 	@Override
