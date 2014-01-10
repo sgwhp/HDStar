@@ -1,5 +1,7 @@
 package org.hdstar.widget.fragment;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class TorrentListFragment extends StackFragment {
 	private TorrentAdapter adapter;
 	private List<Torrent> torrents = new ArrayList<Torrent>();
 	private int page = 1;
+	private String keyWords = null;
 
 	public static TorrentListFragment newInstance() {
 		TorrentListFragment f = new TorrentListFragment();
@@ -97,21 +100,30 @@ public class TorrentListFragment extends StackFragment {
 				((SherlockFragmentActivity) getActivity())
 						.getSupportActionBar().getThemedContext());
 		search.setSubmitButtonEnabled(true);
-		search.setOnQueryTextListener(new OnQueryTextListener(){
+		search.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
+				keyWords = query;
+				keyWords = keyWords.trim();
+				if (!"".equals(keyWords)) {
+					refreshView.setRefreshing(false);
+					return true;
+				}
 				return false;
 			}
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
 				return false;
-			}});
+			}
+		});
 		menu.add(0, Menu.FIRST, 0, android.R.string.search_go)
-		.setIcon(android.R.drawable.ic_search_category_default)
-		.setActionView(search)
-		.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+				.setIcon(android.R.drawable.ic_search_category_default)
+				.setActionView(search)
+				.setShowAsAction(
+						MenuItem.SHOW_AS_ACTION_ALWAYS
+								| MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 	}
 
 	@Override
@@ -178,9 +190,17 @@ public class TorrentListFragment extends StackFragment {
 				.newInstance(HDStarApp.cookies);
 		task.attach(refreshCallback);
 		attachTask(task);
-		task.execGet(Const.Urls.SERVER_TORRENTS_URL,
-				new TypeToken<ResponseWrapper<List<Torrent>>>() {
-				}.getType());
+		String url = Const.Urls.SERVER_TORRENTS_URL;
+		if (keyWords != null) {
+			try {
+				url += "?search=" + URLEncoder.encode(keyWords, Const.CHARSET);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			keyWords = null;
+		}
+		task.execGet(url, new TypeToken<ResponseWrapper<List<Torrent>>>() {
+		}.getType());
 	}
 
 	private void doRefresh() {
