@@ -15,10 +15,17 @@ import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.adapter.TorrentAdapter;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,17 +37,12 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TorrentListFragment extends StackFragment {
 	private View view;
-	private PullToRefreshExpandableListView refreshView;
+	private PullToRefreshLayout mPullToRefreshLayout;
 	private ExpandableListView listView;
 	private Parcelable listViewState;
 	private TorrentAdapter adapter;
@@ -57,9 +59,9 @@ public class TorrentListFragment extends StackFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.torrent_list_layout, null);
-		refreshView = (PullToRefreshExpandableListView) view
-				.findViewById(R.id.pull_refresh_expandable_list);
-		listView = refreshView.getRefreshableView();
+		mPullToRefreshLayout = (PullToRefreshLayout) view
+				.findViewById(R.id.ptr_layout);
+		listView = (ExpandableListView) view.findViewById(R.id.torrent_list);
 		return view;
 	}
 
@@ -73,7 +75,12 @@ public class TorrentListFragment extends StackFragment {
 		}
 		init();
 		if (torrents.size() == 0) {
-			refreshView.setRefreshing(false);
+			mPullToRefreshLayout.post(new Runnable(){
+
+				@Override
+				public void run() {
+					refresh();
+				}});
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -107,7 +114,7 @@ public class TorrentListFragment extends StackFragment {
 				keyWords = query;
 				keyWords = keyWords.trim();
 				if (!"".equals(keyWords)) {
-					refreshView.setRefreshing(false);
+					mPullToRefreshLayout.setRefreshing(false);
 					return true;
 				}
 				return false;
@@ -137,7 +144,8 @@ public class TorrentListFragment extends StackFragment {
 
 	@Override
 	public void refresh() {
-		refreshView.setRefreshing(false);
+		mPullToRefreshLayout.setRefreshing(true);
+		fetch();
 	}
 
 	void init() {
@@ -146,33 +154,31 @@ public class TorrentListFragment extends StackFragment {
 			listView.onRestoreInstanceState(listViewState);
 		}
 
-		refreshView
-				.setOnRefreshListener(new OnRefreshListener2<ExpandableListView>() {
+		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
+//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		ActionBarPullToRefresh
+		.from(getActivity())
+		.options(
+				Options.create().refreshOnUp(true).mode(Mode.BOTH)
+						.headerLayout(R.layout.cancelable_header)
+						.headerTransformer(transformer).build())
+		// Here we mark just the ListView and it's Empty View as
+		// pullable
+		.theseChildrenArePullable(R.id.torrent_list).listener(new OnRefreshListener2() {
 
-					@Override
-					public void onPullDownToRefresh(
-							PullToRefreshBase<ExpandableListView> refreshView) {
-						String label = DateUtils.formatDateTime(getActivity(),
-								System.currentTimeMillis(),
-								DateUtils.FORMAT_SHOW_TIME
-										| DateUtils.FORMAT_SHOW_DATE
-										| DateUtils.FORMAT_ABBREV_ALL);
+			@Override
+			public void onRefreshStartedFromStart(View view) {
+				doRefresh();
+			}
+			
+			@Override
+			public void onRefreshStartedFromEnd(View view){
+				loadNextPage();
+			}
+		})
+		.setup(mPullToRefreshLayout);
 
-						// Update the LastUpdatedLabel
-						refreshView.getLoadingLayoutProxy()
-								.setLastUpdatedLabel(label);
-
-						doRefresh();
-					}
-
-					@Override
-					public void onPullUpToRefresh(
-							PullToRefreshBase<ExpandableListView> refreshView) {
-						doNextPageClick(refreshView);
-					}
-
-				});
-		refreshView.setOnCancelListener(new OnCancelListener() {
+		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
@@ -211,11 +217,7 @@ public class TorrentListFragment extends StackFragment {
 		fetch();
 	}
 
-	public void doNextPageClick(final View view) {
-		// ((TextView) view.findViewById(R.id.loading_next_page_text))
-		// .setText(R.string.loading);
-		// view.findViewById(R.id.loading_next_page_progressBar).setVisibility(
-		// View.VISIBLE);
+	public void loadNextPage() {
 		DelegateTask<List<Torrent>> task = new DelegateTask<List<Torrent>>(
 				HDStarApp.cookies);
 		task.attach(addCallback);
@@ -230,7 +232,7 @@ public class TorrentListFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Torrent> list) {
 			page = 1;
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			torrents.clear();
 			torrents.addAll(list);
 			adapter.notifyDataSetChanged();
@@ -240,13 +242,13 @@ public class TorrentListFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
 		public void onCancel() {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 	};
 
@@ -255,7 +257,7 @@ public class TorrentListFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Torrent> list) {
 			page++;
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			if (list.size() > 0) {
 				torrents.addAll((ArrayList<Torrent>) list);
 				adapter.notifyDataSetChanged();
@@ -271,7 +273,7 @@ public class TorrentListFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			// ((TextView) view.findViewById(R.id.loading_next_page_text))
 			// .setText(R.string.next_page);
 			// view.findViewById(R.id.loading_next_page_progressBar)
@@ -281,7 +283,7 @@ public class TorrentListFragment extends StackFragment {
 
 		@Override
 		public void onCancel() {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 
 	};

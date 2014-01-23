@@ -22,6 +22,14 @@ import org.hdstar.widget.adapter.PostAdapter;
 import org.hdstar.widget.adapter.PostAdapter.OnPostClickListener;
 import org.jsoup.Jsoup;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -37,10 +45,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
@@ -49,7 +53,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TopicFragment extends StackFragment {
 
-	private PullToRefreshListView refreshView;
+	private PullToRefreshLayout mPullToRefreshLayout;
 	private ListView listView;
 	private int topicId;
 	private String title = "";
@@ -118,6 +122,7 @@ public class TopicFragment extends StackFragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
+		if (mPullToRefreshLayout != null) mPullToRefreshLayout.setRefreshComplete();
 		CustomLinkMovementMethod.detach();
 	}
 
@@ -155,52 +160,54 @@ public class TopicFragment extends StackFragment {
 					});
 		}
 		listView.setAdapter(adapter);
-		// listView.setOnItemClickListener(new OnItemClickListener() {
-		//
-		// @Override
-		// public void onItemClick(AdapterView<?> arg0, View arg1,
-		// int position, long id) {
-		// Post post = (Post) listView.getItemAtPosition(position);
-		// String username = Jsoup.parseBodyFragment(post.userName).text();
-		// username = username.substring(0, username.indexOf("("));
-		// // listView.setFocusable(false);
-		// reply(post.body, username);
-		// }
-		//
-		// });
 		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), pauseOnScroll, pauseOnFling));
-		// 注册下拉列表刷新的监听器
-		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
+//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		ActionBarPullToRefresh
+		.from(getActivity())
+		.options(
+				Options.create().refreshOnUp(true).mode(Mode.BOTH)
+						.headerLayout(R.layout.cancelable_header)
+						.headerTransformer(transformer).build())
+		// Here we mark just the ListView and it's Empty View as
+		// pullable
+		.theseChildrenArePullable(R.id.post_list).listener(new OnRefreshListener() {
 
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				doRefresh();
-			}
-		});
-		if (adapter.getCount() != 0) {
-			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
-		} else {
-			refreshView.setRefreshing(false);
-		}
+					@Override
+					public void onRefreshStarted(View view) {
+						doRefresh();
+					}
+				})
+		.setup(mPullToRefreshLayout);
 
-		refreshView.setOnCancelListener(new OnCancelListener() {
+		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
 				detachTask();
 			}
 		});
+		if (adapter.getCount() != 0) {
+			adapter.notifyDataSetChanged();
+			listView.setSelection(1);
+		} else {
+			mPullToRefreshLayout.post(new Runnable(){
+
+				@Override
+				public void run() {
+					refresh();
+				}});
+		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.topic_view, null);
-		refreshView = (PullToRefreshListView) view
-				.findViewById(R.id.pull_refresh_list);
-		listView = refreshView.getRefreshableView();
+		mPullToRefreshLayout = (PullToRefreshLayout) view
+				.findViewById(R.id.ptr_layout);
+		listView = (ListView) view.findViewById(R.id.post_list);
 		return view;
 	}
 
@@ -227,7 +234,8 @@ public class TopicFragment extends StackFragment {
 
 	@Override
 	public void refresh() {
-		refreshView.setRefreshing(false);
+		mPullToRefreshLayout.setRefreshing(true);
+		doRefresh();
 	}
 
 	void fetch() {
@@ -338,14 +346,14 @@ public class TopicFragment extends StackFragment {
 			adapter.notifyDataSetChanged();
 			listView.setSelection(1);
 			// listView.onRefreshComplete();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			SoundPoolManager.play(getActivity());
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
 			// listView.onRefreshComplete();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			// listView.setSelection(1);
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
@@ -353,7 +361,7 @@ public class TopicFragment extends StackFragment {
 		@Override
 		public void onCancel() {
 			// listView.onRefreshComplete();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			detachTask();
 		}
 	};
@@ -363,7 +371,7 @@ public class TopicFragment extends StackFragment {
 		@Override
 		public void onComplete(Void result) {
 			loadingDialog.dismiss();
-			refreshView.setRefreshing(true);
+			mPullToRefreshLayout.setRefreshing(true);
 		}
 
 		@Override

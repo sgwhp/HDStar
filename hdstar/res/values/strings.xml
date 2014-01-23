@@ -99,7 +99,6 @@
     <string name="remote_server">远程服务器</string>
     <string name="clear_cache">清除缓存</string>
     <string name="cache_cleared">缓存已清除</string>
-    <string name="log_out">注销</string>
     <string name="check_update">检查更新</string>
     <string name="searching_for_update">正在搜索更新…</string>
     <string name="searching_update_fail">搜索更新失败，请稍后重试</string>

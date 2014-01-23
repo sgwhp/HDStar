@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ptr_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background" >
     
-    <com.handmark.pulltorefresh.library.PullToRefreshListView 
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    <ListView 
         android:id="@+id/messageList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cacheColorHint="#00000000"
         android:fastScrollEnabled="true"
-        android:headerDividersEnabled="false"
-        ptr:ptrHeaderBackground="@android:color/darker_gray"
-        ptr:ptrHeaderTextColor="@android:color/white"
-        ptr:ptrAnimationStyle="flip"
-        ptr:ptrCancelable="true" />
+        android:headerDividersEnabled="false" />
     
 
-</LinearLayout>
+</uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout>

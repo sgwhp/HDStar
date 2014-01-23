@@ -36,6 +36,14 @@ import org.hdstar.widget.navigation.SimpleListItem;
 import org.hdstar.widget.navigation.StatusType;
 import org.xml.sax.SAXException;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,7 +51,6 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,10 +81,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.slidingmenu.lib.SlidingMenu;
 
@@ -94,7 +97,7 @@ public class RemoteActivity extends BaseActivity implements
 	protected FilterListDropDownAdapter navigationSpinnerAdapter = null;// 下拉导航
 	// private int skipNextOnNavigationItemSelectedCalls = 2;
 	protected NavigationFilter currentFilter = null;// 当前过滤模式
-	private PullToRefreshListView refreshView;
+	private PullToRefreshLayout mPullToRefreshLayout;
 	private View root;
 	private View empty;// 占位，防止操作按钮窗口遮挡任务列表，无特殊意义
 	private View start, pause, stop, delete;
@@ -136,7 +139,7 @@ public class RemoteActivity extends BaseActivity implements
 		getSlidingMenu().setSecondaryMenu(R.layout.rss_list);
 
 		root = findViewById(R.id.task_list_content);
-		refreshView = (PullToRefreshListView) findViewById(R.id.task_list);
+		mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
 		empty = findViewById(R.id.empty);
 
 		rssListView = (ExpandableListView) findViewById(R.id.rss_list);
@@ -346,7 +349,7 @@ public class RemoteActivity extends BaseActivity implements
 			navigationSpinnerAdapter.updateCurrentServer(setting);
 
 			detachTask();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			login = false;
 			taskList.clear();
 			filterList.clear();
@@ -366,7 +369,7 @@ public class RemoteActivity extends BaseActivity implements
 				findViewById(R.id.disk_info).setVisibility(View.GONE);
 			}
 
-			refreshView.setRefreshing(false);
+			mPullToRefreshLayout.setRefreshing(true);
 			refreshDiskInfo();
 
 			// Update connection to the newly selected server and refresh
@@ -388,25 +391,29 @@ public class RemoteActivity extends BaseActivity implements
 		for (int i = rssSettings.size() - 1; i >= 0; i--) {
 			rssStatus[i] = TaskStatus.Normal;
 		}
-		listView = refreshView.getRefreshableView();
+		listView = (ListView) findViewById(R.id.task_list);
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
-		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
+//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		ActionBarPullToRefresh
+		.from(this)
+		.options(
+				Options.create().refreshOnUp(true).mode(Mode.BOTH)
+						.headerLayout(R.layout.cancelable_header)
+						.headerTransformer(transformer).build())
+		// Here we mark just the ListView and it's Empty View as
+		// pullable
+		.theseChildrenArePullable(R.id.task_list).listener(new OnRefreshListener() {
 
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(RemoteActivity.this,
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-								| DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+					@Override
+					public void onRefreshStarted(View view) {
+						doRefresh();
+					}
+				})
+		.setup(mPullToRefreshLayout);
 
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				doRefresh();
-			}
-		});
-
-		refreshView.setOnCancelListener(new OnCancelListener() {
+		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
@@ -729,12 +736,12 @@ public class RemoteActivity extends BaseActivity implements
 
 		@Override
 		public void onCancel() {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
 		}
 	};
@@ -743,7 +750,7 @@ public class RemoteActivity extends BaseActivity implements
 
 		@Override
 		public void onComplete(ArrayList<RemoteTaskInfo> result) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			taskList.clear();
 			SoundPoolManager.play(RemoteActivity.this);
 			taskList.addAll(result);
@@ -761,12 +768,12 @@ public class RemoteActivity extends BaseActivity implements
 
 		@Override
 		public void onCancel() {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
 		}
 	};
@@ -775,7 +782,7 @@ public class RemoteActivity extends BaseActivity implements
 
 		@Override
 		public void onComplete(Boolean result) {
-			refreshView.setRefreshing(true);
+			mPullToRefreshLayout.setRefreshing(true);
 			dialog.dismiss();
 		}
 

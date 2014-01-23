@@ -18,12 +18,18 @@ import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.adapter.MessageAdapter;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,18 +44,13 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MessageBoxFragment extends StackFragment {
 	private int boxType;
 	private List<Message> list;
-	private PullToRefreshListView refreshView;
+	private PullToRefreshLayout mPullToRefreshLayout;
 	private ListView listView;
 	private Parcelable listViewState;
 	private View view;
@@ -92,8 +93,12 @@ public class MessageBoxFragment extends StackFragment {
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			refreshView.setRefreshing(false);
-			// fetch();
+			mPullToRefreshLayout.post(new Runnable(){
+
+				@Override
+				public void run() {
+					refresh();
+				}});
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -135,13 +140,14 @@ public class MessageBoxFragment extends StackFragment {
 
 	@Override
 	public void refresh() {
-		refreshView.setRefreshing(false);
+		mPullToRefreshLayout.setRefreshing(true);
+		fetch();
 	}
 
 	private void init() {
-		refreshView = (PullToRefreshListView) view
-				.findViewById(R.id.messageList);
-		listView = refreshView.getRefreshableView();
+		mPullToRefreshLayout = (PullToRefreshLayout) view
+				.findViewById(R.id.ptr_layout);
+		listView = (ListView) view.findViewById(R.id.messageList);
 		listView.setAdapter(adapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
@@ -157,22 +163,26 @@ public class MessageBoxFragment extends StackFragment {
 			}
 
 		});
-		refreshView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
+//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		ActionBarPullToRefresh
+		.from(getActivity())
+		.options(
+				Options.create().refreshOnUp(true)
+						.headerLayout(R.layout.cancelable_header)
+						.headerTransformer(transformer).build())
+		// Here we mark just the ListView and it's Empty View as
+		// pullable
+		.theseChildrenArePullable(R.id.messageList).listener(new OnRefreshListener() {
 
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getActivity(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-								| DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
+					@Override
+					public void onRefreshStarted(View view) {
+						doRefresh();
+					}
+				})
+		.setup(mPullToRefreshLayout);
 
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				doRefresh();
-			}
-		});
-
-		refreshView.setOnCancelListener(new OnCancelListener() {
+		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
@@ -248,7 +258,7 @@ public class MessageBoxFragment extends StackFragment {
 		public void onComplete(List<Message> result) {
 			// mTask.detach();
 			// listView.onRefreshComplete();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			list.clear();
 			list.addAll(result);
 			adapter.setList(result);
@@ -263,7 +273,7 @@ public class MessageBoxFragment extends StackFragment {
 		public void onFail(Integer msgId) {
 			// mTask.detach();
 			// listView.onRefreshComplete();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			listView.setSelection(1);
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
@@ -272,7 +282,7 @@ public class MessageBoxFragment extends StackFragment {
 		public void onCancel() {
 			// mTask.detach();
 			// listView.onRefreshComplete();
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 	};
 

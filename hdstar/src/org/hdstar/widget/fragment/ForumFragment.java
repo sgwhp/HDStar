@@ -17,11 +17,18 @@ import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.adapter.PageAdapter;
 import org.hdstar.widget.adapter.TopicsAdapter;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,17 +42,12 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnCancelListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ForumFragment extends StackFragment {
 	private View view;
-	private PullToRefreshListView refreshView;
+	private PullToRefreshLayout mPullToRefreshLayout;
 	private ListView listView;
 	private Parcelable listViewState;
 	// private int index;
@@ -103,11 +105,21 @@ public class ForumFragment extends StackFragment {
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			refreshView.setRefreshing(false);
-			// fetch();
+			mPullToRefreshLayout.post(new Runnable(){
+
+				@Override
+				public void run() {
+					refresh();
+				}});
 		} else {
 			adapter.notifyDataSetChanged();
 		}
+	}
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		if (mPullToRefreshLayout != null) mPullToRefreshLayout.setRefreshComplete();
 	}
 
 	@Override
@@ -151,15 +163,47 @@ public class ForumFragment extends StackFragment {
 
 	@Override
 	public void refresh() {
-		refreshView.setRefreshing(false);
+		mPullToRefreshLayout.setRefreshing(true);
+		doRefresh();
 	}
 
 	protected void init() {
 		final float dip = this.getResources().getDisplayMetrics().density;
 		final Activity act = getActivity();
-		refreshView = (PullToRefreshListView) view
-				.findViewById(R.id.pull_refresh_list);
-		listView = refreshView.getRefreshableView();
+		mPullToRefreshLayout = (PullToRefreshLayout) view
+				.findViewById(R.id.ptr_layout);
+		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
+		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		ActionBarPullToRefresh
+		.from(getActivity())
+		.options(
+				Options.create().refreshOnUp(true).mode(Mode.BOTH)
+						.headerLayout(R.layout.cancelable_header)
+						.headerTransformer(transformer).build())
+		// Here we mark just the ListView and it's Empty View as
+		// pullable
+		.theseChildrenArePullable(R.id.topic_list).listener(new OnRefreshListener2() {
+
+					@Override
+					public void onRefreshStartedFromStart(View view) {
+						doRefresh();
+					}
+					
+					@Override
+					public void onRefreshStartedFromEnd(View view){
+						loadNextPage();
+					}
+				})
+		.setup(mPullToRefreshLayout);
+
+		transformer.setOnCancelListener(new OnCancelListener() {
+
+			@Override
+			public void onCancel() {
+				detachTask();
+			}
+		});
+		listView = (ListView) view.findViewById(R.id.topic_list);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -200,37 +244,6 @@ public class ForumFragment extends StackFragment {
 			listView.onRestoreInstanceState(listViewState);
 			// listView.setSelectionFromTop(index, top);
 		}
-		refreshView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
-
-			@Override
-			public void onPullDownToRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getActivity(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-								| DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
-
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-
-				doRefresh();
-			}
-
-			@Override
-			public void onPullUpToRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				loadNextPage();
-			}
-
-		});
-
-		refreshView.setOnCancelListener(new OnCancelListener() {
-
-			@Override
-			public void onCancel() {
-				detachTask();
-			}
-		});
 	}
 
 	void viewTopic(int topicId, int page, String title) {
@@ -279,7 +292,7 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onComplete(List<Topic> list) {
 			curPage = page;
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			adapter.clearItems();
 			adapter.itemsAddAll(list);
 			adapter.notifyDataSetChanged();
@@ -289,14 +302,14 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			// listView.setSelection(1);
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
 		public void onCancel() {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 	};
 
@@ -304,7 +317,7 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Topic> list) {
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			if (list.size() > 0) {
 				adapter.itemsAddAll((ArrayList<Topic>) list);
 				adapter.notifyDataSetChanged();
@@ -317,14 +330,14 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			--curPage;
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
 		public void onCancel() {
 			--curPage;
-			refreshView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
 		}
 
 	};

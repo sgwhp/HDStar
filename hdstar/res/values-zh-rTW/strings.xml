@@ -88,7 +88,6 @@
     <string name="remote_server">遠程服務器</string>
     <string name="clear_cache">清除緩存</string>
     <string name="cache_cleared">緩存已清除</string>
-    <string name="log_out">註銷</string>
     <string name="check_update">檢查更新</string>
     <string name="searching_for_update">正在搜索更新…</string>
     <string name="searching_update_fail">搜索更新失敗，請稍後重試</string>
