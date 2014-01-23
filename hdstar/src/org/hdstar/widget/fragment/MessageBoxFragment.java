@@ -16,7 +16,7 @@ import org.hdstar.task.DelegateTask;
 import org.hdstar.task.OriginTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
-import org.hdstar.widget.MessageAdapter;
+import org.hdstar.widget.adapter.MessageAdapter;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;

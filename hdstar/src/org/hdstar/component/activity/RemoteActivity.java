@@ -29,6 +29,11 @@ import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.TextProgressBar;
+import org.hdstar.widget.navigation.FilterListDropDownAdapter;
+import org.hdstar.widget.navigation.Label;
+import org.hdstar.widget.navigation.NavigationFilter;
+import org.hdstar.widget.navigation.SimpleListItem;
+import org.hdstar.widget.navigation.StatusType;
 import org.xml.sax.SAXException;
 
 import android.app.AlertDialog;
@@ -79,24 +84,32 @@ import com.slidingmenu.lib.SlidingMenu;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+/**
+ * 远程控制. <br/>
+ * 
+ * @author robust
+ */
 public class RemoteActivity extends BaseActivity implements
 		OnNavigationListener, OnClickListener {
+	protected FilterListDropDownAdapter navigationSpinnerAdapter = null;// 下拉导航
+	// private int skipNextOnNavigationItemSelectedCalls = 2;
+	protected NavigationFilter currentFilter = null;// 当前过滤模式
 	private PullToRefreshListView refreshView;
 	private View root;
-	private View empty;
+	private View empty;// 占位，防止操作按钮窗口遮挡任务列表，无特殊意义
 	private View start, pause, stop, delete;
 	private ListView listView;
 	private ExpandableListView rssListView;
 	private RemoteTaskAdapter adapter;
 	private RssAdapter rssAdapter;
-	private ArrayList<RemoteTaskInfo> list = new ArrayList<RemoteTaskInfo>();
-	// private ArrayList<RssLabel> rssList = new ArrayList<RssLabel>();
+	private ArrayList<RemoteTaskInfo> taskList = new ArrayList<RemoteTaskInfo>();
+	private ArrayList<RemoteTaskInfo> filterList = new ArrayList<RemoteTaskInfo>();
 	private boolean[] selected;
 	private RssItem selectedRssItem;
 	private int selectedCount;// 选中的下载任务数
 	private PopupWindow window = null;
-	private PopupWindow addTorrentWindow;
-	private EditText dirEt;
+	private PopupWindow addTorrentWindow;// 下载确认窗口
+	private EditText dirEt;// 下载目录
 	private LinearLayout ctrlBox;
 	private CustomDialog dialog = null;
 	private BaseAsyncTask<?> mTask;
@@ -111,11 +124,7 @@ public class RemoteActivity extends BaseActivity implements
 	private ArrayList<RssSetting> rssSettings;
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
-	private boolean login;
-
-	public RemoteActivity() {
-//		super(R.string.remote);
-	}
+	private boolean login;// 是否已登录
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -144,11 +153,22 @@ public class RemoteActivity extends BaseActivity implements
 			ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
 					context, R.layout.sherlock_spinner_item, servers);
 			list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+			navigationSpinnerAdapter = new FilterListDropDownAdapter(this);
+			navigationSpinnerAdapter.updateServers(settings);
+			// Add status types directly to the action bar spinner
+			navigationSpinnerAdapter.updateStatusTypes(StatusType
+					.getAllStatusTypes(this));
+			// Add an empty labels list (which will be updated later, but the
+			// adapter needs to be created now)
+			navigationSpinnerAdapter.updateLabels(new ArrayList<Label>());
+			currentFilter = StatusType.getShowAllType(this);
 			ActionBar actionbar = getSupportActionBar();
 			actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+			navigationSpinnerAdapter.updateCurrentFilter(currentFilter);
+			actionbar
+					.setListNavigationCallbacks(navigationSpinnerAdapter, this);
 			actionbar.setSelectedNavigationItem(RemoteSettingManager
-					.getDefault(this));
-			actionbar.setListNavigationCallbacks(list, this);
+					.getDefault(this) + 1);
 		} else {
 			findViewById(R.id.login).setEnabled(false);
 			new AlertDialog.Builder(this)
@@ -294,27 +314,72 @@ public class RemoteActivity extends BaseActivity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		detachTask();
-		refreshView.onRefreshComplete();
-		login = false;
-		list.clear();
-		adapter.notifyDataSetChanged();
-		setting = settings.get(itemPosition);
-		remote = RemoteFactory.newInstanceByName(setting.type);
-		remote.setIpNPort(setting.ip);
-		dirEt.setText(setting.downloadDir);
-		if (remote.diskEnable()) {
-			findViewById(R.id.disk_info).setVisibility(View.VISIBLE);
-			findViewById(R.id.refresh_disk_info).setOnClickListener(this);
-			refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);
-			disk = (TextProgressBar) findViewById(R.id.disk_size);
-		} else {
-			findViewById(R.id.disk_info).setVisibility(View.GONE);
+		// if (skipNextOnNavigationItemSelectedCalls > 0) {
+		// skipNextOnNavigationItemSelectedCalls--;
+		// return false;
+		// }
+		Object item = navigationSpinnerAdapter.getItem(itemPosition);
+		if (item instanceof SimpleListItem) {
+			// A filter item was selected form the navigation spinner
+			filterSelected((SimpleListItem) item, false);
+			return true;
+		}
+		// A header was selected; no action
+		return false;
+	}
+
+	/**
+	 * A new filter was selected; update the view over the current data
+	 * 
+	 * @param item
+	 *            The touched filter item
+	 * @param forceNewConnection
+	 *            Whether a new connection should be initialised regardless of
+	 *            the old server selection
+	 */
+	protected void filterSelected(SimpleListItem item,
+			boolean forceNewConnection) {
+
+		// Server selection
+		if (item instanceof RemoteSetting) {
+			setting = (RemoteSetting) item;
+			navigationSpinnerAdapter.updateCurrentServer(setting);
+
+			detachTask();
+			refreshView.onRefreshComplete();
+			login = false;
+			taskList.clear();
+			filterList.clear();
+			adapter.notifyDataSetChanged();
+			// 切换服务器时，取消状态过滤
+			currentFilter = StatusType.getShowAllType(this);
+			navigationSpinnerAdapter.updateCurrentFilter(currentFilter);
+			remote = RemoteFactory.newInstanceByName(setting.type);
+			remote.setIpNPort(setting.ip);
+			dirEt.setText(setting.downloadDir);
+			if (remote.diskEnable()) {
+				findViewById(R.id.disk_info).setVisibility(View.VISIBLE);
+				findViewById(R.id.refresh_disk_info).setOnClickListener(this);
+				refreshDiskInfoBtn = (Button) findViewById(R.id.refresh_disk_info);
+				disk = (TextProgressBar) findViewById(R.id.disk_size);
+			} else {
+				findViewById(R.id.disk_info).setVisibility(View.GONE);
+			}
+
+			refreshView.setRefreshing(false);
+			refreshDiskInfo();
+
+			// Update connection to the newly selected server and refresh
+			return;
+
+		}
+		// Status type or label selection - both of which are navigation filters
+		if (item instanceof NavigationFilter) {
+			currentFilter = (NavigationFilter) item;
+			navigationSpinnerAdapter.updateCurrentFilter(currentFilter);
+			applyFilter();
 		}
 
-		refreshView.setRefreshing(false);
-		refreshDiskInfo();
-		return false;
 	}
 
 	protected void init() {
@@ -391,7 +456,7 @@ public class RemoteActivity extends BaseActivity implements
 		window = new PopupWindow(ctrlBox, LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT, false);
 		window.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.bottom_pop_up_window_bg));
+				R.drawable.pop_up_window_bottom_bg));
 		window.setAnimationStyle(R.style.task_ctrl_box_anim_style);
 		// 初始化rss下载弹出窗口
 		View addTorrentLayout = inflater.inflate(R.layout.add_torrent_dialog,
@@ -403,7 +468,7 @@ public class RemoteActivity extends BaseActivity implements
 		addTorrentWindow = new PopupWindow(addTorrentLayout,
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
 		addTorrentWindow.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.bottom_pop_up_window_bg));
+				R.drawable.pop_up_window_bg));
 		addTorrentWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
 	}
 
@@ -450,9 +515,9 @@ public class RemoteActivity extends BaseActivity implements
 
 	private String[] selectedHashes() {
 		String[] hashes = new String[selectedCount];
-		for (int i = 0, j = 0; i < list.size(); i++) {
+		for (int i = 0, j = 0; i < filterList.size(); i++) {
 			if (selected[i]) {
-				hashes[j++] = list.get(i).hash;
+				hashes[j++] = filterList.get(i).hash;
 			}
 		}
 		return hashes;
@@ -643,6 +708,16 @@ public class RemoteActivity extends BaseActivity implements
 		BaseAsyncTask.taskExec.execute(diskTask);
 	}
 
+	private void applyFilter() {
+		filterList.clear();
+		for (RemoteTaskInfo task : taskList) {
+			if (currentFilter.matches(task, true)) {
+				filterList.add(task);
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
+
 	private TaskCallback<Boolean> loginCallback = new TaskCallback<Boolean>() {
 
 		@Override
@@ -669,14 +744,19 @@ public class RemoteActivity extends BaseActivity implements
 		@Override
 		public void onComplete(ArrayList<RemoteTaskInfo> result) {
 			refreshView.onRefreshComplete();
-			list.clear();
+			taskList.clear();
 			SoundPoolManager.play(RemoteActivity.this);
-			list.addAll(result);
-			selected = new boolean[list.size()];
+			taskList.addAll(result);
+			applyFilter();
+			selected = new boolean[taskList.size()];
 			selectedCount = 0;
 			window.dismiss();
 			empty.setVisibility(View.GONE);
 			adapter.notifyDataSetChanged();
+			// update navigation label
+			navigationSpinnerAdapter.updateLabels(Label
+					.convertToNavigationLabels(remote.getLabels(),
+							getString(R.string.unlabled)));
 		}
 
 		@Override
@@ -781,13 +861,13 @@ public class RemoteActivity extends BaseActivity implements
 
 		public RemoteTaskAdapter() {
 			selectedCount = 0;
-			selected = new boolean[list.size()];
+			selected = new boolean[filterList.size()];
 			taskInfo = getString(R.string.task_info);
 		}
 
 		@Override
 		public int getCount() {
-			return list == null ? 0 : list.size();
+			return filterList == null ? 0 : filterList.size();
 		}
 
 		@Override
@@ -811,7 +891,7 @@ public class RemoteActivity extends BaseActivity implements
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			RemoteTaskInfo item = list.get(position);
+			RemoteTaskInfo item = filterList.get(position);
 			holder.title.setText(item.title);
 			if (item.progress == -1) {
 				holder.progress
@@ -863,22 +943,11 @@ public class RemoteActivity extends BaseActivity implements
 			default:
 				holder.state.setImageResource(R.drawable.state_stop);
 			}
-			// if (item.open == 0) {
-			// holder.state.setImageResource(R.drawable.state_stop);
-			// } else if (item.status == TorrentStatus.Paused) {
-			// holder.state.setImageResource(R.drawable.state_pause);
-			// } else if (item.state == 1) {
-			// if (item.completeSize == item.size) {
-			// holder.state.setImageResource(R.drawable.state_seeding);
-			// } else {
-			// holder.state.setImageResource(R.drawable.state_leaching);
-			// }
-			// }
 			return convertView;
 		}
 
 		public ArrayList<RemoteTaskInfo> getList() {
-			return list;
+			return filterList;
 		}
 
 	}

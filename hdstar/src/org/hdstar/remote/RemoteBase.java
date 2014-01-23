@@ -1,8 +1,10 @@
 package org.hdstar.remote;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hdstar.common.RemoteType;
+import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.task.BaseAsyncTask;
 
@@ -14,16 +16,17 @@ import org.hdstar.task.BaseAsyncTask;
  * 
  */
 public abstract class RemoteBase {
-	protected RemoteType type;
+	protected RemoteType mType;
 	// °üÀ¨ipºÍ¶Ë¿Ú
 	protected String ipNPort;
+	protected ArrayList<Label> mLabels = new ArrayList<Label>();
 
 	public RemoteBase(RemoteType type) {
-		this.type = type;
+		this.mType = type;
 	}
 
 	public RemoteType getRemoteType() {
-		return type;
+		return mType;
 	}
 
 	public void setIpNPort(String ipNPort) {
@@ -32,6 +35,10 @@ public abstract class RemoteBase {
 
 	public String getIpNPort() {
 		return ipNPort;
+	}
+
+	public List<Label> getLabels() {
+		return mLabels;
 	}
 
 	public abstract BaseAsyncTask<Boolean> login(String username,

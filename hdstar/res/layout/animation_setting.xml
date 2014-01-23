@@ -26,7 +26,7 @@
                 android:paddingLeft="5dip"
                 android:text="@string/anim_fade" />
 
-            <org.hdstar.widget.LTAToggleButton
+            <org.hdstar.widget.lta.LTAToggleButton
                 android:id="@+id/fade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

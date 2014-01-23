@@ -46,5 +46,4 @@
         <attr name="additionRight" format="dimension" />
         <attr name="additionTop" format="dimension" />
     </declare-styleable>
-
 </resources>

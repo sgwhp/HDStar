@@ -14,8 +14,8 @@ import org.hdstar.model.Topic;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
-import org.hdstar.widget.PageAdapter;
-import org.hdstar.widget.TopicsAdapter;
+import org.hdstar.widget.adapter.PageAdapter;
+import org.hdstar.widget.adapter.TopicsAdapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

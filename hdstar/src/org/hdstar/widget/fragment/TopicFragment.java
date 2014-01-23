@@ -18,8 +18,8 @@ import org.hdstar.task.OriginTask;
 import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.CustomDialog;
-import org.hdstar.widget.PostAdapter;
-import org.hdstar.widget.PostAdapter.OnPostClickListener;
+import org.hdstar.widget.adapter.PostAdapter;
+import org.hdstar.widget.adapter.PostAdapter.OnPostClickListener;
 import org.jsoup.Jsoup;
 
 import android.annotation.SuppressLint;

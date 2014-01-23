@@ -1,4 +1,4 @@
-package org.hdstar.widget;
+package org.hdstar.widget.adapter;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;

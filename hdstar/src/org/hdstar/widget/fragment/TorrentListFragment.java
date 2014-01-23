@@ -13,7 +13,7 @@ import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
-import org.hdstar.widget.TorrentAdapter;
+import org.hdstar.widget.adapter.TorrentAdapter;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

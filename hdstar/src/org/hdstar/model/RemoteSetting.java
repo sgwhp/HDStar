@@ -4,6 +4,7 @@ import org.hdstar.common.Const;
 import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RemoteType;
 import org.hdstar.util.EncodeDecode;
+import org.hdstar.widget.navigation.SimpleListItem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +12,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class RemoteSetting implements Parcelable {
+public class RemoteSetting implements Parcelable, SimpleListItem {
 
 	public static final String MAX = "max";
 	public static final String REMOTE_TYPE = "RemoteType";
@@ -44,10 +45,10 @@ public class RemoteSetting implements Parcelable {
 		downloadDir = in.readString();
 		rmFile = in.readByte() != 0;
 	}
-	
-	public static RemoteType getRemoteType(String typeStr){
-		for(RemoteType type : RemoteType.values()){
-			if(type.name().equals(typeStr)){
+
+	public static RemoteType getRemoteType(String typeStr) {
+		for (RemoteType type : RemoteType.values()) {
+			if (type.name().equals(typeStr)) {
 				return type;
 			}
 		}
@@ -123,5 +124,10 @@ public class RemoteSetting implements Parcelable {
 		Editor editor = prefs.edit();
 		editor.putString(RemoteSettingManager.DOWNLOAD_DIR + order, downloadDir);
 		editor.commit();
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

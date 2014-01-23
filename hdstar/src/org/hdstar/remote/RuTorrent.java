@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.RemoteType;
+import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.TorrentStatus;
 import org.hdstar.task.BaseAsyncTask;
@@ -39,6 +41,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class RuTorrent extends RemoteBase {
+	HashMap<String, Label> labelsMap = new HashMap<String, Label>();
 
 	public RuTorrent() {
 		super(RemoteType.RuTorrent);
@@ -84,6 +87,8 @@ public class RuTorrent extends RemoteBase {
 				ArrayList<RemoteTaskInfo> result = new ArrayList<RemoteTaskInfo>();
 				RemoteTaskInfo info;
 				JsonArray arr;
+				mLabels.clear();
+				Label label;
 				for (Entry<String, JsonElement> entry : set) {
 					info = new RemoteTaskInfo();
 					arr = entry.getValue().getAsJsonArray();
@@ -93,14 +98,25 @@ public class RuTorrent extends RemoteBase {
 					info.progress = (int) (arr.get(8).getAsLong() * 100 / info.size);
 					info.status = convertRutorrentStatus(arr.get(0).getAsInt(),
 							arr.get(1).getAsInt(), arr.get(3).getAsInt(),
-							info.downloaded == 100);
+							info.progress == 100);
 					info.uploaded = arr.get(9).getAsLong();
 					info.ratio = arr.get(10).getAsFloat() / 1000;
 					info.upSpeed = arr.get(11).getAsLong();
 					info.dlSpeed = arr.get(12).getAsLong();
 					info.label = arr.get(14).getAsString();
 					result.add(info);
+					if ("".equals(info.label)) {
+						continue;
+					}
+					if ((label = labelsMap.get(info.label)) == null) {
+						label = new Label(info.label, 1);
+						labelsMap.put(info.label, label);
+						mLabels.add(label);
+					} else {
+						label.setCount(label.getCount() + 1);
+					}
 				}
+				labelsMap.clear();
 				msgId = SUCCESS_MSG_ID;
 				return result;
 			}

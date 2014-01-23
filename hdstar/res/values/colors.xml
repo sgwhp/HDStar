@@ -11,4 +11,5 @@
   <color name="listSelected_color">#ff4154a3</color>
   <color name="read_bg">#00000000</color>
   <color name="unread_bg">#ffc0c0c0</color>
+  <color name="green">#8acc12</color>
 </resources>

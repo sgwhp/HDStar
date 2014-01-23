@@ -1,24 +1,28 @@
-package org.hdstar.widget;
+package org.hdstar.widget.lta;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.Button;
 
-public class LTATextView extends TextView {
-
+/**
+ * 
+ * @author robust
+ * 
+ */
+public class LTAButton extends Button {
 	private LTAController ltaController;
 
-	public LTATextView(Context context) {
+	public LTAButton(Context context) {
 		super(context);
 		ltaController = new LTAController();
 	}
 
-	public LTATextView(Context context, AttributeSet attrs) {
+	public LTAButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		ltaController = new LTAController(context, attrs);
 	}
 
-	public LTATextView(Context context, AttributeSet attrs, int defStyle) {
+	public LTAButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		ltaController = new LTAController(context, attrs);
 	}
@@ -29,5 +33,4 @@ public class LTATextView extends TextView {
 		super.onLayout(changed, left, top, right, bottom);
 		ltaController.delegateTouch(this, bottom, left, right, top);
 	}
-
 }

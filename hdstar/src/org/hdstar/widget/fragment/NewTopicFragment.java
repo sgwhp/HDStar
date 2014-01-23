@@ -13,7 +13,7 @@ import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.ResizeLayout;
-import org.hdstar.widget.SmilesAdapter;
+import org.hdstar.widget.adapter.SmilesAdapter;
 
 import android.app.Activity;
 import android.content.DialogInterface;

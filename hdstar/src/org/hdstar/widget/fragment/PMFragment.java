@@ -15,7 +15,7 @@ import org.hdstar.task.OriginTask;
 import org.hdstar.util.MyTextParser;
 import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.ResizeLayout;
-import org.hdstar.widget.SmilesAdapter;
+import org.hdstar.widget.adapter.SmilesAdapter;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -153,7 +153,6 @@ public class PMFragment extends StackFragment {
 				String body = ((EditText) v.findViewById(R.id.body)).getText()
 						.toString();
 				body = parser.toImg(body);
-				// body += "\n（使用" + CustomSetting.DEVICE + "回复）";
 				List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 				if (msgId != 0) {
 					// 回复

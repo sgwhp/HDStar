@@ -39,7 +39,7 @@
         android:layout_centerVertical="true"
         android:src="@drawable/state_stop" />
     
-    <org.hdstar.widget.LTACheckBox
+    <org.hdstar.widget.lta.LTACheckBox
         android:id="@+id/check"
         style="@style/CustomCheckboxTheme"
         android:layout_width="wrap_content"

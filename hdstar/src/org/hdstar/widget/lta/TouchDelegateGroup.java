@@ -1,4 +1,4 @@
-package org.hdstar.widget;
+package org.hdstar.widget.lta;
 
 import java.util.ArrayList;
 

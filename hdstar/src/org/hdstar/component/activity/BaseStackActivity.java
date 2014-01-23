@@ -5,7 +5,7 @@ import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.util.Util;
 import org.hdstar.widget.StackHook;
-import org.hdstar.widget.StackPagerAdapter;
+import org.hdstar.widget.adapter.StackPagerAdapter;
 import org.hdstar.widget.fragment.MenuListFragment;
 import org.hdstar.widget.fragment.StackFragment;
 

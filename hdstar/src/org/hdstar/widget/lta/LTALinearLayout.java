@@ -1,4 +1,4 @@
-package org.hdstar.widget;
+package org.hdstar.widget.lta;
 
 import android.content.Context;
 import android.graphics.Rect;

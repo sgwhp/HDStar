@@ -33,7 +33,7 @@
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <org.hdstar.widget.LTAButton
+    <org.hdstar.widget.lta.LTAButton
         android:id="@+id/refresh_rss_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

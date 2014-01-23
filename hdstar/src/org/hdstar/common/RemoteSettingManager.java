@@ -30,6 +30,14 @@ public class RemoteSettingManager {
 		return list;
 	}
 
+	/**
+	 * 
+	 * 获取默认的远程服务器设置顺序. <br/>
+	 * 
+	 * @author robust
+	 * @param context
+	 * @return
+	 */
 	public static int getDefault(Context context) {
 		SharedPreferences prefs = getPrefs(context);
 		return prefs.getInt(DEFAULT, 0);

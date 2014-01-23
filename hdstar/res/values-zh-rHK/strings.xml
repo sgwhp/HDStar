@@ -149,4 +149,11 @@
     <string name="invalidate_ip">非法IP</string>
     <string name="disk">硬碟</string>
     <string name="get_disk_space_failed">獲取硬碟信息失敗</string>
+    <string name="status">狀態</string>
+	<string name="navigation_status_showall">全部</string>
+	<string name="navigation_status_onlydown">下載中</string>
+	<string name="navigation_status_onlyup">上傳中</string>
+	<string name="navigation_status_onlyactive">活動</string>
+	<string name="navigation_status_onlyinactive">停止</string>
+	<string name="unlabled">其他</string>
 </resources>

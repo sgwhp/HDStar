@@ -154,7 +154,7 @@
             android:paddingLeft="5dip"
             android:text="@string/set_as_default" />
 
-        <org.hdstar.widget.LTAToggleButton
+        <org.hdstar.widget.lta.LTAToggleButton
             android:id="@+id/set_as_defalut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

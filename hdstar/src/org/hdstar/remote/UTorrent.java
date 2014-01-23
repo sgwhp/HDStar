@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.RemoteType;
+import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.TorrentStatus;
 import org.hdstar.task.BaseAsyncTask;
@@ -27,6 +28,7 @@ import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class UTorrent extends RemoteBase {
@@ -71,9 +73,20 @@ public class UTorrent extends RemoteBase {
 					InputStream in) {
 				try {
 					JsonParser parser = new JsonParser();
-					JsonElement element = parser.parse(IOUtils.inputStream2String(in));
-					JsonArray arr = element.getAsJsonObject().getAsJsonArray(
-							"torrents");
+					JsonElement element = parser.parse(IOUtils
+							.inputStream2String(in));
+					JsonObject obj = element.getAsJsonObject();
+					// 解析标签
+					JsonArray arr = obj.getAsJsonArray("label");
+					JsonArray jLabel;
+					Label label;
+					for (int i = 0; i < arr.size(); i++) {
+						jLabel = arr.get(i).getAsJsonArray();
+						label = new Label(jLabel.get(0).getAsString(), jLabel
+								.get(1).getAsInt());
+						mLabels.add(label);
+					}
+					arr = obj.getAsJsonArray("torrents");
 					ArrayList<RemoteTaskInfo> result = new ArrayList<RemoteTaskInfo>();
 					JsonArray torrent;
 					RemoteTaskInfo info;
@@ -83,9 +96,9 @@ public class UTorrent extends RemoteBase {
 						info.hash = torrent.get(0).getAsString();
 						info.title = torrent.get(2).getAsString();
 						info.size = torrent.get(3).getAsLong();
-						//完成比例（0-1000）
+						// 完成比例（0-1000）
 						info.progress = torrent.get(4).getAsInt() / 10;
-						//已下载
+						// 已下载
 						info.downloaded = torrent.get(5).getAsLong();
 						info.status = convertUtorrentStatus(torrent.get(1)
 								.getAsInt(), info.progress == 100);
@@ -95,8 +108,8 @@ public class UTorrent extends RemoteBase {
 						info.dlSpeed = torrent.get(9).getAsLong();
 						// 10 eta
 						info.label = torrent.get(11).getAsString();
-						//13 peers
-						//14 seeds
+						// 13 peers
+						// 14 seeds
 						result.add(info);
 					}
 					msgId = SUCCESS_MSG_ID;
@@ -126,9 +139,10 @@ public class UTorrent extends RemoteBase {
 
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		ResponseParser<Boolean> parser = new DefaultGetParser();
-		UtorrentTask<Boolean> task = UtorrentTask.newInstance(ipNPort,
-				buildParams(Const.Urls.UTORRENT_ACTION_URL, ipNPort, mode, hashes),
-				parser);
+		UtorrentTask<Boolean> task = UtorrentTask.newInstance(
+				ipNPort,
+				buildParams(Const.Urls.UTORRENT_ACTION_URL, ipNPort, mode,
+						hashes), parser);
 		return task;
 	}
 

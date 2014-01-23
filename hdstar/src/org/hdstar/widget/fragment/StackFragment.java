@@ -2,7 +2,7 @@ package org.hdstar.widget.fragment;
 
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.widget.StackHook;
-import org.hdstar.widget.StackPagerAdapter;
+import org.hdstar.widget.adapter.StackPagerAdapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;

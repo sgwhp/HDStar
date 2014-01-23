@@ -1,29 +1,24 @@
-package org.hdstar.widget;
+package org.hdstar.widget.lta;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
+import android.widget.ToggleButton;
 
-/**
- * 
- * @author robust
- * 
- */
-public class LTACheckBox extends CheckBox {
+public class LTAToggleButton extends ToggleButton {
 	private LTAController ltaController;
 
-	public LTACheckBox(Context context) {
+	public LTAToggleButton(Context context) {
 		super(context);
 		ltaController = new LTAController();
 	}
 
-	public LTACheckBox(Context context, AttributeSet attrs) {
+	public LTAToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		ltaController = new LTAController(context, attrs);
 	}
 
-	public LTACheckBox(Context context, AttributeSet attrs, int defStyle) {
+	public LTAToggleButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		ltaController = new LTAController(context, attrs);
 	}
