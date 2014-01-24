@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class RemoteListFragment extends StackFragment implements
@@ -38,6 +39,7 @@ public class RemoteListFragment extends StackFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		setHasOptionsMenu(true);
 		init();
 	}
 
@@ -77,7 +79,7 @@ public class RemoteListFragment extends StackFragment implements
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.add);
 		item.setIcon(R.drawable.add);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
@@ -85,9 +87,14 @@ public class RemoteListFragment extends StackFragment implements
 	}
 
 	@Override
-	public void onActionBarClick(int MenuItemId) {
-		push(RemoteSettingFragment.newInstance(RemoteSettingFragment.MODE_ADD,
-				null));
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			push(RemoteSettingFragment.newInstance(
+					RemoteSettingFragment.MODE_ADD, null));
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private View createChild(Context context, RemoteSetting setting, int id) {
@@ -98,7 +105,7 @@ public class RemoteListFragment extends StackFragment implements
 		text.setText("http://" + setting.ip);
 		ImageView icon = (ImageView) v.findViewById(R.id.remote_icon);
 		int iconId = -1;
-		switch(RemoteSetting.getRemoteType(setting.type)){
+		switch (RemoteSetting.getRemoteType(setting.type)) {
 		case RuTorrent:
 			iconId = R.drawable.rtorrent_icon;
 			break;
@@ -106,7 +113,7 @@ public class RemoteListFragment extends StackFragment implements
 			iconId = R.drawable.utorrent_icon;
 			break;
 		}
-		if(iconId != -1){
+		if (iconId != -1) {
 			icon.setImageResource(iconId);
 		}
 		v.setId(id);

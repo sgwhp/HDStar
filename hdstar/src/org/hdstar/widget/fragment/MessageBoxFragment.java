@@ -19,12 +19,11 @@ import org.hdstar.widget.CustomDialog;
 import org.hdstar.widget.adapter.MessageAdapter;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
@@ -42,8 +41,10 @@ import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -86,19 +87,20 @@ public class MessageBoxFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
+		setHasOptionsMenu(true);
 		if (adapter == null) {
 			list = new ArrayList<Message>();
 			adapter = new MessageAdapter(getActivity(), list, boxType);
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			mPullToRefreshLayout.post(new Runnable(){
+			mPullToRefreshLayout.post(new Runnable() {
 
 				@Override
 				public void run() {
 					refresh();
-				}});
+				}
+			});
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -120,7 +122,7 @@ public class MessageBoxFragment extends StackFragment {
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(null);
 		menu.add(0, MessageActivity.DELETE_MENU_ITEM_ID, 0, R.string.delete)
@@ -129,8 +131,13 @@ public class MessageBoxFragment extends StackFragment {
 	}
 
 	@Override
-	public void onActionBarClick(int MenuItemId) {
-		delete();
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case MessageActivity.DELETE_MENU_ITEM_ID:
+			delete();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -164,28 +171,30 @@ public class MessageBoxFragment extends StackFragment {
 
 		});
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
-//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		// transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page),
+		// getString(R.string.release_to_add_next_page));
 		ActionBarPullToRefresh
-		.from(getActivity())
-		.options(
-				Options.create().refreshOnUp(true)
-						.headerLayout(R.layout.cancelable_header)
-						.headerTransformer(transformer).build())
-		// Here we mark just the ListView and it's Empty View as
-		// pullable
-		.theseChildrenArePullable(R.id.messageList).listener(new OnRefreshListener() {
+				.from(getActivity())
+				.options(
+						Options.create().refreshOnUp(true)
+								.headerLayout(R.layout.cancelable_header)
+								.headerTransformer(transformer).build())
+				// Here we mark just the ListView and it's Empty View as
+				// pullable
+				.theseChildrenArePullable(R.id.messageList)
+				.listener(new OnRefreshListener() {
 
 					@Override
 					public void onRefreshStarted(View view) {
 						doRefresh();
 					}
-				})
-		.setup(mPullToRefreshLayout);
+				}).setup(mPullToRefreshLayout);
 
 		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
+				mPullToRefreshLayout.setRefreshComplete();
 				detachTask();
 			}
 		});

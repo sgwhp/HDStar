@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -76,6 +77,7 @@ public class RemoteSettingFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle b = getArguments();
 		mMode = b.getInt("mode");
 		if (mMode == MODE_EDIT) {
@@ -139,14 +141,23 @@ public class RemoteSettingFragment extends StackFragment {
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.save);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 
 	@Override
-	public void onActionBarClick(int MenuItemId) {
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			save();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void save() {
 		String nameStr = name.getText().toString();
 		String ipStr = ip.getText().toString();
 		if (!Util.isIp(ipStr)) {
@@ -183,5 +194,4 @@ public class RemoteSettingFragment extends StackFragment {
 		}
 		Crouton.makeText(getActivity(), R.string.saved, Style.INFO).show();
 	}
-
 }

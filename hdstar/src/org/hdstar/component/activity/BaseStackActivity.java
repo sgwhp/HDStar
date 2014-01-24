@@ -25,7 +25,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.widget.ArrayAdapter;
 
-import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager;
 import com.slidingmenu.lib.SlidingMenu;
@@ -130,7 +129,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 					stackAdapter.up(position - curPage);
 				}
 				curPage = position;
-				invalidateOptionsMenu();
+				// invalidateOptionsMenu();
 				switch (position) {
 				case 0:
 					getSlidingMenu().setTouchModeAbove(
@@ -174,17 +173,17 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 			toggle();
 			return true;
 		}
-		stackAdapter.fragments.get(curPage).onActionBarClick(item.getItemId());
-		return true;
+		// stackAdapter.fragments.get(curPage).onActionBarClick(item.getItemId());
+		return false;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (curPage < stackAdapter.fragments.size()) {
-			stackAdapter.fragments.get(curPage).initActionBar(menu);
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// if (curPage < stackAdapter.fragments.size()) {
+	// stackAdapter.fragments.get(curPage).initActionBar(menu);
+	// }
+	// return super.onCreateOptionsMenu(menu);
+	// }
 
 	@Override
 	public void onBackPressed() {

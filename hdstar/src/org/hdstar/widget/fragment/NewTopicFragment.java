@@ -36,6 +36,9 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -73,6 +76,8 @@ public class NewTopicFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
+				.setSubtitle(null);
 		init();
 	}
 

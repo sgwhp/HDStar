@@ -4,13 +4,11 @@ import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.adapter.StackPagerAdapter;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.app.SherlockFragment;
 
-public class StackFragment extends Fragment {
+public class StackFragment extends SherlockFragment {
 	protected String url;
 	protected BaseAsyncTask<?> mTask;
 
@@ -32,14 +30,6 @@ public class StackFragment extends Fragment {
 			mTask.detach();
 			mTask = null;
 		}
-	}
-
-	public void initActionBar(Menu menu) {
-		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
-				.setSubtitle(null);
-	}
-
-	public void onActionBarClick(int menuItemId) {
 	}
 
 	/**

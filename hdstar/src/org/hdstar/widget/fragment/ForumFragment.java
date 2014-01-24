@@ -18,13 +18,12 @@ import org.hdstar.widget.adapter.PageAdapter;
 import org.hdstar.widget.adapter.TopicsAdapter;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
@@ -40,8 +39,10 @@ import android.widget.PopupWindow;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -99,27 +100,29 @@ public class ForumFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
+		setHasOptionsMenu(true);
 		if (adapter == null) {
 			adapter = new TopicsAdapter(getActivity(), new ArrayList<Topic>());
 		}
 		init();
 		if (adapter.getList() == null || adapter.getList().size() == 0) {
-			mPullToRefreshLayout.post(new Runnable(){
+			mPullToRefreshLayout.post(new Runnable() {
 
 				@Override
 				public void run() {
 					refresh();
-				}});
+				}
+			});
 		} else {
 			adapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		if (mPullToRefreshLayout != null) mPullToRefreshLayout.setRefreshComplete();
+		if (mPullToRefreshLayout != null)
+			mPullToRefreshLayout.setRefreshComplete();
 	}
 
 	@Override
@@ -138,7 +141,7 @@ public class ForumFragment extends StackFragment {
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(null);
 		MenuItem item = menu.add(0, ForumsActivity.COMMIT_ACTION_BAR_ID, 0,
@@ -149,11 +152,16 @@ public class ForumFragment extends StackFragment {
 	}
 
 	@Override
-	public void onActionBarClick(int MenuItemId) {
-		if (getActivity().findViewById(android.R.id.list) != null
-				&& adapter.getList() != null && !url.equals("")) {
-			push(NewTopicFragment.newInstance(forumId));
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case ForumsActivity.COMMIT_ACTION_BAR_ID:
+			if (getActivity().findViewById(android.R.id.list) != null
+					&& adapter.getList() != null && !url.equals("")) {
+				push(NewTopicFragment.newInstance(forumId));
+			}
+			return true;
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -173,33 +181,35 @@ public class ForumFragment extends StackFragment {
 		mPullToRefreshLayout = (PullToRefreshLayout) view
 				.findViewById(R.id.ptr_layout);
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
-		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page),
+				getString(R.string.release_to_add_next_page));
 		ActionBarPullToRefresh
-		.from(getActivity())
-		.options(
-				Options.create().refreshOnUp(true).mode(Mode.BOTH)
-						.headerLayout(R.layout.cancelable_header)
-						.headerTransformer(transformer).build())
-		// Here we mark just the ListView and it's Empty View as
-		// pullable
-		.theseChildrenArePullable(R.id.topic_list).listener(new OnRefreshListener2() {
+				.from(act)
+				.options(
+						Options.create().refreshOnUp(true).mode(Mode.BOTH)
+								.headerLayout(R.layout.cancelable_header)
+								.headerTransformer(transformer).build())
+				// Here we mark just the ListView and it's Empty View as
+				// pullable
+				.theseChildrenArePullable(R.id.topic_list)
+				.listener(new OnRefreshListener2() {
 
 					@Override
 					public void onRefreshStartedFromStart(View view) {
 						doRefresh();
 					}
-					
+
 					@Override
-					public void onRefreshStartedFromEnd(View view){
+					public void onRefreshStartedFromEnd(View view) {
 						loadNextPage();
 					}
-				})
-		.setup(mPullToRefreshLayout);
+				}).setup(mPullToRefreshLayout);
 
 		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
+				mPullToRefreshLayout.setRefreshComplete();
 				detachTask();
 			}
 		});

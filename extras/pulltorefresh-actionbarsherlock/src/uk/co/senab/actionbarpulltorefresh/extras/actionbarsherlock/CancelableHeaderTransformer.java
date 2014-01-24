@@ -18,7 +18,6 @@ public class CancelableHeaderTransformer extends BothHeaderTransformer {
 
 				@Override
 				public void onClick(View v) {
-					hideHeaderView(false);
 					if (mOnCancelListener != null) {
 						mOnCancelListener.onCancel();
 					}
@@ -34,7 +33,7 @@ public class CancelableHeaderTransformer extends BothHeaderTransformer {
 			mCancelBtn.setVisibility(View.INVISIBLE);
 		}
 	}
-	
+
 	@Override
 	public void onRefreshStarted() {
 		super.onRefreshStarted();
@@ -42,9 +41,10 @@ public class CancelableHeaderTransformer extends BothHeaderTransformer {
 			mCancelBtn.setVisibility(View.VISIBLE);
 		}
 	}
-	
+
 	@Override
-    public void onRefreshMinimized() {}
+	public void onRefreshMinimized() {
+	}
 
 	public void setOnCancelListener(OnCancelListener onCancelListener) {
 		mOnCancelListener = onCancelListener;

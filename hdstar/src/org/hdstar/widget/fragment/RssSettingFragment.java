@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.Intents;
@@ -74,6 +75,7 @@ public class RssSettingFragment extends StackFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		setHasOptionsMenu(true);
 		if (mMode == MODE_EDIT) {
 			label.setText(setting.label);
 			link.setText(setting.link);
@@ -94,14 +96,23 @@ public class RssSettingFragment extends StackFragment implements
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.save);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 
 	@Override
-	public void onActionBarClick(int MenuItemId) {
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			save();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void save() {
 		String labelStr = label.getText().toString();
 		String linkStr = link.getText().toString();
 		if ("".equals(labelStr) || "".equals(linkStr)) {

@@ -43,7 +43,6 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -370,6 +369,7 @@ public class RemoteActivity extends BaseActivity implements
 			}
 
 			mPullToRefreshLayout.setRefreshing(true);
+			fetch();
 			refreshDiskInfo();
 
 			// Update connection to the newly selected server and refresh
@@ -395,31 +395,32 @@ public class RemoteActivity extends BaseActivity implements
 		adapter = new RemoteTaskAdapter();
 		listView.setAdapter(adapter);
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
-//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		transformer.setFromEndLabel(
+				getString(R.string.pull_up_to_refresh_pull_label),
+				getString(R.string.pull_to_refresh_release_label));
 		ActionBarPullToRefresh
-		.from(this)
-		.options(
-				Options.create().refreshOnUp(true).mode(Mode.BOTH)
-						.headerLayout(R.layout.cancelable_header)
-						.headerTransformer(transformer).build())
-		// Here we mark just the ListView and it's Empty View as
-		// pullable
-		.theseChildrenArePullable(R.id.task_list).listener(new OnRefreshListener() {
+				.from(this)
+				.options(
+						Options.create().refreshOnUp(true).mode(Mode.BOTH)
+								.headerLayout(R.layout.cancelable_header)
+								.headerTransformer(transformer).build())
+				// Here we mark just the ListView and it's Empty View as
+				// pullable
+				.theseChildrenArePullable(R.id.task_list)
+				.listener(new OnRefreshListener() {
 
 					@Override
 					public void onRefreshStarted(View view) {
 						doRefresh();
 					}
-				})
-		.setup(mPullToRefreshLayout);
+				}).setup(mPullToRefreshLayout);
 
 		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
-				if (mTask != null) {
-					mTask.detach();
-				}
+				mPullToRefreshLayout.setRefreshComplete();
+				detachTask();
 			}
 		});
 

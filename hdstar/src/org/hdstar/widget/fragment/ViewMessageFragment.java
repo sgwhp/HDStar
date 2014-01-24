@@ -12,13 +12,12 @@ import org.hdstar.util.CustomLinkMovementMethod;
 import org.hdstar.util.URLImageParser;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Html;
@@ -29,8 +28,10 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -91,22 +92,23 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		setHasOptionsMenu(true);
 		CustomLinkMovementMethod.attach(this);
 		contentTV.setMovementMethod(CustomLinkMovementMethod.getInstance());
-		// ((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 		init();
 		if (content == null) {
-			mPullToRefreshLayout.post(new Runnable(){
+			mPullToRefreshLayout.post(new Runnable() {
 
 				@Override
 				public void run() {
 					refresh();
-				}});
+				}
+			});
 		}
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(subject);
 		if (content != null && content.receiverId != 0) {
@@ -117,8 +119,13 @@ public class ViewMessageFragment extends StackFragment {
 	}
 
 	@Override
-	public void onActionBarClick(int MenuItemId) {
-		reply();
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case MessageActivity.DELETE_MENU_ITEM_ID:
+			reply();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -129,28 +136,30 @@ public class ViewMessageFragment extends StackFragment {
 
 	private void init() {
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
-//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		// transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page),
+		// getString(R.string.release_to_add_next_page));
 		ActionBarPullToRefresh
-		.from(getActivity())
-		.options(
-				Options.create().refreshOnUp(true).mode(Mode.BOTH)
-						.headerLayout(R.layout.cancelable_header)
-						.headerTransformer(transformer).build())
-		// Here we mark just the ListView and it's Empty View as
-		// pullable
-		.theseChildrenArePullable(R.id.message_scroll_view).listener(new OnRefreshListener() {
+				.from(getActivity())
+				.options(
+						Options.create().refreshOnUp(true).mode(Mode.BOTH)
+								.headerLayout(R.layout.cancelable_header)
+								.headerTransformer(transformer).build())
+				// Here we mark just the ListView and it's Empty View as
+				// pullable
+				.theseChildrenArePullable(R.id.message_scroll_view)
+				.listener(new OnRefreshListener() {
 
 					@Override
 					public void onRefreshStarted(View view) {
 						doRefresh();
 					}
-				})
-		.setup(mPullToRefreshLayout);
+				}).setup(mPullToRefreshLayout);
 
 		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
+				mPullToRefreshLayout.setRefreshComplete();
 				detachTask();
 			}
 		});

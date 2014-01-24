@@ -22,7 +22,6 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -33,10 +32,12 @@ import android.widget.ExpandableListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 import com.google.gson.reflect.TypeToken;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -69,18 +70,19 @@ public class TorrentListFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
+		setHasOptionsMenu(true);
 		if (adapter == null) {
 			adapter = new TorrentAdapter(getActivity(), torrents);
 		}
 		init();
 		if (torrents.size() == 0) {
-			mPullToRefreshLayout.post(new Runnable(){
+			mPullToRefreshLayout.post(new Runnable() {
 
 				@Override
 				public void run() {
 					refresh();
-				}});
+				}
+			});
 		} else {
 			adapter.notifyDataSetChanged();
 		}
@@ -102,7 +104,7 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	@Override
-	public void initActionBar(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		final SearchView search = new SearchView(
 				((SherlockFragmentActivity) getActivity())
 						.getSupportActionBar().getThemedContext());
@@ -134,10 +136,6 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	@Override
-	public void onActionBarClick(int menuItemId) {
-	}
-
-	@Override
 	public void onSelected() {
 		listViewState = null;
 	}
@@ -155,33 +153,35 @@ public class TorrentListFragment extends StackFragment {
 		}
 
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
-//		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page), getString(R.string.release_to_add_next_page));
+		// transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page),
+		// getString(R.string.release_to_add_next_page));
 		ActionBarPullToRefresh
-		.from(getActivity())
-		.options(
-				Options.create().refreshOnUp(true).mode(Mode.BOTH)
-						.headerLayout(R.layout.cancelable_header)
-						.headerTransformer(transformer).build())
-		// Here we mark just the ListView and it's Empty View as
-		// pullable
-		.theseChildrenArePullable(R.id.torrent_list).listener(new OnRefreshListener2() {
+				.from(getActivity())
+				.options(
+						Options.create().refreshOnUp(true).mode(Mode.BOTH)
+								.headerLayout(R.layout.cancelable_header)
+								.headerTransformer(transformer).build())
+				// Here we mark just the ListView and it's Empty View as
+				// pullable
+				.theseChildrenArePullable(R.id.torrent_list)
+				.listener(new OnRefreshListener2() {
 
-			@Override
-			public void onRefreshStartedFromStart(View view) {
-				doRefresh();
-			}
-			
-			@Override
-			public void onRefreshStartedFromEnd(View view){
-				loadNextPage();
-			}
-		})
-		.setup(mPullToRefreshLayout);
+					@Override
+					public void onRefreshStartedFromStart(View view) {
+						doRefresh();
+					}
+
+					@Override
+					public void onRefreshStartedFromEnd(View view) {
+						loadNextPage();
+					}
+				}).setup(mPullToRefreshLayout);
 
 		transformer.setOnCancelListener(new OnCancelListener() {
 
 			@Override
 			public void onCancel() {
+				mPullToRefreshLayout.setRefreshComplete();
 				detachTask();
 			}
 		});
@@ -236,7 +236,6 @@ public class TorrentListFragment extends StackFragment {
 			torrents.clear();
 			torrents.addAll(list);
 			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());
 		}
 

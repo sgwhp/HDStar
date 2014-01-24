@@ -16,6 +16,12 @@
 
 package uk.co.senab.actionbarpulltorefresh.library;
 
+import java.util.WeakHashMap;
+
+import uk.co.senab.actionbarpulltorefresh.library.listeners.HeaderViewListener;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
+import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.ViewDelegate;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -32,13 +38,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
-import java.util.WeakHashMap;
-
-import uk.co.senab.actionbarpulltorefresh.library.listeners.HeaderViewListener;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
-import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.ViewDelegate;
 
 public class PullToRefreshAttacher {
 
@@ -77,6 +76,7 @@ public class PullToRefreshAttacher {
 	private final Rect mRect = new Rect();
 	private Mode mMode;
 	private Mode currentMode;
+	private final AddHeaderViewRunnable mAddHeaderViewRunnable;
 
 	protected PullToRefreshAttacher(Activity activity, Options options) {
 		if (activity == null) {
@@ -123,26 +123,30 @@ public class PullToRefreshAttacher {
 					"Must supply valid layout id for header.");
 		}
 		// Make Header View invisible so it still gets a layout pass
-		mHeaderView.setVisibility(View.INVISIBLE);
+		// edit by robust. change visibility to gone.
+		// 设置成invisible会导致actionbar无法获取焦点
+		mHeaderView.setVisibility(View.GONE);
 
 		// Notify transformer
 		mHeaderTransformer.onViewCreated(activity, mHeaderView);
 
 		// Now HeaderView to Activity
-		decorView.post(new Runnable() {
-			@Override
-			public void run() {
-				if (decorView.getWindowToken() != null) {
-					// The Decor View has a Window Token, so we can add the
-					// HeaderView!
-					addHeaderViewToActivity(mHeaderView);
-				} else {
-					// The Decor View doesn't have a Window Token yet, post
-					// ourselves again...
-					decorView.post(this);
-				}
-			}
-		});
+		mAddHeaderViewRunnable = new AddHeaderViewRunnable();
+		mAddHeaderViewRunnable.start();
+		// decorView.post(new Runnable() {
+		// @Override
+		// public void run() {
+		// if (decorView.getWindowToken() != null) {
+		// // The Decor View has a Window Token, so we can add the
+		// // HeaderView!
+		// addHeaderViewToActivity(mHeaderView);
+		// } else {
+		// // The Decor View doesn't have a Window Token yet, post
+		// // ourselves again...
+		// decorView.post(this);
+		// }
+		// }
+		// });
 	}
 
 	/**
@@ -231,8 +235,8 @@ public class PullToRefreshAttacher {
 		mOnRefreshListener = listener;
 		mOnRefreshListener2 = null;
 	}
-	
-	void setOnRefreshListener(OnRefreshListener2 listener){
+
+	void setOnRefreshListener(OnRefreshListener2 listener) {
 		mOnRefreshListener = null;
 		mOnRefreshListener2 = listener;
 	}
@@ -540,7 +544,8 @@ public class PullToRefreshAttacher {
 
 	void showHeaderView() {
 		updateHeaderViewPosition(mHeaderView);
-		if (mHeaderTransformer.showHeaderView(currentMode == Mode.PULL_FROM_END)) {
+		if (mHeaderTransformer
+				.showHeaderView(currentMode == Mode.PULL_FROM_END)) {
 			if (mHeaderViewListener != null) {
 				mHeaderViewListener.onStateChanged(mHeaderView,
 						HeaderViewListener.STATE_VISIBLE);
@@ -549,7 +554,8 @@ public class PullToRefreshAttacher {
 	}
 
 	void hideHeaderView() {
-		if (mHeaderTransformer.hideHeaderView(currentMode == Mode.PULL_FROM_END)) {
+		if (mHeaderTransformer
+				.hideHeaderView(currentMode == Mode.PULL_FROM_END)) {
 			if (mHeaderViewListener != null) {
 				mHeaderViewListener.onStateChanged(mHeaderView,
 						HeaderViewListener.STATE_HIDDEN);
@@ -623,7 +629,8 @@ public class PullToRefreshAttacher {
 	 *         started.
 	 */
 	private boolean canRefresh(boolean fromTouch) {
-		return !mIsRefreshing && (!fromTouch || mOnRefreshListener != null || mOnRefreshListener2 != null);
+		return !mIsRefreshing
+				&& (!fromTouch || mOnRefreshListener != null || mOnRefreshListener2 != null);
 	}
 
 	private float getScrollNeededForRefresh(View view) {
@@ -652,8 +659,8 @@ public class PullToRefreshAttacher {
 			if (mOnRefreshListener != null) {
 				mOnRefreshListener.onRefreshStarted(view);
 			}
-			if(mOnRefreshListener2 != null){
-				if(currentMode == Mode.PULL_FROM_END){
+			if (mOnRefreshListener2 != null) {
+				if (currentMode == Mode.PULL_FROM_END) {
 					mOnRefreshListener2.onRefreshStartedFromEnd(view);
 				} else {
 					mOnRefreshListener2.onRefreshStartedFromStart(view);
@@ -701,11 +708,13 @@ public class PullToRefreshAttacher {
 		}
 
 		// Create LayoutParams for adding the View as a panel
-//		WindowManager.LayoutParams wlp = new WindowManager.LayoutParams(width,
-//				height, WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-//				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-//						| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//				PixelFormat.TRANSLUCENT);
+		// WindowManager.LayoutParams wlp = new
+		// WindowManager.LayoutParams(width,
+		// height, WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+		// WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+		// | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+		// PixelFormat.TRANSLUCENT);
+		// edit by robust. change headerview to touchable.
 		WindowManager.LayoutParams wlp = new WindowManager.LayoutParams(width,
 				height, WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
@@ -738,6 +747,7 @@ public class PullToRefreshAttacher {
 	}
 
 	protected void removeHeaderViewFromActivity(View headerView) {
+		mAddHeaderViewRunnable.finish();
 		if (headerView.getWindowToken() != null) {
 			mActivity.getWindowManager().removeViewImmediate(headerView);
 		}
@@ -749,6 +759,36 @@ public class PullToRefreshAttacher {
 			minimizeHeader();
 		}
 	};
+
+	private class AddHeaderViewRunnable implements Runnable {
+		@Override
+		public void run() {
+			if (isDestroyed())
+				return;
+
+			if (getDecorView().getWindowToken() != null) {
+				// The Decor View has a Window Token, so we can add the
+				// HeaderView!
+				addHeaderViewToActivity(mHeaderView);
+			} else {
+				// The Decor View doesn't have a Window Token yet, post
+				// ourselves again...
+				start();
+			}
+		}
+
+		public void start() {
+			getDecorView().post(this);
+		}
+
+		public void finish() {
+			getDecorView().removeCallbacks(this);
+		}
+
+		private View getDecorView() {
+			return getAttachedActivity().getWindow().getDecorView();
+		}
+	}
 
 	public static enum Mode {
 

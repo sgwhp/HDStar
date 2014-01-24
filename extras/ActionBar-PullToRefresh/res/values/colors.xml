@@ -16,4 +16,5 @@
 -->
 <resources>
     <color name="default_progress_bar_color">#FF33B5E5</color>
+    <color name="progress_bar_color_green">#8acc12</color>
 </resources>

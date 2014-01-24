@@ -14,6 +14,7 @@
 	<string name="pull_to_refresh_tap_label">Tap to refresh…</string>
     <string name="pull_to_add_next_page">Pull to add next page…</string>
     <string name="release_to_add_next_page">release to add next page…</string>
+    <string name="pull_up_to_refresh_pull_label">Pull up to refresh…</string>
     <string name="no_more_data">No more data</string>
 	<string name="subject">subject</string>
 	<string name="body">body</string>
