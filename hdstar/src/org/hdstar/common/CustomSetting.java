@@ -14,9 +14,7 @@ public class CustomSetting implements Serializable {
 	public static boolean loadImage = true;
 	public static boolean soundOn = true;
 	public static boolean autoRefresh = false;
-	public static String serverAddress = "http://hdsky.eu01.aws.af.cm/";
-	// public static String serverAddress =
-	// "http://10.10.28.113:8084/HDStarService/";
+	 public static String serverAddress = "http://hdstar.ap01.aws.af.cm/";
 
 	public static boolean fade;// 动画淡入淡出效果
 	public static TransitionEffect anim = TransitionEffect.CubeIn;;// 动画效果

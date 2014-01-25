@@ -307,7 +307,6 @@ public class ForumFragment extends StackFragment {
 			adapter.clearItems();
 			adapter.itemsAddAll(list);
 			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());
 		}
 
