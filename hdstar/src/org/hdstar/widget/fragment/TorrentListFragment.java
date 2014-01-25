@@ -116,7 +116,7 @@ public class TorrentListFragment extends StackFragment {
 				keyWords = query;
 				keyWords = keyWords.trim();
 				if (!"".equals(keyWords)) {
-					mPullToRefreshLayout.setRefreshing(false);
+					refresh();
 					return true;
 				}
 				return false;
