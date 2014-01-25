@@ -25,9 +25,7 @@ public class MessageAdapter extends BaseAdapter implements
 
 	public MessageAdapter(Context context, List<Message> list, int boxType) {
 		inflater = LayoutInflater.from(context);
-		for (Message msg : list) {
-			this.list.add(new MessageWithCheck(msg));
-		}
+		addAll(list);
 		this.boxType = boxType;
 	}
 
@@ -92,6 +90,16 @@ public class MessageAdapter extends BaseAdapter implements
 		if (list == null) {
 			return;
 		}
+		for (Message msg : list) {
+			this.list.add(new MessageWithCheck(msg));
+		}
+	}
+
+	public void clear() {
+		this.list.clear();
+	}
+
+	public void addAll(List<Message> list) {
 		for (Message msg : list) {
 			this.list.add(new MessageWithCheck(msg));
 		}

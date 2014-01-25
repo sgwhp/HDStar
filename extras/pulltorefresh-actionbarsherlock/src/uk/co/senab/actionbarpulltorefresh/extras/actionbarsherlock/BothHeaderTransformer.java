@@ -1,7 +1,7 @@
 package uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.R;
 import uk.co.senab.actionbarpulltorefresh.library.DefaultHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -26,13 +26,13 @@ public class BothHeaderTransformer extends DefaultHeaderTransformer {
 
 		// Create animations for use later
 		mHeaderInAnimation = AnimationUtils.loadAnimation(activity,
-				R.anim.slide_down_in);
+				R.anim.ptr_slide_down_in);
 		mHeaderOutAnimation = AnimationUtils.loadAnimation(activity,
-				R.anim.push_up_out);
+				R.anim.ptr_push_up_out);
 		mEndHeaderInAnimation = AnimationUtils.loadAnimation(activity,
-				R.anim.push_up_in);
+				R.anim.ptr_push_up_in);
 		mEndHeaderOutAnimation = AnimationUtils.loadAnimation(activity,
-				R.anim.slide_down_out);
+				R.anim.ptr_slide_down_out);
 
 		if (mHeaderOutAnimation != null || mHeaderInAnimation != null) {
 			final AnimationCallback callback = new AnimationCallback();
@@ -84,12 +84,9 @@ public class BothHeaderTransformer extends DefaultHeaderTransformer {
 	}
 
 	@Override
-	public boolean showHeaderView(boolean fromEnd) {
-		if (Build.VERSION.SDK_INT >= super.getMinimumApiLevel()) {
-            return super.showHeaderView(fromEnd);
-        }
+	public boolean showHeaderView(Mode mode) {
 		if (mPullFromEndLabel != null) {
-			if (fromEnd) {
+			if (mode == Mode.PULL_FROM_END) {
 				if (!mPullFromEndLabel.equals(mPullRefreshLabel)) {
 					setPullText(mPullFromEndLabel);
 				} else {
@@ -105,12 +102,15 @@ public class BothHeaderTransformer extends DefaultHeaderTransformer {
 				mReleaseLabel = mReleaseFromStartLabel;
 			}
 		}
+		if (Build.VERSION.SDK_INT >= super.getMinimumApiLevel()) {
+			return super.showHeaderView(mode);
+		}
 		final View headerView = getHeaderView();
 		final boolean changeVis = headerView != null
 				&& headerView.getVisibility() != View.VISIBLE;
 		if (changeVis) {
 			// Show Header
-			Animation anim = getAnimation(true, fromEnd);
+			Animation anim = getAnimation(true, mode);
 			if (anim != null) {
 				// AnimationListener will call HeaderViewListener
 				headerView.startAnimation(anim);
@@ -121,17 +121,17 @@ public class BothHeaderTransformer extends DefaultHeaderTransformer {
 	}
 
 	@Override
-	public boolean hideHeaderView(boolean fromEnd) {
+	public boolean hideHeaderView(Mode mode) {
 		// 4.0以上的动画无法启动
-        if (Build.VERSION.SDK_INT >= super.getMinimumApiLevel()) {
-            return super.hideHeaderView(fromEnd);
-        }
+		if (Build.VERSION.SDK_INT >= super.getMinimumApiLevel()) {
+			return super.hideHeaderView(mode);
+		}
 		final View headerView = getHeaderView();
 		final boolean changeVis = headerView != null
 				&& headerView.getVisibility() != View.GONE;
 		if (changeVis) {
 			// Hide Header
-			Animation anim = getAnimation(false, fromEnd);
+			Animation anim = getAnimation(false, mode);
 			if (anim != null) {
 				// AnimationListener will call HeaderTransformer and
 				// HeaderViewListener
@@ -169,14 +169,14 @@ public class BothHeaderTransformer extends DefaultHeaderTransformer {
 		mReleaseFromEndLabel = releaseLabel;
 	}
 
-	protected Animation getAnimation(boolean in, boolean fromEnd) {
+	protected Animation getAnimation(boolean in, Mode mode) {
 		if (in) {
-			if (fromEnd) {
+			if (mode == Mode.PULL_FROM_END) {
 				return mEndHeaderInAnimation;
 			}
 			return mHeaderInAnimation;
 		}
-		if (fromEnd) {
+		if (mode == Mode.PULL_FROM_END) {
 			return mEndHeaderOutAnimation;
 		}
 		return mHeaderOutAnimation;

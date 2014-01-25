@@ -23,7 +23,8 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHea
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
@@ -57,6 +58,7 @@ public class MessageBoxFragment extends StackFragment {
 	private View view;
 	private MessageAdapter adapter;
 	private CustomDialog dialog = null;
+	private int page = 0;
 
 	public static MessageBoxFragment newInstance(int boxType) {
 		Bundle bundle = new Bundle();
@@ -171,22 +173,27 @@ public class MessageBoxFragment extends StackFragment {
 
 		});
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
-		// transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page),
-		// getString(R.string.release_to_add_next_page));
+		transformer.setFromEndLabel(getString(R.string.pull_to_add_next_page),
+				getString(R.string.release_to_add_next_page));
 		ActionBarPullToRefresh
 				.from(getActivity())
 				.options(
-						Options.create().refreshOnUp(true)
+						Options.create().refreshOnUp(true).mode(Mode.BOTH)
 								.headerLayout(R.layout.cancelable_header)
 								.headerTransformer(transformer).build())
 				// Here we mark just the ListView and it's Empty View as
 				// pullable
 				.theseChildrenArePullable(R.id.messageList)
-				.listener(new OnRefreshListener() {
+				.listener(new OnRefreshListener2() {
 
 					@Override
-					public void onRefreshStarted(View view) {
+					public void onRefreshStartedFromStart(View view) {
 						doRefresh();
+					}
+
+					@Override
+					public void onRefreshStartedFromEnd(View view) {
+						loadNextPage();
 					}
 				}).setup(mPullToRefreshLayout);
 
@@ -204,8 +211,6 @@ public class MessageBoxFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-		listView.setSelection(0);
-		// listView.prepareForRefresh();
 		DelegateTask<List<Message>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
@@ -262,17 +267,25 @@ public class MessageBoxFragment extends StackFragment {
 		}
 	}
 
+	private void loadNextPage() {
+		DelegateTask<List<Message>> task = DelegateTask
+				.newInstance(HDStarApp.cookies);
+		task.attach(addCallback);
+		attachTask(task);
+		task.execGet(url + "&page=" + ++page,
+				new TypeToken<ResponseWrapper<List<Message>>>() {
+				}.getType());
+	}
+
 	TaskCallback<List<Message>> fetchCallback = new TaskCallback<List<Message>>() {
 		@Override
 		public void onComplete(List<Message> result) {
-			// mTask.detach();
-			// listView.onRefreshComplete();
 			mPullToRefreshLayout.setRefreshComplete();
 			list.clear();
 			list.addAll(result);
-			adapter.setList(result);
+			adapter.clear();
+			adapter.addAll(result);
 			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
 			SoundPoolManager.play(getActivity());
 			HDStarApp.hasNewMessage = false;
 			((BaseStackActivity) getActivity()).refreshMenu();
@@ -280,17 +293,41 @@ public class MessageBoxFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			// mTask.detach();
-			// listView.onRefreshComplete();
 			mPullToRefreshLayout.setRefreshComplete();
-			listView.setSelection(1);
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
 		public void onCancel() {
-			// mTask.detach();
-			// listView.onRefreshComplete();
+			mPullToRefreshLayout.setRefreshComplete();
+		}
+	};
+
+	TaskCallback<List<Message>> addCallback = new TaskCallback<List<Message>>() {
+
+		@Override
+		public void onComplete(List<Message> result) {
+			mPullToRefreshLayout.setRefreshComplete();
+			if (result.size() > 0) {
+				list.addAll(result);
+				adapter.addAll(result);
+				adapter.notifyDataSetChanged();
+			} else {
+				Crouton.makeText(getActivity(), R.string.no_more_data,
+						Style.CONFIRM).show();
+			}
+			SoundPoolManager.play(getActivity());
+		}
+
+		@Override
+		public void onCancel() {
+			--page;
+			mPullToRefreshLayout.setRefreshComplete();
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			--page;
 			mPullToRefreshLayout.setRefreshComplete();
 		}
 	};
@@ -313,7 +350,5 @@ public class MessageBoxFragment extends StackFragment {
 			dialog.dismiss();
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
-
 	};
-
 }

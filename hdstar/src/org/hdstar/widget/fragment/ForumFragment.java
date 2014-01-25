@@ -230,13 +230,14 @@ public class ForumFragment extends StackFragment {
 
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1,
-								int arg2, long arg3) {
-							viewTopic(t.topicId, t.pageList.get(arg2), t.title);
+								int position, long arg3) {
+							viewTopic(t.topicId, position, t.title);
 							window.dismiss();
 						}
 
 					});
-					lv.setAdapter(new PageAdapter(act, t.pageIndex));
+					lv.setAdapter(new PageAdapter(act, t.pageList
+							.get(t.pageList.size() - 1) + 1));
 					window = new PopupWindow(v, (int) (80 * dip + 0.5),
 							(int) (150 * dip + 0.5));
 					window.setBackgroundDrawable(getResources().getDrawable(
@@ -313,7 +314,6 @@ public class ForumFragment extends StackFragment {
 		@Override
 		public void onFail(Integer msgId) {
 			mPullToRefreshLayout.setRefreshComplete();
-			// listView.setSelection(1);
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 

@@ -544,8 +544,7 @@ public class PullToRefreshAttacher {
 
 	void showHeaderView() {
 		updateHeaderViewPosition(mHeaderView);
-		if (mHeaderTransformer
-				.showHeaderView(currentMode == Mode.PULL_FROM_END)) {
+		if (mHeaderTransformer.showHeaderView(currentMode)) {
 			if (mHeaderViewListener != null) {
 				mHeaderViewListener.onStateChanged(mHeaderView,
 						HeaderViewListener.STATE_VISIBLE);
@@ -554,8 +553,7 @@ public class PullToRefreshAttacher {
 	}
 
 	void hideHeaderView() {
-		if (mHeaderTransformer
-				.hideHeaderView(currentMode == Mode.PULL_FROM_END)) {
+		if (mHeaderTransformer.hideHeaderView(currentMode)) {
 			if (mHeaderViewListener != null) {
 				mHeaderViewListener.onStateChanged(mHeaderView,
 						HeaderViewListener.STATE_HIDDEN);

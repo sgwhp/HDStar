@@ -16,6 +16,7 @@
 
 package uk.co.senab.actionbarpulltorefresh.library;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.sdk.Compat;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -183,15 +184,33 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 		return mHeaderView;
 	}
 
+	private ObjectAnimator getAnimation(boolean in, Mode mode) {
+		if (in) {
+			if (mode == Mode.PULL_FROM_END) {
+				return ObjectAnimator.ofFloat(mContentLayout, "translationY",
+						mContentLayout.getHeight(), 0f);
+			}
+			return ObjectAnimator.ofFloat(mContentLayout, "translationY",
+					-mContentLayout.getHeight(), 0f);
+		}
+		if (mode == Mode.PULL_FROM_END) {
+			return ObjectAnimator.ofFloat(mContentLayout, "translationY", 0f,
+					mContentLayout.getHeight());
+		}
+		return ObjectAnimator.ofFloat(mContentLayout, "translationY", 0f,
+				-mContentLayout.getHeight());
+	}
+
 	@Override
-	public boolean showHeaderView(boolean fromEnd) {
+	public boolean showHeaderView(Mode mode) {
 		final boolean changeVis = mHeaderView.getVisibility() != View.VISIBLE;
 
 		if (changeVis) {
 			mHeaderView.setVisibility(View.VISIBLE);
 			AnimatorSet animSet = new AnimatorSet();
-			ObjectAnimator transAnim = ObjectAnimator.ofFloat(mContentLayout,
-					"translationY", -mContentLayout.getHeight(), 0f);
+			// ObjectAnimator transAnim = ObjectAnimator.ofFloat(mContentLayout,
+			// "translationY", -mContentLayout.getHeight(), 0f);
+			ObjectAnimator transAnim = getAnimation(true, mode);
 			ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(mHeaderView,
 					"alpha", 0f, 1f);
 			animSet.playTogether(transAnim, alphaAnim);
@@ -203,7 +222,7 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 	}
 
 	@Override
-	public boolean hideHeaderView(boolean fromEnd) {
+	public boolean hideHeaderView(Mode mode) {
 		final boolean changeVis = mHeaderView.getVisibility() != View.GONE;
 
 		if (changeVis) {
@@ -211,9 +230,10 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 			if (mContentLayout.getAlpha() >= 0.5f) {
 				// If the content layout is showing, translate and fade out
 				animator = new AnimatorSet();
-				ObjectAnimator transAnim = ObjectAnimator.ofFloat(
-						mContentLayout, "translationY", 0f,
-						-mContentLayout.getHeight());
+				// ObjectAnimator transAnim = ObjectAnimator.ofFloat(
+				// mContentLayout, "translationY", 0f,
+				// -mContentLayout.getHeight());
+				ObjectAnimator transAnim = getAnimation(false, mode);
 				ObjectAnimator alphaAnim = ObjectAnimator.ofFloat(mHeaderView,
 						"alpha", 1f, 0f);
 				((AnimatorSet) animator).playTogether(transAnim, alphaAnim);

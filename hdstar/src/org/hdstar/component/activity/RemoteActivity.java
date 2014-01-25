@@ -369,7 +369,7 @@ public class RemoteActivity extends BaseActivity implements
 			}
 
 			mPullToRefreshLayout.setRefreshing(true);
-			fetch();
+			doRefresh();
 			refreshDiskInfo();
 
 			// Update connection to the newly selected server and refresh
@@ -784,6 +784,7 @@ public class RemoteActivity extends BaseActivity implements
 		@Override
 		public void onComplete(Boolean result) {
 			mPullToRefreshLayout.setRefreshing(true);
+			doRefresh();
 			dialog.dismiss();
 		}
 
