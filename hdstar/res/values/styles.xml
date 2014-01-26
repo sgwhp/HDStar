@@ -95,5 +95,24 @@
 		<item name="android:textColor">@color/green</item>
 		<item name="android:textSize">14sp</item>
 	</style>
+	
+	<style name="ListViewStyle" parent="@android:style/Widget.ListView">
+	    <item name="android:cacheColorHint">@color/transparent</item>
+	    <item name="android:listSelector">@color/transparent</item>
+	    <item name="android:fastScrollEnabled">true</item>
+	    <item name="android:headerDividersEnabled">false</item>
+	    <item name="android:dividerHeight">1dp</item>
+	    <item name="android:divider">@color/white</item>
+	</style>
+	
+	<style name="ExpandableListViewStyle" parent="@android:style/Widget.ExpandableListView">
+	    <item name="android:cacheColorHint">@color/transparent</item>
+	    <item name="android:listSelector">@color/transparent</item>
+	    <item name="android:fastScrollEnabled">true</item>
+	    <item name="android:headerDividersEnabled">false</item>
+	    <item name="android:dividerHeight">1dp</item>
+	    <item name="android:divider">@color/white</item>
+	    <item name="android:groupIndicator">@null</item>
+	</style>
 
 </resources>

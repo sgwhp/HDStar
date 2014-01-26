@@ -158,6 +158,9 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 		}
 		if (mHeaderProgressBar != null) {
 			mHeaderProgressBar.setVisibility(View.VISIBLE);
+			// onRefreshMinimized不做任何操作，并且在松开刷新的模式下，
+			// 使用TranslationAnimation进度条可能不消失，导致setIndeterminate无效（2.3.3有这种情况）
+			mHeaderProgressBar.postInvalidate();
 			mHeaderProgressBar.setIndeterminate(true);
 		}
 	}
@@ -420,12 +423,16 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 			final int strokeWidth = mHeaderProgressBar.getResources()
 					.getDimensionPixelSize(
 							R.dimen.ptr_progress_bar_stroke_width);
+			int separatorLength = mHeaderProgressBar.getResources()
+					.getDimensionPixelSize(
+							R.dimen.ptr_progress_bar_big_separator_length);
 
 			mHeaderProgressBar
 					.setIndeterminateDrawable(new SmoothProgressDrawable.Builder(
 							mHeaderProgressBar.getContext())
 							.color(mProgressDrawableColor)
-							.strokeWidth(strokeWidth).build());
+							.strokeWidth(strokeWidth)
+							.separatorLength(separatorLength).build());
 
 			ShapeDrawable shape = new ShapeDrawable();
 			shape.setShape(new RectShape());

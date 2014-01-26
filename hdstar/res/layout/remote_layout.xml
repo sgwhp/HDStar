@@ -16,9 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:cacheColorHint="#00000000"
-            android:fastScrollEnabled="true"
-            android:headerDividersEnabled="false" />
+            style="@style/ListViewStyle" />
 
         <include
             android:id="@+id/empty"
