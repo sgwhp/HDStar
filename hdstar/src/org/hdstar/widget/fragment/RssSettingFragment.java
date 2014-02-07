@@ -50,6 +50,7 @@ public class RssSettingFragment extends StackFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle b = getArguments();
 		mMode = b.getInt("mode");
 		if (mMode == MODE_EDIT) {
@@ -75,7 +76,6 @@ public class RssSettingFragment extends StackFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		if (mMode == MODE_EDIT) {
 			label.setText(setting.label);
 			link.setText(setting.link);

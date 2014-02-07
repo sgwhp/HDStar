@@ -73,6 +73,7 @@ public class MessageBoxFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle bundle = getArguments();
 		boxType = bundle.getInt("boxType");
 		url = bundle.getString("url");
@@ -89,7 +90,6 @@ public class MessageBoxFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		if (adapter == null) {
 			list = new ArrayList<Message>();
 			adapter = new MessageAdapter(getActivity(), list, boxType);
@@ -166,7 +166,7 @@ public class MessageBoxFragment extends StackFragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
-				Message msg = list.get(position - 1);
+				Message msg = list.get(position);
 				push(ViewMessageFragment.newInstance(msg.id, msg.subject,
 						msg.sender, msg.time));
 			}

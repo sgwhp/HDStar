@@ -64,6 +64,7 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		messageId = getArguments().getInt("messageId");
 		subject = getArguments().getString("subject");
 	}
@@ -92,7 +93,6 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		CustomLinkMovementMethod.attach(this);
 		contentTV.setMovementMethod(CustomLinkMovementMethod.getInstance());
 		init();

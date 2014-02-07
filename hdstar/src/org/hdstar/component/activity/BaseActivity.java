@@ -1,11 +1,9 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.util.Util;
 import org.hdstar.widget.fragment.MenuListFragment;
 
-import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -81,36 +79,6 @@ public class BaseActivity extends SlidingFragmentActivity {
 
 	@Override
 	public void onBackPressed() {
-		checkExit();
+		Util.showExitDialog(this);
 	}
-
-	private void checkExit() {
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.confirm)
-				.setIcon(R.drawable.ic_launcher)
-				.setMessage(R.string.exit_message)
-				.setPositiveButton(R.string.exit,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-										.cancelAll();
-								finish();
-							}
-
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-
-							}
-
-						}).create().show();
-	}
-
 }

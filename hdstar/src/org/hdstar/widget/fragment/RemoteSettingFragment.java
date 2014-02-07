@@ -57,6 +57,7 @@ public class RemoteSettingFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -77,7 +78,6 @@ public class RemoteSettingFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		Bundle b = getArguments();
 		mMode = b.getInt("mode");
 		if (mMode == MODE_EDIT) {

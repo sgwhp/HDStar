@@ -5,6 +5,11 @@ import org.hdstar.R;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+/**
+ * °ïÖú
+ * @author robust
+ *
+ */
 @SuppressLint("ValidFragment")
 public class HelpActivity extends BaseActivity {
 

@@ -83,6 +83,7 @@ public class ForumFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle bundle = getArguments();
 		url = bundle.getString("url");
 		forumId = bundle.getInt("id", 1);
@@ -100,12 +101,14 @@ public class ForumFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
+		//首次打开，需要获取数据
+		boolean init = false;
 		if (adapter == null) {
+			init = true;
 			adapter = new TopicsAdapter(getActivity(), new ArrayList<Topic>());
 		}
 		init();
-		if (adapter.getList() == null || adapter.getList().size() == 0) {
+		if (init) {
 			mPullToRefreshLayout.post(new Runnable() {
 
 				@Override

@@ -57,6 +57,12 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.torrent_list_layout, null);
@@ -70,7 +76,6 @@ public class TorrentListFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		if (adapter == null) {
 			adapter = new TorrentAdapter(getActivity(), torrents);
 		}

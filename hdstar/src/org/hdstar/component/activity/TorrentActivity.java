@@ -7,6 +7,11 @@ import android.os.Bundle;
 
 import com.actionbarsherlock.view.Menu;
 
+/**
+ * ÖÖ×Ó
+ * @author robust
+ *
+ */
 public class TorrentActivity extends BaseStackActivity {
 	public static final int COMMIT_ACTION_BAR_ID = Menu.FIRST;
 	private int curTab = -1;

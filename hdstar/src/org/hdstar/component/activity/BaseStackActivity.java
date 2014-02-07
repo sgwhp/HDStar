@@ -10,11 +10,8 @@ import org.hdstar.widget.fragment.MenuListFragment;
 import org.hdstar.widget.fragment.StackFragment;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -191,35 +188,8 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		if (curPage != 0) {
 			viewPager.setCurrentItem(curPage - 1);
 		} else {
-			checkExit();
+			Util.showExitDialog(this);
 		}
-	}
-
-	private void checkExit() {
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.confirm)
-				.setIcon(R.drawable.ic_launcher)
-				.setMessage(R.string.exit_message)
-				.setPositiveButton(R.string.exit,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								// InitActivity.exitApp(BaseStackActivity.this);
-								((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-										.cancelAll();
-								finish();
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-							}
-						}).create().show();
 	}
 
 	@Override

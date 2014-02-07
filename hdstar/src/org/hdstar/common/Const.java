@@ -73,7 +73,7 @@ public class Const {
 		public static String SERVER_DOWNLOAD_URL;
 		public static String SERVER_CHECK_UPDATE_URL;
 
-		/** rutorrent地址 */
+		/** ruTorrent地址 */
 		public static final String RUTORRENT_HOME_PAGE = "http://%s/rutorrent";
 		public static final String RUTORRENT_RPC_ACTION_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/httprpc/action.php";
@@ -88,7 +88,7 @@ public class Const {
 				+ "/php/addtorrent.php?";
 
 		/**
-		 * μtorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位
+		 * μTorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位
 		 */
 		public static final String UTORRENT_HOME_PAGE = "http://%s/gui";
 		public static final String UTORRENT_TOKEN_URL = UTORRENT_HOME_PAGE
@@ -102,6 +102,7 @@ public class Const {
 		public static final String UTORRENT_ADD_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=add-url&s=%s";
 
+		//获取网站图标工具地址
 		public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
 		public static void initServerAddr(final String serverAddr) {
@@ -129,7 +130,7 @@ public class Const {
 	public final class ResponseCode {
 		public static final int PARAMETER_ERROR = 1000;
 		public static final int PARSE_ERROR = 1001;
-		public static final int NO_APK_FOUND = 1002;
+		public static final int APK_NOT_FOUND = 1002;
 	}
 
 	public static final String CHARSET = "UTF-8";

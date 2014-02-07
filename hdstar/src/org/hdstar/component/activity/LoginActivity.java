@@ -13,9 +13,9 @@ import org.hdstar.task.DownloadImageTask;
 import org.hdstar.task.LoginTask;
 import org.hdstar.util.DES;
 import org.hdstar.util.SoundPoolManager;
+import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -37,6 +37,11 @@ import com.actionbarsherlock.app.SherlockActivity;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+/**
+ * µÇÂ¼
+ * @author robust
+ *
+ */
 public class LoginActivity extends SherlockActivity implements OnClickListener {
 	private DownloadImageTask imageTask = null;
 	private final String LOGIN_URL = Const.Urls.BASE_URL + "/login.php";
@@ -73,27 +78,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 				task.abort();
 				dialog.dismiss();
 			} else {
-				new AlertDialog.Builder(this)
-						.setTitle(R.string.confirm)
-						.setIcon(R.drawable.ic_launcher)
-						.setMessage(R.string.exit_message)
-						.setPositiveButton(R.string.exit,
-								new DialogInterface.OnClickListener() {
-
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										finish();
-									}
-								})
-						.setNegativeButton(R.string.cancel,
-								new DialogInterface.OnClickListener() {
-
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-									}
-								}).show();
+				Util.showExitDialog(this);
 			}
 		}
 

@@ -12,7 +12,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-
+/**
+ * ≥ı ºªØ
+ * @author robust
+ *
+ */
 public class InitActivity extends FragmentActivity implements
 		LoaderCallbacks<ArrayList<Topic>> {
 

@@ -63,8 +63,6 @@ public class TopicFragment extends StackFragment {
 	private boolean pauseOnFling = true;
 	private CustomDialog loadingDialog = null;
 
-	// private ArrayList<Post> posts;
-
 	public static TopicFragment newInstance(String url) {
 		TopicFragment fragment = new TopicFragment();
 		Bundle args = new Bundle();
@@ -102,6 +100,7 @@ public class TopicFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle bundle = getArguments();
 		topicId = bundle.getInt("topicId");
 		page = getArguments().getInt("page");
@@ -129,9 +128,11 @@ public class TopicFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		CustomLinkMovementMethod.attach(this);
+		//首次打开，需要获取数据
+		boolean init = false;
 		if (adapter == null) {
+			init = true;
 			adapter = new PostAdapter(getActivity(), new ArrayList<Post>(),
 					new OnPostClickListener() {
 
@@ -172,8 +173,6 @@ public class TopicFragment extends StackFragment {
 						Options.create().refreshOnUp(true)
 								.headerLayout(R.layout.cancelable_header)
 								.headerTransformer(transformer).build())
-				// Here we mark just the ListView and it's Empty View as
-				// pullable
 				.theseChildrenArePullable(R.id.post_list)
 				.listener(new OnRefreshListener() {
 
@@ -191,9 +190,8 @@ public class TopicFragment extends StackFragment {
 				detachTask();
 			}
 		});
-		if (adapter.getCount() != 0) {
+		if (!init) {
 			adapter.notifyDataSetChanged();
-			listView.setSelection(1);
 		} else {
 			mPullToRefreshLayout.post(new Runnable() {
 
@@ -246,7 +244,6 @@ public class TopicFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-		// listView.prepareForRefresh();
 		DelegateTask<List<Post>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(mCallback);

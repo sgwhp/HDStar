@@ -11,6 +11,11 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 
+/**
+ * 消息中心
+ * @author robust
+ *
+ */
 public class MessageActivity extends BaseStackActivity implements
 		OnNavigationListener {
 	public static final int DELETE_MENU_ITEM_ID = Menu.FIRST;

@@ -123,7 +123,7 @@ public class CommonSettingFragment extends StackFragment implements
 					.setTitle(R.string.log_out)
 					.setIcon(R.drawable.ic_launcher)
 					.setMessage(R.string.log_out_message)
-					.setPositiveButton(R.string.update,
+					.setPositiveButton(R.string.log_out,
 							new DialogInterface.OnClickListener() {
 
 								@Override

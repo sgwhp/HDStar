@@ -11,6 +11,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
 
+/**
+ * 超链接跳转处理
+ * @author robust
+ *
+ */
 public class CustomLinkMovementMethod extends LinkMovementMethod {
 	private static CustomLinkMovementMethod linkMovementMethod = new CustomLinkMovementMethod();
 	private static StackFragment mFragment;

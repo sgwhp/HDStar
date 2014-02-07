@@ -98,7 +98,7 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 				android.R.integer.config_shortAnimTime);
 
 		mProgressDrawableColor = activity.getResources().getColor(
-				R.color.progress_bar_color_red);
+				R.color.progress_bar_color_green);
 
 		// Setup the View styles
 		setupViewsFromStyles(activity, headerView);

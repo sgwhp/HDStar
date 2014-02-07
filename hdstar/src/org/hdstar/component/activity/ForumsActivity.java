@@ -12,6 +12,11 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 
+/**
+ * ÂÛÌ³
+ * @author robust
+ *
+ */
 public class ForumsActivity extends BaseStackActivity implements
 		OnNavigationListener {
 	public static final int COMMIT_ACTION_BAR_ID = Menu.FIRST;

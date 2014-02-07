@@ -28,6 +28,12 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 	private ArrayList<RssSetting> settings;
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,7 +47,6 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 		init();
 	}
 

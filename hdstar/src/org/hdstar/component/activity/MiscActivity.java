@@ -6,6 +6,11 @@ import org.hdstar.R;
 
 import android.os.Bundle;
 
+/**
+ * ÆäËû
+ * @author robust
+ *
+ */
 public class MiscActivity extends BaseActivity {
 	HashMap<String, Integer> map = new HashMap<String, Integer>();
 

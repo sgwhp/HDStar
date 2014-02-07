@@ -29,6 +29,11 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+/**
+ * 下载管理
+ * @author robust
+ *
+ */
 public class DownloadActivity extends SherlockActivity implements
 		OnClickListener {
 	private ProgressBar progress;
@@ -62,9 +67,11 @@ public class DownloadActivity extends SherlockActivity implements
 		long size = shared.getLong("size", 0);
 		long patchSize = shared.getLong("patchSize", 0);
 		if (patchSize == 0) {
+			//普通升级
 			downloadSize = size;
 			sizeTV.setText(Util.formatFileSize(size));
 		} else {
+			//增量升级
 			isPatch = true;
 			downloadSize = patchSize;
 			String oriSize = Util.formatFileSize(size).toString();
