@@ -7,6 +7,7 @@ import java.util.List;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
+import org.hdstar.common.ForumPostType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
@@ -46,9 +47,9 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class ReplyFragment extends StackFragment {
 
 	private String topicID = "";
-	private String type;
+	private ForumPostType type;
 	private EditText body = null;
-	private Button button = null;
+	private Button commitBtn = null;
 	private CustomDialog dialog = null;
 	private View v;
 	private ToggleButton smile;
@@ -57,13 +58,13 @@ public class ReplyFragment extends StackFragment {
 	private LinearLayout lin;
 
 	public static ReplyFragment newInstance(String topicID, String text,
-			String username, String type) {
+			String username, ForumPostType type) {
 		Bundle args = new Bundle();
 		ReplyFragment fragment = new ReplyFragment();
 		args.putString("topicID", topicID);
 		args.putString("text", text);
 		args.putString("username", username);
-		args.putString("type", type);
+		args.putString("type", type.value());
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -72,7 +73,7 @@ public class ReplyFragment extends StackFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		topicID = getArguments().getString("topicID");
-		type = getArguments().getString("type");
+		type = ForumPostType.getByValue(getArguments().getString("type"));
 	}
 
 	@Override
@@ -109,8 +110,8 @@ public class ReplyFragment extends StackFragment {
 			text = MyTextParser.toEdit(text);
 			body.setText(text);
 		}
-		button = (Button) v.findViewById(R.id.commit);
-		button.setOnClickListener(new OnClickListener() {
+		commitBtn = (Button) v.findViewById(R.id.commit);
+		commitBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -139,7 +140,7 @@ public class ReplyFragment extends StackFragment {
 					body += "\n£® π”√" + CustomSetting.device + "ªÿ∏¥£©";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", topicID));
-					nvp.add(new BasicNameValuePair("type", type));
+					nvp.add(new BasicNameValuePair("type", type.value()));
 					nvp.add(new BasicNameValuePair("body", body));
 					try {
 						task.execPost(Const.Urls.REPLY_URL, nvp, "");

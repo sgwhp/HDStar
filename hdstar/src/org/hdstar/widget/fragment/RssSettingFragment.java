@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.Intents;
@@ -95,21 +94,38 @@ public class RssSettingFragment extends StackFragment implements
 		}
 	}
 
+	// @Override
+	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	// MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.save);
+	// item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
+	// | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case Menu.FIRST:
+	// save();
+	// return true;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
+
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.save);
+	public void onCreateActionBar(Menu menu) {
+		MenuItem item = menu.add(0, R.id.ab_save_rss_setting, 0, R.string.save);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onActionBarSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case Menu.FIRST:
+		case R.id.ab_save_rss_setting:
 			save();
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 
 	private void save() {

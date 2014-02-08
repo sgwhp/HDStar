@@ -217,7 +217,7 @@ public class PostAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
-					mListener.edit(p);
+					mListener.edit(p, position == 0);
 				}
 			});
 		} else {
@@ -302,7 +302,15 @@ public class PostAdapter extends BaseAdapter {
 
 		public void pm(int receiver);
 
-		public void edit(Post p);
+		/**
+		 * ±à¼­Ìû×Ó
+		 * 
+		 * @author robust
+		 * @param p
+		 * @param top
+		 *            ÊÇ·ñÖ÷Â¥
+		 */
+		public void edit(Post p, boolean top);
 
 		public void delete(int id, boolean isFirst);
 	}

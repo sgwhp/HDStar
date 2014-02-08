@@ -4,11 +4,17 @@ import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.adapter.StackPagerAdapter;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
-import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
-public class StackFragment extends SherlockFragment {
+/**
+ * 
+ * @author robust
+ */
+public class StackFragment extends Fragment {
 	protected String url;
 	protected BaseAsyncTask<?> mTask;
 
@@ -39,6 +45,25 @@ public class StackFragment extends SherlockFragment {
 	}
 
 	public void refresh() {
+	}
+
+	/**
+	 * 初始化actionbar <br/>
+	 * 代替onCreateOptionsMenu
+	 * 
+	 * @see https://github.com/jakewharton/actionbarsherlock/issues/272
+	 */
+	public void onCreateActionBar(Menu menu) {
+	}
+
+	/**
+	 * actionbar被选中 <br/>
+	 * 代替onOptionsItemSelected
+	 * 
+	 * @see https://github.com/jakewharton/actionbarsherlock/issues/272
+	 */
+	public boolean onActionBarSelected(MenuItem item) {
+		return false;
 	}
 
 	public void push(StackFragment f) {

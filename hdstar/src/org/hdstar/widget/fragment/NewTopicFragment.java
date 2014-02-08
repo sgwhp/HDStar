@@ -7,6 +7,7 @@ import java.util.List;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
+import org.hdstar.common.ForumPostType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.OriginTask;
@@ -44,7 +45,10 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class NewTopicFragment extends StackFragment {
 	private EditText subject, body;
-	private Button button = null;
+	private String subjectStr;
+	private String bodyStr;
+	private ForumPostType type;
+	private Button commitBtn = null;
 	private int id = 0;
 	private CustomDialog dialog = null;
 	private View v;
@@ -57,10 +61,36 @@ public class NewTopicFragment extends StackFragment {
 		return fragment;
 	}
 
+	public static NewTopicFragment newInstance(int id, String subject,
+			String body) {
+		Bundle args = new Bundle();
+		NewTopicFragment fragment = new NewTopicFragment();
+		args.putInt("id", id);
+		args.putString("subject", subject);
+		args.putString("body", body);
+		args.putString("type", ForumPostType.Edit.value());
+		fragment.setArguments(args);
+		return fragment;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		id = getArguments().getInt("id");
+		Bundle args = getArguments();
+		id = args.getInt("id");
+		subjectStr = args.getString("subject");
+		if (subjectStr == null) {
+			subjectStr = "";
+		}
+		bodyStr = args.getString("body");
+		if (bodyStr == null) {
+			bodyStr = "";
+		}
+		// 默认新建主题模式
+		type = ForumPostType.getByValue(args.getString("type"));
+		if (type == null) {
+			type = ForumPostType.New;
+		}
 	}
 
 	@Override
@@ -69,7 +99,7 @@ public class NewTopicFragment extends StackFragment {
 		v = inflater.inflate(R.layout.new_topic, null);
 		subject = (EditText) v.findViewById(R.id.subject);
 		body = (EditText) v.findViewById(R.id.body);
-		button = (Button) v.findViewById(R.id.commit);
+		commitBtn = (Button) v.findViewById(R.id.commit);
 		return v;
 	}
 
@@ -83,10 +113,12 @@ public class NewTopicFragment extends StackFragment {
 
 	void init() {
 		final Activity context = getActivity();
+		subject.setText(subjectStr);
+		body.setText(MyTextParser.toEdit(bodyStr));
 		final InputMethodManager im = (InputMethodManager) context
 				.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		final MyTextParser parser = new MyTextParser(context);
-		button.setOnClickListener(new OnClickListener() {
+		commitBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -99,7 +131,7 @@ public class NewTopicFragment extends StackFragment {
 					Crouton.makeText(context, R.string.subject_is_empty,
 							Style.CONFIRM).show();
 				} else {
-					dialog = new CustomDialog(context, R.string.topic_is_adding);
+					dialog = new CustomDialog(context, R.string.committing);
 					dialog.setOnDismissListener(new OnDismissListener() {
 
 						@Override
@@ -117,11 +149,11 @@ public class NewTopicFragment extends StackFragment {
 							+ CustomSetting.device + "发布）";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", id + ""));
-					nvp.add(new BasicNameValuePair("type", "new"));
+					nvp.add(new BasicNameValuePair("type", type.value()));
 					nvp.add(new BasicNameValuePair("subject", subjectStr));
-					nvp.add(new BasicNameValuePair("color", "0"));
-					nvp.add(new BasicNameValuePair("font", "0"));
-					nvp.add(new BasicNameValuePair("size", "0"));
+					// nvp.add(new BasicNameValuePair("color", "0"));
+					// nvp.add(new BasicNameValuePair("font", "0"));
+					// nvp.add(new BasicNameValuePair("size", "0"));
 					nvp.add(new BasicNameValuePair("body", bodyStr));
 					try {
 						task.execPost(Const.Urls.NEW_TOPIC_URL, nvp);
@@ -196,8 +228,13 @@ public class NewTopicFragment extends StackFragment {
 		@Override
 		public void onComplete(Void result) {
 			dialog.dismiss();
-			Crouton.makeText(getActivity(), R.string.add_topic_succeeded,
-					Style.INFO).show();
+			if ("new".equals(type)) {
+				Crouton.makeText(getActivity(), R.string.add_topic_succeeded,
+						Style.INFO).show();
+			} else {
+				Crouton.makeText(getActivity(), R.string.edit_succeeded,
+						Style.INFO).show();
+			}
 			StackFragment f = null;
 			if (CustomSetting.autoRefresh) {
 				f = getStackAdapter().preItem();

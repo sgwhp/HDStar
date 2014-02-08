@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -28,7 +27,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 	private ArrayList<RssSetting> settings;
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,23 +84,42 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		mContainer.addView(v);
 	}
 
+	// @Override
+	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	// MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.add);
+	// item.setIcon(R.drawable.add);
+	// item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
+	// | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case Menu.FIRST:
+	// push(RssSettingFragment.newInstance(RssSettingFragment.MODE_ADD,
+	// null));
+	// return true;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
+
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.add);
+	public void onCreateActionBar(Menu menu) {
+		MenuItem item = menu.add(0, R.id.ab_add_rss_setting, 0, R.string.add);
 		item.setIcon(R.drawable.add);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onActionBarSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case Menu.FIRST:
+		case R.id.ab_add_rss_setting:
 			push(RssSettingFragment.newInstance(RssSettingFragment.MODE_ADD,
 					null));
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 
 	private View createChild(Context context, RssSetting setting, int id) {

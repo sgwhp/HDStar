@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
-import org.hdstar.component.activity.ForumsActivity;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.model.Topic;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
@@ -39,7 +38,6 @@ import android.widget.PopupWindow;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 
@@ -83,7 +81,7 @@ public class ForumFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+		// setHasOptionsMenu(true);
 		Bundle bundle = getArguments();
 		url = bundle.getString("url");
 		forumId = bundle.getInt("id", 1);
@@ -101,7 +99,7 @@ public class ForumFragment extends StackFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		//首次打开，需要获取数据
+		// 首次打开，需要获取数据
 		boolean init = false;
 		if (adapter == null) {
 			init = true;
@@ -144,28 +142,50 @@ public class ForumFragment extends StackFragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateActionBar(Menu menu) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(null);
-		MenuItem item = menu.add(0, ForumsActivity.COMMIT_ACTION_BAR_ID, 0,
-				R.string.new_topic);
+		MenuItem item = menu.add(0, R.id.ab_new_topic, 0, R.string.new_topic);
 		item.setIcon(R.drawable.reply);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onActionBarSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case ForumsActivity.COMMIT_ACTION_BAR_ID:
+		case R.id.ab_new_topic:
 			if (getActivity().findViewById(android.R.id.list) != null
 					&& adapter.getList() != null && !url.equals("")) {
 				push(NewTopicFragment.newInstance(forumId));
 			}
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
+
+	// @Override
+	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	// ((SherlockFragmentActivity) getActivity()).getSupportActionBar()
+	// .setSubtitle(null);
+	// MenuItem item = menu.add(0, R.id.ab_new_topic, 0, R.string.new_topic);
+	// item.setIcon(R.drawable.reply);
+	// item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
+	// | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case R.id.ab_new_topic:
+	// if (getActivity().findViewById(android.R.id.list) != null
+	// && adapter.getList() != null && !url.equals("")) {
+	// push(NewTopicFragment.newInstance(forumId));
+	// }
+	// return true;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
 
 	@Override
 	public void onSelected() {

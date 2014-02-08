@@ -3,7 +3,6 @@ package org.hdstar.widget.fragment;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
-import org.hdstar.component.activity.MessageActivity;
 import org.hdstar.model.MessageContent;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
@@ -28,7 +27,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 
@@ -64,7 +62,7 @@ public class ViewMessageFragment extends StackFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+		// setHasOptionsMenu(true);
 		messageId = getArguments().getInt("messageId");
 		subject = getArguments().getString("subject");
 	}
@@ -107,25 +105,46 @@ public class ViewMessageFragment extends StackFragment {
 		}
 	}
 
+	// @Override
+	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	// ((SherlockFragmentActivity) getActivity()).getSupportActionBar()
+	// .setSubtitle(subject);
+	// if (content != null && content.receiverId != 0) {
+	// menu.add(0, R.id.ab_reply, 0, R.string.reply)
+	// .setIcon(R.drawable.reply)
+	// .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	// }
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case R.id.ab_reply:
+	// reply();
+	// return true;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
+
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateActionBar(Menu menu) {
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(subject);
 		if (content != null && content.receiverId != 0) {
-			menu.add(0, MessageActivity.DELETE_MENU_ITEM_ID, 0, R.string.reply)
+			menu.add(0, R.id.ab_reply, 0, R.string.reply)
 					.setIcon(R.drawable.reply)
 					.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onActionBarSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case MessageActivity.DELETE_MENU_ITEM_ID:
+		case R.id.ab_reply:
 			reply();
 			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 
 	@Override

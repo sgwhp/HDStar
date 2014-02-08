@@ -3,22 +3,22 @@ package org.hdstar.component.activity;
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.widget.fragment.MessageBoxFragment;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.actionbarsherlock.view.Menu;
 
 /**
  * 消息中心
+ * 
  * @author robust
- *
+ * 
  */
 public class MessageActivity extends BaseStackActivity implements
 		OnNavigationListener {
-	public static final int DELETE_MENU_ITEM_ID = Menu.FIRST;
 	private int curTab = -1;
 
 	public MessageActivity() {
