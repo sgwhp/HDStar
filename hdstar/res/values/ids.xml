@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="ab_new_topic"></item>
+    <item type="id" name="ab_reply"></item>
+    <item type="id" name="ab_search_torrent"></item>
+    <item type="id" name="ab_show_rss"></item>
+    <item type="id" name="ab_del_msg"></item>
+    <item type="id" name="ab_add_remote_setting"></item>
+    <item type="id" name="ab_add_rss_setting"></item>
+    <item type="id" name="ab_save_remote_setting"></item>
+    <item type="id" name="ab_save_rss_setting"></item>
+</resources>
