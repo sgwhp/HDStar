@@ -2,7 +2,6 @@ package org.hdstar.widget.fragment;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +11,7 @@ import org.hdstar.common.ForumPostType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Post;
 import org.hdstar.model.ResponseWrapper;
+import org.hdstar.model.TopicDetails;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.task.OriginTask;
@@ -263,11 +263,11 @@ public class TopicFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-		DelegateTask<List<Post>> task = DelegateTask
+		DelegateTask<TopicDetails> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
 		task.attach(mCallback);
 		attachTask(task);
-		task.execGet(url, new TypeToken<ResponseWrapper<List<Post>>>() {
+		task.execGet(url, new TypeToken<ResponseWrapper<TopicDetails>>() {
 		}.getType());
 	}
 
@@ -362,12 +362,17 @@ public class TopicFragment extends StackFragment {
 						}).create().show();
 	}
 
-	private TaskCallback<List<Post>> mCallback = new TaskCallback<List<Post>>() {
+	private TaskCallback<TopicDetails> mCallback = new TaskCallback<TopicDetails>() {
 
 		@Override
-		public void onComplete(List<Post> list) {
+		public void onComplete(TopicDetails result) {
+			if (result.title != null) {
+				title = result.title;
+				((SherlockFragmentActivity) getActivity())
+						.getSupportActionBar().setSubtitle(title);
+			}
 			adapter.clearItems();
-			adapter.addAll(list);
+			adapter.addAll(result.posts);
 			adapter.notifyDataSetChanged();
 			mPullToRefreshLayout.setRefreshComplete();
 			SoundPoolManager.play(getActivity());

@@ -19,6 +19,5 @@ public class Post implements Serializable {
 	public String body = "";
 	public boolean delete;
 	public boolean edit;
-	// Ç©Ãû
-	public String signature = "";
+	public String floor = "";// Â¥²ã
 }

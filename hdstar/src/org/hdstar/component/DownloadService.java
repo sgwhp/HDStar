@@ -31,6 +31,8 @@ import cn.sgwhp.patchdroid.PatchClient;
  * 
  * 控制下载服务时，intent必须带的参数：("command", DownloadService.COMMAND_DOWNLOAD_XXX),
  * ("appCode", appCode) ("isPatch", isPatch)
+ * 
+ * @author robust
  */
 public class DownloadService extends Service {
 	public static final int DOWNLOAD_STATUS_PAUSED = 0;
@@ -120,7 +122,7 @@ public class DownloadService extends Service {
 	 */
 	void stop() {
 		if (task != null) {
-			task.pauseNDelete();
+			task.pause(true);
 			updateStatus(DOWNLOAD_STATUS_PAUSED);
 		}
 	}
@@ -161,7 +163,7 @@ public class DownloadService extends Service {
 			nfIntent = new Intent(Intent.ACTION_VIEW);
 			nfIntent.setDataAndType(
 					Uri.fromFile(new File(Const.DOWNLOAD_DIR + File.separator
-							+ task.fileName)),
+							+ task.apkName)),
 					"application/vnd.android.package-archive");
 		} else {
 			status = DOWNLOAD_STATUS_FAILED;
@@ -189,6 +191,7 @@ public class DownloadService extends Service {
 		private final float UPDATE_PERCENT = 0.05f;// 5%更新一次进度
 		private long updateOffset;
 		private String fileName;
+		private String apkName;
 		private HttpGet get;
 		private InputStream in = null;
 
@@ -220,9 +223,7 @@ public class DownloadService extends Service {
 				client = HttpClientManager.getHttpClient();
 				get = new HttpGet(Const.Urls.SERVER_DOWNLOAD_URL + "?appCode="
 						+ Const.APP_CODE + "&patch=" + isPatch);
-				// get = new HttpGet(
-				// "http://10.10.28.113:8084/HDStarService/download?appCode="
-				// + Const.APP_CODE + "&appVersion=164");
+				// 并非首次下载
 				if (!isNew) {
 					fileName = shared.getString("downloadFile", null);
 					if (fileName != null) {
@@ -250,6 +251,12 @@ public class DownloadService extends Service {
 							.getValue();
 					fileName = fileName
 							.substring(fileName.indexOf("filename=") + 9);
+					File tmpFile = new File(dir.getAbsolutePath()
+							+ File.separator + fileName);
+					// 删除已存在的同名文件
+					if (tmpFile.exists()) {
+						tmpFile.delete();
+					}
 					editor.putString("downloadFile", fileName);
 					editor.commit();
 				}
@@ -272,9 +279,22 @@ public class DownloadService extends Service {
 					if (isPatch) {
 						PatchClient.loadLib();
 						PatchClient.applyPatchToOwn(DownloadService.this,
-								Const.DOWNLOAD_DIR + File.separator + fileName,
 								Const.DOWNLOAD_DIR + File.separator
-										+ "patch.patch");
+										+ "hdstar.apk", Const.DOWNLOAD_DIR
+										+ File.separator + fileName);
+						// 保存apk文件名
+						apkName = "hdstar.apk";
+						editor.putString("apk", apkName);
+						editor.commit();
+						// 删除增量文件
+						File patchFile = new File(dir.getAbsolutePath()
+								+ File.separator + fileName);
+						patchFile.delete();
+					} else {
+						// 保存apk文件名
+						apkName = fileName;
+						editor.putString("apk", apkName);
+						editor.commit();
 					}
 				} catch (IOException ex) {
 					ex.printStackTrace();
@@ -312,10 +332,10 @@ public class DownloadService extends Service {
 			}
 		}
 
-		void pauseNDelete() {
-			pause(true);
-			File file = new File(Const.DOWNLOAD_DIR + File.separator + fileName);
-			file.delete();
-		}
+		// void pauseNDelete() {
+		// pause(true);
+		// File file = new File(Const.DOWNLOAD_DIR + File.separator + fileName);
+		// file.delete();
+		// }
 	}
 }

@@ -102,13 +102,13 @@ public class Const {
 		public static final String UTORRENT_ADD_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=add-url&s=%s";
 
-		//获取网站图标工具地址
+		// 获取网站图标工具地址
 		public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
 		public static void initServerAddr(final String serverAddr) {
 			SERVER_ADDRESS = serverAddr;
 			SERVER_VIEW_FORUM_URL = SERVER_ADDRESS + "viewForum";
-			SERVER_VIEW_TOPIC_URL = SERVER_ADDRESS + "viewTopic";
+			SERVER_VIEW_TOPIC_URL = SERVER_ADDRESS + "viewtopic";
 			SERVER_GET_IMAGE_URL = SERVER_ADDRESS + "getImage?url=";
 			SERVER_VIEW_MESSAGES_URL = SERVER_ADDRESS + "messages";
 			SERVER_SEND_BOX_URL = SERVER_ADDRESS + "sendbox";

@@ -84,12 +84,13 @@ public class IOUtils {
 		String name = fileName.substring(0, endPoint);
 		File file = new File(parent + File.separator + name + suffix);
 		int count = 0;
+		String tmp = name;
 		while (file.exists()) {
 			count++;
-			name = name + "(" + count + ")";
-			file = new File(parent + File.separator + name + suffix);
+			tmp = name + "(" + count + ")";
+			file = new File(parent + File.separator + tmp + suffix);
 		}
-		return name + suffix;
+		return tmp + suffix;
 	}
 
 	public static String inputStream2String(InputStream in) throws IOException {

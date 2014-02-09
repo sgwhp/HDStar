@@ -231,11 +231,12 @@ public class CommonSettingFragment extends StackFragment implements
 									editor.putString("packageName",
 											result.packageName);
 									editor.putString("desc", result.desc);
-									String pics = "";
+									StringBuilder pics = new StringBuilder();
 									for (String pic : result.pics) {
-										pics += pic;
+										pics.append(pic).append(" ");
 									}
-									editor.putString("pics", pics);
+									pics.deleteCharAt(pics.length() - 1);
+									editor.putString("pics", pics.toString());
 									editor.putString("updateDate",
 											result.updateDate);
 									editor.putString("versionName",

@@ -1,5 +1,7 @@
 package org.hdstar.component.activity;
 
+import java.io.File;
+
 import org.hdstar.R;
 import org.hdstar.common.Const;
 import org.hdstar.component.DownloadService;
@@ -13,12 +15,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,11 +35,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 下载管理
+ * 
  * @author robust
- *
+ * 
  */
 public class DownloadActivity extends SherlockActivity implements
 		OnClickListener {
+	private static final int THUMBNAIL_MARGIN = 4;// dp
 	private ProgressBar progress;
 	private ImageButton ctrlBtn;
 	private ImageButton cancelBtn;
@@ -48,6 +54,7 @@ public class DownloadActivity extends SherlockActivity implements
 	private long downloadSize;
 	private int status;
 	private String[] pics;
+	private SharedPreferences prefs;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,16 +69,16 @@ public class DownloadActivity extends SherlockActivity implements
 		updateDate = (TextView) findViewById(R.id.update_date);
 		descTV = (TextView) findViewById(R.id.desc);
 		thumbnails = (LinearLayout) findViewById(R.id.thumbnails);
-		SharedPreferences shared = this.getSharedPreferences(
-				Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
-		long size = shared.getLong("size", 0);
-		long patchSize = shared.getLong("patchSize", 0);
+		prefs = this.getSharedPreferences(Const.DOWNLOAD_SHARED_PREFS,
+				MODE_PRIVATE);
+		long size = prefs.getLong("size", 0);
+		long patchSize = prefs.getLong("patchSize", 0);
 		if (patchSize == 0) {
-			//普通升级
+			// 普通升级
 			downloadSize = size;
 			sizeTV.setText(Util.formatFileSize(size));
 		} else {
-			//增量升级
+			// 增量升级
 			isPatch = true;
 			downloadSize = patchSize;
 			String oriSize = Util.formatFileSize(size).toString();
@@ -81,18 +88,23 @@ public class DownloadActivity extends SherlockActivity implements
 					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			sizeTV.setText(ss);
 		}
-		long completeSize = shared.getLong("completeSize", 0);
+		long completeSize = prefs.getLong("completeSize", 0);
 		if (downloadSize != 0) {
 			setProgress(completeSize);
 		}
-		status = shared.getInt("status", -1);
+		status = prefs.getInt("status", -1);
 		refreshCtrlBtn();
-		versionTV.setText(shared.getString("versionName", ""));
-		updateDate.setText(shared.getString("updateDate", ""));
-		descTV.setText(shared.getString("desc", ""));
-		pics = shared.getString("pics", "").split(" ");
+		versionTV.setText(prefs.getString("versionName", ""));
+		updateDate.setText(prefs.getString("updateDate", ""));
+		descTV.setText(prefs.getString("desc", ""));
+		pics = prefs.getString("pics", "").split(" ");
 		for (String pic : pics) {
 			ImageView thumbnail = new ImageView(this);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.leftMargin = Util.dip2px(this, THUMBNAIL_MARGIN);
+			params.rightMargin = Util.dip2px(this, THUMBNAIL_MARGIN);
+			thumbnail.setLayoutParams(params);
 			ImageLoader.getInstance().displayImage(pic, thumbnail);
 			thumbnails.addView(thumbnail);
 		}
@@ -127,9 +139,13 @@ public class DownloadActivity extends SherlockActivity implements
 		Intent intent = new Intent(this, DownloadService.class);
 		intent.putExtra("command", DownloadService.COMMAND_DOWNLOAD_STOP);
 		startService(intent);
-		SharedPreferences shared = this.getSharedPreferences(
-				Const.DOWNLOAD_SHARED_PREFS, MODE_PRIVATE);
-		Editor editor = shared.edit();
+		// 删除apk
+		String apk = prefs.getString("apk", null);
+		if (apk != null) {
+			File file = new File(Const.DOWNLOAD_DIR + File.separator + apk);
+			file.delete();
+		}
+		Editor editor = prefs.edit();
 		editor.clear();
 		editor.commit();
 	}
@@ -147,6 +163,15 @@ public class DownloadActivity extends SherlockActivity implements
 		startService(intent);
 	}
 
+	private void openApk() {
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(
+				Uri.fromFile(new File(Const.DOWNLOAD_DIR + File.separator
+						+ prefs.getString("apk", ""))),
+				"application/vnd.android.package-archive");
+		startActivity(intent);
+	}
+
 	private void refreshCtrlBtn() {
 		switch (status) {
 		case -1:
@@ -162,6 +187,10 @@ public class DownloadActivity extends SherlockActivity implements
 		case DownloadService.DOWNLOAD_STATUS_RUNNING:
 			ctrlBtn.setEnabled(true);
 			ctrlBtn.setImageResource(R.drawable.sw_pause_n);
+			break;
+		case DownloadService.DOWNLOAD_STATUS_FINISHED:
+			ctrlBtn.setEnabled(true);
+			ctrlBtn.setImageResource(R.drawable.sw_open_n);
 			break;
 		default:
 			ctrlBtn.setEnabled(false);
@@ -202,6 +231,8 @@ public class DownloadActivity extends SherlockActivity implements
 				pauseDownload();
 			} else if (status == DownloadService.DOWNLOAD_STATUS_PAUSED) {
 				resumeDownload();
+			} else if (status == DownloadService.DOWNLOAD_STATUS_FINISHED) {
+				openApk();
 			}
 			break;
 		}

@@ -646,6 +646,8 @@ public class PullToRefreshAttacher {
 
 		// Hide Header View
 		hideHeaderView();
+		// 置空当前模式，防止干扰代码触发的刷新
+		currentMode = null;
 	}
 
 	private void startRefresh(View view, boolean fromTouch) {

@@ -122,6 +122,7 @@ public class PostAdapter extends BaseAdapter {
 
 		final Post p = posts.get(position);
 		holder.username.setText(Html.fromHtml(p.userName));
+		holder.floor.setText(p.floor);
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
 				p.userClassSrc, (Context) ref.get()));
 		FieldSetVO quote = quotes.get(position);
@@ -242,7 +243,7 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	private class ViewHolder {
-		TextView username, info, contentOuter, legend, contentInner,
+		TextView username, info, floor, contentOuter, legend, contentInner,
 				legendInner, contentMiddle, frameMore, pm, quote, edit, delete;
 		View frameOuter, frameInner;
 		ImageView userClass;
@@ -274,6 +275,7 @@ public class PostAdapter extends BaseAdapter {
 			userClass = (ImageView) v.findViewById(R.id.user_class);
 			info = (TextView) v.findViewById(R.id.info);
 			avatar = (ImageView) v.findViewById(R.id.avatar);
+			floor = (TextView) v.findViewById(R.id.floor);
 		}
 	}
 
