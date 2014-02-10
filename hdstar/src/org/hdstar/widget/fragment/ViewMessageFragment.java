@@ -1,7 +1,7 @@
 package org.hdstar.widget.fragment;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.MessageContent;
 import org.hdstar.model.ResponseWrapper;
@@ -201,7 +201,7 @@ public class ViewMessageFragment extends StackFragment {
 				.newInstance(HDStarApp.cookies);
 		task.attach(fetchCallback);
 		attachTask(task);
-		task.execGet(Const.Urls.SERVER_VIEW_MESSAGE_URL + messageId,
+		task.execGet(CommonUrls.HDStar.SERVER_VIEW_MESSAGE_URL + messageId,
 				new TypeToken<ResponseWrapper<MessageContent>>() {
 				}.getType());
 	}

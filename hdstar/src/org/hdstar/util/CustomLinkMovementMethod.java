@@ -1,6 +1,6 @@
 package org.hdstar.util;
 
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.widget.fragment.ForumFragment;
 import org.hdstar.widget.fragment.PMFragment;
 import org.hdstar.widget.fragment.StackFragment;
@@ -13,8 +13,9 @@ import android.view.MotionEvent;
 
 /**
  * 超链接跳转处理
+ * 
  * @author robust
- *
+ * 
  */
 public class CustomLinkMovementMethod extends LinkMovementMethod {
 	private static CustomLinkMovementMethod linkMovementMethod = new CustomLinkMovementMethod();
@@ -42,17 +43,18 @@ public class CustomLinkMovementMethod extends LinkMovementMethod {
 			if (link.length != 0) {
 				StackFragment f;
 				String url = link[0].getURL();
-				if (url.startsWith(Const.Urls.VIEW_FORUM_BASE_URL)) {
+				if (url.startsWith(CommonUrls.HDStar.VIEW_FORUM_BASE_URL)) {
 					f = ForumFragment.newInstance(url);
 					if (f != null) {
 						mFragment.push(f);
 					}
-				} else if (url.startsWith(Const.Urls.VIEW_TOPIC_BASE_URL)) {
+				} else if (url
+						.startsWith(CommonUrls.HDStar.VIEW_TOPIC_BASE_URL)) {
 					f = TopicFragment.newInstance(url);
 					if (f != null) {
 						mFragment.push(f);
 					}
-				} else if (url.startsWith(Const.Urls.SEND_PM_URL)) {
+				} else if (url.startsWith(CommonUrls.HDStar.SEND_PM_URL)) {
 					f = PMFragment.newInstance(url);
 					if (f != null) {
 						mFragment.push(f);

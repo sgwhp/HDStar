@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.RemoteType;
 import org.hdstar.model.Label;
@@ -67,7 +68,7 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList() {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
 		ResponseParser<ArrayList<RemoteTaskInfo>> parser = new ResponseParser<ArrayList<RemoteTaskInfo>>() {
 
 			@Override
@@ -205,7 +206,7 @@ public class RuTorrent extends RemoteBase {
 				serializer.flush();
 
 				HttpPost post = new HttpPost(String.format(
-						Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
+						CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
 				ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 					@Override
@@ -236,7 +237,7 @@ public class RuTorrent extends RemoteBase {
 	public BaseAsyncTask<Boolean> add(String dir, String hash,
 			ArrayList<String> urls) {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RSS_ACTION_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_RSS_ACTION_URL, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 			@Override
@@ -328,7 +329,7 @@ public class RuTorrent extends RemoteBase {
 
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_RPC_ACTION_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 			@Override
@@ -369,7 +370,7 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<long[]> getDiskInfo() {
 		HttpGet get = new HttpGet(String.format(
-				Const.Urls.RUTORRENT_DISK_SPACE_URL, ipNPort)
+				CommonUrls.BTClient.RUTORRENT_DISK_SPACE_URL, ipNPort)
 				+ System.currentTimeMillis());
 		ResponseParser<long[]> parser = new ResponseParser<long[]>(
 				R.string.get_disk_space_failed) {
@@ -408,7 +409,7 @@ public class RuTorrent extends RemoteBase {
 				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
 				new UsernamePasswordCredentials(username, password));
 		HttpGet request = new HttpGet(String.format(
-				Const.Urls.RUTORRENT_HOME_PAGE, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_HOME_PAGE, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
 				R.string.login_error) {
 
@@ -464,7 +465,7 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<Boolean> addByUrl(String dir, String url) {
 		HttpPost post = new HttpPost(String.format(
-				Const.Urls.RUTORRENT_ADD_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_ADD_URL, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 			@Override

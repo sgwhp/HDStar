@@ -35,6 +35,17 @@
             android:gravity="center_vertical"
             android:paddingLeft="5dip"
             android:text="@string/rss" />
+        
+        <TextView
+            android:id="@+id/pt_site"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/setting_strip_middle_sel"
+            android:drawableRight="@drawable/zebra_arrow_bg_sel"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:text="@string/pt_site" />
 
         <TextView
             android:id="@+id/animation"

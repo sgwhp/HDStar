@@ -16,9 +16,8 @@
     </string-array>
     
     <!-- 命名要与RemoteType保持一致 -->
-    <string-array name="remoteClient">
+    <!-- <string-array name="remoteClient">
         <item>μTorrent</item>
         <item>ruTorrent</item>
-     <!--    <item>transmission</item> -->
-    </string-array>
+    </string-array> -->
 </resources>

@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.FieldSetVO;
@@ -185,7 +186,7 @@ public class PostAdapter extends BaseAdapter {
 		// holder.main.setFocusableInTouchMode(false);
 		try {
 			ImageLoader.getInstance().displayImage(
-					Const.Urls.SERVER_GET_IMAGE_URL
+					CommonUrls.HDStar.SERVER_GET_IMAGE_URL
 							+ URLEncoder.encode(p.avatarSrc, Const.CHARSET),
 					holder.avatar, HDStarApp.roundedDisplayOptions,
 					animateFirstListener);

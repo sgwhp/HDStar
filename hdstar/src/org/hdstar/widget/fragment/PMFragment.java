@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.MessageContent;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
@@ -78,7 +78,8 @@ public class PMFragment extends StackFragment {
 	}
 
 	public static PMFragment newInstance(String url) {
-		Pattern pattern = Pattern.compile(Const.Urls.SEND_PM_URL + "(\\d)");
+		Pattern pattern = Pattern.compile(CommonUrls.HDStar.SEND_PM_URL
+				+ "(\\d)");
 		Matcher matcher = pattern.matcher(url);
 		if (matcher.find()) {
 			return newInstance(Integer.parseInt(matcher.group(1)));
@@ -175,10 +176,11 @@ public class PMFragment extends StackFragment {
 				nvp.add(new BasicNameValuePair("font", 0 + ""));
 				nvp.add(new BasicNameValuePair("receiver", receiverId + ""));
 				nvp.add(new BasicNameValuePair("size", 0 + ""));
-				nvp.add(new BasicNameValuePair("returnto", Const.Urls.HOME_PAGE));
+				nvp.add(new BasicNameValuePair("returnto",
+						CommonUrls.HDStar.HOME_PAGE));
 				try {
-					task.execPost(Const.Urls.REPLY_PM_URL, nvp,
-							Const.Urls.HOME_PAGE);
+					task.execPost(CommonUrls.HDStar.REPLY_PM_URL, nvp,
+							CommonUrls.HDStar.HOME_PAGE);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}

@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
@@ -70,7 +70,7 @@ public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
 		String url = getImageUrl(params[0]);
 		if (url != null) {
 			imageHash = url;
-			url = Const.Urls.GET_SECURITY_IMAGE_URL + url;
+			url = CommonUrls.HDStar.GET_SECURITY_IMAGE_URL + url;
 			return downloadImage(url);
 		}
 		return null;

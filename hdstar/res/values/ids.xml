@@ -9,4 +9,6 @@
     <item type="id" name="ab_add_rss_setting"></item>
     <item type="id" name="ab_save_remote_setting"></item>
     <item type="id" name="ab_save_rss_setting"></item>
+    <item type="id" name="ab_add_pt_site_setting"></item>
+    <item type="id" name="ab_save_pt_site_setting"></item>
 </resources>

@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.RemoteType;
 import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
@@ -123,8 +123,8 @@ public class UTorrent extends RemoteBase {
 
 		UtorrentTask<ArrayList<RemoteTaskInfo>> task = UtorrentTask
 				.newInstance(ipNPort, String.format(
-						Const.Urls.UTORRENT_GET_LIST_URL, ipNPort, "%s"),
-						parser);
+						CommonUrls.BTClient.UTORRENT_GET_LIST_URL, ipNPort,
+						"%s"), parser);
 		return task;
 	}
 
@@ -141,8 +141,8 @@ public class UTorrent extends RemoteBase {
 		ResponseParser<Boolean> parser = new DefaultGetParser();
 		UtorrentTask<Boolean> task = UtorrentTask.newInstance(
 				ipNPort,
-				buildParams(Const.Urls.UTORRENT_ACTION_URL, ipNPort, mode,
-						hashes), parser);
+				buildParams(CommonUrls.BTClient.UTORRENT_ACTION_URL, ipNPort,
+						mode, hashes), parser);
 		return task;
 	}
 
@@ -203,7 +203,7 @@ public class UTorrent extends RemoteBase {
 				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
 				new UsernamePasswordCredentials(username, password));
 		HttpGet request = new HttpGet(String.format(
-				Const.Urls.UTORRENT_HOME_PAGE, ipNPort));
+				CommonUrls.BTClient.UTORRENT_HOME_PAGE, ipNPort));
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
 				R.string.login_error) {
 
@@ -225,7 +225,7 @@ public class UTorrent extends RemoteBase {
 		UtorrentTask<Boolean> task = null;
 		try {
 			task = UtorrentTask.newInstance(ipNPort, String.format(
-					Const.Urls.UTORRENT_ACTION_URL, ipNPort, "%s",
+					CommonUrls.BTClient.UTORRENT_ACTION_URL, ipNPort, "%s",
 					URLEncoder.encode(url, "UTF-8")), parser);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

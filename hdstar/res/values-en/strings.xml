@@ -158,4 +158,7 @@
 	<string name="navigation_status_onlyactive">Active</string>
 	<string name="navigation_status_onlyinactive">Inactive</string>
 	<string name="unlabled">Others</string>
+	
+	<!-- pt site -->
+	<string name="init">Init</string>
 </resources>

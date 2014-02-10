@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.ForumPostType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Post;
@@ -76,7 +76,7 @@ public class TopicFragment extends StackFragment {
 			if (matcher.find()) {
 				page = Integer.parseInt(matcher.group(1));
 			}
-			args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL
+			args.putString("url", CommonUrls.HDStar.SERVER_VIEW_TOPIC_URL
 					+ "?topicId=" + id + "&page=" + page);
 			fragment.setArguments(args);
 			return fragment;
@@ -90,8 +90,8 @@ public class TopicFragment extends StackFragment {
 		args.putInt("topicId", topicId);
 		args.putInt("page", page);
 		args.putString("title", title);
-		args.putString("url", Const.Urls.SERVER_VIEW_TOPIC_URL + "?topicId="
-				+ topicId + "&page=" + page);
+		args.putString("url", CommonUrls.HDStar.SERVER_VIEW_TOPIC_URL
+				+ "?topicId=" + topicId + "&page=" + page);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -305,10 +305,10 @@ public class TopicFragment extends StackFragment {
 		int msg;
 		if (isTopic) {
 			msg = R.string.delete_topic_msg;
-			url = String.format(Const.Urls.DELETE_TOPIC_URL, topicId);
+			url = String.format(CommonUrls.HDStar.DELETE_TOPIC_URL, topicId);
 		} else {
 			msg = R.string.delete_post_msg;
-			url = String.format(Const.Urls.DELETE_POST_URL, id);
+			url = String.format(CommonUrls.HDStar.DELETE_POST_URL, id);
 		}
 		new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.confirm)

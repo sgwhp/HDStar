@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.component.activity.DownloadActivity;
 import org.hdstar.util.HttpClientManager;
@@ -221,8 +222,8 @@ public class DownloadService extends Service {
 					dir.mkdirs();
 				}
 				client = HttpClientManager.getHttpClient();
-				get = new HttpGet(Const.Urls.SERVER_DOWNLOAD_URL + "?appCode="
-						+ Const.APP_CODE + "&patch=" + isPatch);
+				get = new HttpGet(CommonUrls.HDStar.SERVER_DOWNLOAD_URL
+						+ "?appCode=" + Const.APP_CODE + "&patch=" + isPatch);
 				// 并非首次下载
 				if (!isNew) {
 					fileName = shared.getString("downloadFile", null);

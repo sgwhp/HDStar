@@ -9,7 +9,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RssSettingManager;
 import org.hdstar.component.HDStarApp;
@@ -1036,7 +1036,7 @@ public class RemoteActivity extends BaseActivity implements
 				holder.label.setText(rssSettings.get(groupPosition).label);
 			}
 			ImageLoader.getInstance().displayImage(
-					String.format(Const.Urls.GETFVO_URL,
+					String.format(CommonUrls.GETFVO_URL,
 							rssSettings.get(groupPosition).link), holder.icon,
 					HDStarApp.displayOptions);
 			TaskStatus status = rssStatus[groupPosition];

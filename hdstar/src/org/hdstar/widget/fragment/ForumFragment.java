@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.model.Topic;
@@ -297,9 +297,9 @@ public class ForumFragment extends StackFragment {
 				.newInstance(HDStarApp.cookies);
 		task.attach(refreshCallback);
 		attachTask(task);
-		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId,
-				new TypeToken<ResponseWrapper<List<Topic>>>() {
-				}.getType());
+		task.execGet(CommonUrls.HDStar.SERVER_VIEW_FORUM_URL + "?forumId="
+				+ forumId, new TypeToken<ResponseWrapper<List<Topic>>>() {
+		}.getType());
 	}
 
 	public void loadNextPage() {
@@ -307,8 +307,8 @@ public class ForumFragment extends StackFragment {
 				HDStarApp.cookies);
 		task.attach(addCallback);
 		attachTask(task);
-		task.execGet(Const.Urls.SERVER_VIEW_FORUM_URL + "?forumId=" + forumId
-				+ "&page=" + ++curPage,
+		task.execGet(CommonUrls.HDStar.SERVER_VIEW_FORUM_URL + "?forumId="
+				+ forumId + "&page=" + ++curPage,
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
 				}.getType());
 	}

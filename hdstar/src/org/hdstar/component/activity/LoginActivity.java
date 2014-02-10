@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
@@ -39,12 +40,13 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * µÇÂ¼
+ * 
  * @author robust
- *
+ * 
  */
 public class LoginActivity extends SherlockActivity implements OnClickListener {
 	private DownloadImageTask imageTask = null;
-	private final String LOGIN_URL = Const.Urls.BASE_URL + "/login.php";
+	private final String LOGIN_URL = CommonUrls.HDStar.BASE_URL + "/login.php";
 	private LoginTask task = null;
 	private CustomDialog dialog = null;
 	private ToggleButton fetchImage;
@@ -129,7 +131,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			CustomSetting.serverAddress = serverAddr.getText().toString();
 			edit.putString("serverAddr", CustomSetting.serverAddress);
 			edit.commit();
-			Const.Urls.initServerAddr(CustomSetting.serverAddress);
+			CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
 		}
 		if (imageTask.getStatus() == AsyncTask.Status.FINISHED) {
 			String imageHash = imageTask.getHash();
@@ -182,7 +184,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			nvp.add(new BasicNameValuePair("imagestring", imageString));
 			nvp.add(new BasicNameValuePair("imagehash", imageHash));
 			try {
-				task.execPost(Const.Urls.TAKE_LOGIN_URL, nvp, "");
+				task.execPost(CommonUrls.HDStar.TAKE_LOGIN_URL, nvp, "");
 			} catch (UnsupportedEncodingException e) {
 				dialog.dismiss();
 				e.printStackTrace();

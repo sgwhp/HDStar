@@ -3,6 +3,7 @@ package org.hdstar.component;
 import java.io.File;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.model.ResponseWrapper;
@@ -117,7 +118,7 @@ public class HDStarApp extends Application {
 		CustomSetting.fade = shared.getBoolean("fade", false);
 		CustomSetting.anim = CustomSetting.stringToAnim(shared.getString(
 				"anim", TransitionEffect.CubeIn.name()));
-		Const.Urls.initServerAddr(CustomSetting.serverAddress);
+		CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
 		initImageLoader(context);
 		// initMemoryCache();
 		// File cacheDir = getStorageCacheDir(this, DISK_CACHE_SUBDIR);
@@ -194,7 +195,7 @@ public class HDStarApp extends Application {
 				task.detach();
 			}
 		});
-		task.execGet(Const.Urls.SERVER_CHECK_MESSAGE_URL,
+		task.execGet(CommonUrls.HDStar.SERVER_CHECK_MESSAGE_URL,
 				new TypeToken<ResponseWrapper<Boolean>>() {
 				}.getType());
 	}

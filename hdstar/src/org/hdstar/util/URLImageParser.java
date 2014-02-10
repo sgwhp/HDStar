@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
@@ -47,10 +48,10 @@ public class URLImageParser implements ImageGetter {
 		if (source.startsWith("pic/smilies/")) {
 			source = "assets://" + source;
 		} else if (!source.startsWith("http://")) {
-			source = Const.Urls.SERVER_GET_IMAGE_URL + Const.Urls.BASE_URL
-					+ "/" + source;
+			source = CommonUrls.HDStar.SERVER_GET_IMAGE_URL
+					+ CommonUrls.HDStar.BASE_URL + "/" + source;
 		} else {
-			source = Const.Urls.SERVER_GET_IMAGE_URL + source;
+			source = CommonUrls.HDStar.SERVER_GET_IMAGE_URL + source;
 		}
 		try {
 			URLEncoder.encode(source, Const.CHARSET);

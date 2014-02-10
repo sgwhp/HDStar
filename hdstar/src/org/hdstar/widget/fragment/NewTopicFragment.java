@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.common.ForumPostType;
 import org.hdstar.component.HDStarApp;
@@ -156,7 +156,7 @@ public class NewTopicFragment extends StackFragment {
 					// nvp.add(new BasicNameValuePair("size", "0"));
 					nvp.add(new BasicNameValuePair("body", bodyStr));
 					try {
-						task.execPost(Const.Urls.NEW_TOPIC_URL, nvp);
+						task.execPost(CommonUrls.HDStar.NEW_TOPIC_URL, nvp);
 					} catch (UnsupportedEncodingException e) {
 						dialog.dismiss();
 						e.printStackTrace();

@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 
 import ch.boye.httpclientandroidlib.Header;
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -24,7 +24,8 @@ public class LoginTask extends BaseAsyncTask<String> {
 					return null;
 				}
 				String location = res.getFirstHeader("Location").getValue();
-				if (location == null || !location.equals(Const.Urls.HOME_PAGE)) {
+				if (location == null
+						|| !location.equals(CommonUrls.HDStar.HOME_PAGE)) {
 					return null;
 				}
 				String cookieStr = "";

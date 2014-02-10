@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
@@ -31,8 +31,8 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 	public UtorrentTask(String ip) {
 		this.ip = ip;
 	}
-	
-	public UtorrentTask(String ip, String url, ResponseParser<T> parser){
+
+	public UtorrentTask(String ip, String url, ResponseParser<T> parser) {
 		this.ip = ip;
 		this.url = url;
 		this.parser = parser;
@@ -41,8 +41,9 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 	public static <T> UtorrentTask<T> newInstance(String ip) {
 		return new UtorrentTask<T>(ip);
 	}
-	
-	public static <T> UtorrentTask<T> newInstance(String ip, String url, ResponseParser<T> parser) {
+
+	public static <T> UtorrentTask<T> newInstance(String ip, String url,
+			ResponseParser<T> parser) {
 		return new UtorrentTask<T>(ip, url, parser);
 	}
 
@@ -133,7 +134,8 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 	 * @throws IOException
 	 */
 	private String getToken() throws ClientProtocolException, IOException {
-		String tokenUrl = String.format(Const.Urls.UTORRENT_TOKEN_URL, ip);
+		String tokenUrl = String.format(CommonUrls.BTClient.UTORRENT_TOKEN_URL,
+				ip);
 		request = new HttpGet(tokenUrl);
 		HttpClient client = HttpClientManager.getHttpClient();
 		HttpResponse response = client.execute(request);
@@ -142,7 +144,7 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 		request.abort();
 		Pattern pattern = Pattern.compile("<div id='token'.*?>(.*?)</div>");
 		Matcher matcher = pattern.matcher(result);
-		if(matcher.find()){
+		if (matcher.find()) {
 			token = matcher.group(1);
 		}
 		return token;

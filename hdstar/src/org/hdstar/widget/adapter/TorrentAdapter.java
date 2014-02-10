@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Torrent;
@@ -202,7 +203,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 						task.detach();
 					}
 				});
-				task.execGet(Const.Urls.BOOKMARK_URL + t.id, Void.class);
+				task.execGet(CommonUrls.HDStar.BOOKMARK_URL + t.id, Void.class);
 			}
 		});
 		holder.seeders.setText(t.seeders + "");

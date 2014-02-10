@@ -157,5 +157,7 @@
 	<string name="navigation_status_onlyactive">活動</string>
 	<string name="navigation_status_onlyinactive">停止</string>
 	<string name="unlabled">其他</string>
-
+	
+	<!-- pt site -->
+	<string name="init">初始化</string>
 </resources>

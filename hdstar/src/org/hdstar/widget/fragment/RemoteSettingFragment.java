@@ -54,12 +54,6 @@ public class RemoteSettingFragment extends StackFragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.remote_setting, null);
@@ -86,7 +80,7 @@ public class RemoteSettingFragment extends StackFragment {
 			setting.order = RemoteSettingManager
 					.getMaxRemote(RemoteSettingManager.getPrefs(getActivity()));
 		}
-		typeStr = getResources().getStringArray(R.array.remoteClient);
+		typeStr = RemoteType.getAllNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_spinner_item, typeStr);
 		typeSpn.setAdapter(adapter);
@@ -158,7 +152,7 @@ public class RemoteSettingFragment extends StackFragment {
 
 	@Override
 	public void onCreateActionBar(Menu menu) {
-		MenuItem item = menu.add(0, R.id.ab_save_remote_setting, 0,
+		MenuItem item = menu.add(0, R.id.ab_save_pt_site_setting, 0,
 				R.string.save);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -167,7 +161,7 @@ public class RemoteSettingFragment extends StackFragment {
 	@Override
 	public boolean onActionBarSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.ab_save_remote_setting:
+		case R.id.ab_save_pt_site_setting:
 			save();
 			return true;
 		}

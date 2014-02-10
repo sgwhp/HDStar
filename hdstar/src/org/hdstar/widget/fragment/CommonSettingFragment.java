@@ -1,6 +1,7 @@
 package org.hdstar.widget.fragment;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.DownloadService;
@@ -72,6 +73,7 @@ public class CommonSettingFragment extends StackFragment implements
 		v.findViewById(R.id.animation).setOnClickListener(this);
 		v.findViewById(R.id.remote_server).setOnClickListener(this);
 		v.findViewById(R.id.rss).setOnClickListener(this);
+		v.findViewById(R.id.pt_site).setOnClickListener(this);
 		return v;
 	}
 
@@ -111,7 +113,7 @@ public class CommonSettingFragment extends StackFragment implements
 		CustomSetting.serverAddress = serverAddr.getText().toString();
 		edit.putString("serverAddr", CustomSetting.serverAddress);
 		edit.commit();
-		Const.Urls.initServerAddr(CustomSetting.serverAddress);
+		CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
 	}
 
 	@Override
@@ -169,9 +171,11 @@ public class CommonSettingFragment extends StackFragment implements
 			// new TypeToken<ResponseWrapper<NewApkInfo>>() {
 			// }.getType());
 
-			task.execGet(Const.Urls.SERVER_CHECK_UPDATE_URL + "?appCode="
-					+ Const.APP_CODE + "&packageName=" + act.getPackageName()
-					+ "&versionCode=" + Util.getVersionCode(act),
+			task.execGet(
+					CommonUrls.HDStar.SERVER_CHECK_UPDATE_URL + "?appCode="
+							+ Const.APP_CODE + "&packageName="
+							+ act.getPackageName() + "&versionCode="
+							+ Util.getVersionCode(act),
 					new TypeToken<ResponseWrapper<NewApkInfo>>() {
 					}.getType());
 			break;
@@ -187,6 +191,9 @@ public class CommonSettingFragment extends StackFragment implements
 			break;
 		case R.id.rss:
 			push(new RssListFragment());
+			break;
+		case R.id.pt_site:
+			push(new PTListFragment());
 			break;
 		}
 	}

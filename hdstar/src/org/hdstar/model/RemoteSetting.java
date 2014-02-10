@@ -14,15 +14,6 @@ import android.os.Parcelable;
 
 public class RemoteSetting implements Parcelable, SimpleListItem {
 
-	public static final String MAX = "max";
-	public static final String REMOTE_TYPE = "RemoteType";
-	public static final String IP = "IP";
-	public static final String NAME = "Name";
-	public static final String USERNAME = "Username";
-	public static final String PASSWORD = "Password";
-	public static final String DOWNLOAD_DIR = "DownloadDir";
-	public static final String RM_FILE = "RemoveFile";
-
 	public int order;
 	public String type;
 	public String name;

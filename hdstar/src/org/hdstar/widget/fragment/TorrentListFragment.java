@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.ResponseWrapper;
@@ -232,7 +233,7 @@ public class TorrentListFragment extends StackFragment {
 				.newInstance(HDStarApp.cookies);
 		task.attach(refreshCallback);
 		attachTask(task);
-		String url = Const.Urls.SERVER_TORRENTS_URL;
+		String url = CommonUrls.HDStar.SERVER_TORRENTS_URL;
 		if (keyWords != null) {
 			try {
 				url += "?search=" + URLEncoder.encode(keyWords, Const.CHARSET);
@@ -258,7 +259,7 @@ public class TorrentListFragment extends StackFragment {
 				HDStarApp.cookies);
 		task.attach(addCallback);
 		attachTask(task);
-		task.execGet(Const.Urls.SERVER_TORRENTS_URL + "?page=" + page,
+		task.execGet(CommonUrls.HDStar.SERVER_TORRENTS_URL + "?page=" + page,
 				new TypeToken<ResponseWrapper<List<Torrent>>>() {
 				}.getType());
 	}

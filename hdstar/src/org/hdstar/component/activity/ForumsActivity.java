@@ -1,7 +1,7 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.widget.fragment.ForumFragment;
 
 import android.content.Context;
@@ -32,7 +32,7 @@ public class ForumsActivity extends BaseStackActivity implements
 		if (savedInstanceState == null) {
 			curTab = 0;
 			stackAdapter.fragments.add(ForumFragment
-					.newInstance(Const.Urls.CHAT_ROOM_URL));
+					.newInstance(CommonUrls.HDStar.CHAT_ROOM_URL));
 		} else {
 			curTab = savedInstanceState.getInt("curForum");
 		}
@@ -57,7 +57,7 @@ public class ForumsActivity extends BaseStackActivity implements
 			curTab = itemPosition;
 			stackAdapter.clear();
 			stackAdapter.forward(ForumFragment
-					.newInstance(Const.Urls.FORUM_URLS[itemPosition]));
+					.newInstance(CommonUrls.HDStar.FORUM_URLS[itemPosition]));
 		}
 		return true;
 	}

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.common.ForumPostType;
 import org.hdstar.component.HDStarApp;
@@ -143,7 +143,7 @@ public class ReplyFragment extends StackFragment {
 					nvp.add(new BasicNameValuePair("type", type.value()));
 					nvp.add(new BasicNameValuePair("body", body));
 					try {
-						task.execPost(Const.Urls.REPLY_URL, nvp, "");
+						task.execPost(CommonUrls.HDStar.REPLY_URL, nvp, "");
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 					}

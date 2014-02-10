@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.BaseStackActivity;
 import org.hdstar.model.Message;
@@ -61,7 +61,7 @@ public class MessageBoxFragment extends StackFragment {
 	public static MessageBoxFragment newInstance(int boxType) {
 		Bundle bundle = new Bundle();
 		bundle.putInt("boxType", boxType);
-		bundle.putString("url", Const.Urls.SERVER_VIEW_MESSAGES_URL
+		bundle.putString("url", CommonUrls.HDStar.SERVER_VIEW_MESSAGES_URL
 				+ "?boxtype=" + boxType);
 		MessageBoxFragment fragment = new MessageBoxFragment();
 		fragment.setArguments(bundle);
@@ -278,7 +278,7 @@ public class MessageBoxFragment extends StackFragment {
 			nvp.add(new BasicNameValuePair("messages[]", ids[i] + ""));
 		}
 		try {
-			task.execPost(Const.Urls.COMMON_MESSAGE_BOX_URL, nvp);
+			task.execPost(CommonUrls.HDStar.COMMON_MESSAGE_BOX_URL, nvp);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
