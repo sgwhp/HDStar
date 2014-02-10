@@ -1,12 +1,20 @@
 package org.hdstar.widget.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hdstar.R;
 import org.hdstar.common.PTSiteSettingManager;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.PTSiteSetting;
+import org.hdstar.ptadapter.PTAdapter;
+import org.hdstar.ptadapter.PTFactory;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.FetchSecurityImgTask;
+import org.hdstar.widget.CustomDialog;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import ch.boye.httpclientandroidlib.NameValuePair;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -33,6 +42,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 	public static final int MODE_ADD = 0;
 	public static final int MODE_EDIT = 1;
 
+	private PTAdapter ptAdapter;
 	private PTSiteSetting setting;
 	private Spinner typeSpn;
 	private String[] typeStr;
@@ -47,7 +57,8 @@ public class PTSiteSettingFragment extends StackFragment implements
 	private Button refreshBtn;
 	private Button initBtn;
 	private Button removeBtn;
-	private FetchSecurityImgTask imgTask;
+	private BaseAsyncTask<Bitmap> imgTask;
+	private CustomDialog dialog = null;
 
 	public static PTSiteSettingFragment newInstance(int mode,
 			PTSiteSetting setting) {
@@ -117,6 +128,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				String typeName = typeStr[position];
+				ptAdapter = PTFactory.newInstanceByName(typeName);
 				for (PTSiteType type : PTSiteType.values()) {
 					if (type.getName().equals(typeName)) {
 						setting.type = type.name();
@@ -151,11 +163,25 @@ public class PTSiteSettingFragment extends StackFragment implements
 			detachImgTask();
 			Toast.makeText(getActivity(), R.string.get_security_code,
 					Toast.LENGTH_LONG).show();
-			imgTask = new FetchSecurityImgTask();
+			imgTask = ptAdapter.getSecurityImage();
 			imgTask.attach(fetchSecurityImgCallback);
 			imgTask.execGet(addr.getText().toString(), Bitmap.class);
 			break;
 		case R.id.init:
+			dialog = new CustomDialog(getActivity(), R.string.connecting);
+			dialog.setOnDismissListener(new OnDismissListener() {
+
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					detachTask();
+				}
+			});
+			dialog.show();
+			List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+			BaseAsyncTask<String> task = ptAdapter.login(nvp);
+			task.attach(initCallback);
+			attachTask(task);
+			BaseAsyncTask.taskExec.execute(task);
 			break;
 		}
 	}
@@ -179,6 +205,27 @@ public class PTSiteSettingFragment extends StackFragment implements
 		@Override
 		public void onComplete(Bitmap result) {
 			securityImg.setImageBitmap(result);
+		}
+
+		@Override
+		public void onCancel() {
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			Crouton.showText(getActivity(), msgId, Style.ALERT);
+		}
+	};
+
+	private TaskCallback<String> initCallback = new TaskCallback<String>() {
+
+		@Override
+		public void onComplete(String result) {
+			dialog.dismiss();
+			Crouton.showText(getActivity(), R.string.initialize_completed,
+					Style.INFO);
+			setting.cookie = result;
+			PTSiteSettingManager.save(getActivity(), setting);
 		}
 
 		@Override
