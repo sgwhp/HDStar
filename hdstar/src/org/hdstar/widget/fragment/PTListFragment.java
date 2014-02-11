@@ -105,7 +105,7 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	}
 
 	private View createChild(Context context, PTSiteSetting setting, int id) {
-		View v = mInflater.inflate(R.layout.rss_setting_item, null);
+		View v = mInflater.inflate(R.layout.pt_site_setting_item, null);
 		TextView text = (TextView) v.findViewById(R.id.site_label);
 		text.setText(setting.label);
 		text = (TextView) v.findViewById(R.id.site_addr);
@@ -113,8 +113,8 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 		ImageView icon = (ImageView) v.findViewById(R.id.site_icon);
 		// ªÒ»°Õº±Í
 		ImageLoader.getInstance().displayImage(
-				String.format(CommonUrls.GETFVO_URL, setting.address), icon,
-				HDStarApp.displayOptions);
+				String.format(CommonUrls.GETFVO_URL, "http://"
+						+ setting.address), icon, HDStarApp.displayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;

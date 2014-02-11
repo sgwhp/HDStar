@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -12,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
@@ -26,6 +26,11 @@ import ch.boye.httpclientandroidlib.util.EntityUtils;
 
 public class FetchSecurityImgTask extends BaseAsyncTask<Bitmap> {
 	private String imageHash = null;
+	private String url;
+
+	public FetchSecurityImgTask(String url) {
+		this.url = url;
+	}
 
 	public String getImageHash() {
 		return imageHash;
@@ -33,16 +38,19 @@ public class FetchSecurityImgTask extends BaseAsyncTask<Bitmap> {
 
 	@Override
 	protected Bitmap doInBackground(String... params) {
-		return downloadImage(getImageUrl(params[0]));
+		imageHash = getImageHash(String.format(CommonUrls.NEXUSPHP_LOGIN_URL,
+				url));
+		return downloadImage(String.format(
+				CommonUrls.NEXUSPHP_FETCH_SECURITY_IMAGE_URL, url, imageHash));
 	}
 
-	@Override
-	public void execGet(String url, final Type resultType) {
-		taskExec.execute(this, url);
-	}
+	// @Override
+	// public void execGet(String url, final Type resultType) {
+	// taskExec.execute(this, url);
+	// }
 
 	@SuppressWarnings("resource")
-	String getImageUrl(String url) {
+	String getImageHash(String url) {
 		HttpClient client = HttpClientManager.getHttpClient();
 		request = new HttpGet(url);
 		BufferedReader reader = null;

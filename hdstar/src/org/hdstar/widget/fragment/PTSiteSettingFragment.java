@@ -1,8 +1,5 @@
 package org.hdstar.widget.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hdstar.R;
 import org.hdstar.common.PTSiteSettingManager;
 import org.hdstar.common.PTSiteType;
@@ -30,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import ch.boye.httpclientandroidlib.NameValuePair;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -160,14 +156,27 @@ public class PTSiteSettingFragment extends StackFragment implements
 					true);
 			break;
 		case R.id.refresh:
+			if (!save()) {
+				return;
+			}
+			ptAdapter.setmUrl(setting.address);
 			detachImgTask();
 			Toast.makeText(getActivity(), R.string.get_security_code,
 					Toast.LENGTH_LONG).show();
 			imgTask = ptAdapter.getSecurityImage();
 			imgTask.attach(fetchSecurityImgCallback);
-			imgTask.execGet(addr.getText().toString(), Bitmap.class);
+			BaseAsyncTask.taskExec.execute(imgTask);
 			break;
 		case R.id.init:
+			if (!save()) {
+				return;
+			}
+			if ("".equals(securityCode.getText())) {
+				Crouton.makeText(getActivity(), R.string.input_security_code,
+						Style.CONFIRM).show();
+				return;
+			}
+			ptAdapter.setmUrl(setting.address);
 			dialog = new CustomDialog(getActivity(), R.string.connecting);
 			dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -177,8 +186,8 @@ public class PTSiteSettingFragment extends StackFragment implements
 				}
 			});
 			dialog.show();
-			List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-			BaseAsyncTask<String> task = ptAdapter.login(nvp);
+			BaseAsyncTask<String> task = ptAdapter.login(setting.username,
+					setting.password, securityCode.getText().toString());
 			task.attach(initCallback);
 			attachTask(task);
 			BaseAsyncTask.taskExec.execute(task);
@@ -194,16 +203,49 @@ public class PTSiteSettingFragment extends StackFragment implements
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 	}
 
+	@Override
+	public boolean onActionBarSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.ab_save_pt_site_setting:
+			if (save()) {
+				Crouton.makeText(getActivity(), R.string.saved, Style.INFO)
+						.show();
+			}
+			break;
+		}
+		return super.onActionBarSelected(item);
+	}
+
 	private void detachImgTask() {
 		if (imgTask != null) {
 			imgTask.detach();
 		}
 	}
 
+	private boolean save() {
+		setting.address = addr.getText().toString();
+		setting.label = label.getText().toString();
+		setting.username = username.getText().toString();
+		setting.password = password.getText().toString();
+		if ("".equals(setting.address) || "".equals(setting.username)
+				|| "".equals(setting.password) || "".equals(setting.label)) {
+			Crouton.makeText(getActivity(), R.string.fill_in_the_blanks,
+					Style.CONFIRM).show();
+			return false;
+		}
+		if (mMode == MODE_EDIT) {
+			PTSiteSettingManager.save(getActivity(), setting);
+		} else {
+			PTSiteSettingManager.add(getActivity(), setting);
+		}
+		return true;
+	}
+
 	private TaskCallback<Bitmap> fetchSecurityImgCallback = new TaskCallback<Bitmap>() {
 
 		@Override
 		public void onComplete(Bitmap result) {
+			result.setDensity(160);
 			securityImg.setImageBitmap(result);
 		}
 

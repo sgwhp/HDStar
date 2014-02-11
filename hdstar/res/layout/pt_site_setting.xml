@@ -118,14 +118,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/setting_strip_bottom_sel" >
+        android:layout_height="wrap_content" >
 
         <EditText
             android:id="@+id/security_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_middle_sel"
+            android:background="@drawable/setting_strip_bottom_sel"
             android:ems="10"
             android:maxLength="10"
             android:paddingLeft="160.0dip" />

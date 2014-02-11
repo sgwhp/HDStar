@@ -121,6 +121,7 @@ public class CommonUrls {
 
 	// nexusphp获取验证码地址
 	public static final String NEXUSPHP_FETCH_SECURITY_IMAGE_URL = "http://%s/image.php?action=regimage&imagehash=%s";
-	public static final String NEXUSPHP_LOGIN_URL = "http://%s/takelogin.php";
+	public static final String NEXUSPHP_LOGIN_URL = "http://%s/login.php";
+	public static final String NEXUSPHP_TAKE_LOGIN_URL = "http://%s/takelogin.php";
 	public static final String NEXUSPHP_HOME_PAGE = "http://%s/index.php";
 }

@@ -27,8 +27,16 @@ public abstract class ResponseParser<T> {
 		return msgId;
 	}
 
+	public void setMessageId(int id) {
+		msgId = id;
+	}
+
 	public boolean isSucceeded() {
 		return msgId == SUCCESS_MSG_ID;
+	}
+
+	public void setSucceeded() {
+		msgId = SUCCESS_MSG_ID;
 	}
 
 	public Type getType() {

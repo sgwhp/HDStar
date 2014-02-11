@@ -1,19 +1,25 @@
 package org.hdstar.ptadapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
 
-import ch.boye.httpclientandroidlib.NameValuePair;
-
 import android.graphics.Bitmap;
 
 public abstract class PTAdapter {
 	private PTSiteType mType;
-	
+	protected String mUrl;
+
+	public String getmUrl() {
+		return mUrl;
+	}
+
+	public void setmUrl(String mUrl) {
+		this.mUrl = mUrl;
+	}
+
 	public PTSiteType getmType() {
 		return mType;
 	}
@@ -23,9 +29,10 @@ public abstract class PTAdapter {
 	}
 
 	public abstract BaseAsyncTask<Bitmap> getSecurityImage();
-	
-	public abstract BaseAsyncTask<String> login(List<NameValuePair> nvp);
-	
+
+	public abstract BaseAsyncTask<String> login(String username,
+			String password, String securityCode);
+
 	public abstract BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page);
 
 }

@@ -163,4 +163,5 @@
 	<string name="init">Init</string>
 	<string name="initialize_completed">Initialize completed.</string>
 	<string name="connecting">Connecting…</string>
+	<string name="saved">Saved.</string>
 </resources>
