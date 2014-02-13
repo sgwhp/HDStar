@@ -62,6 +62,7 @@ public class CommonUrls {
 		public static String SERVER_TORRENTS_URL;
 		public static String SERVER_DOWNLOAD_URL;
 		public static String SERVER_CHECK_UPDATE_URL;
+		public static String SERVER_ABOUT_URL;
 
 		public static void initServerAddr(final String serverAddr) {
 			SERVER_ADDRESS = serverAddr;
@@ -82,6 +83,7 @@ public class CommonUrls {
 			SERVER_TORRENTS_URL = SERVER_ADDRESS + "torrents";
 			SERVER_DOWNLOAD_URL = SERVER_ADDRESS + "download";
 			SERVER_CHECK_UPDATE_URL = SERVER_ADDRESS + "checkVersion";
+			SERVER_ABOUT_URL = SERVER_ADDRESS + "about.jsp";
 		}
 	}
 
