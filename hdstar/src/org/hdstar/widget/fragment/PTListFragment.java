@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.PTSiteSettingManager;
+import org.hdstar.common.PTSiteType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.PTSiteSetting;
 
@@ -107,17 +108,17 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	private View createChild(Context context, PTSiteSetting setting, int id) {
 		View v = mInflater.inflate(R.layout.pt_site_setting_item, null);
 		TextView text = (TextView) v.findViewById(R.id.site_label);
-		text.setText(setting.label);
-		text = (TextView) v.findViewById(R.id.site_addr);
-		text.setText(setting.address);
+		text.setText(setting.type);
+		text = (TextView) v.findViewById(R.id.username);
+		text.setText(setting.username);
 		ImageView icon = (ImageView) v.findViewById(R.id.site_icon);
 		// ªÒ»°Õº±Í
 		ImageLoader.getInstance().displayImage(
 				String.format(CommonUrls.GETFVO_URL, "http://"
-						+ setting.address), icon, HDStarApp.displayOptions);
+						+ PTSiteType.getByName(setting.type).getUrl()), icon,
+				HDStarApp.displayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;
 	}
-
 }

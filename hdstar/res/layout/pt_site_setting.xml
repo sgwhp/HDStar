@@ -25,49 +25,27 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/security"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
 
         <EditText
-            android:id="@+id/site_label"
+            android:id="@+id/security_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
-            android:inputType="text"
-            android:paddingLeft="40dip"
-            android:paddingRight="5dp"
-            android:singleLine="true" />
+            android:maxLength="10"
+            android:paddingLeft="160.0dip" />
 
-        <TextView
+        <ImageView
+            android:id="@+id/security_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|left"
+            android:gravity="center_vertical"
             android:paddingLeft="5dip"
-            android:text="@string/label" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <EditText
-            android:id="@+id/site_addr"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_middle_sel"
-            android:ems="10"
-            android:inputType="text"
-            android:paddingLeft="80dip"
-            android:paddingRight="5dp"
-            android:singleLine="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|left"
-            android:paddingLeft="5dip"
-            android:text="@string/server_addr" />
+            android:src="@drawable/temp_image" />
     </FrameLayout>
 
     <FrameLayout
@@ -95,13 +73,14 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" >
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_middle_sel"
+            android:background="@drawable/setting_strip_bottom_sel"
             android:ems="10"
             android:inputType="textPassword"
             android:paddingLeft="42dip"
@@ -116,55 +95,27 @@
             android:src="@drawable/password_ic" />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <EditText
-            android:id="@+id/security_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_bottom_sel"
-            android:ems="10"
-            android:maxLength="10"
-            android:paddingLeft="160.0dip" />
-
-        <ImageView
-            android:id="@+id/security_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingLeft="5dip"
-            android:src="@drawable/temp_image" />
-    </FrameLayout>
-
-    <LinearLayout
+    <Button
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dip" >
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_bg_sel"
+        android:text="@string/refresh"
+        android:visibility="gone" />
 
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_left_bg_sel"
-            android:text="@string/refresh" />
-
-        <Button
-            android:id="@+id/init"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_right_bg_sel"
-            android:text="@string/init" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/init"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_bg_sel"
+        android:text="@string/init" />
 
     <Button
         android:id="@+id/remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dip"
         android:background="@drawable/log_out_btn_sel"
         android:text="@string/delete"
         android:visibility="gone" />

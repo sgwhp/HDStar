@@ -28,7 +28,13 @@ public abstract class PTAdapter {
 		this.mType = mType;
 	}
 
-	public abstract BaseAsyncTask<Bitmap> getSecurityImage();
+	public boolean needSecurityCode() {
+		return false;
+	}
+
+	public BaseAsyncTask<Bitmap> getSecurityImage() {
+		return null;
+	}
 
 	public abstract BaseAsyncTask<String> login(String username,
 			String password, String securityCode);

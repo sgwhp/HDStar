@@ -19,8 +19,6 @@ import android.content.SharedPreferences.Editor;
 public class PTSiteSettingManager {
 	public static final String MAX = "max";
 	public static final String SITE_TYPE = "siteType";
-	public static final String LABEL = "label";
-	public static final String ADDRESS = "address";
 	public static final String USERNAME = "Username";
 	public static final String PASSWORD = "Password";
 	public static final String COOKIE = "cookie";
@@ -39,8 +37,6 @@ public class PTSiteSettingManager {
 		PTSiteSetting setting = new PTSiteSetting();
 		setting.order = order;
 		setting.type = prefs.getString(SITE_TYPE + order, "");
-		setting.label = prefs.getString(LABEL + order, "");
-		setting.address = prefs.getString(ADDRESS + order, "");
 		setting.username = prefs.getString(USERNAME + order, "");
 		try {
 			setting.password = DES.decryptDES(
@@ -71,15 +67,11 @@ public class PTSiteSettingManager {
 		for (int i = order; i < max; i++) {
 			int j = i + 1;
 			edit.putString(SITE_TYPE + i, prefs.getString(SITE_TYPE + j, null));
-			edit.putString(LABEL + i, prefs.getString(LABEL + j, null));
-			edit.putString(ADDRESS + i, prefs.getString(ADDRESS + j, null));
 			edit.putString(USERNAME + i, prefs.getString(USERNAME + j, null));
 			edit.putString(PASSWORD + i, prefs.getString(PASSWORD + j, null));
 			edit.putString(COOKIE + i, prefs.getString(COOKIE + j, null));
 		}
 		edit.remove(SITE_TYPE + max);
-		edit.remove(LABEL + max);
-		edit.remove(ADDRESS + max);
 		edit.remove(USERNAME + max);
 		edit.remove(PASSWORD + max);
 		edit.remove(COOKIE + max);
@@ -94,8 +86,6 @@ public class PTSiteSettingManager {
 		Editor edit = prefs.edit();
 		try {
 			edit.putString(SITE_TYPE + setting.order, setting.type);
-			edit.putString(LABEL + setting.order, setting.label);
-			edit.putString(ADDRESS + setting.order, setting.address);
 			edit.putString(USERNAME + setting.order, setting.username);
 			edit.putString(PASSWORD + setting.order,
 					DES.encryptDES(setting.password, Const.TAG));
@@ -112,8 +102,6 @@ public class PTSiteSettingManager {
 		Editor edit = prefs.edit();
 		try {
 			edit.putString(SITE_TYPE + setting.order, setting.type);
-			edit.putString(LABEL + setting.order, setting.label);
-			edit.putString(ADDRESS + setting.order, setting.address);
 			edit.putString(USERNAME + setting.order, setting.username);
 			edit.putString(PASSWORD + setting.order,
 					DES.encryptDES(setting.password, Const.TAG));

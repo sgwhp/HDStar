@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,10 +45,9 @@ public class PTSiteSettingFragment extends StackFragment implements
 	private String[] typeStr;
 	private int mMode;
 
-	private EditText label;
-	private EditText addr;
 	private EditText username;
 	private EditText password;
+	private FrameLayout security;
 	private ImageView securityImg;
 	private EditText securityCode;
 	private Button refreshBtn;
@@ -91,10 +91,9 @@ public class PTSiteSettingFragment extends StackFragment implements
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.pt_site_setting, null);
 		typeSpn = (Spinner) v.findViewById(R.id.pt_type);
-		label = (EditText) v.findViewById(R.id.site_label);
-		addr = (EditText) v.findViewById(R.id.site_addr);
 		username = (EditText) v.findViewById(R.id.username);
 		password = (EditText) v.findViewById(R.id.password);
+		security = (FrameLayout) v.findViewById(R.id.security);
 		securityImg = (ImageView) v.findViewById(R.id.security_image);
 		securityCode = (EditText) v.findViewById(R.id.security_code);
 		refreshBtn = (Button) v.findViewById(R.id.refresh);
@@ -111,8 +110,6 @@ public class PTSiteSettingFragment extends StackFragment implements
 				android.R.layout.simple_spinner_item, typeStr);
 		typeSpn.setAdapter(adapter);
 		if (mMode == MODE_EDIT) {
-			label.setText(setting.label);
-			addr.setText(setting.address);
 			username.setText(setting.username);
 			password.setText(setting.password);
 			removeBtn.setVisibility(View.VISIBLE);
@@ -128,6 +125,14 @@ public class PTSiteSettingFragment extends StackFragment implements
 				for (PTSiteType type : PTSiteType.values()) {
 					if (type.getName().equals(typeName)) {
 						setting.type = type.name();
+						if (PTFactory.newInstanceByType(type)
+								.needSecurityCode()) {
+							security.setVisibility(View.VISIBLE);
+							refreshBtn.setVisibility(View.VISIBLE);
+						} else {
+							security.setVisibility(View.GONE);
+							refreshBtn.setVisibility(View.GONE);
+						}
 						return;
 					}
 				}
@@ -159,7 +164,6 @@ public class PTSiteSettingFragment extends StackFragment implements
 			if (!save()) {
 				return;
 			}
-			ptAdapter.setmUrl(setting.address);
 			detachImgTask();
 			Toast.makeText(getActivity(), R.string.get_security_code,
 					Toast.LENGTH_LONG).show();
@@ -176,7 +180,6 @@ public class PTSiteSettingFragment extends StackFragment implements
 						Style.CONFIRM).show();
 				return;
 			}
-			ptAdapter.setmUrl(setting.address);
 			dialog = new CustomDialog(getActivity(), R.string.connecting);
 			dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -223,12 +226,10 @@ public class PTSiteSettingFragment extends StackFragment implements
 	}
 
 	private boolean save() {
-		setting.address = addr.getText().toString();
-		setting.label = label.getText().toString();
 		setting.username = username.getText().toString();
 		setting.password = password.getText().toString();
-		if ("".equals(setting.address) || "".equals(setting.username)
-				|| "".equals(setting.password) || "".equals(setting.label)) {
+		if ("".equals(setting.username) || "".equals(setting.password)
+				|| "".equals(setting.label)) {
 			Crouton.makeText(getActivity(), R.string.fill_in_the_blanks,
 					Style.CONFIRM).show();
 			return false;

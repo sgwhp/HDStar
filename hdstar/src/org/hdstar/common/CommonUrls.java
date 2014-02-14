@@ -122,8 +122,15 @@ public class CommonUrls {
 	public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
 	// nexusphp获取验证码地址
-	public static final String NEXUSPHP_FETCH_SECURITY_IMAGE_URL = "http://%s/image.php?action=regimage&imagehash=%s";
-	public static final String NEXUSPHP_LOGIN_URL = "http://%s/login.php";
-	public static final String NEXUSPHP_TAKE_LOGIN_URL = "http://%s/takelogin.php";
-	public static final String NEXUSPHP_HOME_PAGE = "http://%s/index.php";
+	public static final String NEXUSPHP_FETCH_SECURITY_IMAGE_URL = "%s/image.php?action=regimage&imagehash=%s";
+	public static final String NEXUSPHP_LOGIN_URL = "%s/login.php";
+	public static final String NEXUSPHP_TAKE_LOGIN_URL = "%s/takelogin.php";
+	public static final String NEXUSPHP_HOME_PAGE = "%s/index.php";
+
+	public static class PTSiteUrls {
+		public static final String CHDBITS = "https://chdbits.org";
+		public static final String CMCT = "http://hdcmct.org";
+		public static final String M_TEAM = "http://tp.m-team.cc";
+		public static final String OPEN_CD = "http://open.cd";
+	}
 }
