@@ -10,15 +10,18 @@ import org.hdstar.component.activity.DownloadActivity;
 import org.hdstar.component.activity.LoginActivity;
 import org.hdstar.model.NewApkInfo;
 import org.hdstar.model.ResponseWrapper;
+import org.hdstar.ptadapter.HDSky;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
-import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
+import org.hdstar.widget.CustomDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -48,6 +51,8 @@ public class CommonSettingFragment extends StackFragment implements
 	private ToggleButton autoRefresh;
 	private EditText serverAddr;
 	private Button downloadBtn;
+	private CustomDialog loadingDialog = null;
+	private BaseAsyncTask<Boolean> logoutTask;
 
 	// private DelegateTask<NewApkInfo> task;
 
@@ -131,17 +136,21 @@ public class CommonSettingFragment extends StackFragment implements
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									HttpClientManager.restClient();
-									Editor edit = act.getSharedPreferences(
-											Const.SETTING_SHARED_PREFS,
-											Activity.MODE_PRIVATE).edit();
-									edit.remove("cookies");
-									edit.commit();
-									HDStarApp.cookies = null;
-									Intent intent = new Intent(act,
-											LoginActivity.class);
-									startActivity(intent);
-									act.finish();
+									loadingDialog = new CustomDialog(
+											getActivity(), R.string.connecting);
+									loadingDialog
+											.setOnDismissListener(new OnDismissListener() {
+
+												@Override
+												public void onDismiss(
+														DialogInterface dialog) {
+													detachLogoutTask();
+												}
+											});
+									loadingDialog.show();
+									logoutTask = new HDSky().logout();
+									logoutTask.attach(logoutCallback);
+									BaseAsyncTask.taskExec.execute(logoutTask);
 								}
 							})
 					.setNegativeButton(R.string.cancel,
@@ -163,14 +172,6 @@ public class CommonSettingFragment extends StackFragment implements
 			DelegateTask<NewApkInfo> task = DelegateTask.newInstance("");
 			task.attach(mCallback);
 			attachTask(task);
-			// task.execGet(
-			// "http://10.10.28.113:8084/HDStarService/checkVersion?appCode="
-			// + Const.APP_CODE + "&packageName="
-			// + this.getPackageName() + "&versionCode="
-			// + Util.getVersionCode(this),
-			// new TypeToken<ResponseWrapper<NewApkInfo>>() {
-			// }.getType());
-
 			task.execGet(
 					CommonUrls.HDStar.SERVER_CHECK_UPDATE_URL + "?appCode="
 							+ Const.APP_CODE + "&packageName="
@@ -195,6 +196,12 @@ public class CommonSettingFragment extends StackFragment implements
 		case R.id.pt_site:
 			push(new PTListFragment());
 			break;
+		}
+	}
+
+	private void detachLogoutTask() {
+		if (logoutTask != null) {
+			logoutTask.detach();
 		}
 	}
 
@@ -288,4 +295,30 @@ public class CommonSettingFragment extends StackFragment implements
 
 	};
 
+	private TaskCallback<Boolean> logoutCallback = new TaskCallback<Boolean>() {
+
+		@Override
+		public void onComplete(Boolean result) {
+			loadingDialog.dismiss();
+			Activity act = getActivity();
+			Editor edit = act.getSharedPreferences(Const.SETTING_SHARED_PREFS,
+					Activity.MODE_PRIVATE).edit();
+			edit.remove("cookies");
+			edit.commit();
+			HDStarApp.cookies = null;
+			Intent intent = new Intent(act, LoginActivity.class);
+			startActivity(intent);
+			act.finish();
+		}
+
+		@Override
+		public void onCancel() {
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			loadingDialog.dismiss();
+			Crouton.showText(getActivity(), msgId, Style.ALERT);
+		}
+	};
 }

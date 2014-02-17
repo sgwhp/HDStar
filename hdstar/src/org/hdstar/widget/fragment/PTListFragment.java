@@ -114,8 +114,8 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 		ImageView icon = (ImageView) v.findViewById(R.id.site_icon);
 		// ªÒ»°Õº±Í
 		ImageLoader.getInstance().displayImage(
-				String.format(CommonUrls.GETFVO_URL, "http://"
-						+ PTSiteType.getByName(setting.type).getUrl()), icon,
+				String.format(CommonUrls.GETFVO_URL,
+						PTSiteType.getByName(setting.type).getUrl()), icon,
 				HDStarApp.displayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);

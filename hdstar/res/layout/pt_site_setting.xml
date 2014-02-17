@@ -111,6 +111,15 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/btn_bg_sel"
         android:text="@string/init" />
+    
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/log_out_btn_sel"
+        android:text="@string/log_out"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/remove"

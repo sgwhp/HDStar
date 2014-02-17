@@ -116,6 +116,10 @@ public class HttpClientManager {
 		throw new CloneNotSupportedException();
 	}
 
+	/**
+	 * É÷ÓÃ£¡<br/>
+	 * ÖØÖÃHttpClientÊµÀı. <br/>
+	 */
 	public static void restClient() {
 		if (customHttpClient != null) {
 			customHttpClient.getConnectionManager().shutdown();

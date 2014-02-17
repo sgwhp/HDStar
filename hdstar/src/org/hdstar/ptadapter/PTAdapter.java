@@ -9,36 +9,101 @@ import org.hdstar.task.BaseAsyncTask;
 import android.graphics.Bitmap;
 
 public abstract class PTAdapter {
-	private PTSiteType mType;
-	protected String mUrl;
+	protected PTSiteType mType;
 
-	public String getmUrl() {
-		return mUrl;
+	public PTAdapter(PTSiteType type) {
+		mType = type;
 	}
 
-	public void setmUrl(String mUrl) {
-		this.mUrl = mUrl;
-	}
-
-	public PTSiteType getmType() {
+	public PTSiteType getType() {
 		return mType;
 	}
 
-	public void setmType(PTSiteType mType) {
-		this.mType = mType;
+	public void setType(PTSiteType type) {
+		this.mType = type;
 	}
 
+	/**
+	 * 
+	 * 登录是否需要验证码. <br/>
+	 * 
+	 * @author robust
+	 * @return
+	 */
 	public boolean needSecurityCode() {
 		return false;
 	}
 
+	/**
+	 * 
+	 * 构建获取验证码图片任务. <br/>
+	 * 
+	 * @author robust
+	 * @return
+	 */
 	public BaseAsyncTask<Bitmap> getSecurityImage() {
 		return null;
 	}
 
+	/**
+	 * 
+	 * 构建登录任务. <br/>
+	 * 
+	 * @author robust
+	 * @param username
+	 *            账号
+	 * @param password
+	 *            密码
+	 * @param securityCode
+	 *            验证码（可选）
+	 * @return
+	 */
 	public abstract BaseAsyncTask<String> login(String username,
 			String password, String securityCode);
 
-	public abstract BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page);
+	/**
+	 * 
+	 * 退出. <br/>
+	 * 
+	 * @author robust
+	 * @return
+	 */
+	public abstract BaseAsyncTask<Boolean> logout();
+
+	/**
+	 * 
+	 * 构建获取种子列表任务. <br/>
+	 * 
+	 * @author robust
+	 * @param page
+	 *            页码
+	 * @param keywords
+	 *            关键字
+	 * @return
+	 */
+	public abstract BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
+			String keywords);
+
+	/**
+	 * 
+	 * 是否支持rss下载（下载框）. <br/>
+	 * 
+	 * @author robust
+	 * @return
+	 */
+	public boolean rssEnable() {
+		return false;
+	}
+
+	/**
+	 * 
+	 * 构建添加到rss下载任务. <br/>
+	 * 
+	 * @author robust
+	 * @param torrentId
+	 *            种子id
+	 * @return
+	 */
+	public abstract BaseAsyncTask<Boolean> addToRss(String torrentId);
 
 }

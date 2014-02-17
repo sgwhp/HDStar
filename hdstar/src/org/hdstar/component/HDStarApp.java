@@ -9,6 +9,7 @@ import org.hdstar.common.CustomSetting;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
+import org.hdstar.util.CrashHandler;
 import org.hdstar.util.IOUtils;
 
 import android.annotation.TargetApi;
@@ -57,7 +58,10 @@ public class HDStarApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 
+		// 初始化个人设置等
 		init(getApplicationContext());
+		// 初始化log处理工具
+		CrashHandler.getInstance().init(getApplicationContext());
 	}
 
 	@Override

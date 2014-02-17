@@ -13,7 +13,6 @@ import android.os.Parcelable;
 public class PTSiteSetting implements Parcelable {
 	public int order;
 	public String type;
-	public String label;
 	public String username;
 	public String password;
 	public String cookie;
@@ -24,7 +23,6 @@ public class PTSiteSetting implements Parcelable {
 	public PTSiteSetting(Parcel in) {
 		order = in.readInt();
 		type = in.readString();
-		label = in.readString();
 		username = in.readString();
 		password = in.readString();
 		cookie = in.readString();
@@ -39,7 +37,6 @@ public class PTSiteSetting implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeInt(order);
 		dest.writeString(type);
-		dest.writeString(label);
 		dest.writeString(username);
 		dest.writeString(password);
 		dest.writeString(cookie);

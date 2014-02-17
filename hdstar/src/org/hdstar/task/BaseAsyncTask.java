@@ -31,7 +31,7 @@ import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	public static final AsyncTaskExecInterface taskExec = new AsyncTaskExecManager()
 			.build();
-	protected String cookie;
+	protected String cookie = "";
 	protected HttpRequestBase request = null;
 	protected TaskCallback<T> mCallback;
 	protected ResponseParser<T> parser;
@@ -39,7 +39,6 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	protected boolean needContent = true;
 
 	public BaseAsyncTask() {
-		this.cookie = "";
 	}
 
 	public BaseAsyncTask(String cookie) {
@@ -56,6 +55,13 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		this.parser = parser;
 	}
 
+	public BaseAsyncTask(String cookie, HttpRequestBase request,
+			ResponseParser<T> parser) {
+		this.request = request;
+		this.parser = parser;
+		this.cookie = cookie;
+	}
+
 	public static <T> BaseAsyncTask<T> newInstance() {
 		return new BaseAsyncTask<T>();
 	}
@@ -67,6 +73,11 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	public static <T> BaseAsyncTask<T> newInstance(HttpRequestBase request,
 			ResponseParser<T> parser) {
 		return new BaseAsyncTask<T>(request, parser);
+	}
+
+	public static <T> BaseAsyncTask<T> newInstance(String cookie,
+			HttpRequestBase request, ResponseParser<T> parser) {
+		return new BaseAsyncTask<T>(cookie, request, parser);
 	}
 
 	public void attach(TaskCallback<T> callbacks) {
@@ -124,7 +135,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 			e.printStackTrace();
 			// request.abort();
 			if ("Connection reset by peer".equals(e.getMessage())) {
-				HttpClientManager.restClient();
+				// TODO HttpClientManager.restClient();
 			}
 		} catch (IOException e) {
 			// request.abort();

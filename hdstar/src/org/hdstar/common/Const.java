@@ -41,6 +41,8 @@ public class Const {
 
 	public static final int[] boxTypes = { 1, -1 };
 
+	public static final String LOG_FILE = "log.txt";
+
 	/**
 	 * 种子优惠类型
 	 * 

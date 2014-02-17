@@ -56,12 +56,6 @@ public class TorrentListFragment extends StackFragment {
 		return f;
 	}
 
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// setHasOptionsMenu(true);
-	// }
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -107,38 +101,6 @@ public class TorrentListFragment extends StackFragment {
 		// top = v == null ? 0 : v.getTop();
 		super.onDestroyView();
 	}
-
-	// @Override
-	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	// final SearchView search = new SearchView(
-	// ((SherlockFragmentActivity) getActivity())
-	// .getSupportActionBar().getThemedContext());
-	// search.setSubmitButtonEnabled(true);
-	// search.setOnQueryTextListener(new OnQueryTextListener() {
-	//
-	// @Override
-	// public boolean onQueryTextSubmit(String query) {
-	// keyWords = query;
-	// keyWords = keyWords.trim();
-	// if (!"".equals(keyWords)) {
-	// refresh();
-	// return true;
-	// }
-	// return false;
-	// }
-	//
-	// @Override
-	// public boolean onQueryTextChange(String newText) {
-	// return false;
-	// }
-	// });
-	// menu.add(0, Menu.FIRST, 0, android.R.string.search_go)
-	// .setIcon(android.R.drawable.ic_search_category_default)
-	// .setActionView(search)
-	// .setShowAsAction(
-	// MenuItem.SHOW_AS_ACTION_ALWAYS
-	// | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-	// }
 
 	@Override
 	public void onCreateActionBar(Menu menu) {
