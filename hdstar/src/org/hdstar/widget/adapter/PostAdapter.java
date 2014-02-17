@@ -205,13 +205,20 @@ public class PostAdapter extends BaseAdapter {
 				mListener.pm(p.uid);
 			}
 		});
-		holder.quote.setOnClickListener(new OnClickListener() {
+		if (p.quote) {
+			holder.quote.setVisibility(View.VISIBLE);
+			holder.quote.setClickable(true);
+			holder.quote.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				mListener.quote(p);
-			}
-		});
+				@Override
+				public void onClick(View v) {
+					mListener.quote(p);
+				}
+			});
+		} else {
+			holder.quote.setVisibility(View.INVISIBLE);
+			holder.quote.setClickable(false);
+		}
 		if (p.edit) {
 			holder.edit.setVisibility(View.VISIBLE);
 			holder.edit.setEnabled(true);

@@ -235,6 +235,10 @@ public class TopicFragment extends StackFragment {
 
 	@Override
 	public void onCreateActionBar(Menu menu) {
+		//尚未初始化或主题已锁定
+		if(adapter == null || adapter.getList().size() == 0 || adapter.getList().get(0).id == 0){
+			return;
+		}
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
 				.setSubtitle(title);
 		MenuItem item = menu.add(0, R.id.ab_reply, 0, R.string.reply);
@@ -364,6 +368,7 @@ public class TopicFragment extends StackFragment {
 
 	private TaskCallback<TopicDetails> mCallback = new TaskCallback<TopicDetails>() {
 
+		@SuppressLint("NewApi")
 		@Override
 		public void onComplete(TopicDetails result) {
 			if (result.title != null) {
@@ -374,6 +379,7 @@ public class TopicFragment extends StackFragment {
 			adapter.clearItems();
 			adapter.addAll(result.posts);
 			adapter.notifyDataSetChanged();
+			((SherlockFragmentActivity) getActivity()).invalidateOptionsMenu();
 			mPullToRefreshLayout.setRefreshComplete();
 			SoundPoolManager.play(getActivity());
 		}
