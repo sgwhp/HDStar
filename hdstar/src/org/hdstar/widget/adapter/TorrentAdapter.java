@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
-import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Torrent;
+import org.hdstar.ptadapter.PTAdapter;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.OriginTask;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -23,16 +22,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TorrentAdapter extends BaseExpandableListAdapter {
-	// private Context context;
 	private LayoutInflater inflater;
+	PTAdapter adapter;
 	private List<Torrent> torrents;
 	private Drawable bookmarked;
 	private Drawable unbookmark;
 	private HashMap<String, Drawable> klasses = new HashMap<String, Drawable>();
 
-	public TorrentAdapter(Context context, List<Torrent> torrents) {
-		// this.context = context;
+	public TorrentAdapter(Context context, PTAdapter adapter,
+			List<Torrent> torrents) {
 		inflater = LayoutInflater.from(context);
+		this.adapter = adapter;
 		this.torrents = torrents;
 		Resources res = context.getResources();
 		bookmarked = getCompoundDrawable(res, R.drawable.bookmarked_btn_bg_sel);
@@ -168,7 +168,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			holder = (ChildHolder) convertView.getTag();
 		}
 		final Torrent t = torrents.get(groupPosition);
-		holder.comments.setText(t.comments + "");
+		holder.comments.setText(t.comments);
 		holder.time.setText(t.time);
 		holder.size.setText(t.size);
 		if (t.bookmark) {
@@ -182,12 +182,11 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 
 			@Override
 			public void onClick(View v) {
-				final OriginTask<Void> task = OriginTask
-						.newInstance(HDStarApp.cookies);
-				task.attach(new TaskCallback<Void>() {
+				final BaseAsyncTask<Boolean> task = adapter.bookmark(t.id + "");
+				task.attach(new TaskCallback<Boolean>() {
 
 					@Override
-					public void onComplete(Void result) {
+					public void onComplete(Boolean result) {
 						task.detach();
 						t.bookmark = !t.bookmark;
 						notifyDataSetChanged();
@@ -203,12 +202,12 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 						task.detach();
 					}
 				});
-				task.execGet(CommonUrls.HDStar.BOOKMARK_URL + t.id, Void.class);
+				BaseAsyncTask.taskExec.execute(task);
 			}
 		});
-		holder.seeders.setText(t.seeders + "");
-		holder.leachers.setText(t.leechers + "");
-		holder.snatched.setText(t.snatched + "");
+		holder.seeders.setText(t.seeders);
+		holder.leachers.setText(t.leechers);
+		holder.snatched.setText(t.snatched);
 		holder.uploader.setText(t.uploader);
 		return convertView;
 	}

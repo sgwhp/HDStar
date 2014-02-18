@@ -43,6 +43,12 @@ public class Const {
 
 	public static final String LOG_FILE = "log.txt";
 
+	public static final class TorrentTags {
+		public static final String STICKY = "sticky";
+		public static final String UNBOOKMARKED = "Unbookmarked";
+		public static final String BOOKMARKED = "Bookmarked";
+	}
+
 	/**
 	 * 种子优惠类型
 	 * 

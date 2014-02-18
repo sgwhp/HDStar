@@ -182,5 +182,6 @@
 	<string name="initialize_completed">初始化完成</string>
 	<string name="connecting">通讯中…</string>
 	<string name="saved">保存成功</string>
+	<string name="unintialized">未初始化</string>
 
 </resources>

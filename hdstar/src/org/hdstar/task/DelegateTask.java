@@ -1,17 +1,12 @@
 package org.hdstar.task;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.hdstar.model.ResponseWrapper;
-
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
-
-import com.google.gson.Gson;
 
 /**
  * 连接代理服务器(HDStarService)的请求任务
@@ -33,21 +28,7 @@ public class DelegateTask<T> extends BaseAsyncTask<T> {
 
 	@Override
 	public void execGet(String url, final Type resultType) {
-		parser = new ResponseParser<T>() {
-			@Override
-			public T parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 200) {
-					Gson gson = new Gson();
-					ResponseWrapper<T> wrapper = gson.fromJson(
-							new InputStreamReader(in), resultType);
-					if (wrapper.resCode == 200) {
-						setMessageId(ResponseParser.SUCCESS_MSG_ID);
-						return wrapper.body;
-					}
-				}
-				return null;
-			}
-		};
+		parser = new DelegateGetParser<T>(resultType);
 		super.execGet(url, resultType);
 	}
 

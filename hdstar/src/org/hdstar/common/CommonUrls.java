@@ -127,6 +127,8 @@ public class CommonUrls {
 	public static final String NEXUSPHP_TAKE_LOGIN_URL = "%s/takelogin.php";
 	public static final String NEXUSPHP_LOGOUT_URL = "%s/logout.php";
 	public static final String NEXUSPHP_HOME_PAGE = "%s/index.php";
+	public static final String NEXUSPHP_BOOKMARK = "%s/bookmark.php?torrentid=%s";
+	public static final String NEXUSPHP_TORRENTS = "%s/torrents.php?page=%d";
 
 	public static class PTSiteUrls {
 		public static final String CHDBITS = "http://chdbits.org";

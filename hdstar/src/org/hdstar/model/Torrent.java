@@ -17,12 +17,12 @@ public class Torrent implements Serializable {
 	public String freeType;
 	public boolean bookmark;
 	public boolean sticky;
-	public int comments;
+	public String comments;
 	public String time;
 	public String size;
-	public int seeders;
-	public int leechers;
-	public int snatched;
+	public String seeders;
+	public String leechers;
+	public String snatched;
 	public String uploader;
 
 }

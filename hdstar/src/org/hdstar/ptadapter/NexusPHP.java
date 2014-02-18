@@ -10,6 +10,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,9 +20,14 @@ import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
+import org.hdstar.task.DefaultGetParser;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -101,7 +107,99 @@ public class NexusPHP extends PTAdapter {
 	@Override
 	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
 			String keywords) {
-		return null;
+		String url = String.format(Locale.getDefault(),
+				CommonUrls.NEXUSPHP_TORRENTS, mType.getUrl(), page);
+		if (keywords != null && !keywords.equals("")) {
+			url += "&search=" + keywords;
+		}
+		HttpGet get = new HttpGet(url);
+		ResponseParser<ArrayList<Torrent>> parser = new ResponseParser<ArrayList<Torrent>>() {
+
+			@Override
+			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
+				try {
+					Document doc = Jsoup.parse(in, Const.CHARSET,
+							mType.getUrl());
+					ArrayList<Torrent> torrents = new ArrayList<Torrent>();
+					Torrent t;
+					Elements eTorrents = doc.getElementsByClass("torrents")
+							.get(0).child(0).children();
+					Elements torrentCols;
+					Elements classes;
+					Element titles;
+					Element url;
+					String urlStr;
+					Pattern pattern = Pattern.compile("id=(\\d+)");
+					for (int i = 1; i < eTorrents.size(); i++) {
+						t = new Torrent();
+						torrentCols = eTorrents.get(i).children();
+						// freetype sticky
+						classes = torrentCols.get(0).getElementsByTag("img");
+						if (classes.size() > 0) {
+							t.firstClass = classes.get(0).attr("class");
+						}
+						if (classes.size() > 1) {
+							t.secondClass = classes.get(1).attr("class");
+						}
+						if ("".equals(t.secondClass)) {
+							t.secondClass = "si_notallowed";
+						}
+						titles = torrentCols.get(1).child(0).child(0).child(0)
+								.child(0);
+						t.subtitle = titles.ownText();
+						classes = titles.getElementsByTag("img");
+						for (int j = 0; j < classes.size(); j++) {
+							String klass = classes.get(j).attr("class");
+							if (Const.TorrentTags.STICKY.equals(klass)) {
+								t.sticky = true;
+								continue;
+							}
+							t.freeType = klass;
+						}
+						// titles
+						url = titles.getElementsByTag("a").get(0);
+						t.title = url.attr("title");
+						urlStr = url.attr("href");
+						Matcher matcher = pattern.matcher(urlStr);
+						if (matcher.find()) {
+							t.id = Integer.parseInt(matcher.group(1));
+						}
+						// bookmark
+						String bookmark = torrentCols.get(1).child(0).child(0)
+								.child(0).child(1).getElementsByTag("img")
+								.last().attr("alt");
+						if (Const.TorrentTags.BOOKMARKED.equals(bookmark)) {
+							t.bookmark = true;
+						}
+						// comments
+						t.comments = torrentCols.get(2).text();
+						// time
+						t.time = torrentCols.get(3).text();
+						// size
+						t.size = torrentCols.get(4).text();
+						// seeders
+						t.seeders = torrentCols.get(5).text();
+						// leachers
+						t.leechers = torrentCols.get(6).text();
+						// snatched
+						t.snatched = torrentCols.get(7).text();
+						// uploader
+						t.uploader = torrentCols.get(8).text();
+						torrents.add(t);
+					}
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		};
+		BaseAsyncTask<ArrayList<Torrent>> task = BaseAsyncTask.newInstance(
+				cookie, get, parser);
+		return task;
 	}
 
 	@Override
@@ -125,6 +223,15 @@ public class NexusPHP extends PTAdapter {
 		};
 		BaseAsyncTask<Boolean> task = new BaseAsyncTask<Boolean>(get, parser);
 		task.setNeedContent(false);
+		return task;
+	}
+
+	@Override
+	public BaseAsyncTask<Boolean> bookmark(String torrentId) {
+		HttpGet get = new HttpGet(String.format(CommonUrls.NEXUSPHP_BOOKMARK,
+				mType.getUrl(), torrentId));
+		BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie, get,
+				new DefaultGetParser());
 		return task;
 	}
 

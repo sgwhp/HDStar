@@ -1,8 +1,10 @@
 package org.hdstar.widget.fragment;
 
 import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
 import org.hdstar.common.PTSiteSettingManager;
 import org.hdstar.common.PTSiteType;
+import org.hdstar.component.HDStarApp;
 import org.hdstar.model.PTSiteSetting;
 import org.hdstar.ptadapter.PTAdapter;
 import org.hdstar.ptadapter.PTFactory;
@@ -18,18 +20,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -41,10 +41,10 @@ public class PTSiteSettingFragment extends StackFragment implements
 
 	private PTAdapter ptAdapter;
 	private PTSiteSetting setting;
-	private Spinner typeSpn;
-	private String[] typeStr;
 	private int mMode;
 
+	private ImageView icon;
+	private TextView label;
 	private EditText username;
 	private EditText password;
 	private FrameLayout security;
@@ -58,14 +58,20 @@ public class PTSiteSettingFragment extends StackFragment implements
 	private BaseAsyncTask<Boolean> logoutTask;
 	private CustomDialog dialog = null;
 
-	public static PTSiteSettingFragment newInstance(int mode,
-			PTSiteSetting setting) {
+	public static PTSiteSettingFragment newInstance(PTSiteSetting setting) {
 		PTSiteSettingFragment fragment = new PTSiteSettingFragment();
 		Bundle args = new Bundle();
-		args.putInt("mode", mode);
-		if (setting != null) {
-			args.putParcelable("setting", setting);
-		}
+		args.putInt("mode", MODE_EDIT);
+		args.putParcelable("setting", setting);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public static PTSiteSettingFragment newInstance(String type) {
+		PTSiteSettingFragment fragment = new PTSiteSettingFragment();
+		Bundle args = new Bundle();
+		args.putInt("mode", MODE_ADD);
+		args.putString("type", type);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -79,6 +85,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 			setting = b.getParcelable("setting");
 		} else {
 			setting = new PTSiteSetting();
+			setting.type = b.getString("type");
 		}
 	}
 
@@ -93,7 +100,8 @@ public class PTSiteSettingFragment extends StackFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.pt_site_setting, null);
-		typeSpn = (Spinner) v.findViewById(R.id.pt_type);
+		icon = (ImageView) v.findViewById(R.id.site_icon);
+		label = (TextView) v.findViewById(R.id.site_label);
 		username = (EditText) v.findViewById(R.id.username);
 		password = (EditText) v.findViewById(R.id.password);
 		security = (FrameLayout) v.findViewById(R.id.security);
@@ -109,10 +117,12 @@ public class PTSiteSettingFragment extends StackFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		typeStr = PTSiteType.getAllNames();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_item, typeStr);
-		typeSpn.setAdapter(adapter);
+		ptAdapter = PTFactory.newInstanceByName(setting.type);
+		ImageLoader.getInstance().displayImage(
+				String.format(CommonUrls.GETFVO_URL,
+						PTSiteType.getByName(setting.type).getUrl()), icon,
+				HDStarApp.displayOptions);
+		label.setText(setting.type);
 		if (mMode == MODE_EDIT) {
 			username.setText(setting.username);
 			password.setText(setting.password);
@@ -122,40 +132,21 @@ public class PTSiteSettingFragment extends StackFragment implements
 				logoutBtn.setVisibility(View.VISIBLE);
 				logoutBtn.setOnClickListener(this);
 				initBtn.setVisibility(View.GONE);
+				// 获取验证码
+				if (ptAdapter.needSecurityCode()) {
+					security.setVisibility(View.VISIBLE);
+					refreshBtn.setVisibility(View.VISIBLE);
+					getSecurityCode();
+				}
 			} else {
 				initBtn.setOnClickListener(this);
 			}
 		} else {
 			initBtn.setOnClickListener(this);
 		}
-		typeSpn.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				String typeName = typeStr[position];
-				ptAdapter = PTFactory.newInstanceByName(typeName);
-				setting.type = typeName;
-				// 获取验证码
-				if (ptAdapter.needSecurityCode()) {
-					security.setVisibility(View.VISIBLE);
-					refreshBtn.setVisibility(View.VISIBLE);
-					getSecurityCode();
-				} else {
-					security.setVisibility(View.GONE);
-					refreshBtn.setVisibility(View.GONE);
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
-		for (PTSiteType type : PTSiteType.values()) {
-			if (type.name().equals(setting.type)) {
-				typeSpn.setSelection(type.ordinal());
-				break;
-			}
+		if (!ptAdapter.needSecurityCode()) {
+			security.setVisibility(View.GONE);
+			refreshBtn.setVisibility(View.GONE);
 		}
 		refreshBtn.setOnClickListener(this);
 	}

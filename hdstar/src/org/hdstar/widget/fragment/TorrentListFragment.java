@@ -1,18 +1,15 @@
 package org.hdstar.widget.fragment;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hdstar.R;
-import org.hdstar.common.CommonUrls;
-import org.hdstar.common.Const;
-import org.hdstar.component.HDStarApp;
-import org.hdstar.model.ResponseWrapper;
+import org.hdstar.model.PTSiteSetting;
 import org.hdstar.model.Torrent;
+import org.hdstar.ptadapter.PTAdapter;
+import org.hdstar.ptadapter.PTFactory;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.widget.adapter.TorrentAdapter;
 
@@ -36,24 +33,37 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-import com.google.gson.reflect.TypeToken;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TorrentListFragment extends StackFragment {
+	private PTSiteSetting setting;
+	private PTAdapter ptAdapter;
 	private View view;
 	private PullToRefreshLayout mPullToRefreshLayout;
 	private ExpandableListView listView;
 	private Parcelable listViewState;
 	private TorrentAdapter adapter;
 	private List<Torrent> torrents = new ArrayList<Torrent>();
-	private int page = 1;
-	private String keyWords = null;
+	private int page = 0;
+	private int curPage = 0;
+	private String keywords = "";
 
-	public static TorrentListFragment newInstance() {
+	public static TorrentListFragment newInstance(PTSiteSetting setting) {
 		TorrentListFragment f = new TorrentListFragment();
+		Bundle args = new Bundle();
+		args.putParcelable("setting", setting);
+		f.setArguments(args);
 		return f;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setting = getArguments().getParcelable("setting");
+		ptAdapter = PTFactory.newInstanceByName(setting.type);
+		ptAdapter.setCookie(setting.cookie);
 	}
 
 	@Override
@@ -71,7 +81,7 @@ public class TorrentListFragment extends StackFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (adapter == null) {
-			adapter = new TorrentAdapter(getActivity(), torrents);
+			adapter = new TorrentAdapter(getActivity(), ptAdapter, torrents);
 		}
 		init();
 		if (torrents.size() == 0) {
@@ -112,9 +122,9 @@ public class TorrentListFragment extends StackFragment {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				keyWords = query;
-				keyWords = keyWords.trim();
-				if (!"".equals(keyWords)) {
+				curPage = 0;
+				keywords = query;
+				if (!"".equals(keywords)) {
 					refresh();
 					return true;
 				}
@@ -123,6 +133,7 @@ public class TorrentListFragment extends StackFragment {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
+				keywords = newText;
 				return false;
 			}
 		});
@@ -190,22 +201,11 @@ public class TorrentListFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-		listView.setSelection(0);
-		DelegateTask<List<Torrent>> task = DelegateTask
-				.newInstance(HDStarApp.cookies);
+		BaseAsyncTask<ArrayList<Torrent>> task = ptAdapter.getTorrents(page,
+				keywords.trim());
 		task.attach(refreshCallback);
 		attachTask(task);
-		String url = CommonUrls.HDStar.SERVER_TORRENTS_URL;
-		if (keyWords != null) {
-			try {
-				url += "?search=" + URLEncoder.encode(keyWords, Const.CHARSET);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			keyWords = null;
-		}
-		task.execGet(url, new TypeToken<ResponseWrapper<List<Torrent>>>() {
-		}.getType());
+		BaseAsyncTask.taskExec.execute(task);
 	}
 
 	private void doRefresh() {
@@ -217,20 +217,18 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	public void loadNextPage() {
-		DelegateTask<List<Torrent>> task = new DelegateTask<List<Torrent>>(
-				HDStarApp.cookies);
+		BaseAsyncTask<ArrayList<Torrent>> task = ptAdapter.getTorrents(
+				curPage + 1, keywords.trim());
 		task.attach(addCallback);
 		attachTask(task);
-		task.execGet(CommonUrls.HDStar.SERVER_TORRENTS_URL + "?page=" + page,
-				new TypeToken<ResponseWrapper<List<Torrent>>>() {
-				}.getType());
+		BaseAsyncTask.taskExec.execute(task);
 	}
 
-	TaskCallback<List<Torrent>> refreshCallback = new TaskCallback<List<Torrent>>() {
+	TaskCallback<ArrayList<Torrent>> refreshCallback = new TaskCallback<ArrayList<Torrent>>() {
 
 		@Override
-		public void onComplete(List<Torrent> list) {
-			page = 1;
+		public void onComplete(ArrayList<Torrent> list) {
+			curPage = page;
 			mPullToRefreshLayout.setRefreshComplete();
 			torrents.clear();
 			torrents.addAll(list);
@@ -250,11 +248,11 @@ public class TorrentListFragment extends StackFragment {
 		}
 	};
 
-	TaskCallback<List<Torrent>> addCallback = new TaskCallback<List<Torrent>>() {
+	TaskCallback<ArrayList<Torrent>> addCallback = new TaskCallback<ArrayList<Torrent>>() {
 
 		@Override
-		public void onComplete(List<Torrent> list) {
-			page++;
+		public void onComplete(ArrayList<Torrent> list) {
+			curPage++;
 			mPullToRefreshLayout.setRefreshComplete();
 			if (list.size() > 0) {
 				torrents.addAll((ArrayList<Torrent>) list);
@@ -263,19 +261,11 @@ public class TorrentListFragment extends StackFragment {
 				Crouton.makeText(getActivity(), R.string.no_more_data,
 						Style.CONFIRM).show();
 			}
-			// ((TextView) view.findViewById(R.id.loading_next_page_text))
-			// .setText(R.string.next_page);
-			// view.findViewById(R.id.loading_next_page_progressBar)
-			// .setVisibility(View.GONE);
 		}
 
 		@Override
 		public void onFail(Integer msgId) {
 			mPullToRefreshLayout.setRefreshComplete();
-			// ((TextView) view.findViewById(R.id.loading_next_page_text))
-			// .setText(R.string.next_page);
-			// view.findViewById(R.id.loading_next_page_progressBar)
-			// .setVisibility(View.GONE);
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 

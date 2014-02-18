@@ -2,6 +2,7 @@ package org.hdstar.ptadapter;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,16 +10,21 @@ import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
+import org.hdstar.model.ResponseWrapper;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
+import org.hdstar.task.DelegateGetParser;
 import org.hdstar.task.ResponseParser;
 
 import ch.boye.httpclientandroidlib.Header;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
+import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
+
+import com.google.gson.reflect.TypeToken;
 
 public class HDSky extends NexusPHP {
 
@@ -53,7 +59,7 @@ public class HDSky extends NexusPHP {
 					}
 					String location = res.getFirstHeader("Location").getValue();
 					if (location == null
-							|| !location.equals(CommonUrls.NEXUSPHP_HOME_PAGE)) {
+							|| !location.equals(CommonUrls.HDStar.HOME_PAGE)) {
 						return null;
 					}
 					String cookieStr = "";
@@ -78,6 +84,19 @@ public class HDSky extends NexusPHP {
 	@Override
 	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
 			String keywords) {
-		return null;
+		String url = CommonUrls.HDStar.SERVER_TORRENTS_URL + "?page=" + page;
+		if (keywords != null && !"".equals(keywords)) {
+			try {
+				url += "&search=" + URLEncoder.encode(keywords, Const.CHARSET);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		HttpGet get = new HttpGet(url);
+		BaseAsyncTask<ArrayList<Torrent>> task = BaseAsyncTask.newInstance(
+				cookie, get, new DelegateGetParser<ArrayList<Torrent>>(
+						new TypeToken<ResponseWrapper<List<Torrent>>>() {
+						}.getType()));
+		return task;
 	}
 }

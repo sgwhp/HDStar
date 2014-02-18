@@ -291,7 +291,6 @@ public class ForumFragment extends StackFragment {
 		if (mTask != null) {
 			return;
 		}
-		listView.setSelection(0);
 		// listView.prepareForRefresh();
 		DelegateTask<List<Topic>> task = DelegateTask
 				.newInstance(HDStarApp.cookies);
@@ -308,7 +307,7 @@ public class ForumFragment extends StackFragment {
 		task.attach(addCallback);
 		attachTask(task);
 		task.execGet(CommonUrls.HDStar.SERVER_VIEW_FORUM_URL + "?forumId="
-				+ forumId + "&page=" + ++curPage,
+				+ forumId + "&page=" + (curPage + 1),
 				new TypeToken<ResponseWrapper<List<Topic>>>() {
 				}.getType());
 	}
@@ -349,6 +348,7 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onComplete(List<Topic> list) {
+			curPage++;
 			mPullToRefreshLayout.setRefreshComplete();
 			if (list.size() > 0) {
 				adapter.itemsAddAll((ArrayList<Topic>) list);
@@ -361,14 +361,12 @@ public class ForumFragment extends StackFragment {
 
 		@Override
 		public void onFail(Integer msgId) {
-			--curPage;
 			mPullToRefreshLayout.setRefreshComplete();
 			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
 		}
 
 		@Override
 		public void onCancel() {
-			--curPage;
 			mPullToRefreshLayout.setRefreshComplete();
 		}
 

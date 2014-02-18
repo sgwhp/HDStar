@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 
 public abstract class PTAdapter {
 	protected PTSiteType mType;
+	protected String cookie;
 
 	public PTAdapter(PTSiteType type) {
 		mType = type;
@@ -21,6 +22,14 @@ public abstract class PTAdapter {
 
 	public void setType(PTSiteType type) {
 		this.mType = type;
+	}
+
+	public String getCookie() {
+		return cookie;
+	}
+
+	public void setCookie(String cookie) {
+		this.cookie = cookie;
 	}
 
 	/**
@@ -83,6 +92,16 @@ public abstract class PTAdapter {
 	 */
 	public abstract BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
 			String keywords);
+
+	/**
+	 * 
+	 * 收藏或取消收藏. <br/>
+	 * 
+	 * @author robust
+	 * @param torrentId
+	 * @return
+	 */
+	public abstract BaseAsyncTask<Boolean> bookmark(String torrentId);
 
 	/**
 	 * 

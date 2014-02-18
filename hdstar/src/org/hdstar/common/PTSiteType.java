@@ -14,7 +14,7 @@ public enum PTSiteType {
 			CommonUrls.PTSiteUrls.M_TEAM), OpenCD("OpenCD",
 			CommonUrls.PTSiteUrls.OPEN_CD);
 
-	private final String name;
+	private final String name;// 名称，仅用作显示，不能作为数据进行传输、序列化或持久化
 	private final String url;
 
 	PTSiteType(String name, String url) {
@@ -22,6 +22,13 @@ public enum PTSiteType {
 		this.url = url;
 	}
 
+	/**
+	 * 
+	 * 获取用来显示的名称. <br/>
+	 * 
+	 * @author robust
+	 * @return 名称，仅用作显示，不能作为数据进行传输、序列化或持久化
+	 */
 	public String getName() {
 		return name;
 	}
@@ -30,9 +37,16 @@ public enum PTSiteType {
 		return url;
 	}
 
+	/**
+	 * 
+	 * @author robust
+	 * @param name
+	 *            enum.name()方法得到的值
+	 * @return
+	 */
 	public static PTSiteType getByName(String name) {
 		for (PTSiteType type : PTSiteType.values()) {
-			if (type.name.equals(name)) {
+			if (type.name().equals(name)) {
 				return type;
 			}
 		}

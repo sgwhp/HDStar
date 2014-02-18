@@ -1,6 +1,8 @@
 package org.hdstar.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.hdstar.model.PTSiteSetting;
 import org.hdstar.util.DES;
@@ -29,6 +31,26 @@ public class PTSiteSettingManager {
 		ArrayList<PTSiteSetting> sites = new ArrayList<PTSiteSetting>();
 		for (int i = 0; i < max; i++) {
 			sites.add(get(prefs, i));
+		}
+		return sites;
+	}
+
+	public static void getAll(Context context, List<PTSiteSetting> settings) {
+		SharedPreferences prefs = getPrefs(context);
+		int max = getMax(prefs);
+		for (int i = 0; i < max; i++) {
+			settings.add(get(prefs, i));
+		}
+	}
+
+	public static HashMap<String, PTSiteSetting> getAsMap(Context context) {
+		SharedPreferences prefs = getPrefs(context);
+		int max = getMax(prefs);
+		HashMap<String, PTSiteSetting> sites = new HashMap<String, PTSiteSetting>();
+		PTSiteSetting setting;
+		for (int i = 0; i < max; i++) {
+			setting = get(prefs, i);
+			sites.put(setting.type, setting);
 		}
 		return sites;
 	}

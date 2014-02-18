@@ -6,23 +6,25 @@
     android:orientation="vertical"
     android:padding="5dip" >
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Spinner
-            android:id="@+id/pt_type"
-            style="@style/spinnerListItemTopStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/setting_strip_top_sel" >
 
         <ImageView
+            android:id="@+id/site_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/site_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/zebra_arrow_down" />
-    </FrameLayout>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/security"
@@ -111,7 +113,7 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/btn_bg_sel"
         android:text="@string/init" />
-    
+
     <Button
         android:id="@+id/logout"
         android:layout_width="match_parent"
