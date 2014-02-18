@@ -81,6 +81,16 @@
             android:drawableTop="@drawable/torrent_uploader"
             android:gravity="center" />
 
+        <TextView
+            android:id="@+id/torrent_rss"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/torrent_rss_sel"
+            android:gravity="center"
+            android:clickable="true"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </LinearLayout>

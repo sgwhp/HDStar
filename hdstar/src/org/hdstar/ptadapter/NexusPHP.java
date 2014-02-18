@@ -187,6 +187,8 @@ public class NexusPHP extends PTAdapter {
 						t.uploader = torrentCols.get(8).text();
 						torrents.add(t);
 					}
+					msgId = ResponseParser.SUCCESS_MSG_ID;
+					return torrents;
 				} catch (NullPointerException e) {
 					e.printStackTrace();
 				} catch (NumberFormatException e) {
