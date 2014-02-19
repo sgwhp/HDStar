@@ -132,19 +132,20 @@ public class PTSiteSettingFragment extends StackFragment implements
 				logoutBtn.setVisibility(View.VISIBLE);
 				logoutBtn.setOnClickListener(this);
 				initBtn.setVisibility(View.GONE);
-				// 获取验证码
-				if (ptAdapter.needSecurityCode()) {
-					security.setVisibility(View.VISIBLE);
-					refreshBtn.setVisibility(View.VISIBLE);
-					getSecurityCode();
-				}
 			} else {
 				initBtn.setOnClickListener(this);
 			}
 		} else {
 			initBtn.setOnClickListener(this);
 		}
-		if (!ptAdapter.needSecurityCode()) {
+		if (ptAdapter.needSecurityCode()) {
+			if (setting.cookie == null || "".equals(setting.cookie)) {
+				security.setVisibility(View.VISIBLE);
+				refreshBtn.setVisibility(View.VISIBLE);
+				// 获取验证码
+				getSecurityCode();
+			}
+		} else {
 			security.setVisibility(View.GONE);
 			refreshBtn.setVisibility(View.GONE);
 		}
@@ -256,6 +257,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 		if (mMode == MODE_EDIT) {
 			PTSiteSettingManager.save(getActivity(), setting);
 		} else {
+			mMode = MODE_EDIT;
 			PTSiteSettingManager.add(getActivity(), setting);
 		}
 		return true;
@@ -265,8 +267,10 @@ public class PTSiteSettingFragment extends StackFragment implements
 
 		@Override
 		public void onComplete(Bitmap result) {
-			result.setDensity(160);
-			securityImg.setImageBitmap(result);
+			if (result != null) {
+				result.setDensity(160);
+				securityImg.setImageBitmap(result);
+			}
 		}
 
 		@Override
@@ -291,6 +295,8 @@ public class PTSiteSettingFragment extends StackFragment implements
 			initBtn.setVisibility(View.GONE);
 			logoutBtn.setVisibility(View.VISIBLE);
 			logoutBtn.setOnClickListener(PTSiteSettingFragment.this);
+			security.setVisibility(View.GONE);
+			refreshBtn.setVisibility(View.GONE);
 		}
 
 		@Override
@@ -314,6 +320,11 @@ public class PTSiteSettingFragment extends StackFragment implements
 			initBtn.setVisibility(View.VISIBLE);
 			initBtn.setOnClickListener(PTSiteSettingFragment.this);
 			logoutBtn.setVisibility(View.GONE);
+			if (ptAdapter.needSecurityCode()) {
+				security.setVisibility(View.VISIBLE);
+				refreshBtn.setVisibility(View.VISIBLE);
+				refreshBtn.setOnClickListener(PTSiteSettingFragment.this);
+			}
 		}
 
 		@Override

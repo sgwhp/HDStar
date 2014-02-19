@@ -107,7 +107,6 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 			stackAdapter.setCurPosition(curPage);
 		}
 		viewPager.setAdapter(stackAdapter);
-		viewPager.setCurrentItem(curPage);
 
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
@@ -143,6 +142,8 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 			}
 
 		});
+		// ÏÈ×¢²á¼àÌýÆ÷
+		viewPager.setCurrentItem(curPage);
 		// getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 	}
 

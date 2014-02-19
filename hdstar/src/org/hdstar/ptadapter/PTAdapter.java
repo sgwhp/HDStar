@@ -20,10 +20,6 @@ public abstract class PTAdapter {
 		return mType;
 	}
 
-	public void setType(PTSiteType type) {
-		this.mType = type;
-	}
-
 	public String getCookie() {
 		return cookie;
 	}

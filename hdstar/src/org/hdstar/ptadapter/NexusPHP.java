@@ -56,20 +56,26 @@ public class NexusPHP extends PTAdapter {
 		return new FetchSecurityImgTask(mType.getUrl());
 	}
 
+	protected List<NameValuePair> buildLoginParams(String username,
+			String password, String securityCode) {
+		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+		nvp.add(new BasicNameValuePair("username", username));
+		nvp.add(new BasicNameValuePair("password", password));
+		if (needSecurityCode()) {
+			nvp.add(new BasicNameValuePair("imagestring", securityCode));
+			nvp.add(new BasicNameValuePair("imagehash", imageHash));
+		}
+		return nvp;
+	}
+
 	@Override
 	public BaseAsyncTask<String> login(String username, String password,
 			String securityCode) {
 		HttpPost post = new HttpPost(String.format(
 				CommonUrls.NEXUSPHP_TAKE_LOGIN_URL, mType.getUrl()));
 		try {
-			List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-			nvp.add(new BasicNameValuePair("username", username));
-			nvp.add(new BasicNameValuePair("password", password));
-			if (needSecurityCode()) {
-				nvp.add(new BasicNameValuePair("imagestring", securityCode));
-				nvp.add(new BasicNameValuePair("imagehash", imageHash));
-			}
-			post.setEntity(new UrlEncodedFormEntity(nvp, Const.CHARSET));
+			post.setEntity(new UrlEncodedFormEntity(buildLoginParams(username,
+					password, securityCode), Const.CHARSET));
 			ResponseParser<String> parser = new ResponseParser<String>(
 					R.string.login_error) {
 
@@ -104,16 +110,48 @@ public class NexusPHP extends PTAdapter {
 		return null;
 	}
 
-	@Override
-	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
-			String keywords) {
-		String url = String.format(Locale.getDefault(),
-				CommonUrls.NEXUSPHP_TORRENTS, mType.getUrl(), page);
-		if (keywords != null && !keywords.equals("")) {
-			url += "&search=" + keywords;
+	/**
+	 * 
+	 * 解析某行种子中的类别列. <br/>
+	 * 
+	 * @param tClassCol
+	 *            类别列，一般为第一列
+	 * @param t
+	 */
+	protected void parseTorrentClass(Element tClassCol, Torrent t) {
+		Elements classes = tClassCol.getElementsByTag("img");
+		if (classes.size() > 0) {
+			t.firstClass = classes.get(0).attr("class");
 		}
-		HttpGet get = new HttpGet(url);
-		ResponseParser<ArrayList<Torrent>> parser = new ResponseParser<ArrayList<Torrent>>() {
+		if (classes.size() > 1) {
+			t.secondClass = classes.get(1).attr("class");
+		}
+		if ("".equals(t.secondClass)) {
+			t.secondClass = "si_notallowed";
+		}
+	}
+
+	/**
+	 * 
+	 * 解析某行种子中操作列的下载框状态. <br/>
+	 * 
+	 * @param tRssRol
+	 *            操作列，一般为第二列，与标题在同一列
+	 * @param t
+	 * @param index
+	 *            种子所在行数
+	 */
+	protected void parseRssDownload(Element tRssRol, Torrent t, int index) {
+	}
+
+	/**
+	 * 
+	 * 获取种子解析器. <br/>
+	 * 
+	 * @return
+	 */
+	protected ResponseParser<ArrayList<Torrent>> getTorrentParser() {
+		return new ResponseParser<ArrayList<Torrent>>() {
 
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
@@ -133,17 +171,18 @@ public class NexusPHP extends PTAdapter {
 					for (int i = 1; i < eTorrents.size(); i++) {
 						t = new Torrent();
 						torrentCols = eTorrents.get(i).children();
+						parseTorrentClass(torrentCols.get(0), t);
+						// classes = torrentCols.get(0).getElementsByTag("img");
+						// if (classes.size() > 0) {
+						// t.firstClass = classes.get(0).attr("class");
+						// }
+						// if (classes.size() > 1) {
+						// t.secondClass = classes.get(1).attr("class");
+						// }
+						// if ("".equals(t.secondClass)) {
+						// t.secondClass = "si_notallowed";
+						// }
 						// freetype sticky
-						classes = torrentCols.get(0).getElementsByTag("img");
-						if (classes.size() > 0) {
-							t.firstClass = classes.get(0).attr("class");
-						}
-						if (classes.size() > 1) {
-							t.secondClass = classes.get(1).attr("class");
-						}
-						if ("".equals(t.secondClass)) {
-							t.secondClass = "si_notallowed";
-						}
 						titles = torrentCols.get(1).child(0).child(0).child(0)
 								.child(0);
 						t.subtitle = titles.ownText();
@@ -165,12 +204,14 @@ public class NexusPHP extends PTAdapter {
 							t.id = Integer.parseInt(matcher.group(1));
 						}
 						// bookmark
-						String bookmark = torrentCols.get(1).child(0).child(0)
-								.child(0).child(1).getElementsByTag("img")
-								.last().attr("alt");
+						String bookmark = torrentCols.get(1)
+								.getElementById("bookmark" + (i - 1)).child(0)
+								.attr("alt");
 						if (Const.TorrentTags.BOOKMARKED.equals(bookmark)) {
 							t.bookmark = true;
 						}
+						// 下载框
+						parseRssDownload(torrentCols.get(1), t, i - 1);
 						// comments
 						t.comments = torrentCols.get(2).text();
 						// time
@@ -199,8 +240,19 @@ public class NexusPHP extends PTAdapter {
 				return null;
 			}
 		};
+	}
+
+	@Override
+	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
+			String keywords) {
+		String url = String.format(Locale.getDefault(),
+				CommonUrls.NEXUSPHP_TORRENTS, mType.getUrl(), page);
+		if (keywords != null && !keywords.equals("")) {
+			url += "&search=" + keywords;
+		}
+		HttpGet get = new HttpGet(url);
 		BaseAsyncTask<ArrayList<Torrent>> task = BaseAsyncTask.newInstance(
-				cookie, get, parser);
+				cookie, get, getTorrentParser());
 		return task;
 	}
 

@@ -40,12 +40,17 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		init();
+		// init();
 	}
 
 	@Override
 	public void refresh() {
 		mContainer.removeAllViews();
+		init();
+	}
+
+	@Override
+	public void onSelected() {
 		init();
 	}
 

@@ -132,8 +132,15 @@ public class CommonUrls {
 
 	public static class PTSiteUrls {
 		public static final String CHDBITS = "http://chdbits.org";
+		public static final String CHDBITS_RSS_DOWNLOAD_URL = "http://chdbits.org/myrss.php?ajax=1&torrentid=%s";
+
 		public static final String CMCT = "http://hdcmct.org";
-		public static final String M_TEAM = "http://tp.m-team.cc";
-		public static final String OPEN_CD = "http://open.cd";
+		public static final String CMCT_RSS_DOWNLOAD_URL = "http://hdcmct.org/subscribe.php?ajax=1&torrentid=%s";
+
+		public static final String M_TEAM = "https://tp.m-team.cc";
+
+		// OpenCD的登录页面只能是https，所以统一使用https
+		public static final String OPEN_CD = "https://open.cd";
+		public static final String OPEN_CD_RSS_DOWNLOAD_URL = "https://open.cd/bookmark.php?type=1&level=0&cmd=&torrentid=%s";
 	}
 }

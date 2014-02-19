@@ -1,10 +1,10 @@
 package org.hdstar.widget.adapter;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Torrent;
 import org.hdstar.ptadapter.PTAdapter;
 import org.hdstar.task.BaseAsyncTask;
@@ -12,6 +12,8 @@ import org.hdstar.task.BaseAsyncTask.TaskCallback;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,68 +23,27 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 public class TorrentAdapter extends BaseExpandableListAdapter {
+	private Resources res;
 	private LayoutInflater inflater;
 	PTAdapter adapter;
 	private List<Torrent> torrents;
-	private Drawable bookmarked;
-	private Drawable unbookmark;
-	private HashMap<String, Drawable> klasses = new HashMap<String, Drawable>();
+	private Drawable bookmarked, unbookmark;
+	private Drawable rss, rssAdded;
 
 	public TorrentAdapter(Context context, PTAdapter adapter,
 			List<Torrent> torrents) {
 		inflater = LayoutInflater.from(context);
+		res = context.getResources();
 		this.adapter = adapter;
 		this.torrents = torrents;
 		Resources res = context.getResources();
 		bookmarked = getCompoundDrawable(res, R.drawable.bookmarked_btn_bg_sel);
 		unbookmark = getCompoundDrawable(res, R.drawable.unbookmark_btn_bg_sel);
-		klasses.put("c_anime", getCompoundDrawable(res, R.drawable.c_anime));
-		klasses.put("c_hqaudio", getCompoundDrawable(res, R.drawable.c_hqaudio));
-		klasses.put("c_doc", getCompoundDrawable(res, R.drawable.c_doc));
-		klasses.put("c_misc", getCompoundDrawable(res, R.drawable.c_misc));
-		klasses.put("c_movies", getCompoundDrawable(res, R.drawable.c_movie));
-		klasses.put("c_music", getCompoundDrawable(res, R.drawable.c_music));
-		klasses.put("c_pad", getCompoundDrawable(res, R.drawable.c_pad));
-		klasses.put("c_sports", getCompoundDrawable(res, R.drawable.c_sport));
-		klasses.put("c_tvshows", getCompoundDrawable(res, R.drawable.c_tv_show));
-		klasses.put("c_tvseries",
-				getCompoundDrawable(res, R.drawable.c_tv_series));
-		klasses.put("si_bdh264", getCompoundDrawable(res, R.drawable.bd_h264));
-		klasses.put("si_bdvc1", getCompoundDrawable(res, R.drawable.bd_vc1));
-		klasses.put("si_bdmpeg2", getCompoundDrawable(res, R.drawable.bd_mpeg2));
-		klasses.put("si_hddvdh264",
-				getCompoundDrawable(res, R.drawable.hddvd_h264));
-		klasses.put("si_hddvdvc1",
-				getCompoundDrawable(res, R.drawable.hddvd_vc1));
-		klasses.put("si_hddvdmpeg2",
-				getCompoundDrawable(res, R.drawable.hddvd_mpeg2));
-		klasses.put("si_remuxh264",
-				getCompoundDrawable(res, R.drawable.remux_h264));
-		klasses.put("si_remuxvc1",
-				getCompoundDrawable(res, R.drawable.remux_vc1));
-		klasses.put("si_remuxmpeg2",
-				getCompoundDrawable(res, R.drawable.remux_mpeg2));
-		klasses.put("si_avchd", getCompoundDrawable(res, R.drawable.avchd));
-		klasses.put("si_hdtvh264",
-				getCompoundDrawable(res, R.drawable.hdtv_h264));
-		klasses.put("si_hdtvmpeg2",
-				getCompoundDrawable(res, R.drawable.hdtv_mpeg2));
-		klasses.put("si_dvdr", getCompoundDrawable(res, R.drawable.dvdr));
-		klasses.put("si_riph264", getCompoundDrawable(res, R.drawable.rip_h264));
-		klasses.put("si_ripxvid", getCompoundDrawable(res, R.drawable.rip_xvid));
-		klasses.put("si_cdflac", getCompoundDrawable(res, R.drawable.cd_flac));
-		klasses.put("si_cdape", getCompoundDrawable(res, R.drawable.cd_ape));
-		klasses.put("si_cddts", getCompoundDrawable(res, R.drawable.cd_dts));
-		klasses.put("si_cdother", getCompoundDrawable(res, R.drawable.cd_other));
-		klasses.put("si_extractflac",
-				getCompoundDrawable(res, R.drawable.extract_flac));
-		klasses.put("si_extractdts",
-				getCompoundDrawable(res, R.drawable.extract_dts));
-		klasses.put("si_extractac3",
-				getCompoundDrawable(res, R.drawable.extract_ac3));
-		klasses.put("si_notallowed",
-				getCompoundDrawable(res, R.drawable.notallowed));
+		rss = getCompoundDrawable(res, R.drawable.torrent_rss_sel);
+		rssAdded = getCompoundDrawable(res, R.drawable.torrent_rss_added_sel);
 	}
 
 	@Override
@@ -144,13 +105,24 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		}
 		holder.freeType.setText(Const.FreeType.getFreeTag(t.freeType));
 		holder.title.setText(t.title);
-		Drawable d = klasses.get(t.firstClass);
-		if (d != null) {
-			holder.title.setCompoundDrawables(d, null, null, null);
+		Bitmap bitmap = ImageLoader.getInstance().loadImageSync(
+				"assets://pic/torrent_class/" + t.firstClass + ".png",
+				HDStarApp.displayOptions);
+		BitmapDrawable bDrawable;
+		if (bitmap != null) {
+			bDrawable = new BitmapDrawable(res, bitmap);
+			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
+					bDrawable.getIntrinsicHeight());
+			holder.title.setCompoundDrawables(bDrawable, null, null, null);
 		}
-		d = klasses.get(t.secondClass);
-		if (d != null) {
-			holder.subtitle.setCompoundDrawables(d, null, null, null);
+		bitmap = ImageLoader.getInstance().loadImageSync(
+				"assets://pic/torrent_class/" + t.secondClass + ".png",
+				HDStarApp.displayOptions);
+		if (bitmap != null) {
+			bDrawable = new BitmapDrawable(res, bitmap);
+			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
+					bDrawable.getIntrinsicHeight());
+			holder.subtitle.setCompoundDrawables(bDrawable, null, null, null);
 		}
 		holder.subtitle.setText(t.subtitle);
 		return convertView;
@@ -171,6 +143,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		holder.comments.setText(t.comments);
 		holder.time.setText(t.time);
 		holder.size.setText(t.size);
+		// bookmark
 		if (t.bookmark) {
 			holder.bookmark.setCompoundDrawables(null, bookmarked, null, null);
 			holder.bookmark.setText(R.string.unbookmark);
@@ -205,6 +178,46 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 				BaseAsyncTask.taskExec.execute(task);
 			}
 		});
+		// rss download
+		if (adapter.rssEnable()) {
+			holder.rss.setVisibility(View.VISIBLE);
+			if (t.rss) {
+				holder.rss.setCompoundDrawables(null, rssAdded, null, null);
+			} else {
+				holder.rss.setCompoundDrawables(null, rss, null, null);
+			}
+			holder.rss.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					final BaseAsyncTask<Boolean> task = adapter.addToRss(t.id
+							+ "");
+					task.attach(new TaskCallback<Boolean>() {
+
+						@Override
+						public void onComplete(Boolean result) {
+							task.detach();
+							t.rss = !t.rss;
+							notifyDataSetChanged();
+						}
+
+						@Override
+						public void onCancel() {
+							task.detach();
+						}
+
+						@Override
+						public void onFail(Integer msgId) {
+							task.detach();
+						}
+					});
+					BaseAsyncTask.taskExec.execute(task);
+				}
+			});
+		} else {
+			holder.rss.setVisibility(View.GONE);
+		}
+
 		holder.seeders.setText(t.seeders);
 		holder.leachers.setText(t.leechers);
 		holder.snatched.setText(t.snatched);
@@ -257,6 +270,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		TextView leachers;
 		TextView snatched;
 		TextView uploader;
+		TextView rss;
 
 		ChildHolder(View v) {
 			comments = (TextView) v.findViewById(R.id.torrent_comments);
@@ -267,6 +281,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			leachers = (TextView) v.findViewById(R.id.torrent_leachers);
 			snatched = (TextView) v.findViewById(R.id.torrent_snatched);
 			uploader = (TextView) v.findViewById(R.id.torrent_uploader);
+			rss = (TextView) v.findViewById(R.id.torrent_rss);
 		}
 	}
 
