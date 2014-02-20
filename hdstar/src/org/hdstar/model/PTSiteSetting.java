@@ -1,5 +1,7 @@
 package org.hdstar.model;
 
+import org.hdstar.common.PTSiteType;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,6 +18,7 @@ public class PTSiteSetting implements Parcelable {
 	public String username;
 	public String password;
 	public String cookie;
+	private PTSiteType siteType;
 
 	public PTSiteSetting() {
 	}
@@ -40,6 +43,13 @@ public class PTSiteSetting implements Parcelable {
 		dest.writeString(username);
 		dest.writeString(password);
 		dest.writeString(cookie);
+	}
+
+	public PTSiteType getSiteType() {
+		if (siteType == null) {
+			siteType = PTSiteType.getByName(type);
+		}
+		return siteType;
 	}
 
 	public static final Parcelable.Creator<PTSiteSetting> CREATOR = new Parcelable.Creator<PTSiteSetting>() {

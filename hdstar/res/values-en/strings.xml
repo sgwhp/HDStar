@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">HDSky</string>
+	<string name="app_name">Platinum Crawler</string>
 	<string name="account">account</string>
 	<string name="password">password</string>
 	<string name="login">Login</string>
@@ -165,4 +165,8 @@
 	<string name="connecting">Connecting…</string>
 	<string name="saved">Saved.</string>
 	<string name="unintialized">Unintialized.</string>
+	<string name="torrents">Torrents</string>
+	<string name="OpenCD">OpenCD</string>
+	<string name="music">Music</string>
+	<string name="adult">Adult</string>
 </resources>

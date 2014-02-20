@@ -26,7 +26,16 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
 	private HashMap<String, PTSiteSetting> settings;
-	private PTSiteType[] types = PTSiteType.values();
+	private PTSiteType[] mTypes;
+	{
+		// 初始化所有站点，排除掉HDSky
+		PTSiteType[] types = PTSiteType.values();
+		for (int i = 0, j = 0; i < types.length; i++) {
+			if (types[i] != PTSiteType.HDSky) {
+				mTypes[j++] = types[i];
+			}
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,17 +85,17 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		PTSiteSetting setting = settings.get(types[v.getId() - ID].name());
+		PTSiteSetting setting = settings.get(mTypes[v.getId() - ID].name());
 		if (setting != null) {
 			push(PTSiteSettingFragment.newInstance(setting));
 		} else {
-			push(PTSiteSettingFragment
-					.newInstance(types[v.getId() - ID].name()));
+			push(PTSiteSettingFragment.newInstance(mTypes[v.getId() - ID]
+					.name()));
 		}
 	}
 
 	private void init() {
-		if (types.length == 0) {
+		if (mTypes.length == 0) {
 			return;
 		}
 		Context context = getActivity();
@@ -94,30 +103,30 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 		View v;
 		String username;
 		String uninitialized = getString(R.string.unintialized);
-		if (types.length == 1) {
-			username = settings.containsKey(types[0].name()) ? settings
-					.get(types[0].name()).username : uninitialized;
-			v = createChild(context, types[0], username, ID);
+		if (mTypes.length == 1) {
+			username = settings.containsKey(mTypes[0].name()) ? settings
+					.get(mTypes[0].name()).username : uninitialized;
+			v = createChild(context, mTypes[0], username, ID);
 			v.setBackgroundResource(R.drawable.setting_strip_bg_sel);
 			mContainer.addView(v);
 			return;
 		}
-		username = settings.containsKey(types[0].name()) ? settings
-				.get(types[0].name()).username : uninitialized;
-		v = createChild(context, types[0], username, ID);
+		username = settings.containsKey(mTypes[0].name()) ? settings
+				.get(mTypes[0].name()).username : uninitialized;
+		v = createChild(context, mTypes[0], username, ID);
 		v.setBackgroundResource(R.drawable.setting_strip_top_sel);
 		mContainer.addView(v);
-		for (int i = 1; i < types.length - 1; i++) {
-			username = settings.containsKey(types[i].name()) ? settings
-					.get(types[i].name()).username : uninitialized;
-			v = createChild(context, types[i], username, ID + i);
+		for (int i = 1; i < mTypes.length - 1; i++) {
+			username = settings.containsKey(mTypes[i].name()) ? settings
+					.get(mTypes[i].name()).username : uninitialized;
+			v = createChild(context, mTypes[i], username, ID + i);
 			v.setBackgroundResource(R.drawable.setting_strip_middle_sel);
 			mContainer.addView(v);
 		}
-		username = settings.containsKey(types[types.length - 1].name()) ? settings
-				.get(types[types.length - 1].name()).username : uninitialized;
-		v = createChild(context, types[types.length - 1], username, ID
-				+ types.length - 1);
+		username = settings.containsKey(mTypes[mTypes.length - 1].name()) ? settings
+				.get(mTypes[mTypes.length - 1].name()).username : uninitialized;
+		v = createChild(context, mTypes[mTypes.length - 1], username, ID
+				+ mTypes.length - 1);
 		v.setBackgroundResource(R.drawable.setting_strip_bottom_sel);
 		mContainer.addView(v);
 	}

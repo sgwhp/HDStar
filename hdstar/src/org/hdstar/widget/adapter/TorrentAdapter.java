@@ -114,6 +114,8 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
 					bDrawable.getIntrinsicHeight());
 			holder.title.setCompoundDrawables(bDrawable, null, null, null);
+		} else {
+			holder.title.setCompoundDrawables(null, null, null, null);
 		}
 		bitmap = ImageLoader.getInstance().loadImageSync(
 				"assets://pic/torrent_class/" + t.secondClass + ".png",
@@ -123,6 +125,8 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
 					bDrawable.getIntrinsicHeight());
 			holder.subtitle.setCompoundDrawables(bDrawable, null, null, null);
+		} else {
+			holder.subtitle.setCompoundDrawables(null, null, null, null);
 		}
 		holder.subtitle.setText(t.subtitle);
 		return convertView;

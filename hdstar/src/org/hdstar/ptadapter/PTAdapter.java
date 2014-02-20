@@ -11,9 +11,12 @@ import android.graphics.Bitmap;
 public abstract class PTAdapter {
 	protected PTSiteType mType;
 	protected String cookie;
+	protected String torrentsUrl;// 种子页面地址
 
 	public PTAdapter(PTSiteType type) {
 		mType = type;
+		// 默认使用第一个
+		torrentsUrl = mType.getTorrentPages()[0].url;
 	}
 
 	public PTSiteType getType() {
@@ -26,6 +29,10 @@ public abstract class PTAdapter {
 
 	public void setCookie(String cookie) {
 		this.cookie = cookie;
+	}
+
+	public void setTorrentsUrl(String url) {
+		torrentsUrl = url;
 	}
 
 	/**

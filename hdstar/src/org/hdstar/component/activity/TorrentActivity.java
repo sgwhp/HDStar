@@ -16,6 +16,9 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 /**
  * 种子
  * 
@@ -42,7 +45,7 @@ public class TorrentActivity extends BaseStackActivity implements
 		hdsky.cookie = getSharedPreferences(Const.SETTING_SHARED_PREFS,
 				MODE_PRIVATE).getString("cookies", "");
 		settings.add(hdsky);
-		// 添加已初始化的站点
+		// 添加已保存设置的站点
 		PTSiteSettingManager.getAll(this, settings);
 
 		if (savedInstanceState == null) {
@@ -55,7 +58,7 @@ public class TorrentActivity extends BaseStackActivity implements
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		String[] pts = new String[settings.size()];
 		for (int i = settings.size() - 1; i >= 0; i--) {
-			pts[i] = settings.get(i).type;
+			pts[i] = settings.get(i).getSiteType().getName();
 		}
 		ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
 				getSupportActionBar().getThemedContext(),
@@ -72,12 +75,18 @@ public class TorrentActivity extends BaseStackActivity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		if (itemPosition != curTab) {
-			curTab = itemPosition;
-			stackAdapter.clear();
-			stackAdapter.forward(TorrentListFragment.newInstance(settings
-					.get(itemPosition)));
+		if (itemPosition == curTab) {
+			return true;
 		}
+		PTSiteSetting setting = settings.get(itemPosition);
+		// 未初始化
+		if (setting.cookie == null || "".equals(setting.cookie)) {
+			Crouton.makeText(this, R.string.unintialized, Style.CONFIRM);
+			return true;
+		}
+		curTab = itemPosition;
+		stackAdapter.clear();
+		stackAdapter.forward(TorrentListFragment.newInstance(setting));
 		return true;
 	}
 

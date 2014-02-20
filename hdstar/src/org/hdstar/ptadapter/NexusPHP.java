@@ -245,8 +245,7 @@ public class NexusPHP extends PTAdapter {
 	@Override
 	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
 			String keywords) {
-		String url = String.format(Locale.getDefault(),
-				CommonUrls.NEXUSPHP_TORRENTS, mType.getUrl(), page);
+		String url = String.format(Locale.getDefault(), torrentsUrl, page);
 		if (keywords != null && !keywords.equals("")) {
 			url += "&search=" + keywords;
 		}

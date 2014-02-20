@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">HDSky</string>
+	<string name="app_name">鉑爬蟲</string>
 	<string name="account">帳號</string>
 	<string name="password">密碼</string>
 	<string name="login">登錄</string>
@@ -164,4 +164,8 @@
 	<string name="connecting">通訊中…</string>
 	<string name="saved">保存成功</string>
 	<string name="unintialized">未初始化</string>
+	<string name="torrents">種子</string>
+	<string name="OpenCD">原抓</string>
+	<string name="music">音樂</string>
+	<string name="adult">成人</string>
 </resources>

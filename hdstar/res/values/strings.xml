@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HDSky</string>
+    <string name="app_name">铂爬虫</string>
     
     <string name="forums">论坛</string>
     <string name="torrent">种子</string>
@@ -183,5 +183,9 @@
 	<string name="connecting">通讯中…</string>
 	<string name="saved">保存成功</string>
 	<string name="unintialized">未初始化</string>
+	<string name="torrents">种子</string>
+	<string name="OpenCD">原抓</string>
+	<string name="music">音乐</string>
+	<string name="adult">成人</string>
 
 </resources>

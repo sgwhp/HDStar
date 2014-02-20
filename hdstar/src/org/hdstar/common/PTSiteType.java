@@ -1,25 +1,43 @@
 package org.hdstar.common;
 
+import org.hdstar.R;
+
 /**
  * 
  * PT站类型. <br/>
- * 日期: 2014年2月10日 上午10:18:39 <br/>
  * 
  * @author robust
  */
 public enum PTSiteType {
-	CHDBits("CHDBits", CommonUrls.PTSiteUrls.CHDBITS), CMCT("CMCT",
-			CommonUrls.PTSiteUrls.CMCT), HDSky("HDSky",
-			CommonUrls.HDStar.BASE_URL), MTeam("M-Team",
-			CommonUrls.PTSiteUrls.M_TEAM), OpenCD("OpenCD",
-			CommonUrls.PTSiteUrls.OPEN_CD);
+	// chd
+	CHDBits("CHDBits", CommonUrls.PTSiteUrls.CHDBITS, new TorrentPageUrl(
+			CommonUrls.PTSiteUrls.CHDBITS_TORRENTS_URL, R.string.torrents)),
+	// cmct
+	CMCT("CMCT", CommonUrls.PTSiteUrls.CMCT, new TorrentPageUrl(
+			CommonUrls.PTSiteUrls.CMCT_TORRENTS_URL, R.string.torrents)),
+	// hds
+	HDSky("HDSky", CommonUrls.HDStar.BASE_URL),
+	// mt
+	MTeam("M-Team", CommonUrls.PTSiteUrls.M_TEAM, new TorrentPageUrl[] {
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.M_TEAM_ADULT_URL,
+					R.string.adult),
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.M_TEAM_TORRENTS_URL,
+					R.string.torrents) }),
+	// opencd
+	OpenCD("OpenCD", CommonUrls.PTSiteUrls.OPEN_CD, new TorrentPageUrl[] {
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.OPEN_CD_TORRENTS_URL,
+					R.string.torrents),
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.OPEN_CD_MUSIC_URL,
+					R.string.music) });
 
 	private final String name;// 名称，仅用作显示，不能作为数据进行传输、序列化或持久化
 	private final String url;
+	private final TorrentPageUrl[] torrentPages;// 种子页面地址，默认打开第一个
 
-	PTSiteType(String name, String url) {
+	PTSiteType(String name, String url, TorrentPageUrl... pageUrls) {
 		this.name = name;
 		this.url = url;
+		this.torrentPages = pageUrls;
 	}
 
 	/**
@@ -35,6 +53,10 @@ public enum PTSiteType {
 
 	public String getUrl() {
 		return url;
+	}
+
+	public TorrentPageUrl[] getTorrentPages() {
+		return torrentPages;
 	}
 
 	/**
