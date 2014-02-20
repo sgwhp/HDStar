@@ -42,6 +42,7 @@ public class CommonUrls {
 				+ "?action=deletepost&postid=%d&sure=1";
 		public static final String DELETE_TOPIC_URL = FORUM_BASE_URL
 				+ "?action=deletetopic&topicid=%d&sure=1";
+		public static final String TORRENTS_URL = BASE_URL + "/torrents.php?page=%d";
 
 		/** 客户端服务器地址 */
 		// public static final String SERVER_ADDRESS =
@@ -156,6 +157,6 @@ public class CommonUrls {
 		public static final String OPEN_CD_TORRENTS_URL = OPEN_CD
 				+ "/torrents.php?boardid=2&page=%d";
 		public static final String OPEN_CD_MUSIC_URL = OPEN_CD
-				+ "torrents.php?boardid=1&page=%d";
+				+ "/torrents.php?boardid=1&page=%d";
 	}
 }

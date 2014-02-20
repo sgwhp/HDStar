@@ -44,7 +44,6 @@ import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
@@ -57,7 +56,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -127,6 +125,10 @@ public class RemoteActivity extends BaseActivity implements
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
 	private boolean login;// ÊÇ·ñÒÑµÇÂ¼
+	
+	public RemoteActivity(){
+		super(R.id.remove);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -146,15 +148,15 @@ public class RemoteActivity extends BaseActivity implements
 		inflater = LayoutInflater.from(this);
 		settings = RemoteSettingManager.getAll(this);
 		init();
-		Context context = getSupportActionBar().getThemedContext();
+//		Context context = getSupportActionBar().getThemedContext();
 		if (settings.size() > 0) {
 			String[] servers = new String[settings.size()];
 			for (int i = 0; i < settings.size(); i++) {
 				servers[i] = settings.get(i).name;
 			}
-			ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
-					context, R.layout.sherlock_spinner_item, servers);
-			list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+//			ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
+//					context, R.layout.sherlock_spinner_item, servers);
+//			list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
 			navigationSpinnerAdapter = new FilterListDropDownAdapter(this);
 			navigationSpinnerAdapter.updateServers(settings);
 			// Add status types directly to the action bar spinner

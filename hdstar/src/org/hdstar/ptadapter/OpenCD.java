@@ -78,7 +78,9 @@ public class OpenCD extends NexusPHP {
 						for (int j = 2; j < classes.size(); j++) {
 							subtitle.append(classes.get(j).text()).append("|");
 						}
-						subtitle.deleteCharAt(subtitle.length() - 1);
+						if(subtitle.length() > 1){
+							subtitle.deleteCharAt(subtitle.length() - 1);
+						}
 						t.subtitle = subtitle.toString();
 						// sticky
 						classes = titles.getElementsByTag("img");

@@ -1,6 +1,7 @@
 package org.hdstar.model;
 
 import org.hdstar.common.PTSiteType;
+import org.hdstar.widget.navigation.SimpleListItem;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,16 +9,17 @@ import android.os.Parcelable;
 /**
  * 
  * PT站点设置. <br/>
- * 日期: 2014年2月10日 上午10:37:14 <br/>
  * 
  * @author robust
  */
-public class PTSiteSetting implements Parcelable {
+public class PTSiteSetting implements Parcelable, SimpleListItem {
 	public int order;
 	public String type;
 	public String username;
 	public String password;
 	public String cookie;
+	public String torrentUrl;// 当前使用的种子页面地址，无需持久化
+	public String torrentPageName;//页面名称，无需持久化
 	private PTSiteType siteType;
 
 	public PTSiteSetting() {
@@ -29,6 +31,8 @@ public class PTSiteSetting implements Parcelable {
 		username = in.readString();
 		password = in.readString();
 		cookie = in.readString();
+		torrentUrl = in.readString();
+		torrentPageName = in.readString();
 	}
 
 	@Override
@@ -43,6 +47,8 @@ public class PTSiteSetting implements Parcelable {
 		dest.writeString(username);
 		dest.writeString(password);
 		dest.writeString(cookie);
+		dest.writeString(torrentUrl);
+		dest.writeString(torrentPageName);
 	}
 
 	public PTSiteType getSiteType() {
@@ -50,6 +56,25 @@ public class PTSiteSetting implements Parcelable {
 			siteType = PTSiteType.getByName(type);
 		}
 		return siteType;
+	}
+
+	/**
+	 * 复制除了torrentUrl以外的所有属性
+	 * 
+	 * @param torrentUrl
+	 *            torrentUrl的新值
+	 * @return
+	 */
+	public PTSiteSetting copy(String torrentUrl, String torrentPageName) {
+		PTSiteSetting setting = new PTSiteSetting();
+		setting.order = order;
+		setting.type = type;
+		setting.username = username;
+		setting.password = password;
+		setting.cookie = cookie;
+		setting.torrentUrl = torrentUrl;
+		setting.torrentPageName = torrentPageName;
+		return setting;
 	}
 
 	public static final Parcelable.Creator<PTSiteSetting> CREATOR = new Parcelable.Creator<PTSiteSetting>() {
@@ -64,5 +89,13 @@ public class PTSiteSetting implements Parcelable {
 			return new PTSiteSetting[size];
 		}
 	};
+
+	@Override
+	public String getName() {
+		if(torrentPageName == null){
+			return getSiteType().getName();
+		}
+		return torrentPageName;
+	}
 
 }

@@ -40,6 +40,10 @@ public class FilterListItemView extends FrameLayout {
 	public void bind(SimpleListItem filterItem) {
 		itemText.setText(filterItem.getName());
 	}
+	
+	public void bind(CharSequence name){
+		itemText.setText(name);
+	}
 
 	/**
 	 * The mAlreadyInflated_ hack is needed because of an Android bug which

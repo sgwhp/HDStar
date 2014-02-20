@@ -30,6 +30,7 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	{
 		// 初始化所有站点，排除掉HDSky
 		PTSiteType[] types = PTSiteType.values();
+		mTypes = new PTSiteType[types.length - 1];
 		for (int i = 0, j = 0; i < types.length; i++) {
 			if (types[i] != PTSiteType.HDSky) {
 				mTypes[j++] = types[i];

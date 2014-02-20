@@ -64,6 +64,7 @@ public class TorrentListFragment extends StackFragment {
 		setting = getArguments().getParcelable("setting");
 		ptAdapter = PTFactory.newInstanceByName(setting.type);
 		ptAdapter.setCookie(setting.cookie);
+		ptAdapter.setTorrentsUrl(setting.torrentUrl);
 	}
 
 	@Override
