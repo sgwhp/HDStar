@@ -208,6 +208,8 @@ public class PullToRefreshAttacher {
 	 *            - Whether the attacher should be in a refreshing state,
 	 */
 	final void setRefreshing(boolean refreshing) {
+		// 重置，避免currentMode对代码刷新的显示方式造成干扰
+		reset(false);
 		setRefreshingInt(null, refreshing, false);
 	}
 
@@ -668,11 +670,11 @@ public class PullToRefreshAttacher {
 			}
 		}
 
-		// Call Transformer
-		mHeaderTransformer.onRefreshStarted();
-
 		// Show Header View
 		showHeaderView();
+
+		// Call Transformer
+		mHeaderTransformer.onRefreshStarted();
 
 		// Post a runnable to minimize the refresh header
 		if (mRefreshMinimize) {

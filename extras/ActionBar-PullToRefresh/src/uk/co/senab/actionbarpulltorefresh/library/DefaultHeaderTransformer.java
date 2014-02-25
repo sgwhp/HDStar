@@ -41,7 +41,6 @@ import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
-import fr.castorflex.android.smoothprogressbar.SmoothProgressDrawable;
 
 /**
  * Default Header Transformer.
@@ -420,19 +419,19 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 
 	private void applyProgressBarSettings() {
 		if (mHeaderProgressBar != null) {
-			final int strokeWidth = mHeaderProgressBar.getResources()
-					.getDimensionPixelSize(
-							R.dimen.ptr_progress_bar_stroke_width);
-			int separatorLength = mHeaderProgressBar.getResources()
-					.getDimensionPixelSize(
-							R.dimen.ptr_progress_bar_big_separator_length);
-
-			mHeaderProgressBar
-					.setIndeterminateDrawable(new SmoothProgressDrawable.Builder(
-							mHeaderProgressBar.getContext())
-							.color(mProgressDrawableColor)
-							.strokeWidth(strokeWidth)
-							.separatorLength(separatorLength).build());
+			// final int strokeWidth = mHeaderProgressBar.getResources()
+			// .getDimensionPixelSize(
+			// R.dimen.ptr_progress_bar_stroke_width);
+			// int separatorLength = mHeaderProgressBar.getResources()
+			// .getDimensionPixelSize(
+			// R.dimen.ptr_progress_bar_big_separator_length);
+			//
+			// mHeaderProgressBar
+			// .setIndeterminateDrawable(new SmoothProgressDrawable.Builder(
+			// mHeaderProgressBar.getContext())
+			// .color(mProgressDrawableColor)
+			// .strokeWidth(strokeWidth)
+			// .separatorLength(separatorLength).build());
 
 			ShapeDrawable shape = new ShapeDrawable();
 			shape.setShape(new RectShape());
