@@ -18,6 +18,9 @@ public enum PTSiteType {
 	// hds
 	HDSky("HDSky", CommonUrls.HDStar.BASE_URL, new TorrentPageUrl(
 			CommonUrls.HDStar.TORRENTS_URL, R.string.torrents)),
+	// hdw
+	HDWing("HDWing", CommonUrls.PTSiteUrls.HDW, new TorrentPageUrl(
+			CommonUrls.PTSiteUrls.HDW_TORRENTS_URL, R.string.torrents)),
 	// mt
 	MTeam("M-Team", CommonUrls.PTSiteUrls.MT, new TorrentPageUrl[] {
 			new TorrentPageUrl(CommonUrls.PTSiteUrls.MT_ADULT_URL,

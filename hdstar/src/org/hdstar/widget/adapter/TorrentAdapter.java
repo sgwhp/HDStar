@@ -105,30 +105,36 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		}
 		holder.freeType.setText(Const.FreeType.getFreeTag(t.freeType));
 		holder.title.setText(t.title);
-		Bitmap bitmap = ImageLoader.getInstance().loadImageSync(
-				"assets://pic/torrent_class/" + t.firstClass + ".png",
-				HDStarApp.displayOptions);
+		Bitmap bitmap;
 		BitmapDrawable bDrawable;
-		if (bitmap != null) {
-			bitmap.setDensity(160);
-			bDrawable = new BitmapDrawable(res, bitmap);
-			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
-					bDrawable.getIntrinsicHeight());
-			holder.title.setCompoundDrawables(bDrawable, null, null, null);
-		} else {
-			holder.title.setCompoundDrawables(null, null, null, null);
+		if (t.firstClass != null) {
+			bitmap = ImageLoader.getInstance().loadImageSync(
+					"assets://pic/torrent_class/" + t.firstClass + ".png",
+					HDStarApp.displayOptions);
+			if (bitmap != null) {
+				bitmap.setDensity(160);
+				bDrawable = new BitmapDrawable(res, bitmap);
+				bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
+						bDrawable.getIntrinsicHeight());
+				holder.title.setCompoundDrawables(bDrawable, null, null, null);
+			} else {
+				holder.title.setCompoundDrawables(null, null, null, null);
+			}
 		}
-		bitmap = ImageLoader.getInstance().loadImageSync(
-				"assets://pic/torrent_class/" + t.secondClass + ".png",
-				HDStarApp.displayOptions);
-		if (bitmap != null) {
-			bitmap.setDensity(160);
-			bDrawable = new BitmapDrawable(res, bitmap);
-			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
-					bDrawable.getIntrinsicHeight());
-			holder.subtitle.setCompoundDrawables(bDrawable, null, null, null);
-		} else {
-			holder.subtitle.setCompoundDrawables(null, null, null, null);
+		if (t.secondClass != null) {
+			bitmap = ImageLoader.getInstance().loadImageSync(
+					"assets://pic/torrent_class/" + t.secondClass + ".png",
+					HDStarApp.displayOptions);
+			if (bitmap != null) {
+				bitmap.setDensity(160);
+				bDrawable = new BitmapDrawable(res, bitmap);
+				bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
+						bDrawable.getIntrinsicHeight());
+				holder.subtitle.setCompoundDrawables(bDrawable, null, null,
+						null);
+			} else {
+				holder.subtitle.setCompoundDrawables(null, null, null, null);
+			}
 		}
 		holder.subtitle.setText(t.subtitle);
 		return convertView;

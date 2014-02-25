@@ -47,7 +47,7 @@ public class OpenCD extends NexusPHP {
 
 	@Override
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
-		t.firstClass = tClassCol.child(0).attr("style");
+		t.firstClass = tClassCol.attr("style");
 		t.firstClass = "opencd"
 				+ t.firstClass.substring(t.firstClass.lastIndexOf("/"),
 						t.firstClass.indexOf("."));

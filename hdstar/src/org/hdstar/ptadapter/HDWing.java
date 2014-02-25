@@ -33,8 +33,8 @@ import ch.boye.httpclientandroidlib.util.EntityUtils;
 
 public class HDWing extends PTAdapter {
 
-	public HDWing(PTSiteType type) {
-		super(type);
+	public HDWing() {
+		super(PTSiteType.HDWing);
 	}
 
 	@Override
@@ -147,8 +147,8 @@ public class HDWing extends PTAdapter {
 		Elements classes = tClassCol.getElementsByTag("img");
 		if (classes.size() > 0) {
 			t.firstClass = classes.get(0).attr("src");
-			t.firstClass = "hdw/"
-					+ t.firstClass.substring(0, t.firstClass.indexOf("."));
+			t.firstClass = "hdw"
+					+ t.firstClass.substring(t.firstClass.lastIndexOf("/"), t.firstClass.indexOf("."));
 		}
 	}
 
@@ -211,7 +211,7 @@ public class HDWing extends PTAdapter {
 						// child(0) «<b>±Í«©
 						t.title = url.child(0).text();
 						// titles
-						urlStr = url.attr("href");
+						urlStr = imgs.get(0).attr("href");
 						Matcher matcher = pattern.matcher(urlStr);
 						if (matcher.find()) {
 							t.id = Integer.parseInt(matcher.group(1));
