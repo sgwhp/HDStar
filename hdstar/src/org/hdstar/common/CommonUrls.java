@@ -42,7 +42,8 @@ public class CommonUrls {
 				+ "?action=deletepost&postid=%d&sure=1";
 		public static final String DELETE_TOPIC_URL = FORUM_BASE_URL
 				+ "?action=deletetopic&topicid=%d&sure=1";
-		public static final String TORRENTS_URL = BASE_URL + "/torrents.php?page=%d";
+		public static final String TORRENTS_URL = BASE_URL
+				+ "/torrents.php?page=%d";
 
 		/** 客户端服务器地址 */
 		// public static final String SERVER_ADDRESS =
@@ -95,7 +96,7 @@ public class CommonUrls {
 				+ "/plugins/httprpc/action.php";
 		public static final String RUTORRENT_RSS_ACTION_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/rss/action.php";
-		// 刷新rss标签地址
+		/** 刷新rss标签地址 */
 		public static final String RUTORRENT_RSS_REFRESH_URL = RUTORRENT_RSS_ACTION_URL
 				+ "?mode=refresh&rss=%s";
 		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
@@ -132,23 +133,44 @@ public class CommonUrls {
 	public static final String NEXUSPHP_TORRENTS = "%s/torrents.php?page=%d";
 
 	public static class PTSiteUrls {
-		public static final String CHDBITS = "http://chdbits.org";
-		public static final String CHDBITS_RSS_DOWNLOAD_URL = CHDBITS
+		// chd
+		public static final String CHD = "http://chdbits.org";
+		public static final String CHD_RSS_DOWNLOAD_URL = CHD
 				+ "/myrss.php?ajax=1&torrentid=%s";
-		public static final String CHDBITS_TORRENTS_URL = CHDBITS
+		public static final String CHD_TORRENTS_URL = CHD
 				+ "/torrents.php?page=%d";
 
+		// cmct
 		public static final String CMCT = "http://hdcmct.org";
 		public static final String CMCT_RSS_DOWNLOAD_URL = CMCT
 				+ "/subscribe.php?ajax=1&torrentid=%s";
 		public static final String CMCT_TORRENTS_URL = CMCT
 				+ "/torrents.php?page=%d";
 
-		public static final String M_TEAM = "https://tp.m-team.cc";
-		public static final String M_TEAM_TORRENTS_URL = M_TEAM
+		// hdw
+		public static final String HDW = "http://hdwing.com";
+		public static final String HDW_HOME_PAGE = HDW + "/index.php";
+		public static final String HDW_TORRENTS_URL = HDW
+				+ "/browse.php?page=%d";
+		// Rnd是时间，单位毫秒
+		public static final String HDW_RSS_DOWNLOAD_URL = HDW
+				+ "/_ajax_addtobasket.php?Rnd=%d";
+		public static final String HDW_LOGIN = HDW + "/login.php";
+		public static final String HDW_TAKE_LOGIN = HDW + "/takelogin.php";
+		public static final String HDW_LOGOUT = HDW + "/logout.php";
+		// tm 随机数，刷新时使用
+		// public static final String HDW_GET_SECURITY_IMG =
+		// "/validatecode.php?tm=%d";
+		public static final String HDW_GET_SECURITY_IMG = "/validatecode.php";
+		public static final String HDW_BOOKMARK = "/bookmark.php?torrent=?%d";
+		// post，参数delbookmark，种子id数组
+		public static final String HDW_DEL_BOOKMARK = "/takedelbookmarks.php";
+
+		// mt
+		public static final String MT = "https://tp.m-team.cc";
+		public static final String MT_TORRENTS_URL = MT
 				+ "/torrents.php?page=%d";
-		public static final String M_TEAM_ADULT_URL = M_TEAM
-				+ "/adult.php?page=%d";
+		public static final String MT_ADULT_URL = MT + "/adult.php?page=%d";
 
 		// OpenCD的登录页面只能是https，所以统一使用https
 		public static final String OPEN_CD = "https://open.cd";
@@ -158,5 +180,6 @@ public class CommonUrls {
 				+ "/torrents.php?boardid=2&page=%d";
 		public static final String OPEN_CD_MUSIC_URL = OPEN_CD
 				+ "/torrents.php?boardid=1&page=%d";
+
 	}
 }

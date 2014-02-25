@@ -3,21 +3,20 @@ package org.hdstar.component.activity;
 import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 
-import com.slidingmenu.lib.SlidingMenu;
-
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.CancelableHeaderTransformer.OnCancelListener;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.Options;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.slidingmenu.lib.SlidingMenu;
 
 /**
  * 帮助
@@ -55,8 +54,8 @@ public class HelpActivity extends BaseActivity {
 
 					@Override
 					public void onRefreshStarted(View view) {
-						//避免onPageStarted调用刷新时重复加载
-						if(!loading){
+						// 避免onPageStarted调用刷新时重复加载
+						if (!loading) {
 							aboutPage.reload();
 						}
 					}
@@ -71,7 +70,7 @@ public class HelpActivity extends BaseActivity {
 			}
 		});
 		aboutPage.setWebViewClient(new WebViewClient() {
-			
+
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				// 在当前的webview中跳转到新的url，防止弹出浏览器选择
@@ -79,7 +78,7 @@ public class HelpActivity extends BaseActivity {
 
 				return true;
 			}
-			
+
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
@@ -102,5 +101,16 @@ public class HelpActivity extends BaseActivity {
 				aboutPage.loadUrl(CommonUrls.HDStar.SERVER_ABOUT_URL);
 			}
 		});
+	}
+
+	@Override
+	public void onBackPressed() {
+		// 返回
+		if (aboutPage.canGoBack()) {
+			aboutPage.goBack();
+			return;
+		}
+		super.onBackPressed();
+		return;
 	}
 }

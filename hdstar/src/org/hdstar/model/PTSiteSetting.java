@@ -18,8 +18,10 @@ public class PTSiteSetting implements Parcelable, SimpleListItem {
 	public String username;
 	public String password;
 	public String cookie;
-	public String torrentUrl;// 当前使用的种子页面地址，无需持久化
-	public String torrentPageName;//页面名称，无需持久化
+	/** 当前使用的种子页面地址，无需持久化 */
+	public String torrentUrl;
+	/** 页面名称，无需持久化 */
+	public String torrentPageName;
 	private PTSiteType siteType;
 
 	public PTSiteSetting() {
@@ -92,7 +94,7 @@ public class PTSiteSetting implements Parcelable, SimpleListItem {
 
 	@Override
 	public String getName() {
-		if(torrentPageName == null){
+		if (torrentPageName == null) {
 			return getSiteType().getName();
 		}
 		return torrentPageName;

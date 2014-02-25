@@ -57,11 +57,53 @@ public class Const {
 	 */
 	public static final class FreeType {
 		public static final String FREE = "pro_free";
+		public static final String HDW_FREE = "/pic/ico_free.gif";
 		public static final String _2X_FREE = "pro_free2up";
 		public static final String _2X_50_PTC = "pro_50pctdown2up";
 		public static final String _2X = "pro_2up";
 		public static final String _50_PTC = "pro_50pctdown";
+		public static final String HDW_50_PTC = "/pic/ico_half.gif";
 		public static final String _30_PTC = "pro_30pctdown";
+		public static final String HDW_30_PTC = "/pic/ico_third.gif";
+
+		public static final HashMap<String, SpannableString> FREE_TYPE_MAP = new HashMap<String, SpannableString>();
+		static {
+			SpannableString ss;
+			ss = new SpannableString(" Free ");
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 52, 206)), 0, 6,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			FREE_TYPE_MAP.put(FREE, ss);
+			FREE_TYPE_MAP.put(HDW_FREE, ss);
+
+			ss = new SpannableString("2xFree");
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(15, 164, 100)), 0, 6,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			FREE_TYPE_MAP.put(_2X_FREE, ss);
+
+			ss = new SpannableString(" 2x50%");
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 3,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 3, 6,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			FREE_TYPE_MAP.put(_2X_50_PTC, ss);
+
+			ss = new SpannableString("  2x  ");
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 6,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			FREE_TYPE_MAP.put(_2X, ss);
+
+			ss = new SpannableString(" 50%  ");
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 0, 6,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			FREE_TYPE_MAP.put(_50_PTC, ss);
+			FREE_TYPE_MAP.put(HDW_50_PTC, ss);
+
+			ss = new SpannableString(" 30%  ");
+			ss.setSpan(new BackgroundColorSpan(Color.rgb(65, 23, 73)), 0, 6,
+					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			FREE_TYPE_MAP.put(_30_PTC, ss);
+			FREE_TYPE_MAP.put(HDW_30_PTC, ss);
+		}
 
 		/**
 		 * 为保持种子列表整齐，尽量限制返回的字符串长度为6
@@ -71,45 +113,10 @@ public class Const {
 		 */
 		public static SpannableString getFreeTag(String freeType) {
 			SpannableString ss;
-			if (FREE.equals(freeType)) {
-				ss = new SpannableString(" Free ");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 52, 206)), 0,
-						6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				return ss;
+			if ((ss = FREE_TYPE_MAP.get(freeType)) == null) {
+				ss = new SpannableString("");
 			}
-			if (_2X_FREE.equals(freeType)) {
-				ss = new SpannableString("2xFree");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(15, 164, 100)), 0,
-						6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				return ss;
-			}
-			if ((_2X_50_PTC.equals(freeType))) {
-				ss = new SpannableString(" 2x50%");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 3,
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 3, 6,
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				return ss;
-			}
-			if (_2X.equals(freeType)) {
-				ss = new SpannableString("  2x  ");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(0, 153, 0)), 0, 6,
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				return ss;
-			}
-			if (_50_PTC.equals(freeType)) {
-				ss = new SpannableString(" 50%  ");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(220, 0, 3)), 0, 6,
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				return ss;
-			}
-			if (_30_PTC.equals(freeType)) {
-				ss = new SpannableString(" 30%  ");
-				ss.setSpan(new BackgroundColorSpan(Color.rgb(65, 23, 73)), 0,
-						6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				return ss;
-			}
-			return new SpannableString("");
+			return ss;
 		}
 	}
 

@@ -6,6 +6,7 @@ import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.DefaultGetParser;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 
@@ -13,6 +14,17 @@ public class CMCT extends NexusPHP {
 
 	public CMCT() {
 		super(PTSiteType.CMCT);
+	}
+
+	@Override
+	protected void parseTorrentClass(Element tClassCol, Torrent t) {
+		Elements classes = tClassCol.child(0).getElementsByTag("img");
+		if (classes.size() > 0) {
+			t.firstClass = classes.get(0).attr("style");
+			t.firstClass = "cmct"
+					+ t.firstClass.substring(t.firstClass.lastIndexOf("/"),
+							t.firstClass.indexOf("."));
+		}
 	}
 
 	@Override

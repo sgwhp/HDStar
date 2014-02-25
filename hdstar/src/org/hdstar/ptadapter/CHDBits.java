@@ -23,7 +23,7 @@ public class CHDBits extends NexusPHP {
 	@Override
 	public BaseAsyncTask<Boolean> addToRss(String torrentId) {
 		HttpGet get = new HttpGet(String.format(
-				CommonUrls.PTSiteUrls.CHDBITS_RSS_DOWNLOAD_URL, torrentId));
+				CommonUrls.PTSiteUrls.CHD_RSS_DOWNLOAD_URL, torrentId));
 		BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie, get,
 				new DefaultGetParser());
 		return task;

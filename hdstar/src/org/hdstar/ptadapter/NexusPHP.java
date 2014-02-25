@@ -172,16 +172,6 @@ public class NexusPHP extends PTAdapter {
 						t = new Torrent();
 						torrentCols = eTorrents.get(i).children();
 						parseTorrentClass(torrentCols.get(0), t);
-						// classes = torrentCols.get(0).getElementsByTag("img");
-						// if (classes.size() > 0) {
-						// t.firstClass = classes.get(0).attr("class");
-						// }
-						// if (classes.size() > 1) {
-						// t.secondClass = classes.get(1).attr("class");
-						// }
-						// if ("".equals(t.secondClass)) {
-						// t.secondClass = "si_notallowed";
-						// }
 						// freetype sticky
 						titles = torrentCols.get(1).child(0).child(0).child(0)
 								.child(0);

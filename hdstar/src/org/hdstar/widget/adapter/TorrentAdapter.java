@@ -110,6 +110,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 				HDStarApp.displayOptions);
 		BitmapDrawable bDrawable;
 		if (bitmap != null) {
+			bitmap.setDensity(160);
 			bDrawable = new BitmapDrawable(res, bitmap);
 			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
 					bDrawable.getIntrinsicHeight());
@@ -121,6 +122,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 				"assets://pic/torrent_class/" + t.secondClass + ".png",
 				HDStarApp.displayOptions);
 		if (bitmap != null) {
+			bitmap.setDensity(160);
 			bDrawable = new BitmapDrawable(res, bitmap);
 			bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
 					bDrawable.getIntrinsicHeight());

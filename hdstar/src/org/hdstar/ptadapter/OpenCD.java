@@ -46,6 +46,14 @@ public class OpenCD extends NexusPHP {
 	}
 
 	@Override
+	protected void parseTorrentClass(Element tClassCol, Torrent t) {
+		t.firstClass = tClassCol.child(0).attr("style");
+		t.firstClass = "opencd"
+				+ t.firstClass.substring(t.firstClass.lastIndexOf("/"),
+						t.firstClass.indexOf("."));
+	}
+
+	@Override
 	protected ResponseParser<ArrayList<Torrent>> getTorrentParser() {
 		return new ResponseParser<ArrayList<Torrent>>() {
 
@@ -78,7 +86,7 @@ public class OpenCD extends NexusPHP {
 						for (int j = 2; j < classes.size(); j++) {
 							subtitle.append(classes.get(j).text()).append("|");
 						}
-						if(subtitle.length() > 1){
+						if (subtitle.length() > 1) {
 							subtitle.deleteCharAt(subtitle.length() - 1);
 						}
 						t.subtitle = subtitle.toString();

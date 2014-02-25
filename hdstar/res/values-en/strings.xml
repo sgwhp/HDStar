@@ -2,6 +2,16 @@
 <resources>
 
 	<string name="app_name">Platinum Crawler</string>
+	
+	<string name="forums">Forums</string>
+    <string name="torrent">Torrents</string>
+    <string name="remote">Remote</string>
+    <string name="misc">Misc</string>
+    <string name="message">Message</string>
+    <string name="setting">Setting</string>
+    <string name="help">Help</string>
+    <string name="exit">Exit</string>
+	
 	<string name="account">account</string>
 	<string name="password">password</string>
 	<string name="login">Login</string>

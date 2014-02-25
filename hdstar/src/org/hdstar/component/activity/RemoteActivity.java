@@ -91,12 +91,15 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class RemoteActivity extends BaseActivity implements
 		OnNavigationListener, OnClickListener {
-	protected FilterListDropDownAdapter navigationSpinnerAdapter = null;// 下拉导航
+	/** 下拉导航 */
+	protected FilterListDropDownAdapter navigationSpinnerAdapter = null;
 	// private int skipNextOnNavigationItemSelectedCalls = 2;
-	protected NavigationFilter currentFilter = null;// 当前过滤模式
+	/** 当前过滤模式 */
+	protected NavigationFilter currentFilter = null;
 	private PullToRefreshLayout mPullToRefreshLayout;
 	private View root;
-	private View empty;// 占位，防止操作按钮窗口遮挡任务列表，无特殊意义
+	/** 占位，防止操作按钮窗口遮挡任务列表，无特殊意义 */
+	private View empty;
 	private View start, pause, stop, delete;
 	private ListView listView;
 	private ExpandableListView rssListView;
@@ -106,10 +109,13 @@ public class RemoteActivity extends BaseActivity implements
 	private ArrayList<RemoteTaskInfo> filterList = new ArrayList<RemoteTaskInfo>();
 	private boolean[] selected;
 	private RssItem selectedRssItem;
-	private int selectedCount;// 选中的下载任务数
+	/** 选中的下载任务数 */
+	private int selectedCount;
 	private PopupWindow window = null;
-	private PopupWindow addTorrentWindow;// 下载确认窗口
-	private EditText dirEt;// 下载目录
+	/** 下载确认窗口 */
+	private PopupWindow addTorrentWindow;
+	/** 下载目录 */
+	private EditText dirEt;
 	private LinearLayout ctrlBox;
 	private CustomDialog dialog = null;
 	private BaseAsyncTask<?> mTask;
@@ -124,10 +130,11 @@ public class RemoteActivity extends BaseActivity implements
 	private ArrayList<RssSetting> rssSettings;
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
-	private boolean login;// 是否已登录
-	
-	public RemoteActivity(){
-		super(R.id.remove);
+	/** 是否已登录 */
+	private boolean login;
+
+	public RemoteActivity() {
+		super(R.string.remote);
 	}
 
 	@Override
@@ -148,15 +155,15 @@ public class RemoteActivity extends BaseActivity implements
 		inflater = LayoutInflater.from(this);
 		settings = RemoteSettingManager.getAll(this);
 		init();
-//		Context context = getSupportActionBar().getThemedContext();
+		// Context context = getSupportActionBar().getThemedContext();
 		if (settings.size() > 0) {
 			String[] servers = new String[settings.size()];
 			for (int i = 0; i < settings.size(); i++) {
 				servers[i] = settings.get(i).name;
 			}
-//			ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
-//					context, R.layout.sherlock_spinner_item, servers);
-//			list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+			// ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
+			// context, R.layout.sherlock_spinner_item, servers);
+			// list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
 			navigationSpinnerAdapter = new FilterListDropDownAdapter(this);
 			navigationSpinnerAdapter.updateServers(settings);
 			// Add status types directly to the action bar spinner

@@ -10,15 +10,16 @@ public class Post implements Serializable {
 	public int id;
 	public String userName = "";
 	public int uid;
-	// 头像链接地址
+	/** 头像链接地址 */
 	public String avatarSrc = "";
-	// 等级图片链接地址
+	/** 等级图片链接地址 */
 	public String userClassSrc = "";
-	// 上传量、下载量等信息
+	/** 上传量、下载量等信息 */
 	public String info = "";
 	public String body = "";
 	public boolean delete;
 	public boolean edit;
 	public boolean quote;
-	public String floor = "";// 楼层
+	/** 楼层 */
+	public String floor = "";
 }

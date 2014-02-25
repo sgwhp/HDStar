@@ -24,6 +24,7 @@ public class Torrent implements Serializable {
 	public String leechers;
 	public String snatched;
 	public String uploader;
-	public boolean rss;//是否已添加到下载框，可能有多种状态，但只有在再点击一次就能转到普通状态的情况下，该值才为真
+	/** 是否已添加到下载框，可能有多种状态，但只有在再点击一次就能转到普通状态的情况下，该值才为真 */
+	public boolean rss;
 
 }

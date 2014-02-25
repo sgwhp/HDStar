@@ -10,8 +10,8 @@ import org.hdstar.R;
  */
 public enum PTSiteType {
 	// chd
-	CHDBits("CHDBits", CommonUrls.PTSiteUrls.CHDBITS, new TorrentPageUrl(
-			CommonUrls.PTSiteUrls.CHDBITS_TORRENTS_URL, R.string.torrents)),
+	CHDBits("CHDBits", CommonUrls.PTSiteUrls.CHD, new TorrentPageUrl(
+			CommonUrls.PTSiteUrls.CHD_TORRENTS_URL, R.string.torrents)),
 	// cmct
 	CMCT("CMCT", CommonUrls.PTSiteUrls.CMCT, new TorrentPageUrl(
 			CommonUrls.PTSiteUrls.CMCT_TORRENTS_URL, R.string.torrents)),
@@ -19,10 +19,10 @@ public enum PTSiteType {
 	HDSky("HDSky", CommonUrls.HDStar.BASE_URL, new TorrentPageUrl(
 			CommonUrls.HDStar.TORRENTS_URL, R.string.torrents)),
 	// mt
-	MTeam("M-Team", CommonUrls.PTSiteUrls.M_TEAM, new TorrentPageUrl[] {
-			new TorrentPageUrl(CommonUrls.PTSiteUrls.M_TEAM_ADULT_URL,
+	MTeam("M-Team", CommonUrls.PTSiteUrls.MT, new TorrentPageUrl[] {
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.MT_ADULT_URL,
 					R.string.adult),
-			new TorrentPageUrl(CommonUrls.PTSiteUrls.M_TEAM_TORRENTS_URL,
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.MT_TORRENTS_URL,
 					R.string.torrents) }),
 	// opencd
 	OpenCD("OpenCD", CommonUrls.PTSiteUrls.OPEN_CD, new TorrentPageUrl[] {

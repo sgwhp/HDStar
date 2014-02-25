@@ -61,6 +61,7 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 
 	@Override
 	public void onSelected() {
+		mContainer.removeAllViews();
 		init();
 	}
 
