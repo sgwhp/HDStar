@@ -148,7 +148,8 @@ public class HDWing extends PTAdapter {
 		if (classes.size() > 0) {
 			t.firstClass = classes.get(0).attr("src");
 			t.firstClass = "hdw"
-					+ t.firstClass.substring(t.firstClass.lastIndexOf("/"), t.firstClass.indexOf("."));
+					+ t.firstClass.substring(t.firstClass.lastIndexOf("/"),
+							t.firstClass.indexOf("."));
 		}
 	}
 
@@ -202,8 +203,9 @@ public class HDWing extends PTAdapter {
 						if (titles.child(0).attr("class").contains("sticky")) {
 							t.sticky = true;
 						}
-						url = titles.child(0).child(0).child(0).child(1);
-						imgs = url.getElementsByTag("a");
+						url = titles.child(0).child(0).child(0).child(1)
+								.child(0);
+						imgs = url.getElementsByTag("img");
 						if (imgs.size() > 0) {
 							t.freeType = imgs.get(imgs.size() - 1).attr("src");
 						}
@@ -211,7 +213,7 @@ public class HDWing extends PTAdapter {
 						// child(0) «<b>±Í«©
 						t.title = url.child(0).text();
 						// titles
-						urlStr = imgs.get(0).attr("href");
+						urlStr = url.attr("href");
 						Matcher matcher = pattern.matcher(urlStr);
 						if (matcher.find()) {
 							t.id = Integer.parseInt(matcher.group(1));
@@ -222,17 +224,17 @@ public class HDWing extends PTAdapter {
 						// comments
 						t.comments = torrentCols.get(2).text();
 						// time
-						t.time = torrentCols.get(3).text();
+						t.time = torrentCols.get(4).text();
 						// size
-						t.size = torrentCols.get(4).text();
-						// seeders
-						t.seeders = torrentCols.get(5).text();
-						// leachers
-						t.leechers = torrentCols.get(6).text();
+						t.size = torrentCols.get(5).text();
 						// snatched
-						t.snatched = torrentCols.get(7).text();
+						t.snatched = torrentCols.get(6).text();
+						// seeders
+						t.seeders = torrentCols.get(7).text();
+						// leachers
+						t.leechers = torrentCols.get(8).text();
 						// uploader
-						t.uploader = torrentCols.get(8).text();
+						t.uploader = torrentCols.get(9).text();
 						torrents.add(t);
 					}
 					msgId = ResponseParser.SUCCESS_MSG_ID;

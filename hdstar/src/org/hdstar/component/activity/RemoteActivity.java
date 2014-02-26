@@ -267,6 +267,9 @@ public class RemoteActivity extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.label:
+			label();
+			break;
 		case R.id.start:
 			start();
 			break;
@@ -462,6 +465,7 @@ public class RemoteActivity extends BaseActivity implements
 		// 初始化下载任务控制弹出窗口
 		ctrlBox = (LinearLayout) inflater.inflate(
 				R.layout.remote_task_ctrl_layout, null);
+		ctrlBox.findViewById(R.id.label).setOnClickListener(this);
 		start = ctrlBox.findViewById(R.id.start);
 		start.setOnClickListener(this);
 		pause = ctrlBox.findViewById(R.id.pause);
@@ -540,6 +544,18 @@ public class RemoteActivity extends BaseActivity implements
 		return hashes;
 	}
 
+	/**
+	 * 
+	 * 打标签. <br/>
+	 */
+	private void label() {
+		// TODO label
+	}
+
+	/**
+	 * 
+	 * 开始任务. <br/>
+	 */
 	private void start() {
 		if (selectedCount == 0) {
 			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
@@ -564,6 +580,10 @@ public class RemoteActivity extends BaseActivity implements
 		dialog.show();
 	}
 
+	/**
+	 * 
+	 * 暂停任务. <br/>
+	 */
 	private void pause() {
 		if (selectedCount == 0) {
 			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
@@ -588,6 +608,10 @@ public class RemoteActivity extends BaseActivity implements
 		dialog.show();
 	}
 
+	/**
+	 * 
+	 * 停止任务. <br/>
+	 */
 	private void stop() {
 		if (selectedCount == 0) {
 			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
@@ -612,6 +636,10 @@ public class RemoteActivity extends BaseActivity implements
 		dialog.show();
 	}
 
+	/**
+	 * 
+	 * 删除任务. <br/>
+	 */
 	private void delete() {
 		if (selectedCount == 0) {
 			Crouton.makeText(this, R.string.no_task_selected, Style.CONFIRM)
