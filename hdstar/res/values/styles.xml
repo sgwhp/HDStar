@@ -86,6 +86,11 @@
 	    <item name="android:paddingLeft">5dp</item>
     </style>
     
+    <style name="spinnerListItemStyle">
+        <item name="android:background">@drawable/setting_strip_bg_sel</item>
+	    <item name="android:paddingLeft">5dp</item>
+    </style>
+    
     <!-- Taken from http://stackoverflow.com/questions/10020466/android-4-0-sub-title-section-label-styling -->
 	<style name="SectionHeader" parent="android:Widget.Holo.Light.TextView">
 		<item name="android:drawableBottom">@drawable/section_header</item>

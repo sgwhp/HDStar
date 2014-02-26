@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/label"
+            style="@style/CustomEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:paddingRight="48dp"
+            android:ems="10"
+            android:hint="@string/label"
+            android:singleLine="true" />
+
+        <Spinner
+            style="@style/spinnerListItemStyle"
+            android:id="@+id/labels_for_choose"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:paddingRight="50dp"
+            android:layout_gravity="right|center_vertical" />
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical|right"
+            android:src="@drawable/zebra_arrow_down" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/set_label_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_left_bg_sel"
+            android:text="@android:string/yes"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/close_label_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_right_bg_sel"
+            android:text="@android:string/cancel"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

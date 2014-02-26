@@ -3,6 +3,7 @@ package org.hdstar.component.activity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -56,6 +57,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -71,6 +75,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import ch.boye.httpclientandroidlib.HttpResponse;
 
@@ -116,6 +121,12 @@ public class RemoteActivity extends BaseActivity implements
 	private PopupWindow addTorrentWindow;
 	/** 下载目录 */
 	private EditText dirEt;
+	/** 设置标签窗口 */
+	private PopupWindow setLabelWindow;
+	/** 标签文本框 */
+	private EditText labelEt;
+	/** 标签选择 */
+	private Spinner labelSp;
 	private LinearLayout ctrlBox;
 	private CustomDialog dialog = null;
 	private BaseAsyncTask<?> mTask;
@@ -268,7 +279,7 @@ public class RemoteActivity extends BaseActivity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.label:
-			label();
+			showSetLabelWindow();
 			break;
 		case R.id.start:
 			start();
@@ -322,6 +333,12 @@ public class RemoteActivity extends BaseActivity implements
 			break;
 		case R.id.refresh_disk_info:
 			refreshDiskInfo();
+			break;
+		case R.id.close_label_dialog:
+			setLabelWindow.dismiss();
+			break;
+		case R.id.set_label_btn:
+			setLabel();
 			break;
 		}
 	}
@@ -491,6 +508,17 @@ public class RemoteActivity extends BaseActivity implements
 		addTorrentWindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.pop_up_window_bg));
 		addTorrentWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
+		//初始化设置标签窗口
+		View setLabelLayout = inflater.inflate(R.layout.set_label_dialog, null);
+		setLabelLayout.findViewById(R.id.set_label_btn).setOnClickListener(this);
+		setLabelLayout.findViewById(R.id.close_label_dialog).setOnClickListener(this);
+		labelEt = (EditText) setLabelLayout.findViewById(R.id.label);
+		labelSp = (Spinner) setLabelLayout.findViewById(R.id.labels_for_choose);
+		setLabelWindow = new PopupWindow(setLabelLayout,
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		setLabelWindow.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.pop_up_window_bg));
+		setLabelWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
 	}
 
 	private void refreshRss(int refreshingLabel) {
@@ -546,10 +574,51 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * 打标签. <br/>
+	 * 显示打标签窗口. <br/>
 	 */
-	private void label() {
-		// TODO label
+	private void showSetLabelWindow() {
+		List<org.hdstar.model.Label> labels = remote.getLabels();
+		final String[] labelsStr = new String[labels.size()];
+		for(int i = labels.size() - 1; i >= 0; i--){
+			labelsStr[i] = labels.get(i).getName();
+		}
+		labelSp.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labelsStr));
+		labelSp.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				labelEt.setText(labelsStr[position]);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}});
+		setLabelWindow.update();
+		setLabelWindow.showAtLocation(root, Gravity.CENTER, 0, 0);
+	}
+	
+	/**
+	 * 打标签
+	 */
+	private void setLabel(){
+		setLabelWindow.dismiss();
+		final BaseAsyncTask<Boolean> task = remote.setLabel(labelEt.getText().toString(), selectedHashes());
+		if (task == null) {
+			return;
+		}
+		task.attach(processCallback);
+		attachTask(task);
+		BaseAsyncTask.taskExec.execute(task);
+		dialog = new CustomDialog(this, R.string.connecting);
+		dialog.setOnDismissListener(new OnDismissListener() {
+
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				task.detach();
+			}
+		});
+		dialog.show();
 	}
 
 	/**

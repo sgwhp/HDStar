@@ -118,6 +118,8 @@ public class CommonUrls {
 				+ "&action=%s";
 		public static final String UTORRENT_ADD_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=add-url&s=%s";
+		public static final String UTORRENT_SET_LABEL_URL = UTORRENT_BASE_REQ_URL
+				+ "&action=setprops";
 	}
 
 	// 获取网站图标工具地址
@@ -161,10 +163,13 @@ public class CommonUrls {
 		// tm 随机数，刷新时使用
 		// public static final String HDW_GET_SECURITY_IMG =
 		// "/validatecode.php?tm=%d";
-		public static final String HDW_GET_SECURITY_IMG = HDW + "/validatecode.php";
-		public static final String HDW_BOOKMARK = HDW + "/bookmark.php?torrent=?%d";
+		public static final String HDW_GET_SECURITY_IMG = HDW
+				+ "/validatecode.php";
+		public static final String HDW_BOOKMARK = HDW
+				+ "/bookmark.php?torrent=?%d";
 		// post，参数delbookmark，种子id数组
-		public static final String HDW_DEL_BOOKMARK = HDW + "/takedelbookmarks.php";
+		public static final String HDW_DEL_BOOKMARK = HDW
+				+ "/takedelbookmarks.php";
 
 		// mt
 		public static final String MT = "https://tp.m-team.cc";

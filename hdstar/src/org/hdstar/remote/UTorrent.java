@@ -233,4 +233,14 @@ public class UTorrent extends RemoteBase {
 		return task;
 	}
 
+	@Override
+	public BaseAsyncTask<Boolean> setLabel(String label, String... hashes) {
+		String url = String.format(
+				CommonUrls.BTClient.UTORRENT_SET_LABEL_URL, ipNPort, "%s");
+		for(String hash : hashes){
+			url += "&s=label" + "&hash=" + hash + "&v=" + label;
+		}
+		return UtorrentTask.newInstance(ipNPort, url, new DefaultGetParser());
+	}
+
 }

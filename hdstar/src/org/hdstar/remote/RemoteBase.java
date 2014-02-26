@@ -67,5 +67,7 @@ public abstract class RemoteBase {
 	 * @return 数组长度为2，分别是总空间和可用空间
 	 */
 	public abstract BaseAsyncTask<long[]> getDiskInfo();
+	
+	public abstract BaseAsyncTask<Boolean> setLabel(String label, String... hashes);
 
 }

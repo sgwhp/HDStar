@@ -19,6 +19,7 @@ import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.TorrentStatus;
 import org.hdstar.task.BaseAsyncTask;
+import org.hdstar.task.DefaultGetParser;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.util.HttpClientManager;
 import org.xmlpull.v1.XmlSerializer;
@@ -207,20 +208,9 @@ public class RuTorrent extends RemoteBase {
 
 				HttpPost post = new HttpPost(String.format(
 						CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
-				ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
-
-					@Override
-					public Boolean parse(HttpResponse res, InputStream in) {
-						if (res.getStatusLine().getStatusCode() == 200) {
-							msgId = SUCCESS_MSG_ID;
-							return true;
-						}
-						return false;
-					}
-				};
 				post.setEntity(new StringEntity(writer.toString()));
 				final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(
-						post, parser);
+						post, new DefaultGetParser());
 				return task;
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
@@ -238,17 +228,6 @@ public class RuTorrent extends RemoteBase {
 			ArrayList<String> urls) {
 		HttpPost post = new HttpPost(String.format(
 				CommonUrls.BTClient.RUTORRENT_RSS_ACTION_URL, ipNPort));
-		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
-
-			@Override
-			public Boolean parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 200) {
-					msgId = SUCCESS_MSG_ID;
-					return true;
-				}
-				return false;
-			}
-		};
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("mode", "loadtorrents"));
 		params.add(new BasicNameValuePair("dir_edit", dir));
@@ -259,7 +238,7 @@ public class RuTorrent extends RemoteBase {
 		try {
 			post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
-					parser);
+					new DefaultGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -330,22 +309,11 @@ public class RuTorrent extends RemoteBase {
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		HttpPost post = new HttpPost(String.format(
 				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
-		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
-
-			@Override
-			public Boolean parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 200) {
-					msgId = SUCCESS_MSG_ID;
-					return true;
-				}
-				return false;
-			}
-		};
 		try {
 			post.setEntity(new UrlEncodedFormEntity(buildParams(mode, hashes),
 					Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
-					parser);
+					new DefaultGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -487,6 +455,26 @@ public class RuTorrent extends RemoteBase {
 			post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
 					parser);
+			return task;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public BaseAsyncTask<Boolean> setLabel(String label, String... hashes) {
+		HttpPost post = new HttpPost(String.format(
+				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
+		List<NameValuePair> nvp = buildParams("setlabel", hashes);
+		for (int i = hashes.length; i > 0; i--) {
+			nvp.add(new BasicNameValuePair("s", "label"));
+			nvp.add(new BasicNameValuePair("v", label));
+		}
+		try {
+			post.setEntity(new UrlEncodedFormEntity(nvp, Const.CHARSET));
+			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
+					new DefaultGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
