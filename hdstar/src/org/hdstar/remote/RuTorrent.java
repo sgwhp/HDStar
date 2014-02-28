@@ -42,6 +42,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * 
+ * ‘∂≥ÃruTorrent  ≈‰∆˜. <br/>
+ * 
+ * @author robust
+ */
 public class RuTorrent extends RemoteBase {
 	HashMap<String, Label> labelsMap = new HashMap<String, Label>();
 

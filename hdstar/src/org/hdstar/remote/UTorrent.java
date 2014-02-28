@@ -31,6 +31,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * 
+ * ‘∂≥Ã¶ÃTorrent  ≈‰∆˜. <br/>
+ * ≤Œøºtransdroid
+ * 
+ * @see http://www.transdroid.org/under-the-hood/
+ * 
+ * @author robust
+ */
 public class UTorrent extends RemoteBase {
 
 	public UTorrent() {
@@ -235,9 +244,9 @@ public class UTorrent extends RemoteBase {
 
 	@Override
 	public BaseAsyncTask<Boolean> setLabel(String label, String... hashes) {
-		String url = String.format(
-				CommonUrls.BTClient.UTORRENT_SET_LABEL_URL, ipNPort, "%s");
-		for(String hash : hashes){
+		String url = String.format(CommonUrls.BTClient.UTORRENT_SET_LABEL_URL,
+				ipNPort, "%s");
+		for (String hash : hashes) {
 			url += "&s=label" + "&hash=" + hash + "&v=" + label;
 		}
 		return UtorrentTask.newInstance(ipNPort, url, new DefaultGetParser());

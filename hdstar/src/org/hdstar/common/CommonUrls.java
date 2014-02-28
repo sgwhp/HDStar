@@ -104,9 +104,7 @@ public class CommonUrls {
 		public static final String RUTORRENT_ADD_URL = RUTORRENT_HOME_PAGE
 				+ "/php/addtorrent.php?";
 
-		/**
-		 * μTorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位
-		 */
+		/** μTorrent地址 。为了统一格式，方便调用String.format()，token参数务必放在首位 */
 		public static final String UTORRENT_HOME_PAGE = "http://%s/gui";
 		public static final String UTORRENT_TOKEN_URL = UTORRENT_HOME_PAGE
 				+ "/token.html";
@@ -120,6 +118,9 @@ public class CommonUrls {
 				+ "&action=add-url&s=%s";
 		public static final String UTORRENT_SET_LABEL_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=setprops";
+
+		/** transmission地址 */
+		public static final String TRANSMISSION_HOME_PAGE = "http：//%s/transmission/rpc";
 	}
 
 	// 获取网站图标工具地址
