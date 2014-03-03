@@ -178,4 +178,6 @@
 	<string name="OpenCD">原抓</string>
 	<string name="music">音樂</string>
 	<string name="adult">成人</string>
+	<string name="media">影視&amp;音樂</string>
+	<string name="game">遊戲&amp;軟體</string>
 </resources>

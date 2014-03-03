@@ -126,6 +126,8 @@ public abstract class PTAdapter {
 	 *            ÖÖ×Óid
 	 * @return
 	 */
-	public abstract BaseAsyncTask<Boolean> addToRss(String torrentId);
+	public BaseAsyncTask<Boolean> addToRss(String torrentId) {
+		return null;
+	}
 
 }

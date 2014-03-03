@@ -6,78 +6,39 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
-import org.hdstar.task.DefaultGetParser;
 import org.hdstar.task.ResponseParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import ch.boye.httpclientandroidlib.Header;
+import ch.boye.httpclientandroidlib.HeaderElement;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
-import ch.boye.httpclientandroidlib.util.EntityUtils;
 
-public class HDWing extends PTAdapter {
+public class TTG extends PTAdapter {
+	private String PHPSESSID = null;// sessionId，ttg在cookies中会用到
 
-	public HDWing() {
-		super(PTSiteType.HDWing);
-	}
-
-	@Override
-	public boolean needSecurityCode() {
-		return true;
-	}
-
-	@Override
-	public BaseAsyncTask<Bitmap> getSecurityImage() {
-		ResponseParser<Bitmap> parser = new ResponseParser<Bitmap>() {
-
-			@Override
-			public Bitmap parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() != 200) {
-					return null;
-				}
-				byte[] image;
-				try {
-					image = EntityUtils.toByteArray(res.getEntity());
-					Bitmap mBitmap = BitmapFactory.decodeByteArray(image, 0,
-							image.length);
-					msgId = SUCCESS_MSG_ID;
-					return mBitmap;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return null;
-			}
-		};
-		HttpGet get = new HttpGet(CommonUrls.PTSiteUrls.HDW_GET_SECURITY_IMG);
-		BaseAsyncTask<Bitmap> task = new BaseAsyncTask<Bitmap>(get, parser);
-		task.setNeedContent(false);
-		return task;
+	public TTG() {
+		super(PTSiteType.TTG);
 	}
 
 	@Override
 	public BaseAsyncTask<String> login(String username, String password,
 			String securityCode) {
-		HttpPost post = new HttpPost(CommonUrls.PTSiteUrls.HDW_TAKE_LOGIN);
+		HttpPost post = new HttpPost(CommonUrls.PTSiteUrls.TTG_TAKE_LOGIN);
 		List<BasicNameValuePair> nvp = new ArrayList<BasicNameValuePair>();
-		nvp.add(new BasicNameValuePair("code", securityCode));
 		nvp.add(new BasicNameValuePair("password", password));
-		nvp.add(new BasicNameValuePair("submit", "登录"));
 		nvp.add(new BasicNameValuePair("username", username));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp));
@@ -90,8 +51,7 @@ public class HDWing extends PTAdapter {
 					}
 					String location = res.getFirstHeader("Location").getValue();
 					if (location == null
-							|| !location
-									.equals(CommonUrls.PTSiteUrls.HDW_HOME_PAGE)) {
+							|| !location.equals(CommonUrls.PTSiteUrls.TTG_MY)) {
 						return null;
 					}
 					String cookieStr = "";
@@ -114,7 +74,7 @@ public class HDWing extends PTAdapter {
 
 	@Override
 	public BaseAsyncTask<Boolean> logout() {
-		HttpGet get = new HttpGet(CommonUrls.PTSiteUrls.HDW_LOGOUT);
+		HttpGet get = new HttpGet(CommonUrls.PTSiteUrls.TTG_LOGOUT);
 		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
 
 			@Override
@@ -137,6 +97,25 @@ public class HDWing extends PTAdapter {
 
 	/**
 	 * 
+	 * 获取sessionId. <br/>
+	 * 
+	 * @param res
+	 *            http响应
+	 */
+	private void dealWithSessionId(HttpResponse res) {
+		Header header = res.getFirstHeader("Set-Cookie");
+		if (header == null) {
+			return;
+		}
+		for (HeaderElement element : header.getElements()) {
+			if ("PHPSESSID".equals(element.getName())) {
+				PHPSESSID = element.getValue();
+			}
+		}
+	}
+
+	/**
+	 * 
 	 * 解析某行种子中的类别列. <br/>
 	 * 
 	 * @param tClassCol
@@ -146,24 +125,7 @@ public class HDWing extends PTAdapter {
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
 		Elements classes = tClassCol.getElementsByTag("img");
 		if (classes.size() > 0) {
-			t.firstClass = "/" + classes.get(0).attr("src");
-		}
-	}
-
-	/**
-	 * 
-	 * 解析某行种子中操作列的下载框状态. <br/>
-	 * 
-	 * @param tRssRol
-	 *            操作列，一般为第二列，与标题在同一列
-	 * @param t
-	 * @param index
-	 *            种子所在行数
-	 */
-	protected void parseRssDownload(Element tRssRol, Torrent t, int index) {
-		String src = tRssRol.getElementById("bi_" + t.id).attr("src");
-		if ("/images/basket_added.gif".equals(src)) {
-			t.rss = true;
+			t.firstClass = classes.get(0).attr("src");
 		}
 	}
 
@@ -179,62 +141,61 @@ public class HDWing extends PTAdapter {
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
 				try {
+					dealWithSessionId(res);
 					Document doc = Jsoup.parse(in, Const.CHARSET,
 							mType.getUrl());
 					ArrayList<Torrent> torrents = new ArrayList<Torrent>();
 					Torrent t;
-					Elements eTorrents = doc
-							.getElementsByClass("torrents_list").get(0)
+					Elements eTorrents = doc.getElementById("torrent_table")
 							.child(0).children();
-					Elements torrentCols, imgs;
+					Elements torrentCols, es;
 					Element titles;
 					Element url;
-					String urlStr;
-					Pattern pattern = Pattern.compile("id=(\\d+)");
+					String[] strs;
 					for (int i = 1; i < eTorrents.size(); i++) {
 						t = new Torrent();
 						torrentCols = eTorrents.get(i).children();
 						parseTorrentClass(torrentCols.get(0), t);
 						// freetype sticky
-						titles = torrentCols.get(1);
-						if (titles.child(0).attr("class").contains("sticky")) {
+						if (eTorrents.get(i).attr("class").contains("sticky")) {
 							t.sticky = true;
 						}
-						url = titles.child(0).child(0).child(0).child(1)
-								.child(0);
-						imgs = url.getElementsByTag("img");
-						if (imgs.size() > 0) {
-							t.freeType = imgs.get(imgs.size() - 1).attr("src");
+						titles = torrentCols.get(1).child(0);
+						url = titles.getElementsByTag("a").get(0);
+						es = titles.getElementsByTag("img");
+						if (es.size() > 0) {
+							t.freeType = es.get(es.size() - 1).attr("src");
 						}
-						if (url.children().size() > 0) {
-							t.subtitle = url.ownText();
-							// child(0)是<b>标签
-							t.title = url.child(0).text();
-							// titles
-						} else {
-							// 无副标题的情况
-							t.title = url.text();
+						// 标题<a>标签内嵌了<b> --> <font>
+						titles = url.child(0).child(0);
+						t.title = titles.ownText();
+						// ttg副标题可能有多个
+						es = titles.getElementsByTag("span");
+						for (int j = 0; j < es.size(); j++) {
+							t.subtitle = es.get(j).text();
 						}
-						urlStr = url.attr("href");
-						Matcher matcher = pattern.matcher(urlStr);
-						if (matcher.find()) {
-							t.id = Integer.parseInt(matcher.group(1));
-						}
+						t.id = Integer.parseInt(eTorrents.get(i).attr("id"));
 						// bookmark不解析，hdw种子列表无法显示种子的收藏状态
 						// 下载框
-						parseRssDownload(torrentCols.get(1), t, i - 1);
+						if (eTorrents
+								.get(i)
+								.attr("style")
+								.equals("background-color: rgb(135, 206, 250);")) {
+							t.rss = true;
+						}
 						// comments
-						t.comments = torrentCols.get(2).text();
+						t.comments = torrentCols.get(3).text();
 						// time
 						t.time = torrentCols.get(4).text();
 						// size
-						t.size = torrentCols.get(5).text();
+						t.size = torrentCols.get(6).text();
 						// snatched
-						t.snatched = torrentCols.get(6).text();
+						t.snatched = torrentCols.get(7).text();
+						strs = torrentCols.get(8).text().split("/");
 						// seeders
-						t.seeders = torrentCols.get(7).text();
+						t.seeders = strs[0];
 						// leachers
-						t.leechers = torrentCols.get(8).text();
+						t.leechers = strs[1];
 						// uploader
 						t.uploader = torrentCols.get(9).text();
 						torrents.add(t);
@@ -252,17 +213,21 @@ public class HDWing extends PTAdapter {
 			}
 		};
 		HttpGet get = new HttpGet(url);
+		String cookieStr = cookie;
+		if (PHPSESSID != null) {
+			cookieStr += "PHPSESSID=" + PHPSESSID + ";";
+		}
 		BaseAsyncTask<ArrayList<Torrent>> task = BaseAsyncTask.newInstance(
-				cookie, get, parser);
+				cookieStr, get, parser);
 		return task;
 	}
 
 	@Override
 	public BaseAsyncTask<Boolean> bookmark(String torrentId) {
 		HttpGet get = new HttpGet(String.format(
-				CommonUrls.PTSiteUrls.HDW_BOOKMARK, torrentId));
+				CommonUrls.PTSiteUrls.TTG_BOOKMARK, torrentId));
 		BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie, get,
-				new DefaultGetParser());
+				new TTGDefaultGetParser());
 		return task;
 	}
 
@@ -274,19 +239,31 @@ public class HDWing extends PTAdapter {
 	@Override
 	public BaseAsyncTask<Boolean> addToRss(String torrentId) {
 		List<BasicNameValuePair> nvp = new ArrayList<BasicNameValuePair>();
-		nvp.add(new BasicNameValuePair("torrentid", torrentId));
-		HttpPost post = new HttpPost(String.format(
-				CommonUrls.PTSiteUrls.HDW_RSS_DOWNLOAD_URL,
-				System.currentTimeMillis()));
+		nvp.add(new BasicNameValuePair("tid", torrentId));
+		HttpPost post = new HttpPost(CommonUrls.PTSiteUrls.TTG_RSS_DOWNLOAD_URL);
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp));
 			BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie,
-					post, new DefaultGetParser());
+					post, new TTGDefaultGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private class TTGDefaultGetParser extends ResponseParser<Boolean> {
+
+		@Override
+		public Boolean parse(HttpResponse res, InputStream in) {
+			dealWithSessionId(res);
+			if (res.getStatusLine().getStatusCode() == 200) {
+				msgId = SUCCESS_MSG_ID;
+				return true;
+			}
+			return false;
+		}
+
 	}
 
 }

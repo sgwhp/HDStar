@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 public class TorrentAdapter extends BaseExpandableListAdapter {
 	private Resources res;
@@ -84,7 +86,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		GroupHolder holder;
+		final GroupHolder holder;
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.torrent_row_group, null);
 			holder = new GroupHolder(convertView);
@@ -105,23 +107,66 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		}
 		holder.freeType.setText(Const.FreeType.getFreeTag(t.freeType));
 		holder.title.setText(t.title);
+		holder.subtitle.setText(t.subtitle);
 		Bitmap bitmap;
 		BitmapDrawable bDrawable;
 		if (t.firstClass != null) {
-			bitmap = ImageLoader.getInstance().loadImageSync(
-					"assets://pic/torrent_class/" + t.firstClass + ".png",
-					HDStarApp.displayOptions);
-			if (bitmap != null) {
-				bitmap.setDensity(160);
-				bDrawable = new BitmapDrawable(res, bitmap);
-				bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
-						bDrawable.getIntrinsicHeight());
-				holder.title.setCompoundDrawables(bDrawable, null, null, null);
+			if (!t.firstClass.startsWith("/")) {
+				bitmap = ImageLoader.getInstance().loadImageSync(
+						"assets://pic/torrent_class/" + t.firstClass + ".png",
+						HDStarApp.displayOptions);
+				if (bitmap != null) {
+					bitmap.setDensity(160);
+					bDrawable = new BitmapDrawable(res, bitmap);
+					bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
+							bDrawable.getIntrinsicHeight());
+					holder.title.setCompoundDrawables(bDrawable, null, null,
+							null);
+				} else {
+					holder.title.setCompoundDrawables(null, null, null, null);
+				}
 			} else {
 				holder.title.setCompoundDrawables(null, null, null, null);
+				ImageLoader.getInstance().loadImage(
+						adapter.getType().getUrl() + t.firstClass,
+						HDStarApp.displayOptions, new ImageLoadingListener() {
+
+							@Override
+							public void onLoadingCancelled(String arg0,
+									View arg1) {
+							}
+
+							@Override
+							public void onLoadingComplete(String arg0,
+									View arg1, Bitmap result) {
+								result.setDensity(160);
+								BitmapDrawable drawable = new BitmapDrawable(
+										res, result);
+								drawable.setBounds(0, 0,
+										drawable.getIntrinsicWidth(),
+										drawable.getIntrinsicHeight());
+								holder.title.setCompoundDrawables(drawable,
+										null, null, null);
+							}
+
+							@Override
+							public void onLoadingFailed(String arg0, View arg1,
+									FailReason arg2) {
+							}
+
+							@Override
+							public void onLoadingStarted(String arg0, View arg1) {
+							}
+						});
 			}
+		} else {
+			holder.title.setCompoundDrawables(null, null, null, null);
 		}
-		if (t.secondClass != null) {
+		if (t.secondClass == null) {
+			holder.subtitle.setCompoundDrawables(null, null, null, null);
+			return convertView;
+		}
+		if (!t.secondClass.startsWith("/")) {
 			bitmap = ImageLoader.getInstance().loadImageSync(
 					"assets://pic/torrent_class/" + t.secondClass + ".png",
 					HDStarApp.displayOptions);
@@ -135,8 +180,39 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			} else {
 				holder.subtitle.setCompoundDrawables(null, null, null, null);
 			}
+		} else {
+			holder.subtitle.setCompoundDrawables(null, null, null, null);
+			ImageLoader.getInstance().loadImage(
+					adapter.getType().getUrl() + t.secondClass,
+					HDStarApp.displayOptions, new ImageLoadingListener() {
+
+						@Override
+						public void onLoadingCancelled(String arg0, View arg1) {
+						}
+
+						@Override
+						public void onLoadingComplete(String arg0, View arg1,
+								Bitmap result) {
+							result.setDensity(160);
+							BitmapDrawable drawable = new BitmapDrawable(res,
+									result);
+							drawable.setBounds(0, 0,
+									drawable.getIntrinsicWidth(),
+									drawable.getIntrinsicHeight());
+							holder.subtitle.setCompoundDrawables(drawable,
+									null, null, null);
+						}
+
+						@Override
+						public void onLoadingFailed(String arg0, View arg1,
+								FailReason arg2) {
+						}
+
+						@Override
+						public void onLoadingStarted(String arg0, View arg1) {
+						}
+					});
 		}
-		holder.subtitle.setText(t.subtitle);
 		return convertView;
 	}
 

@@ -25,6 +25,8 @@ import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 public class OpenCD extends NexusPHP {
+	// opencd种子类别图片style属性值类似"width:30px;height:30px;background-image: url(plugin/style/chs/type_408.gif);"
+	private Pattern pattern = Pattern.compile("url\\((.*?)\\)");
 
 	public OpenCD() {
 		super(PTSiteType.OpenCD);
@@ -47,10 +49,17 @@ public class OpenCD extends NexusPHP {
 
 	@Override
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
-		t.firstClass = tClassCol.attr("style");
-		t.firstClass = "opencd"
-				+ t.firstClass.substring(t.firstClass.lastIndexOf("/"),
-						t.firstClass.indexOf("."));
+		Matcher matcher = pattern.matcher(tClassCol.attr("style"));
+		if (matcher.find()) {
+			t.firstClass = "/" + matcher.group(1);
+		}
+		Elements classes = tClassCol.child(0).getElementsByTag("img");
+		if (classes.size() > 0) {
+			matcher = pattern.matcher(classes.get(0).attr("style"));
+			if (matcher.find()) {
+				t.secondClass = "/" + matcher.group(1);
+			}
+		}
 	}
 
 	@Override

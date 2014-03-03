@@ -36,10 +36,10 @@ public class TransmissionTask<T> extends BaseAsyncTask<T> {
 		HttpClient client = HttpClientManager.getHttpClient();
 		InputStream in = null;
 		try {
+			request = new HttpGet(String.format(url, sessionId));
 			if (sessionId != null) {
 				request.addHeader(SESSION_HEADER, sessionId);
 			}
-			request = new HttpGet(String.format(url, sessionId));
 			request.setHeader("Cookie", cookie);
 			HttpResponse response = client.execute(request);
 			if (response.getStatusLine().getStatusCode() == 409) {

@@ -187,5 +187,17 @@ public class CommonUrls {
 		public static final String OPEN_CD_MUSIC_URL = OPEN_CD
 				+ "/torrents.php?boardid=1&page=%d";
 
+		// ttg
+		public static final String TTG = "http://ttg.im";
+		public static final String TTG_TORRENTS = TTG
+				+ "/browse.php?c=M&page=%d";
+		public static final String TTG_GAME = TTG + "/browse.php?c=G&page=%d";
+		public static final String TTG_LOGOUT = TTG + "/logout.php";
+		public static final String TTG_TAKE_LOGIN = TTG + "/takelogin.php";
+		public static final String TTG_MY = TTG + "/my.php";
+		public static final String TTG_BOOKMARK = TTG
+				+ "/bookmark.php?torrent=?%d";
+		public static final String TTG_RSS_DOWNLOAD_URL = TTG + "/mycart.php";
+
 	}
 }

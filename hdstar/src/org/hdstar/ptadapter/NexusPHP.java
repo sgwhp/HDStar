@@ -278,11 +278,6 @@ public class NexusPHP extends PTAdapter {
 		return task;
 	}
 
-	@Override
-	public BaseAsyncTask<Boolean> addToRss(String torrentId) {
-		return null;
-	}
-
 	private class FetchSecurityImgTask extends BaseAsyncTask<Bitmap> {
 		private String url;
 

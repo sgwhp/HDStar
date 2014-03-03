@@ -1,5 +1,8 @@
 package org.hdstar.ptadapter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
@@ -11,6 +14,8 @@ import org.jsoup.select.Elements;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 
 public class CMCT extends NexusPHP {
+	// cmct种子类别图片style属性值类似"background-image: url(pic/category/chd/bluenvelopes/720p.png);"
+	private Pattern pattern = Pattern.compile("url\\((.*?)\\)");
 
 	public CMCT() {
 		super(PTSiteType.CMCT);
@@ -20,10 +25,10 @@ public class CMCT extends NexusPHP {
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
 		Elements classes = tClassCol.child(0).getElementsByTag("img");
 		if (classes.size() > 0) {
-			t.firstClass = classes.get(0).attr("style");
-			t.firstClass = "cmct"
-					+ t.firstClass.substring(t.firstClass.lastIndexOf("/"),
-							t.firstClass.indexOf("."));
+			Matcher matcher = pattern.matcher(classes.get(0).attr("style"));
+			if (matcher.find()) {
+				t.firstClass = "/" + matcher.group(1);
+			}
 		}
 	}
 

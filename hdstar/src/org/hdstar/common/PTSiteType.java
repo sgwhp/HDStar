@@ -32,7 +32,12 @@ public enum PTSiteType {
 			new TorrentPageUrl(CommonUrls.PTSiteUrls.OPEN_CD_TORRENTS_URL,
 					R.string.torrents),
 			new TorrentPageUrl(CommonUrls.PTSiteUrls.OPEN_CD_MUSIC_URL,
-					R.string.music) });
+					R.string.music) }),
+	// ttg
+	TTG("TorrenTGui", CommonUrls.PTSiteUrls.TTG, new TorrentPageUrl[] {
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.TTG_TORRENTS,
+					R.string.media),
+			new TorrentPageUrl(CommonUrls.PTSiteUrls.TTG_GAME, R.string.game) });
 
 	private final String name;// 名称，仅用作显示，不能作为数据进行传输、序列化或持久化
 	private final String url;

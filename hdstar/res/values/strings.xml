@@ -187,5 +187,7 @@
 	<string name="OpenCD">原抓</string>
 	<string name="music">音乐</string>
 	<string name="adult">成人</string>
+	<string name="media">影视&amp;音乐</string>
+	<string name="game">游戏&amp;软件</string>
 
 </resources>
