@@ -1,17 +1,13 @@
 package org.hdstar.component.activity;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
+import org.hdstar.ptadapter.HDSky;
+import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.DownloadImageTask;
-import org.hdstar.task.LoginTask;
 import org.hdstar.util.DES;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
@@ -22,6 +18,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -29,9 +26,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ToggleButton;
-import ch.boye.httpclientandroidlib.NameValuePair;
-import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
@@ -45,23 +41,24 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * 
  */
 public class LoginActivity extends SherlockActivity implements OnClickListener {
-	private DownloadImageTask imageTask = null;
-	private final String LOGIN_URL = CommonUrls.HDStar.BASE_URL + "/login.php";
-	private LoginTask task = null;
+	private BaseAsyncTask<Bitmap> imageTask = null;
+	private BaseAsyncTask<String> task = null;
 	private CustomDialog dialog = null;
 	private ToggleButton fetchImage;
 	private ToggleButton sound;
 	private EditText deviceName;
 	private ToggleButton autoRefresh;
 	private EditText serverAddr;
+	private ImageView securityImage;
+	private HDSky hdsky = new HDSky();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.login);
 		setContentView(R.layout.login);
-		getSecurityCode();
 		init();
+		getSecurityCode();
 	}
 
 	@Override
@@ -103,14 +100,16 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 				e.printStackTrace();
 			}
 		}
+		securityImage = (ImageView) findViewById(R.id.security_image);
 	}
 
 	/**
 	 * 获取验证码
 	 * */
 	void getSecurityCode() {
-		imageTask = new DownloadImageTask(this);
-		imageTask.execute(LOGIN_URL);
+		imageTask = hdsky.getSecurityImage();
+		imageTask.attach(imageCallback);
+		BaseAsyncTask.commit(imageTask);
 	}
 
 	private void login() {
@@ -134,7 +133,6 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
 		}
 		if (imageTask.getStatus() == AsyncTask.Status.FINISHED) {
-			String imageHash = imageTask.getHash();
 			String imageString = ((EditText) findViewById(R.id.security_code))
 					.getText().toString();
 			String id = ((EditText) findViewById(R.id.username)).getText()
@@ -176,19 +174,40 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 
 			});
 			dialog.show();
-			task = new LoginTask();
+			task = hdsky.login(id, password, imageString);
 			task.attach(mListener);
-			List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-			nvp.add(new BasicNameValuePair("username", id));
-			nvp.add(new BasicNameValuePair("password", password));
-			nvp.add(new BasicNameValuePair("imagestring", imageString));
-			nvp.add(new BasicNameValuePair("imagehash", imageHash));
-			try {
-				task.execPost(CommonUrls.HDStar.TAKE_LOGIN_URL, nvp, "");
-			} catch (UnsupportedEncodingException e) {
-				dialog.dismiss();
-				e.printStackTrace();
+			BaseAsyncTask.commit(task);
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.login:
+			login();
+			break;
+		case R.id.refresh:
+			if (imageTask != null) {
+				imageTask.detach();
 			}
+			getSecurityCode();
+			break;
+		case R.id.setting:
+			if (fetchImage == null) {
+				ViewStub stub = (ViewStub) findViewById(R.id.setting_stub);
+				stub.inflate();
+				fetchImage = (ToggleButton) findViewById(R.id.fetchImage);
+				sound = (ToggleButton) findViewById(R.id.sound);
+				autoRefresh = (ToggleButton) findViewById(R.id.auto_refresh);
+				deviceName = (EditText) findViewById(R.id.deviceName);
+				serverAddr = (EditText) findViewById(R.id.server_addr);
+				fetchImage.setChecked(CustomSetting.loadImage);
+				sound.setChecked(CustomSetting.soundOn);
+				deviceName.setText(CustomSetting.device);
+				autoRefresh.setChecked(CustomSetting.autoRefresh);
+				serverAddr.setText(CustomSetting.serverAddress);
+			}
+			break;
 		}
 	}
 
@@ -229,34 +248,21 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 
 	};
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.login:
-			login();
-			break;
-		case R.id.refresh:
-			if (imageTask != null) {
-				imageTask.interrupt(true);
-			}
-			getSecurityCode();
-			break;
-		case R.id.setting:
-			if (fetchImage == null) {
-				ViewStub stub = (ViewStub) findViewById(R.id.setting_stub);
-				stub.inflate();
-				fetchImage = (ToggleButton) findViewById(R.id.fetchImage);
-				sound = (ToggleButton) findViewById(R.id.sound);
-				autoRefresh = (ToggleButton) findViewById(R.id.auto_refresh);
-				deviceName = (EditText) findViewById(R.id.deviceName);
-				serverAddr = (EditText) findViewById(R.id.server_addr);
-				fetchImage.setChecked(CustomSetting.loadImage);
-				sound.setChecked(CustomSetting.soundOn);
-				deviceName.setText(CustomSetting.device);
-				autoRefresh.setChecked(CustomSetting.autoRefresh);
-				serverAddr.setText(CustomSetting.serverAddress);
-			}
-			break;
+	private TaskCallback<Bitmap> imageCallback = new TaskCallback<Bitmap>() {
+
+		@Override
+		public void onComplete(Bitmap result) {
+			result.setDensity(160);
+			securityImage.setImageBitmap(result);
 		}
-	}
+
+		@Override
+		public void onCancel() {
+		}
+
+		@Override
+		public void onFail(Integer msgId) {
+			Crouton.makeText(LoginActivity.this, msgId, Style.ALERT).show();
+		}
+	};
 }

@@ -239,7 +239,7 @@ public class HDWing extends PTAdapter {
 						t.uploader = torrentCols.get(9).text();
 						torrents.add(t);
 					}
-					msgId = ResponseParser.SUCCESS_MSG_ID;
+					setSucceeded();
 					return torrents;
 				} catch (NullPointerException e) {
 					e.printStackTrace();

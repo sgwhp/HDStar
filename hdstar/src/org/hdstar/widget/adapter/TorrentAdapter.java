@@ -263,7 +263,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 						task.detach();
 					}
 				});
-				BaseAsyncTask.taskExec.execute(task);
+				BaseAsyncTask.commit(task);
 			}
 		});
 		// rss download
@@ -299,7 +299,7 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 							task.detach();
 						}
 					});
-					BaseAsyncTask.taskExec.execute(task);
+					BaseAsyncTask.commit(task);
 				}
 			});
 		} else {

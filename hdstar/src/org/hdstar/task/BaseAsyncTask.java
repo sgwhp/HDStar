@@ -28,13 +28,20 @@ import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
 import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
+/**
+ * 基础请求任务. <br/>
+ * 
+ * @author robust
+ */
 public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
-	public static final AsyncTaskExecInterface taskExec = new AsyncTaskExecManager()
+	// 保证Android 3.0以上系统的AsyncTask也能多线程同时执行的工具
+	protected static final AsyncTaskExecInterface taskExec = new AsyncTaskExecManager()
 			.build();
 	protected String cookie = "";
 	protected HttpRequestBase request = null;
 	protected TaskCallback<T> mCallback;
 	protected ResponseParser<T> parser;
+	/** 是否被取消 */
 	protected boolean interrupted = false;
 	protected boolean needContent = true;
 
@@ -80,10 +87,15 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		return new BaseAsyncTask<T>(cookie, request, parser);
 	}
 
-	public void attach(TaskCallback<T> callbacks) {
-		mCallback = callbacks;
+	/** 设置callback */
+	public void attach(TaskCallback<T> callback) {
+		mCallback = callback;
 	}
 
+	/**
+	 * 
+	 * 删除callback引用，停止请求. <br/>
+	 */
 	public void detach() {
 		interrupted = true;
 		mCallback = null;
@@ -167,10 +179,23 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		}
 	}
 
+	/**
+	 * 
+	 * 设置执行完毕后要显示的消息资源id. <br/>
+	 * 
+	 * @param msgId
+	 *            要显示的消息资源id
+	 */
 	public void setMessageId(int msgId) {
 		parser.msgId = msgId;
 	}
 
+	/**
+	 * 
+	 * 是否需要打开Response的InputStream. <br/>
+	 * 
+	 * @return
+	 */
 	public boolean isNeedContent() {
 		return needContent;
 	}
@@ -217,6 +242,17 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 			ResponseParser<T> parser) throws UnsupportedEncodingException {
 		this.parser = parser;
 		execPost(url, nvp);
+	}
+
+	/**
+	 * 
+	 * 在线程池中执行，Android 3.0以上系统的AsyncTask是单线程的. <br/>
+	 * 
+	 * @param task
+	 * @param args
+	 */
+	public static <T> void commit(AsyncTask<T, ?, ?> task, T... args) {
+		taskExec.execute(task, args);
 	}
 
 	public static interface TaskCallback<T> {

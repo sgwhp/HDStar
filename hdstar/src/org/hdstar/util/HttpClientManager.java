@@ -44,9 +44,6 @@ public class HttpClientManager {
 	// client更新周期
 	private static final int EXPIRED_PERIOD = 5 * 60 * 1000;
 
-	// client最后一次使用时间
-	// private static long latest;
-	//
 	private static IdleConnectionMonitorThread idleThread;
 
 	private HttpClientManager() {
@@ -85,31 +82,36 @@ public class HttpClientManager {
 				}
 			}
 		}
-		// else if (cur - latest > VALIDATE_PERIOD) {
-		// // 一段时间未使用httpclient，首次使用时会出现连接超时
-		// // 这里超过5分钟（10分钟太长）未使用就新建一个测试连接并关闭它
-		// synchronized (HttpClientManager.class) {
-		// if (cur - latest > VALIDATE_PERIOD) {
-		// final HttpGet get = new HttpGet(Const.Urls.SERVER_ADDRESS);
-		// new Thread() {
-		// public void run() {
-		// try {
-		// // 连接打开后关闭并返回
-		// Thread.sleep(200);
-		// get.abort();
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// }.start();
-		// activateClient(get);
-		// latest = cur;
-		// }
-		// }
-		// }
-		//
-		// latest = cur;
 		return customHttpClient;
+	}
+
+	/**
+	 * 
+	 * 非单例，用完要shutdown. <br/>
+	 * 
+	 * @return
+	 */
+	public static HttpClient newHttpClient() {
+		HttpParams params = new BasicHttpParams();
+		params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
+				CONNECT_TIMEOUT);
+		params.setParameter(CoreConnectionPNames.SO_TIMEOUT, WAIT_TIMEOUT);
+		params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
+		SchemeRegistry schemeRegistry = new SchemeRegistry();
+		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
+				.getSocketFactory()));
+		schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
+				.getSocketFactory()));
+		PoolingClientConnectionManager cm = new PoolingClientConnectionManager(
+				schemeRegistry);
+		// Increase max total connection to 200
+		cm.setMaxTotal(200);
+		// Increase default max connection per route to 20
+		cm.setDefaultMaxPerRoute(20);
+		// Increase max connections for localhost:80 to 50
+		HttpHost localhost = new HttpHost("locahost", 80);
+		cm.setMaxPerRoute(new HttpRoute(localhost), 50);
+		return new DefaultHttpClient(cm, params);
 	}
 
 	public Object clone() throws CloneNotSupportedException {

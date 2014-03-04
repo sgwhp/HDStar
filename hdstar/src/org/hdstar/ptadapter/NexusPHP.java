@@ -43,8 +43,15 @@ import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 import ch.boye.httpclientandroidlib.util.EntityUtils;
 
+/**
+ * 
+ * NexushPHP模板的站点适配器. <br/>
+ * 
+ * @author robust
+ */
 public class NexusPHP extends PTAdapter {
 
+	/** 验证码的hash值 */
 	protected String imageHash;
 
 	public NexusPHP(PTSiteType type) {
@@ -56,6 +63,14 @@ public class NexusPHP extends PTAdapter {
 		return new FetchSecurityImgTask(mType.getUrl());
 	}
 
+	/**
+	 * 构建请求参数 <br/>
+	 * 
+	 * @param username
+	 * @param password
+	 * @param securityCode
+	 * @return
+	 */
 	protected List<NameValuePair> buildLoginParams(String username,
 			String password, String securityCode) {
 		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
@@ -278,12 +293,19 @@ public class NexusPHP extends PTAdapter {
 		return task;
 	}
 
+	/**
+	 * 
+	 * 下载nexusphp验证码请求任务. <br/>
+	 * 
+	 * @author robust
+	 */
 	private class FetchSecurityImgTask extends BaseAsyncTask<Bitmap> {
 		private String url;
 
 		public FetchSecurityImgTask(String url) {
 			this.url = url;
-			parser = new ResponseParser<Bitmap>() {
+			parser = new ResponseParser<Bitmap>(
+					R.string.failed_to_download_security_code) {
 
 				@Override
 				public Bitmap parse(HttpResponse res, InputStream in) {
@@ -301,8 +323,15 @@ public class NexusPHP extends PTAdapter {
 					imageHash));
 		}
 
+		/**
+		 * 
+		 * 获取验证码的hash值. <br/>
+		 * 
+		 * @param url
+		 * @return
+		 */
 		@SuppressWarnings("resource")
-		String getImageHash(String url) {
+		private String getImageHash(String url) {
 			HttpClient client = HttpClientManager.getHttpClient();
 			request = new HttpGet(url);
 			BufferedReader reader = null;
@@ -337,9 +366,9 @@ public class NexusPHP extends PTAdapter {
 				e.printStackTrace();
 			} catch (SocketException e) {
 				e.printStackTrace();
-				if ("Connection reset by peer".equals(e.getMessage())) {
-					HttpClientManager.restClient();
-				}
+				// if ("Connection reset by peer".equals(e.getMessage())) {
+				// HttpClientManager.restClient();
+				// }
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -352,7 +381,13 @@ public class NexusPHP extends PTAdapter {
 			return null;
 		}
 
-		public Bitmap downloadImage(String url) {
+		/**
+		 * 下载验证码. <br/>
+		 * 
+		 * @param url
+		 * @return
+		 */
+		private Bitmap downloadImage(String url) {
 			HttpClient httpClient = HttpClientManager.getHttpClient();
 			request = new HttpGet(url);
 			try {
@@ -379,9 +414,9 @@ public class NexusPHP extends PTAdapter {
 				e.printStackTrace();
 			} catch (SocketException e) {
 				e.printStackTrace();
-				if ("Connection reset by peer".equals(e.getMessage())) {
-					HttpClientManager.restClient();
-				}
+				// if ("Connection reset by peer".equals(e.getMessage())) {
+				// HttpClientManager.restClient();
+				// }
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {

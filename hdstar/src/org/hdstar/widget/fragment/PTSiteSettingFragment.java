@@ -185,7 +185,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 					setting.password, securityCode.getText().toString());
 			task.attach(initCallback);
 			attachTask(task);
-			BaseAsyncTask.taskExec.execute(task);
+			BaseAsyncTask.commit(task);
 			break;
 		case R.id.logout:
 			dialog = new CustomDialog(getActivity(), R.string.connecting);
@@ -199,7 +199,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 			dialog.show();
 			logoutTask = ptAdapter.logout();
 			logoutTask.attach(logoutCallback);
-			BaseAsyncTask.taskExec.execute(logoutTask);
+			BaseAsyncTask.commit(logoutTask);
 			break;
 		}
 	}
@@ -243,7 +243,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 				Toast.LENGTH_LONG).show();
 		imgTask = ptAdapter.getSecurityImage();
 		imgTask.attach(fetchSecurityImgCallback);
-		BaseAsyncTask.taskExec.execute(imgTask);
+		BaseAsyncTask.commit(imgTask);
 	}
 
 	private boolean save() {

@@ -508,10 +508,12 @@ public class RemoteActivity extends BaseActivity implements
 		addTorrentWindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.pop_up_window_bg));
 		addTorrentWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
-		//初始化设置标签窗口
+		// 初始化设置标签窗口
 		View setLabelLayout = inflater.inflate(R.layout.set_label_dialog, null);
-		setLabelLayout.findViewById(R.id.set_label_btn).setOnClickListener(this);
-		setLabelLayout.findViewById(R.id.close_label_dialog).setOnClickListener(this);
+		setLabelLayout.findViewById(R.id.set_label_btn)
+				.setOnClickListener(this);
+		setLabelLayout.findViewById(R.id.close_label_dialog)
+				.setOnClickListener(this);
 		labelEt = (EditText) setLabelLayout.findViewById(R.id.label);
 		labelSp = (Spinner) setLabelLayout.findViewById(R.id.labels_for_choose);
 		setLabelWindow = new PopupWindow(setLabelLayout,
@@ -559,7 +561,7 @@ public class RemoteActivity extends BaseActivity implements
 		BaseAsyncTask<ArrayList<RemoteTaskInfo>> task = remote.fetchList();
 		task.attach(mCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 	}
 
 	private String[] selectedHashes() {
@@ -579,11 +581,12 @@ public class RemoteActivity extends BaseActivity implements
 	private void showSetLabelWindow() {
 		List<org.hdstar.model.Label> labels = remote.getLabels();
 		final String[] labelsStr = new String[labels.size()];
-		for(int i = labels.size() - 1; i >= 0; i--){
+		for (int i = labels.size() - 1; i >= 0; i--) {
 			labelsStr[i] = labels.get(i).getName();
 		}
-		labelSp.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labelsStr));
-		labelSp.setOnItemSelectedListener(new OnItemSelectedListener(){
+		labelSp.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, labelsStr));
+		labelSp.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -593,23 +596,25 @@ public class RemoteActivity extends BaseActivity implements
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-			}});
+			}
+		});
 		setLabelWindow.update();
 		setLabelWindow.showAtLocation(root, Gravity.CENTER, 0, 0);
 	}
-	
+
 	/**
 	 * 打标签
 	 */
-	private void setLabel(){
+	private void setLabel() {
 		setLabelWindow.dismiss();
-		final BaseAsyncTask<Boolean> task = remote.setLabel(labelEt.getText().toString(), selectedHashes());
+		final BaseAsyncTask<Boolean> task = remote.setLabel(labelEt.getText()
+				.toString(), selectedHashes());
 		if (task == null) {
 			return;
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -637,7 +642,7 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -665,7 +670,7 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -693,7 +698,7 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -723,7 +728,7 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		task.attach(processCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 		dialog = new CustomDialog(this, R.string.connecting);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
@@ -775,7 +780,7 @@ public class RemoteActivity extends BaseActivity implements
 			}
 		});
 		attachRssTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -801,7 +806,7 @@ public class RemoteActivity extends BaseActivity implements
 			BaseAsyncTask<Boolean> task = remote.login(setting.username,
 					setting.password);
 			task.attach(loginCallback);
-			BaseAsyncTask.taskExec.execute(task);
+			BaseAsyncTask.commit(task);
 			attachTask(task);
 		}
 	}
@@ -819,7 +824,7 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		diskTask = remote.getDiskInfo();
 		diskTask.attach(diskCallback);
-		BaseAsyncTask.taskExec.execute(diskTask);
+		BaseAsyncTask.commit(diskTask);
 	}
 
 	private void applyFilter() {

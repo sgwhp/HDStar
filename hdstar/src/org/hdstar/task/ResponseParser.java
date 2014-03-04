@@ -7,6 +7,12 @@ import org.hdstar.R;
 
 import ch.boye.httpclientandroidlib.HttpResponse;
 
+/**
+ * 请求任务解析. <br/>
+ * 所有的BaseAsyncTask都要由此类来解析数据并判断请求任务是否成功完成
+ * 
+ * @author robust
+ */
 public abstract class ResponseParser<T> {
 	public static final int SUCCESS_MSG_ID = 0;
 	protected int msgId = R.string.refresh_failed;
@@ -31,6 +37,11 @@ public abstract class ResponseParser<T> {
 		msgId = id;
 	}
 
+	/**
+	 * 任务是否完成. <br/>
+	 * 
+	 * @return
+	 */
 	public boolean isSucceeded() {
 		return msgId == SUCCESS_MSG_ID;
 	}

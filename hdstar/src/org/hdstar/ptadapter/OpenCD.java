@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,7 @@ import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.DefaultGetParser;
+import org.hdstar.task.NotSingletonHttpClientTask;
 import org.hdstar.task.ResponseParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +26,13 @@ import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
+/**
+ * 
+ * OpenCD爬虫适配器. <br/>
+ * OpenCD在使用单例HttpClient时，一定时间内重复请求会直接跳转到登录页面，具体原因未知，暂时不能使用单例的HttpClient
+ * 
+ * @author robust
+ */
 public class OpenCD extends NexusPHP {
 	// opencd种子类别图片style属性值类似"width:30px;height:30px;background-image: url(plugin/style/chs/type_408.gif);"
 	private Pattern pattern = Pattern.compile("url\\((.*?)\\)");
@@ -146,7 +155,7 @@ public class OpenCD extends NexusPHP {
 						t.uploader = torrentCols.get(8).text();
 						torrents.add(t);
 					}
-					msgId = ResponseParser.SUCCESS_MSG_ID;
+					setSucceeded();
 					return torrents;
 				} catch (NullPointerException e) {
 					e.printStackTrace();
@@ -161,6 +170,28 @@ public class OpenCD extends NexusPHP {
 	}
 
 	@Override
+	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
+			String keywords) {
+		String url = String.format(Locale.getDefault(), torrentsUrl, page);
+		if (keywords != null && !keywords.equals("")) {
+			url += "&search=" + keywords;
+		}
+		HttpGet get = new HttpGet(url);
+		BaseAsyncTask<ArrayList<Torrent>> task = NotSingletonHttpClientTask
+				.newInstance(cookie, get, getTorrentParser());
+		return task;
+	}
+
+	@Override
+	public BaseAsyncTask<Boolean> bookmark(String torrentId) {
+		HttpGet get = new HttpGet(String.format(CommonUrls.NEXUSPHP_BOOKMARK,
+				mType.getUrl(), torrentId));
+		BaseAsyncTask<Boolean> task = NotSingletonHttpClientTask.newInstance(
+				cookie, get, new DefaultGetParser());
+		return task;
+	}
+
+	@Override
 	public boolean rssEnable() {
 		return true;
 	}
@@ -169,8 +200,8 @@ public class OpenCD extends NexusPHP {
 	public BaseAsyncTask<Boolean> addToRss(String torrentId) {
 		HttpGet get = new HttpGet(String.format(
 				CommonUrls.PTSiteUrls.CMCT_RSS_DOWNLOAD_URL, torrentId));
-		BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie, get,
-				new DefaultGetParser());
+		BaseAsyncTask<Boolean> task = NotSingletonHttpClientTask.newInstance(
+				cookie, get, new DefaultGetParser());
 		return task;
 	}
 

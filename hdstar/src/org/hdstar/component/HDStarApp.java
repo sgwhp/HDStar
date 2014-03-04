@@ -26,9 +26,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.gson.reflect.TypeToken;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.disc.impl.TotalSizeLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -80,17 +78,16 @@ public class HDStarApp extends Application {
 				context);
 		builder.threadPriority(Thread.NORM_PRIORITY - 2)
 				.denyCacheImageMultipleSizesInMemory()
-				.discCacheFileNameGenerator(new Md5FileNameGenerator())
+				// .discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.memoryCache(new LruMemoryCache(MEMORY_CACHE_SIZE))
-				.memoryCacheSize(MEMORY_CACHE_SIZE)
-				.memoryCacheSizePercentage(13);
+				.memoryCache(new LruMemoryCache(MEMORY_CACHE_SIZE));
+		// .memoryCacheSizePercentage(13)
 		File discCache = getExternalStorageCacheDir(context, DISK_CACHE_SUBDIR);
 		if (discCache != null) {
-			builder.discCache(new UnlimitedDiscCache(discCache))
-					.discCacheSize(DISK_CACHE_SIZE)
-					.discCacheFileCount(100)
-					.discCacheFileNameGenerator(new HashCodeFileNameGenerator());
+			builder.discCache(new TotalSizeLimitedDiscCache(discCache,
+					DISK_CACHE_SIZE));
+			// .discCacheFileCount(100)
+			// .discCacheFileNameGenerator(new HashCodeFileNameGenerator())
 		}
 		ImageLoaderConfiguration config = builder.build();
 		// Initialize ImageLoader with configuration.

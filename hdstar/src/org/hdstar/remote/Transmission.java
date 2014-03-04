@@ -10,6 +10,8 @@ import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.ResponseParser;
 import org.hdstar.util.HttpClientManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -156,6 +158,17 @@ public class Transmission extends RemoteBase {
 	public BaseAsyncTask<Boolean> setLabel(String label, String... hashes) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private JSONObject buildRequestObject(String sendMethod,
+			JSONObject arguments) throws JSONException {
+
+		// Build request for method
+		JSONObject request = new JSONObject();
+		request.put("method", sendMethod);
+		request.put("arguments", arguments);
+		request.put("tag", 0);
+		return request;
 	}
 
 }

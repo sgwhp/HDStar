@@ -28,3 +28,6 @@ proguard/
 *.iws
 .idea/
 
+# thumbnails of windows xp
+Thumbs.db
+

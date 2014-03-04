@@ -150,7 +150,7 @@ public class CommonSettingFragment extends StackFragment implements
 									loadingDialog.show();
 									logoutTask = new HDSky().logout();
 									logoutTask.attach(logoutCallback);
-									BaseAsyncTask.taskExec.execute(logoutTask);
+									BaseAsyncTask.commit(logoutTask);
 								}
 							})
 					.setNegativeButton(R.string.cancel,

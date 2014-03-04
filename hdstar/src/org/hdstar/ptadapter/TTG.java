@@ -12,6 +12,7 @@ import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
+import org.hdstar.task.NotSingletonHttpClientTask;
 import org.hdstar.task.ResponseParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,15 +20,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import ch.boye.httpclientandroidlib.Header;
-import ch.boye.httpclientandroidlib.HeaderElement;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
+/**
+ * ttg爬虫适配器. <br/>
+ * ttg在使用单例HttpClient时，程序首次请求种子页面没问题，但之后会直接跳转到登录页面。<br/>
+ * 具体原因未知，可以确定与PHPSESSID、Header等无关，暂时不能使用单例的HttpClient。
+ * 
+ * @author robust
+ */
 public class TTG extends PTAdapter {
-	private String PHPSESSID = null;// sessionId，ttg在cookies中会用到
+	// private static String PHPSESSID = null;// sessionId，ttg在cookies中会用到
 
 	public TTG() {
 		super(PTSiteType.TTG);
@@ -95,24 +102,24 @@ public class TTG extends PTAdapter {
 		return task;
 	}
 
-	/**
-	 * 
-	 * 获取sessionId. <br/>
-	 * 
-	 * @param res
-	 *            http响应
-	 */
-	private void dealWithSessionId(HttpResponse res) {
-		Header header = res.getFirstHeader("Set-Cookie");
-		if (header == null) {
-			return;
-		}
-		for (HeaderElement element : header.getElements()) {
-			if ("PHPSESSID".equals(element.getName())) {
-				PHPSESSID = element.getValue();
-			}
-		}
-	}
+	// /**
+	// *
+	// * 获取sessionId. <br/>
+	// *
+	// * @param res
+	// * http响应
+	// */
+	// private void dealWithSessionId(HttpResponse res) {
+	// Header header = res.getFirstHeader("Set-Cookie");
+	// if (header == null) {
+	// return;
+	// }
+	// for (HeaderElement element : header.getElements()) {
+	// if ("PHPSESSID".equals(element.getName())) {
+	// PHPSESSID = element.getValue();
+	// }
+	// }
+	// }
 
 	/**
 	 * 
@@ -141,7 +148,7 @@ public class TTG extends PTAdapter {
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
 				try {
-					dealWithSessionId(res);
+					// dealWithSessionId(res);
 					Document doc = Jsoup.parse(in, Const.CHARSET,
 							mType.getUrl());
 					ArrayList<Torrent> torrents = new ArrayList<Torrent>();
@@ -200,7 +207,7 @@ public class TTG extends PTAdapter {
 						t.uploader = torrentCols.get(9).text();
 						torrents.add(t);
 					}
-					msgId = ResponseParser.SUCCESS_MSG_ID;
+					setSucceeded();
 					return torrents;
 				} catch (NullPointerException e) {
 					e.printStackTrace();
@@ -213,12 +220,22 @@ public class TTG extends PTAdapter {
 			}
 		};
 		HttpGet get = new HttpGet(url);
+		// get.addHeader("Accept",
+		// "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		// get.addHeader("Accept-Encoding", "gzip, deflate");
+		// get.addHeader("Accept-Language",
+		// "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
+		// get.addHeader("Connection", "keep-alive");
+		// get.addHeader("Host", "ttg.im");
+		// get.addHeader("Referer", "http://ttg.im/browse.php?c=M");
+		// get.addHeader("User-Agent",
+		// "Mozilla/5.0 (Windows NT 5.1; rv:27.0) Gecko/20100101 Firefox/27.0");
 		String cookieStr = cookie;
-		if (PHPSESSID != null) {
-			cookieStr += "PHPSESSID=" + PHPSESSID + ";";
-		}
-		BaseAsyncTask<ArrayList<Torrent>> task = BaseAsyncTask.newInstance(
-				cookieStr, get, parser);
+		// if (PHPSESSID != null) {
+		// cookieStr += "PHPSESSID=" + PHPSESSID + ";";
+		// }
+		BaseAsyncTask<ArrayList<Torrent>> task = NotSingletonHttpClientTask
+				.newInstance(cookieStr, get, parser);
 		return task;
 	}
 
@@ -226,8 +243,8 @@ public class TTG extends PTAdapter {
 	public BaseAsyncTask<Boolean> bookmark(String torrentId) {
 		HttpGet get = new HttpGet(String.format(
 				CommonUrls.PTSiteUrls.TTG_BOOKMARK, torrentId));
-		BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie, get,
-				new TTGDefaultGetParser());
+		BaseAsyncTask<Boolean> task = NotSingletonHttpClientTask.newInstance(
+				cookie, get, new TTGDefaultGetParser());
 		return task;
 	}
 
@@ -243,8 +260,8 @@ public class TTG extends PTAdapter {
 		HttpPost post = new HttpPost(CommonUrls.PTSiteUrls.TTG_RSS_DOWNLOAD_URL);
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp));
-			BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie,
-					post, new TTGDefaultGetParser());
+			BaseAsyncTask<Boolean> task = NotSingletonHttpClientTask
+					.newInstance(cookie, post, new TTGDefaultGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -256,7 +273,7 @@ public class TTG extends PTAdapter {
 
 		@Override
 		public Boolean parse(HttpResponse res, InputStream in) {
-			dealWithSessionId(res);
+			// dealWithSessionId(res);
 			if (res.getStatusLine().getStatusCode() == 200) {
 				msgId = SUCCESS_MSG_ID;
 				return true;

@@ -206,7 +206,7 @@ public class TorrentListFragment extends StackFragment {
 				keywords.trim());
 		task.attach(refreshCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 	}
 
 	private void doRefresh() {
@@ -222,7 +222,7 @@ public class TorrentListFragment extends StackFragment {
 				curPage + 1, keywords.trim());
 		task.attach(addCallback);
 		attachTask(task);
-		BaseAsyncTask.taskExec.execute(task);
+		BaseAsyncTask.commit(task);
 	}
 
 	TaskCallback<ArrayList<Torrent>> refreshCallback = new TaskCallback<ArrayList<Torrent>>() {

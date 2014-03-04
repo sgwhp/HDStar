@@ -9,6 +9,7 @@ public class CommonUrls {
 	 */
 	public static class HDStar {
 		public static final String BASE_URL = "http://hdsky.me";
+		public static final String LOGIN_URL = BASE_URL + "/login.php";
 		public static final String TAKE_LOGIN_URL = BASE_URL + "/takelogin.php";
 		public static final String HOME_PAGE = BASE_URL + "/index.php";
 		public static final String GET_SECURITY_IMAGE_URL = BASE_URL
@@ -45,7 +46,7 @@ public class CommonUrls {
 		public static final String TORRENTS_URL = BASE_URL
 				+ "/torrents.php?page=%d";
 
-		/** 客户端服务器地址 */
+		/** 客户端应用服务器地址 */
 		// public static final String SERVER_ADDRESS =
 		// "http://hdstar.ap01.aws.af.cm/";
 		public static String SERVER_ADDRESS;
@@ -66,6 +67,11 @@ public class CommonUrls {
 		public static String SERVER_CHECK_UPDATE_URL;
 		public static String SERVER_ABOUT_URL;
 
+		/**
+		 * 根据个人设置初始化应用服务器地址 <br/>
+		 * 
+		 * @param serverAddr
+		 */
 		public static void initServerAddr(final String serverAddr) {
 			SERVER_ADDRESS = serverAddr;
 			SERVER_VIEW_FORUM_URL = SERVER_ADDRESS + "viewForum";
