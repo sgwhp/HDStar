@@ -5,8 +5,15 @@ import java.util.List;
 
 import org.hdstar.common.RemoteType;
 import org.hdstar.model.Label;
+import org.hdstar.model.RemoteSetting;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.task.BaseAsyncTask;
+import org.hdstar.util.HttpClientManager;
+
+import ch.boye.httpclientandroidlib.HttpHost;
+import ch.boye.httpclientandroidlib.auth.AuthScope;
+import ch.boye.httpclientandroidlib.auth.UsernamePasswordCredentials;
+import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 
 /**
  * 子类命名要与RemoteType中的一致
@@ -17,8 +24,8 @@ import org.hdstar.task.BaseAsyncTask;
  */
 public abstract class RemoteBase {
 	protected RemoteType mType;
-	// 包括ip和端口
-	protected String ipNPort;
+	/** 设置信息，包括ip、端口、用户名、密码等 */
+	protected RemoteSetting setting;
 	/** 任务列表的所有标签 */
 	protected ArrayList<Label> mLabels = new ArrayList<Label>();
 
@@ -30,30 +37,47 @@ public abstract class RemoteBase {
 		return mType;
 	}
 
-	public void setIpNPort(String ipNPort) {
-		this.ipNPort = ipNPort;
+	public RemoteSetting getSetting() {
+		return setting;
 	}
 
-	public String getIpNPort() {
-		return ipNPort;
+	public void setSetting(RemoteSetting setting) {
+		this.setting = setting;
+		// 设置auth验证参数
+		String ip;
+		int port;
+		String[] sa = setting.ip.split(":");
+		ip = sa[0];
+		if (sa.length == 2) {
+			port = Integer.parseInt(sa[1]);
+		} else {
+			port = 80;
+		}
+		HttpHost targetHost = new HttpHost(ip, port, "http");
+		DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
+				.getHttpClient();
+		client.getCredentialsProvider().setCredentials(
+				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+				new UsernamePasswordCredentials(setting.username,
+						setting.password));
 	}
 
 	public List<Label> getLabels() {
 		return mLabels;
 	}
 
-	/**
-	 * 
-	 * 构建登录请求. <br/>
-	 * 
-	 * @param username
-	 *            用户名
-	 * @param password
-	 *            密码
-	 * @return
-	 */
-	public abstract BaseAsyncTask<Boolean> login(String username,
-			String password);
+	// /**
+	// *
+	// * 构建登录请求. <br/>
+	// *
+	// * @param username
+	// * 用户名
+	// * @param password
+	// * 密码
+	// * @return
+	// */
+	// public abstract BaseAsyncTask<Boolean> login(String username,
+	// String password);
 
 	/**
 	 * 

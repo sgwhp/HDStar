@@ -153,7 +153,7 @@ public class CommonSettingFragment extends StackFragment implements
 									BaseAsyncTask.commit(logoutTask);
 								}
 							})
-					.setNegativeButton(R.string.cancel,
+					.setNegativeButton(android.R.string.cancel,
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -274,7 +274,7 @@ public class CommonSettingFragment extends StackFragment implements
 									getActivity().startService(dlIntent);
 								}
 							})
-					.setNegativeButton(R.string.cancel,
+					.setNegativeButton(android.R.string.cancel,
 							new DialogInterface.OnClickListener() {
 
 								@Override

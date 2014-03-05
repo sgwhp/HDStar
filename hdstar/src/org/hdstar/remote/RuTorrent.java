@@ -19,22 +19,18 @@ import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.TorrentStatus;
 import org.hdstar.task.BaseAsyncTask;
-import org.hdstar.task.DefaultGetParser;
-import org.hdstar.task.ResponseParser;
-import org.hdstar.util.HttpClientManager;
+import org.hdstar.task.parser.BasicAuthGetParser;
+import org.hdstar.task.parser.BasicAuthParser;
+import org.hdstar.task.parser.ResponseParser;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.util.Xml;
-import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
-import ch.boye.httpclientandroidlib.auth.AuthScope;
-import ch.boye.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.entity.StringEntity;
-import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 import com.google.gson.JsonArray;
@@ -75,11 +71,11 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList() {
 		HttpPost post = new HttpPost(String.format(
-				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
-		ResponseParser<ArrayList<RemoteTaskInfo>> parser = new ResponseParser<ArrayList<RemoteTaskInfo>>() {
+				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, setting.ip));
+		BasicAuthParser<ArrayList<RemoteTaskInfo>> parser = new BasicAuthParser<ArrayList<RemoteTaskInfo>>() {
 
 			@Override
-			public ArrayList<RemoteTaskInfo> parse(HttpResponse res,
+			public ArrayList<RemoteTaskInfo> parseContent(HttpResponse res,
 					InputStream in) {
 				// if (res.getStatusLine().getStatusCode() == 401) {
 				// Intent intent = new Intent(context,
@@ -213,10 +209,11 @@ public class RuTorrent extends RemoteBase {
 				serializer.flush();
 
 				HttpPost post = new HttpPost(String.format(
-						CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
+						CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL,
+						setting.ip));
 				post.setEntity(new StringEntity(writer.toString()));
 				final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(
-						post, new DefaultGetParser());
+						post, new BasicAuthGetParser());
 				return task;
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
@@ -233,7 +230,7 @@ public class RuTorrent extends RemoteBase {
 	public BaseAsyncTask<Boolean> add(String dir, String hash,
 			ArrayList<String> urls) {
 		HttpPost post = new HttpPost(String.format(
-				CommonUrls.BTClient.RUTORRENT_RSS_ACTION_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_RSS_ACTION_URL, setting.ip));
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("mode", "loadtorrents"));
 		params.add(new BasicNameValuePair("dir_edit", dir));
@@ -244,7 +241,7 @@ public class RuTorrent extends RemoteBase {
 		try {
 			post.setEntity(new UrlEncodedFormEntity(params, Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
-					new DefaultGetParser());
+					new BasicAuthGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -314,12 +311,12 @@ public class RuTorrent extends RemoteBase {
 
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
 		HttpPost post = new HttpPost(String.format(
-				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, setting.ip));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(buildParams(mode, hashes),
 					Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
-					new DefaultGetParser());
+					new BasicAuthGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -344,7 +341,7 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<long[]> getDiskInfo() {
 		HttpGet get = new HttpGet(String.format(
-				CommonUrls.BTClient.RUTORRENT_DISK_SPACE_URL, ipNPort)
+				CommonUrls.BTClient.RUTORRENT_DISK_SPACE_URL, setting.ip)
 				+ System.currentTimeMillis());
 		ResponseParser<long[]> parser = new ResponseParser<long[]>(
 				R.string.get_disk_space_failed) {
@@ -365,40 +362,40 @@ public class RuTorrent extends RemoteBase {
 		return diskTask;
 	}
 
-	@Override
-	public BaseAsyncTask<Boolean> login(String username, String password) {
-		String ip;
-		int port;
-		String[] sa = ipNPort.split(":");
-		ip = sa[0];
-		if (sa.length == 2) {
-			port = Integer.parseInt(sa[1]);
-		} else {
-			port = 80;
-		}
-		HttpHost targetHost = new HttpHost(ip, port, "http");
-		DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
-				.getHttpClient();
-		client.getCredentialsProvider().setCredentials(
-				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
-				new UsernamePasswordCredentials(username, password));
-		HttpGet request = new HttpGet(String.format(
-				CommonUrls.BTClient.RUTORRENT_HOME_PAGE, ipNPort));
-		ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
-				R.string.login_error) {
-
-			@Override
-			public Boolean parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 301) {
-					msgId = SUCCESS_MSG_ID;
-					return true;
-				}
-
-				return false;
-			}
-		};
-		return new BaseAsyncTask<Boolean>(request, parser);
-	}
+	// @Override
+	// public BaseAsyncTask<Boolean> login(String username, String password) {
+	// String ip;
+	// int port;
+	// String[] sa = setting.ip.split(":");
+	// ip = sa[0];
+	// if (sa.length == 2) {
+	// port = Integer.parseInt(sa[1]);
+	// } else {
+	// port = 80;
+	// }
+	// HttpHost targetHost = new HttpHost(ip, port, "http");
+	// DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
+	// .getHttpClient();
+	// client.getCredentialsProvider().setCredentials(
+	// new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+	// new UsernamePasswordCredentials(username, password));
+	// HttpGet request = new HttpGet(String.format(
+	// CommonUrls.BTClient.RUTORRENT_HOME_PAGE, setting.ip));
+	// ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
+	// R.string.login_error) {
+	//
+	// @Override
+	// public Boolean parse(HttpResponse res, InputStream in) {
+	// if (res.getStatusLine().getStatusCode() == 301) {
+	// msgId = SUCCESS_MSG_ID;
+	// return true;
+	// }
+	//
+	// return false;
+	// }
+	// };
+	// return new BaseAsyncTask<Boolean>(request, parser);
+	// }
 
 	private void buildMemberMethod(XmlSerializer serializer, String methodName)
 			throws IllegalArgumentException, IllegalStateException, IOException {
@@ -439,11 +436,11 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<Boolean> addByUrl(String dir, String url) {
 		HttpPost post = new HttpPost(String.format(
-				CommonUrls.BTClient.RUTORRENT_ADD_URL, ipNPort));
-		ResponseParser<Boolean> parser = new ResponseParser<Boolean>() {
+				CommonUrls.BTClient.RUTORRENT_ADD_URL, setting.ip));
+		BasicAuthParser<Boolean> parser = new BasicAuthParser<Boolean>() {
 
 			@Override
-			public Boolean parse(HttpResponse res, InputStream in) {
+			public Boolean parseContent(HttpResponse res, InputStream in) {
 				if (res.getFirstHeader("Location").getValue()
 						.contains("result[]=Success")) {
 					msgId = SUCCESS_MSG_ID;
@@ -471,7 +468,7 @@ public class RuTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<Boolean> setLabel(String label, String... hashes) {
 		HttpPost post = new HttpPost(String.format(
-				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, ipNPort));
+				CommonUrls.BTClient.RUTORRENT_RPC_ACTION_URL, setting.ip));
 		List<NameValuePair> nvp = buildParams("setlabel", hashes);
 		for (int i = hashes.length; i > 0; i--) {
 			nvp.add(new BasicNameValuePair("s", "label"));
@@ -480,7 +477,7 @@ public class RuTorrent extends RemoteBase {
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp, Const.CHARSET));
 			final BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(post,
-					new DefaultGetParser());
+					new BasicAuthGetParser());
 			return task;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

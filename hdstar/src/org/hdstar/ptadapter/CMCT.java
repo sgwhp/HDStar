@@ -7,7 +7,7 @@ import org.hdstar.common.CommonUrls;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
-import org.hdstar.task.DefaultGetParser;
+import org.hdstar.task.parser.DefaultGetParser;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 

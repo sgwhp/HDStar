@@ -1,4 +1,4 @@
-package org.hdstar.task;
+package org.hdstar.task.parser;
 
 import java.io.InputStream;
 
@@ -9,7 +9,7 @@ public class DefaultGetParser extends ResponseParser<Boolean> {
 	@Override
 	public Boolean parse(HttpResponse res, InputStream in) {
 		if (res.getStatusLine().getStatusCode() == 200) {
-			msgId = SUCCESS_MSG_ID;
+			setSucceeded();
 			return true;
 		}
 		return false;

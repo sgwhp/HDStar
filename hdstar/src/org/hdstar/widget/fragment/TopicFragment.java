@@ -235,8 +235,9 @@ public class TopicFragment extends StackFragment {
 
 	@Override
 	public void onCreateActionBar(Menu menu) {
-		//尚未初始化或主题已锁定
-		if(adapter == null || adapter.getList().size() == 0 || adapter.getList().get(0).id == 0){
+		// 尚未初始化或主题已锁定
+		if (adapter == null || adapter.getList().size() == 0
+				|| adapter.getList().get(0).id == 0) {
 			return;
 		}
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
@@ -342,7 +343,7 @@ public class TopicFragment extends StackFragment {
 								attachTask(task);
 								task.execGet(
 										url,
-										new org.hdstar.task.ResponseParser<Void>() {
+										new org.hdstar.task.parser.ResponseParser<Void>() {
 
 											@Override
 											public Void parse(HttpResponse res,
@@ -356,7 +357,7 @@ public class TopicFragment extends StackFragment {
 										});
 							}
 						})
-				.setNegativeButton(R.string.cancel,
+				.setNegativeButton(android.R.string.cancel,
 						new DialogInterface.OnClickListener() {
 
 							@Override

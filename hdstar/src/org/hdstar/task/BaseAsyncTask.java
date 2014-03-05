@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.hdstar.R;
 import org.hdstar.common.Const;
+import org.hdstar.task.parser.ResponseParser;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 
@@ -175,7 +176,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		if (parser.isSucceeded()) {
 			mCallback.onComplete(result);
 		} else {
-			mCallback.onFail(parser.msgId);
+			mCallback.onFail(parser.getMessageId());
 		}
 	}
 
@@ -187,7 +188,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	 *            要显示的消息资源id
 	 */
 	public void setMessageId(int msgId) {
-		parser.msgId = msgId;
+		parser.setMessageId(msgId);
 	}
 
 	/**

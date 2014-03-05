@@ -215,7 +215,7 @@ public class DownloadActivity extends SherlockActivity implements
 									finish();
 								}
 							})
-					.setNegativeButton(R.string.cancel,
+					.setNegativeButton(android.R.string.cancel,
 							new DialogInterface.OnClickListener() {
 
 								@Override

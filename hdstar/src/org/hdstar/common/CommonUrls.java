@@ -126,7 +126,8 @@ public class CommonUrls {
 				+ "&action=setprops";
 
 		/** transmission地址 */
-		public static final String TRANSMISSION_HOME_PAGE = "http：//%s/transmission/rpc";
+		public static final String TRANSMISSION_HOME_PAGE = "http://%s/transmission/web";
+		public static final String TRANSMISSION_RPC_URL = "http://%s/transmission/rpc";
 	}
 
 	// 获取网站图标工具地址

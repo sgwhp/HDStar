@@ -35,7 +35,6 @@
     <string name="exit_message">確定退出？</string>
     <string name="log_out_message">確定註銷？</string>
     <string name="confirm">提示</string>
-    <string name="cancel">取消</string>
     <string name="input_password">請輸入密碼</string>
     <string name="input_username">請輸入帳號</string>
     <string name="input_security_code">請輸入驗證碼</string>
@@ -166,6 +165,7 @@
 	<string name="navigation_status_onlyactive">活動</string>
 	<string name="navigation_status_onlyinactive">停止</string>
 	<string name="unlabled">其他</string>
+	<string name="http_401">HTTP 401，賬號或密碼錯誤</string>
 	
 	<!-- pt site -->
 	<string name="init">初始化</string>

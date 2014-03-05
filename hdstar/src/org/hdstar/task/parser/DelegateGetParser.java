@@ -1,4 +1,4 @@
-package org.hdstar.task;
+package org.hdstar.task.parser;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -30,7 +30,7 @@ public class DelegateGetParser<T> extends ResponseParser<T> {
 			ResponseWrapper<T> wrapper = gson.fromJson(
 					new InputStreamReader(in), resultType);
 			if (wrapper.resCode == 200) {
-				setMessageId(ResponseParser.SUCCESS_MSG_ID);
+				setSucceeded();
 				return wrapper.body;
 			}
 		}

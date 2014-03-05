@@ -13,7 +13,7 @@ import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.NotSingletonHttpClientTask;
-import org.hdstar.task.ResponseParser;
+import org.hdstar.task.parser.ResponseParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

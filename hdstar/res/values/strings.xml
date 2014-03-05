@@ -34,7 +34,6 @@
     <string name="exit_message">确定退出？</string>
     <string name="log_out_message">确定注销？</string>
     <string name="confirm">提示</string>
-    <string name="cancel">取消</string>
     <string name="input_password">请输入密码</string>
     <string name="input_username">请输入账号</string>
     <string name="input_security_code">请输入验证码</string>
@@ -175,6 +174,7 @@
 	<string name="navigation_status_onlyactive">活动</string>
 	<string name="navigation_status_onlyinactive">停止</string>
 	<string name="unlabled">其他</string>
+	<string name="http_401">HTTP 401，账号或密码错误</string>
 	
 	<!-- pt site -->
 	<string name="pt_site">PT</string>

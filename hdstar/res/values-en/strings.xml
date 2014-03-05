@@ -35,7 +35,6 @@
     <string name="exit_message">Sure to exit?</string>
     <string name="log_out_message">Sure to log out?</string>
     <string name="confirm">confirm</string>
-    <string name="cancel">cancel</string>
     <string name="input_password">The password is empty!</string>
     <string name="input_username">The username is empty!</string>
     <string name="input_security_code">The security code is empty!</string>
@@ -168,6 +167,7 @@
 	<string name="navigation_status_onlyactive">Active</string>
 	<string name="navigation_status_onlyinactive">Inactive</string>
 	<string name="unlabled">Others</string>
+	<string name="http_401">401 HTTP response (username or password incorrect)</string>
 	
 	<!-- pt site -->
 	<string name="init">Init</string>

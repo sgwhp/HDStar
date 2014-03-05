@@ -6,25 +6,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.RemoteType;
 import org.hdstar.model.Label;
 import org.hdstar.model.RemoteTaskInfo;
 import org.hdstar.model.TorrentStatus;
 import org.hdstar.task.BaseAsyncTask;
-import org.hdstar.task.DefaultGetParser;
-import org.hdstar.task.ResponseParser;
 import org.hdstar.task.UtorrentTask;
-import org.hdstar.util.HttpClientManager;
+import org.hdstar.task.parser.BasicAuthGetParser;
+import org.hdstar.task.parser.BasicAuthParser;
 import org.hdstar.util.IOUtils;
 
-import ch.boye.httpclientandroidlib.HttpHost;
 import ch.boye.httpclientandroidlib.HttpResponse;
-import ch.boye.httpclientandroidlib.auth.AuthScope;
-import ch.boye.httpclientandroidlib.auth.UsernamePasswordCredentials;
-import ch.boye.httpclientandroidlib.client.methods.HttpGet;
-import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -34,7 +27,8 @@ import com.google.gson.JsonParser;
 /**
  * 
  * 远程μTorrent适配器. <br/>
- * 参考transdroid
+ * 
+ * 部分功能参考transdroid
  * 
  * @see http://www.transdroid.org/under-the-hood/
  * 
@@ -75,10 +69,10 @@ public class UTorrent extends RemoteBase {
 
 	@Override
 	public BaseAsyncTask<ArrayList<RemoteTaskInfo>> fetchList() {
-		ResponseParser<ArrayList<RemoteTaskInfo>> parser = new ResponseParser<ArrayList<RemoteTaskInfo>>() {
+		BasicAuthParser<ArrayList<RemoteTaskInfo>> parser = new BasicAuthParser<ArrayList<RemoteTaskInfo>>() {
 
 			@Override
-			public ArrayList<RemoteTaskInfo> parse(HttpResponse res,
+			public ArrayList<RemoteTaskInfo> parseContent(HttpResponse res,
 					InputStream in) {
 				try {
 					JsonParser parser = new JsonParser();
@@ -121,7 +115,7 @@ public class UTorrent extends RemoteBase {
 						// 14 seeds
 						result.add(info);
 					}
-					msgId = SUCCESS_MSG_ID;
+					setSucceeded();
 					return result;
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -131,8 +125,8 @@ public class UTorrent extends RemoteBase {
 		};
 
 		UtorrentTask<ArrayList<RemoteTaskInfo>> task = UtorrentTask
-				.newInstance(ipNPort, String.format(
-						CommonUrls.BTClient.UTORRENT_GET_LIST_URL, ipNPort,
+				.newInstance(setting.ip, String.format(
+						CommonUrls.BTClient.UTORRENT_GET_LIST_URL, setting.ip,
 						"%s"), parser);
 		return task;
 	}
@@ -147,11 +141,10 @@ public class UTorrent extends RemoteBase {
 	}
 
 	private BaseAsyncTask<Boolean> ctrlTask(String mode, String... hashes) {
-		ResponseParser<Boolean> parser = new DefaultGetParser();
 		UtorrentTask<Boolean> task = UtorrentTask.newInstance(
-				ipNPort,
-				buildParams(CommonUrls.BTClient.UTORRENT_ACTION_URL, ipNPort,
-						mode, hashes), parser);
+				setting.ip,
+				buildParams(CommonUrls.BTClient.UTORRENT_ACTION_URL,
+						setting.ip, mode, hashes), new BasicAuthGetParser());
 		return task;
 	}
 
@@ -194,48 +187,47 @@ public class UTorrent extends RemoteBase {
 		return null;
 	}
 
-	@Override
-	public BaseAsyncTask<Boolean> login(String username, String password) {
-		String ip;
-		int port;
-		String[] sa = ipNPort.split(":");
-		ip = sa[0];
-		if (sa.length == 2) {
-			port = Integer.parseInt(sa[1]);
-		} else {
-			port = 80;
-		}
-		HttpHost targetHost = new HttpHost(ip, port, "http");
-		DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
-				.getHttpClient();
-		client.getCredentialsProvider().setCredentials(
-				new AuthScope(targetHost.getHostName(), targetHost.getPort()),
-				new UsernamePasswordCredentials(username, password));
-		HttpGet request = new HttpGet(String.format(
-				CommonUrls.BTClient.UTORRENT_HOME_PAGE, ipNPort));
-		ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
-				R.string.login_error) {
-
-			@Override
-			public Boolean parse(HttpResponse res, InputStream in) {
-				if (res.getStatusLine().getStatusCode() == 301) {
-					msgId = SUCCESS_MSG_ID;
-					return true;
-				}
-				return false;
-			}
-		};
-		return new BaseAsyncTask<Boolean>(request, parser);
-	}
+	// @Override
+	// public BaseAsyncTask<Boolean> login(String username, String password) {
+	// String ip;
+	// int port;
+	// String[] sa = setting.ip.split(":");
+	// ip = sa[0];
+	// if (sa.length == 2) {
+	// port = Integer.parseInt(sa[1]);
+	// } else {
+	// port = 80;
+	// }
+	// HttpHost targetHost = new HttpHost(ip, port, "http");
+	// DefaultHttpClient client = (DefaultHttpClient) HttpClientManager
+	// .getHttpClient();
+	// client.getCredentialsProvider().setCredentials(
+	// new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+	// new UsernamePasswordCredentials(username, password));
+	// HttpGet request = new HttpGet(String.format(
+	// CommonUrls.BTClient.UTORRENT_HOME_PAGE, setting.ip));
+	// ResponseParser<Boolean> parser = new ResponseParser<Boolean>(
+	// R.string.login_error) {
+	//
+	// @Override
+	// public Boolean parse(HttpResponse res, InputStream in) {
+	// if (res.getStatusLine().getStatusCode() == 301) {
+	// setSucceeded();
+	// return true;
+	// }
+	// return false;
+	// }
+	// };
+	// return new BaseAsyncTask<Boolean>(request, parser);
+	// }
 
 	@Override
 	public BaseAsyncTask<Boolean> addByUrl(String dir, String url) {
-		ResponseParser<Boolean> parser = new DefaultGetParser();
 		UtorrentTask<Boolean> task = null;
 		try {
-			task = UtorrentTask.newInstance(ipNPort, String.format(
-					CommonUrls.BTClient.UTORRENT_ACTION_URL, ipNPort, "%s",
-					URLEncoder.encode(url, "UTF-8")), parser);
+			task = UtorrentTask.newInstance(setting.ip, String.format(
+					CommonUrls.BTClient.UTORRENT_ACTION_URL, setting.ip, "%s",
+					URLEncoder.encode(url, "UTF-8")), new BasicAuthGetParser());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -245,11 +237,12 @@ public class UTorrent extends RemoteBase {
 	@Override
 	public BaseAsyncTask<Boolean> setLabel(String label, String... hashes) {
 		String url = String.format(CommonUrls.BTClient.UTORRENT_SET_LABEL_URL,
-				ipNPort, "%s");
+				setting.ip, "%s");
 		for (String hash : hashes) {
 			url += "&s=label" + "&hash=" + hash + "&v=" + label;
 		}
-		return UtorrentTask.newInstance(ipNPort, url, new DefaultGetParser());
+		return UtorrentTask.newInstance(setting.ip, url,
+				new BasicAuthGetParser());
 	}
 
 }

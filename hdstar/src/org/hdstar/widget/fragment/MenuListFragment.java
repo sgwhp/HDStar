@@ -124,7 +124,7 @@ public class MenuListFragment extends ListFragment {
 							}
 
 						})
-				.setNegativeButton(R.string.cancel,
+				.setNegativeButton(android.R.string.cancel,
 						new DialogInterface.OnClickListener() {
 
 							@Override

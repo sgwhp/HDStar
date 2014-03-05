@@ -13,8 +13,8 @@ import org.hdstar.common.PTSiteType;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
-import org.hdstar.task.DelegateGetParser;
-import org.hdstar.task.ResponseParser;
+import org.hdstar.task.parser.DelegateGetParser;
+import org.hdstar.task.parser.ResponseParser;
 
 import ch.boye.httpclientandroidlib.Header;
 import ch.boye.httpclientandroidlib.HttpResponse;

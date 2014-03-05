@@ -35,6 +35,7 @@ public class Util {
 
 	/**
 	 * 获取app当前版本号
+	 * 
 	 * @param context
 	 * @return 当前版本号
 	 */
@@ -68,35 +69,37 @@ public class Util {
 		return str
 				.matches("(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[\\d]{1,5})?$");
 	}
-	
+
 	/**
 	 * 显示退出提示框
+	 * 
 	 * @param context
 	 */
-	public static void showExitDialog(final Activity context){
+	public static void showExitDialog(final Activity context) {
 		new AlertDialog.Builder(context)
-		.setTitle(R.string.confirm)
-		.setIcon(R.drawable.ic_launcher)
-		.setMessage(R.string.exit_message)
-		.setPositiveButton(R.string.exit,
-				new DialogInterface.OnClickListener() {
+				.setTitle(R.string.confirm)
+				.setIcon(R.drawable.ic_launcher)
+				.setMessage(R.string.exit_message)
+				.setPositiveButton(R.string.exit,
+						new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog,
-							int which) {
-						// InitActivity.exitApp(BaseStackActivity.this);
-						((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-								.cancelAll();
-						context.finish();
-					}
-				})
-		.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// InitActivity.exitApp(BaseStackActivity.this);
+								((NotificationManager) context
+										.getSystemService(Context.NOTIFICATION_SERVICE))
+										.cancelAll();
+								context.finish();
+							}
+						})
+				.setNegativeButton(android.R.string.cancel,
+						new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog,
-							int which) {
-					}
-				}).create().show();
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+							}
+						}).create().show();
 	}
 }

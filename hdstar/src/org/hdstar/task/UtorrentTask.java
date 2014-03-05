@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
+import org.hdstar.task.parser.ResponseParser;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 

@@ -7,6 +7,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import org.hdstar.R;
+import org.hdstar.task.parser.ResponseParser;
 import org.hdstar.util.HttpClientManager;
 import org.hdstar.util.IOUtils;
 

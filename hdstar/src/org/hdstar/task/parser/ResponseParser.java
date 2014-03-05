@@ -1,4 +1,4 @@
-package org.hdstar.task;
+package org.hdstar.task.parser;
 
 import java.io.InputStream;
 import java.lang.reflect.Type;

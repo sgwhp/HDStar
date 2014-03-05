@@ -23,7 +23,7 @@ import org.hdstar.remote.RemoteBase;
 import org.hdstar.remote.RemoteFactory;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.ResponseParser;
+import org.hdstar.task.parser.ResponseParser;
 import org.hdstar.task.TaskStatus;
 import org.hdstar.util.RssHandler;
 import org.hdstar.util.SoundPoolManager;
@@ -141,8 +141,9 @@ public class RemoteActivity extends BaseActivity implements
 	private ArrayList<RssSetting> rssSettings;
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
-	/** 是否已登录 */
-	private boolean login;
+
+	// /** 是否已登录 */
+	// private boolean login;
 
 	public RemoteActivity() {
 		super(R.string.remote);
@@ -210,7 +211,7 @@ public class RemoteActivity extends BaseActivity implements
 									finish();
 								}
 							})
-					.setNegativeButton(R.string.cancel,
+					.setNegativeButton(android.R.string.cancel,
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -315,7 +316,7 @@ public class RemoteActivity extends BaseActivity implements
 								}
 
 							})
-					.setNegativeButton(R.string.cancel,
+					.setNegativeButton(android.R.string.cancel,
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -378,7 +379,7 @@ public class RemoteActivity extends BaseActivity implements
 
 			detachTask();
 			mPullToRefreshLayout.setRefreshComplete();
-			login = false;
+			// login = false;
 			taskList.clear();
 			filterList.clear();
 			adapter.notifyDataSetChanged();
@@ -386,7 +387,7 @@ public class RemoteActivity extends BaseActivity implements
 			currentFilter = StatusType.getShowAllType(this);
 			navigationSpinnerAdapter.updateCurrentFilter(currentFilter);
 			remote = RemoteFactory.newInstanceByName(setting.type);
-			remote.setIpNPort(setting.ip);
+			remote.setSetting(setting);
 			dirEt.setText(setting.downloadDir);
 			if (remote.diskEnable()) {
 				findViewById(R.id.disk_info).setVisibility(View.VISIBLE);
@@ -800,15 +801,16 @@ public class RemoteActivity extends BaseActivity implements
 			mTask.detach();
 			mTask = null;
 		}
-		if (login) {
-			fetch();
-		} else {
-			BaseAsyncTask<Boolean> task = remote.login(setting.username,
-					setting.password);
-			task.attach(loginCallback);
-			BaseAsyncTask.commit(task);
-			attachTask(task);
-		}
+		fetch();
+		// if (login) {
+		// fetch();
+		// } else {
+		// BaseAsyncTask<Boolean> task = remote.login(setting.username,
+		// setting.password);
+		// task.attach(loginCallback);
+		// BaseAsyncTask.commit(task);
+		// attachTask(task);
+		// }
 	}
 
 	/**
@@ -837,26 +839,27 @@ public class RemoteActivity extends BaseActivity implements
 		adapter.notifyDataSetChanged();
 	}
 
-	private TaskCallback<Boolean> loginCallback = new TaskCallback<Boolean>() {
-
-		@Override
-		public void onComplete(Boolean result) {
-			login = true;
-			detachTask();
-			fetch();
-		}
-
-		@Override
-		public void onCancel() {
-			mPullToRefreshLayout.setRefreshComplete();
-		}
-
-		@Override
-		public void onFail(Integer msgId) {
-			mPullToRefreshLayout.setRefreshComplete();
-			Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
-		}
-	};
+	// private TaskCallback<Boolean> loginCallback = new TaskCallback<Boolean>()
+	// {
+	//
+	// @Override
+	// public void onComplete(Boolean result) {
+	// login = true;
+	// detachTask();
+	// fetch();
+	// }
+	//
+	// @Override
+	// public void onCancel() {
+	// mPullToRefreshLayout.setRefreshComplete();
+	// }
+	//
+	// @Override
+	// public void onFail(Integer msgId) {
+	// mPullToRefreshLayout.setRefreshComplete();
+	// Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
+	// }
+	// };
 
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {
 
