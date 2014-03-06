@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 
 /**
  * 
- * Ó¦ÓÃ·þÎñÆ÷·µ»ØjsonÊý¾ÝµÄ½âÎö¹¤¾ß. <br/>
+ * åº”ç”¨æœåŠ¡å™¨è¿”å›žjsonæ•°æ®çš„è§£æžå·¥å…·. <br/>
  * 
  * @author robust
  */

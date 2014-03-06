@@ -45,7 +45,7 @@ public class MyTextParser {
 	private HashMap<String, Integer> buildSmileyToRes() {
 		if (Const.DEFAULT_SMILEY_RES_IDS.length != mSmileyTexts.length) {
 			// Log.w("SmileyParser", "Smiley resource ID/text mismatch");
-			// ±íÇéµÄÊıÁ¿ĞèÒªºÍÊı×é¶¨ÒåµÄ³¤¶ÈÒ»ÖÂ£¡
+			// è¡¨æƒ…çš„æ•°é‡éœ€è¦å’Œæ•°ç»„å®šä¹‰çš„é•¿åº¦ä¸€è‡´ï¼
 			throw new IllegalStateException("Smiley resource ID/text mismatch");
 		}
 
@@ -58,12 +58,12 @@ public class MyTextParser {
 		return smileyToRes;
 	}
 
-	// ¹¹½¨ÕıÔò±í´ïÊ½
+	// æ„å»ºæ­£åˆ™è¡¨è¾¾å¼
 	private Pattern buildPattern() {
 		return Pattern.compile("\\[sm[0-9]+\\]", Pattern.DOTALL);
 	}
 
-	// ¸ù¾İÎÄ±¾Ìæ»»³ÉÍ¼Æ¬
+	// æ ¹æ®æ–‡æœ¬æ›¿æ¢æˆå›¾ç‰‡
 	public CharSequence toSpan(CharSequence text) {
 		SpannableStringBuilder builder = new SpannableStringBuilder(text);
 		Matcher matcher = mPattern.matcher(text);
@@ -90,14 +90,14 @@ public class MyTextParser {
 	}
 
 	/**
-	 * ½«html×ª»»ÎªBBCode
+	 * å°†htmlè½¬æ¢ä¸ºBBCode
 	 */
 	public static String toBBCode(String text) {
-		// Ìæ»»ËùÓĞµÄ»»ĞĞ
+		// æ›¿æ¢æ‰€æœ‰çš„æ¢è¡Œ
 		// text = text.replaceAll("<br\\s.*?>", "\n");
-		// Ìæ»»ÒıÓÃµÄºó°ë²¿·Ö
+		// æ›¿æ¢å¼•ç”¨çš„ååŠéƒ¨åˆ†
 		text = text.replaceAll("</fieldset>", "[/quote]");
-		// Ìæ»»ÒıÓÃµÄÇ°°ë²¿·Ö
+		// æ›¿æ¢å¼•ç”¨çš„å‰åŠéƒ¨åˆ†
 		Pattern pattern = Pattern.compile(
 				"<fieldset>\\s.*?<legend>([^<]*?)</legend>", Pattern.DOTALL);
 		Matcher matcher = pattern.matcher(text);
@@ -113,7 +113,7 @@ public class MyTextParser {
 			}
 			text = text.replace(matcher.group(), "[quote=" + temp + "]");
 		}
-		// Ìæ»»±íÇé
+		// æ›¿æ¢è¡¨æƒ…
 		// pattern = Pattern.compile("<img.*?alt=\"(\\[em\\d+\\])\"\\s.*?/>",
 		// Pattern.DOTALL);
 		pattern = Pattern.compile("<img[^>]*?alt=\"(\\[em\\d+\\])\"\\s.*?/>",
@@ -123,7 +123,7 @@ public class MyTextParser {
 			// matcher.replaceFirst(matcher.group(1));
 			text = text.replace(matcher.group(), matcher.group(1));
 		}
-		// Ìæ»»Í¼Æ¬
+		// æ›¿æ¢å›¾ç‰‡
 		// pattern = Pattern.compile("<img\\s.*?src=\"([^\"]+)\".*?/>",
 		// Pattern.DOTALL);
 		pattern = Pattern.compile("<img[^>]*?src=\"([^\"]+)\".*?/>",
@@ -134,7 +134,7 @@ public class MyTextParser {
 			text = text.replace(matcher.group(), "[img]" + matcher.group(1)
 					+ "[/img]");
 		}
-		// Ìæ»»³¬Á´½Ó
+		// æ›¿æ¢è¶…é“¾æ¥
 		pattern = Pattern.compile("<a\\s.*?href=\"([^\"]+)\"[^>]*>(.*?)</a>",
 				Pattern.DOTALL);
 		matcher = pattern.matcher(text);
@@ -144,10 +144,10 @@ public class MyTextParser {
 			text = text.replace(matcher.group(), "[url=" + matcher.group(1)
 					+ "]" + matcher.group(2) + "[/url]");
 		}
-		// Ìæ»»<i>±êÇ©
+		// æ›¿æ¢<i>æ ‡ç­¾
 		text.replaceAll("<i>", "[i]");
 		text.replaceAll("<i\\>", "[/i]");
-		// Ìæ»»ÊÓÆµ
+		// æ›¿æ¢è§†é¢‘
 		pattern = Pattern.compile("<embed\\s.*?src=\"(.*?)\".*?</embed>");
 		matcher = pattern.matcher(text);
 		while (matcher.find()) {
@@ -157,7 +157,7 @@ public class MyTextParser {
 	}
 
 	/**
-	 * ¹¹½¨ÒıÓÃ¸ñÊ½µÄ»Ø¸´£¬²¢½«html×ª»»BBCode
+	 * æ„å»ºå¼•ç”¨æ ¼å¼çš„å›å¤ï¼Œå¹¶å°†htmlè½¬æ¢BBCode
 	 */
 	public static String toQuote(String text, String username) {
 		Document doc = Jsoup.parseBodyFragment(text);
@@ -187,7 +187,7 @@ public class MyTextParser {
 	}
 
 	/**
-	 * ¹¹½¨»Ø¸´Õ¾ÄÚĞÅ¸ñÊ½µÄ»Ø¸´ÄÚÈİ£¬²¢½«html×ª»»BBCode
+	 * æ„å»ºå›å¤ç«™å†…ä¿¡æ ¼å¼çš„å›å¤å†…å®¹ï¼Œå¹¶å°†htmlè½¬æ¢BBCode
 	 */
 	public static String toReplyPM(Context context, int sender, String text) {
 		text = toBBCode(text);
@@ -206,7 +206,7 @@ public class MyTextParser {
 	}
 
 	/**
-	 * ¹¹½¨»Ø¸´Õ¾ÄÚĞÅ¸ñÊ½µÄÖ÷Ìâ£¬²¢½«html×ª»»BBCode
+	 * æ„å»ºå›å¤ç«™å†…ä¿¡æ ¼å¼çš„ä¸»é¢˜ï¼Œå¹¶å°†htmlè½¬æ¢BBCode
 	 */
 	public static String toReplySubject(String subject) {
 		Pattern pattern = Pattern.compile("Re\\((\\d+)\\)");
@@ -230,7 +230,7 @@ public class MyTextParser {
 	}
 
 	/**
-	 * ½âÎöhtmlÖĞµÄfieldset±êÇ©
+	 * è§£æhtmlä¸­çš„fieldsetæ ‡ç­¾
 	 */
 	public static FieldSetVO toFiledSetVO(FieldSetVO parent, String html,
 			int level) {
@@ -244,7 +244,7 @@ public class MyTextParser {
 			parent.fieldSet = quote;
 			parent.legend = matcher.group(1);
 			int index = html.indexOf(matcher.group());
-			// ½ØÈ¡ÒıÓÃÒÔÍâµÄ²¿·Ö£¬²¢ÒÆ³ı¿ªÊ¼µÄ¼¸¸ö<br>
+			// æˆªå–å¼•ç”¨ä»¥å¤–çš„éƒ¨åˆ†ï¼Œå¹¶ç§»é™¤å¼€å§‹çš„å‡ ä¸ª<br>
 			parent.content = html.substring(0, index)
 					+ html.substring(index + matcher.group().length() + 1)
 							.replaceFirst("(<br\\s*/{0,1}>\\s*)+", "");

@@ -30,7 +30,7 @@ public class AnimSettingFragment extends StackFragment {
 		fade.setOnCheckedChangeListener(boxCheckedListener);
 		RadioGroup radio = (RadioGroup) v.findViewById(R.id.animations);
 		radio.setOnCheckedChangeListener(radioCheckedListener);
-		// ×¢Òâ±£³Ö½çÃæ¶¯»­µÄË³ĞòÓëÃ¶¾ÙÀàĞÍÖĞµÄË³Ğò±£³ÖÒ»ÖÂ
+		// æ³¨æ„ä¿æŒç•Œé¢åŠ¨ç”»çš„é¡ºåºä¸æšä¸¾ç±»å‹ä¸­çš„é¡ºåºä¿æŒä¸€è‡´
 		((RadioButton) radio.getChildAt(CustomSetting.anim.ordinal()))
 				.setChecked(true);
 		return v;

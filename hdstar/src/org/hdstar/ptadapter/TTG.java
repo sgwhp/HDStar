@@ -27,14 +27,14 @@ import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 /**
- * ttgÅÀ³æÊÊÅäÆ÷. <br/>
- * ttgÔÚÊ¹ÓÃµ¥ÀıHttpClientÊ±£¬³ÌĞòÊ×´ÎÇëÇóÖÖ×ÓÒ³ÃæÃ»ÎÊÌâ£¬µ«Ö®ºó»áÖ±½ÓÌø×ªµ½µÇÂ¼Ò³Ãæ¡£<br/>
- * ¾ßÌåÔ­ÒòÎ´Öª£¬¿ÉÒÔÈ·¶¨ÓëPHPSESSID¡¢HeaderµÈÎŞ¹Ø£¬ÔİÊ±²»ÄÜÊ¹ÓÃµ¥ÀıµÄHttpClient¡£
+ * ttgçˆ¬è™«é€‚é…å™¨. <br/>
+ * ttgåœ¨ä½¿ç”¨å•ä¾‹HttpClientæ—¶ï¼Œç¨‹åºé¦–æ¬¡è¯·æ±‚ç§å­é¡µé¢æ²¡é—®é¢˜ï¼Œä½†ä¹‹åä¼šç›´æ¥è·³è½¬åˆ°ç™»å½•é¡µé¢ã€‚<br/>
+ * å…·ä½“åŸå› æœªçŸ¥ï¼Œå¯ä»¥ç¡®å®šä¸PHPSESSIDã€Headerç­‰æ— å…³ï¼Œæš‚æ—¶ä¸èƒ½ä½¿ç”¨å•ä¾‹çš„HttpClientã€‚
  * 
  * @author robust
  */
 public class TTG extends PTAdapter {
-	// private static String PHPSESSID = null;// sessionId£¬ttgÔÚcookiesÖĞ»áÓÃµ½
+	// private static String PHPSESSID = null;// sessionIdï¼Œttgåœ¨cookiesä¸­ä¼šç”¨åˆ°
 
 	public TTG() {
 		super(PTSiteType.TTG);
@@ -104,10 +104,10 @@ public class TTG extends PTAdapter {
 
 	// /**
 	// *
-	// * »ñÈ¡sessionId. <br/>
+	// * è·å–sessionId. <br/>
 	// *
 	// * @param res
-	// * httpÏìÓ¦
+	// * httpå“åº”
 	// */
 	// private void dealWithSessionId(HttpResponse res) {
 	// Header header = res.getFirstHeader("Set-Cookie");
@@ -123,10 +123,10 @@ public class TTG extends PTAdapter {
 
 	/**
 	 * 
-	 * ½âÎöÄ³ĞĞÖÖ×ÓÖĞµÄÀà±ğÁĞ. <br/>
+	 * è§£ææŸè¡Œç§å­ä¸­çš„ç±»åˆ«åˆ—. <br/>
 	 * 
 	 * @param tClassCol
-	 *            Àà±ğÁĞ£¬Ò»°ãÎªµÚÒ»ÁĞ
+	 *            ç±»åˆ«åˆ—ï¼Œä¸€èˆ¬ä¸ºç¬¬ä¸€åˆ—
 	 * @param t
 	 */
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
@@ -173,17 +173,22 @@ public class TTG extends PTAdapter {
 						if (es.size() > 0) {
 							t.freeType = es.get(es.size() - 1).attr("src");
 						}
-						// ±êÌâ<a>±êÇ©ÄÚÇ¶ÁË<b> --> <font>
-						titles = url.child(0).child(0);
+						// æ ‡é¢˜<a>æ ‡ç­¾å†…åµŒäº†<b>
+						titles = url.child(0);
 						t.title = titles.ownText();
-						// ttg¸±±êÌâ¿ÉÄÜÓĞ¶à¸ö
-						es = titles.getElementsByTag("span");
-						for (int j = 0; j < es.size(); j++) {
-							t.subtitle = es.get(j).text();
+						if (titles.children().size() > 0) {
+							// // æœ‰å‰¯æ ‡é¢˜æ—¶ä¸»æ ‡é¢˜åœ¨<b>å†…åµŒçš„<font>å†…
+							// titles = titles.child(0);
+							// ttgå‰¯æ ‡é¢˜å¯èƒ½æœ‰å¤šä¸ª
+							es = titles.getElementsByTag("span");
+							for (int j = 0; j < es.size(); j++) {
+								t.subtitle = es.get(j).text();
+							}
 						}
+
 						t.id = Integer.parseInt(eTorrents.get(i).attr("id"));
-						// bookmark²»½âÎö£¬hdwÖÖ×ÓÁĞ±íÎŞ·¨ÏÔÊ¾ÖÖ×ÓµÄÊÕ²Ø×´Ì¬
-						// ÏÂÔØ¿ò
+						// bookmarkä¸è§£æï¼Œhdwç§å­åˆ—è¡¨æ— æ³•æ˜¾ç¤ºç§å­çš„æ”¶è—çŠ¶æ€
+						// ä¸‹è½½æ¡†
 						if (eTorrents
 								.get(i)
 								.attr("style")

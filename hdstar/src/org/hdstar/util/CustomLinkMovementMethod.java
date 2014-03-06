@@ -12,7 +12,7 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 
 /**
- * ³¬Á´½ÓÌø×ª´¦Àí
+ * è¶…é“¾æ¥è·³è½¬å¤„ç†
  * 
  * @author robust
  * 

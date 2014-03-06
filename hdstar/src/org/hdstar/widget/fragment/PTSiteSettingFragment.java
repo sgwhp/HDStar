@@ -142,7 +142,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 			if (setting.cookie == null || "".equals(setting.cookie)) {
 				security.setVisibility(View.VISIBLE);
 				refreshBtn.setVisibility(View.VISIBLE);
-				// »ñÈ¡ÑéÖ¤Âë
+				// è·å–éªŒè¯ç 
 				getSecurityCode();
 			}
 		} else {
@@ -258,7 +258,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 			PTSiteSettingManager.save(getActivity(), setting);
 		} else {
 			mMode = MODE_EDIT;
-			PTSiteSettingManager.add(getActivity(), setting);
+			setting.order = PTSiteSettingManager.add(getActivity(), setting);
 		}
 		return true;
 	}

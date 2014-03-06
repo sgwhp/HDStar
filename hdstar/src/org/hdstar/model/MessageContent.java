@@ -3,7 +3,7 @@ package org.hdstar.model;
 import java.io.Serializable;
 
 /**
- * pm具体内容. <br/>
+ * pm鍏蜂綋鍐呭. <br/>
  * 
  * @author robust
  */
@@ -13,11 +13,11 @@ public class MessageContent implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/** 发送人id */
+	/** 鍙戦�佷汉id */
 	public int senderId;
-	/** 接收人id */
+	/** 鎺ユ敹浜篿d */
 	public int receiverId;
-	/** pm内容 */
+	/** pm鍐呭 */
 	public String content;
 
 }

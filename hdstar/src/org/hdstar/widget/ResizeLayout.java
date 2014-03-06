@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * ³ß´ç·¢Éú¸Ä±äÊ±£¬´¥·¢»Øµ÷£¬ÓÃÓÚ¼àÌıÈí¼üÅÌµÄµ¯³ö¹Ø±Õ
+ * å°ºå¯¸å‘ç”Ÿæ”¹å˜æ—¶ï¼Œè§¦å‘å›è°ƒï¼Œç”¨äºç›‘å¬è½¯é”®ç›˜çš„å¼¹å‡ºå…³é—­
  * 
  * @author robust
  * 

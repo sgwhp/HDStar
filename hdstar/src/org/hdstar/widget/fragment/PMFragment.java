@@ -161,12 +161,12 @@ public class PMFragment extends StackFragment {
 				body = parser.toImg(body);
 				List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 				if (msgId != 0) {
-					// 回复
+					// 鍥炲
 					nvp.add(new BasicNameValuePair("origmsg", msgId + ""));
 					nvp.add(new BasicNameValuePair("subject", "Re: "
 							+ MyTextParser.toReplySubject(subject)));
 				} else {
-					// 新增
+					// 鏂板
 					nvp.add(new BasicNameValuePair("subject", subjectEt
 							.getText().toString()));
 				}
@@ -232,7 +232,7 @@ public class PMFragment extends StackFragment {
 			@Override
 			public void OnResize(int w, int h, int oldw, int oldh) {
 				if (h < oldh) {
-					// 键盘弹出
+					// 閿洏寮瑰嚭
 					if (smile.isChecked()) {
 						im.hideSoftInputFromWindow(root.getWindowToken(), 0);
 						smile.performClick();

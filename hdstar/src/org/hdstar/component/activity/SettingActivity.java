@@ -6,7 +6,7 @@ import org.hdstar.widget.fragment.CommonSettingFragment;
 import android.os.Bundle;
 
 /**
- * ÉèÖÃ
+ * è®¾ç½®
  * @author robust
  *
  */

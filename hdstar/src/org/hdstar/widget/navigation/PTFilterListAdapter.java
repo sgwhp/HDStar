@@ -8,7 +8,7 @@ import org.hdstar.widget.adapter.MergeAdapter;
 import android.content.Context;
 
 /**
- * ptÕ¾Ñ¡ÔñÁĞ±íÊÊÅäÆ÷
+ * ptç«™é€‰æ‹©åˆ—è¡¨é€‚é…å™¨
  * @author robust
  *
  */

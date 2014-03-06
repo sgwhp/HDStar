@@ -15,7 +15,7 @@ public class Torrent implements Serializable {
 	public String title;
 	public String subtitle;
 	/**
-	 * 免费类型
+	 * 鍏嶈垂绫诲瀷
 	 * 
 	 * @see org.hdstar.common.Const.FreeType
 	 */
@@ -27,10 +27,10 @@ public class Torrent implements Serializable {
 	public String size;
 	public String seeders;
 	public String leechers;
-	/** 下载完成数量 */
+	/** 涓嬭浇瀹屾垚鏁伴噺 */
 	public String snatched;
 	public String uploader;
-	/** 是否已添加到下载框，可能有多种状态，但只有在再点击一次就能转到普通状态的情况下，该值才为真 */
+	/** 鏄惁宸叉坊鍔犲埌涓嬭浇妗嗭紝鍙兘鏈夊绉嶇姸鎬侊紝浣嗗彧鏈夊湪鍐嶇偣鍑讳竴娆″氨鑳借浆鍒版櫘閫氱姸鎬佺殑鎯呭喌涓嬶紝璇ュ�兼墠涓虹湡 */
 	public boolean rss;
 
 }

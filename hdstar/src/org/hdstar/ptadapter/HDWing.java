@@ -77,7 +77,7 @@ public class HDWing extends PTAdapter {
 		List<BasicNameValuePair> nvp = new ArrayList<BasicNameValuePair>();
 		nvp.add(new BasicNameValuePair("code", securityCode));
 		nvp.add(new BasicNameValuePair("password", password));
-		nvp.add(new BasicNameValuePair("submit", "µÇÂ¼"));
+		nvp.add(new BasicNameValuePair("submit", "ç™»å½•"));
 		nvp.add(new BasicNameValuePair("username", username));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp));
@@ -137,10 +137,10 @@ public class HDWing extends PTAdapter {
 
 	/**
 	 * 
-	 * ½âÎöÄ³ĞĞÖÖ×ÓÖĞµÄÀà±ğÁĞ. <br/>
+	 * è§£ææŸè¡Œç§å­ä¸­çš„ç±»åˆ«åˆ—. <br/>
 	 * 
 	 * @param tClassCol
-	 *            Àà±ğÁĞ£¬Ò»°ãÎªµÚÒ»ÁĞ
+	 *            ç±»åˆ«åˆ—ï¼Œä¸€èˆ¬ä¸ºç¬¬ä¸€åˆ—
 	 * @param t
 	 */
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
@@ -152,13 +152,13 @@ public class HDWing extends PTAdapter {
 
 	/**
 	 * 
-	 * ½âÎöÄ³ĞĞÖÖ×ÓÖĞ²Ù×÷ÁĞµÄÏÂÔØ¿ò×´Ì¬. <br/>
+	 * è§£ææŸè¡Œç§å­ä¸­æ“ä½œåˆ—çš„ä¸‹è½½æ¡†çŠ¶æ€. <br/>
 	 * 
 	 * @param tRssRol
-	 *            ²Ù×÷ÁĞ£¬Ò»°ãÎªµÚ¶şÁĞ£¬Óë±êÌâÔÚÍ¬Ò»ÁĞ
+	 *            æ“ä½œåˆ—ï¼Œä¸€èˆ¬ä¸ºç¬¬äºŒåˆ—ï¼Œä¸æ ‡é¢˜åœ¨åŒä¸€åˆ—
 	 * @param t
 	 * @param index
-	 *            ÖÖ×ÓËùÔÚĞĞÊı
+	 *            ç§å­æ‰€åœ¨è¡Œæ•°
 	 */
 	protected void parseRssDownload(Element tRssRol, Torrent t, int index) {
 		String src = tRssRol.getElementById("bi_" + t.id).attr("src");
@@ -208,11 +208,11 @@ public class HDWing extends PTAdapter {
 						}
 						if (url.children().size() > 0) {
 							t.subtitle = url.ownText();
-							// child(0)ÊÇ<b>±êÇ©
+							// child(0)æ˜¯<b>æ ‡ç­¾
 							t.title = url.child(0).text();
 							// titles
 						} else {
-							// ÎŞ¸±±êÌâµÄÇé¿ö
+							// æ— å‰¯æ ‡é¢˜çš„æƒ…å†µ
 							t.title = url.text();
 						}
 						urlStr = url.attr("href");
@@ -220,8 +220,8 @@ public class HDWing extends PTAdapter {
 						if (matcher.find()) {
 							t.id = Integer.parseInt(matcher.group(1));
 						}
-						// bookmark²»½âÎö£¬hdwÖÖ×ÓÁĞ±íÎŞ·¨ÏÔÊ¾ÖÖ×ÓµÄÊÕ²Ø×´Ì¬
-						// ÏÂÔØ¿ò
+						// bookmarkä¸è§£æï¼Œhdwç§å­åˆ—è¡¨æ— æ³•æ˜¾ç¤ºç§å­çš„æ”¶è—çŠ¶æ€
+						// ä¸‹è½½æ¡†
 						parseRssDownload(torrentCols.get(1), t, i - 1);
 						// comments
 						t.comments = torrentCols.get(2).text();

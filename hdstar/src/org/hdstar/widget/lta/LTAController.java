@@ -53,7 +53,7 @@ class LTAController {
 	}
 
 	/**
-	 * ÉèÖÃ´¥ÃşÎ¯ÍĞ
+	 * è®¾ç½®è§¦æ‘¸å§”æ‰˜
 	 * 
 	 * @param v
 	 * @param bottom
@@ -80,10 +80,10 @@ class LTAController {
 	}
 
 	/**
-	 * ÉèÖÃ¶îÍâµÄ´¥Ãş·¶Î§
+	 * è®¾ç½®é¢å¤–çš„è§¦æ‘¸èŒƒå›´
 	 * 
 	 * @param addition
-	 *            ĞèÒªÔö¼ÓµÄ´óĞ¡£¬µ¥Î»px
+	 *            éœ€è¦å¢åŠ çš„å¤§å°ï¼Œå•ä½px
 	 */
 	public void setAddition(int addition) {
 		mTouchAdditionBottom = addition;
@@ -93,40 +93,40 @@ class LTAController {
 	}
 
 	/**
-	 * ÉèÖÃµ×²¿ÇøÓò¶îÍâµÄ´¥Ãş·¶Î§
+	 * è®¾ç½®åº•éƒ¨åŒºåŸŸé¢å¤–çš„è§¦æ‘¸èŒƒå›´
 	 * 
 	 * @param additionBottom
-	 *            ĞèÒªÔö¼ÓµÄ´óĞ¡£¬µ¥Î»px
+	 *            éœ€è¦å¢åŠ çš„å¤§å°ï¼Œå•ä½px
 	 */
 	public void setAdditionBottom(int additionBottom) {
 		mTouchAdditionBottom = additionBottom;
 	}
 
 	/**
-	 * ÉèÖÃ×ó±ßÇøÓò¶îÍâµÄ´¥Ãş·¶Î§
+	 * è®¾ç½®å·¦è¾¹åŒºåŸŸé¢å¤–çš„è§¦æ‘¸èŒƒå›´
 	 * 
 	 * @param additionLeft
-	 *            ĞèÒªÔö¼ÓµÄ´óĞ¡£¬µ¥Î»px
+	 *            éœ€è¦å¢åŠ çš„å¤§å°ï¼Œå•ä½px
 	 */
 	public void setAdditionLeft(int additionLeft) {
 		mTouchAdditionLeft = additionLeft;
 	}
 
 	/**
-	 * ÉèÖÃÓÒ±ßÇøÓò¶îÍâµÄ´¥Ãş·¶Î§
+	 * è®¾ç½®å³è¾¹åŒºåŸŸé¢å¤–çš„è§¦æ‘¸èŒƒå›´
 	 * 
 	 * @param additionRight
-	 *            ĞèÒªÔö¼ÓµÄ´óĞ¡£¬µ¥Î»px
+	 *            éœ€è¦å¢åŠ çš„å¤§å°ï¼Œå•ä½px
 	 */
 	public void setAdditionRight(int additionRight) {
 		mTouchAdditionRight = additionRight;
 	}
 
 	/**
-	 * ÉèÖÃ¶¥²¿ÇøÓò¶îÍâµÄ´¥Ãş·¶Î§
+	 * è®¾ç½®é¡¶éƒ¨åŒºåŸŸé¢å¤–çš„è§¦æ‘¸èŒƒå›´
 	 * 
 	 * @param additionTop
-	 *            ĞèÒªÔö¼ÓµÄ´óĞ¡£¬µ¥Î»px
+	 *            éœ€è¦å¢åŠ çš„å¤§å°ï¼Œå•ä½px
 	 */
 	public void setAdditionTop(int additionTop) {
 		mTouchAdditionTop = additionTop;

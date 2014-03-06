@@ -60,7 +60,7 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 			request.setHeader("Cookie", cookie);
 			HttpResponse response = client.execute(request);
 			if (response.getStatusLine().getStatusCode() == 300) {
-				// 令牌过期
+				// 浠ょ墝杩囨湡
 				request.abort();
 				getToken();
 				request = new HttpGet(String.format(url, token));
@@ -128,7 +128,7 @@ public class UtorrentTask<T> extends BaseAsyncTask<T> {
 	}
 
 	/**
-	 * 获取令牌
+	 * 鑾峰彇浠ょ墝
 	 * 
 	 * @return
 	 * @throws ClientProtocolException

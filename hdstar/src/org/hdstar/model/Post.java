@@ -10,16 +10,16 @@ public class Post implements Serializable {
 	public int id;
 	public String userName = "";
 	public int uid;
-	/** Í·ÏñÁ´½ÓµØÖ· */
+	/** å¤´åƒé“¾æ¥åœ°å€ */
 	public String avatarSrc = "";
-	/** µÈ¼¶Í¼Æ¬Á´½ÓµØÖ· */
+	/** ç­‰çº§å›¾ç‰‡é“¾æ¥åœ°å€ */
 	public String userClassSrc = "";
-	/** ÉÏ´«Á¿¡¢ÏÂÔØÁ¿µÈĞÅÏ¢ */
+	/** ä¸Šä¼ é‡ã€ä¸‹è½½é‡ç­‰ä¿¡æ¯ */
 	public String info = "";
 	public String body = "";
 	public boolean delete;
 	public boolean edit;
 	public boolean quote;
-	/** Â¥²ã */
+	/** æ¥¼å±‚ */
 	public String floor = "";
 }

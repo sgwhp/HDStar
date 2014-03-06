@@ -28,13 +28,13 @@ import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 /**
  * 
- * OpenCDÅÀ³æÊÊÅäÆ÷. <br/>
- * OpenCDÔÚÊ¹ÓÃµ¥ÀıHttpClientÊ±£¬Ò»¶¨Ê±¼äÄÚÖØ¸´ÇëÇó»áÖ±½ÓÌø×ªµ½µÇÂ¼Ò³Ãæ£¬¾ßÌåÔ­ÒòÎ´Öª£¬ÔİÊ±²»ÄÜÊ¹ÓÃµ¥ÀıµÄHttpClient
+ * OpenCDçˆ¬è™«é€‚é…å™¨. <br/>
+ * OpenCDåœ¨ä½¿ç”¨å•ä¾‹HttpClientæ—¶ï¼Œä¸€å®šæ—¶é—´å†…é‡å¤è¯·æ±‚ä¼šç›´æ¥è·³è½¬åˆ°ç™»å½•é¡µé¢ï¼Œå…·ä½“åŸå› æœªçŸ¥ï¼Œæš‚æ—¶ä¸èƒ½ä½¿ç”¨å•ä¾‹çš„HttpClient
  * 
  * @author robust
  */
 public class OpenCD extends NexusPHP {
-	// opencdÖÖ×ÓÀà±ğÍ¼Æ¬styleÊôĞÔÖµÀàËÆ"width:30px;height:30px;background-image: url(plugin/style/chs/type_408.gif);"
+	// opencdç§å­ç±»åˆ«å›¾ç‰‡styleå±æ€§å€¼ç±»ä¼¼"width:30px;height:30px;background-image: url(plugin/style/chs/type_408.gif);"
 	private Pattern pattern = Pattern.compile("url\\((.*?)\\)");
 
 	public OpenCD() {
@@ -100,7 +100,7 @@ public class OpenCD extends NexusPHP {
 						classes = titles.children();
 						t.subtitle = "";
 						StringBuilder subtitle = new StringBuilder();
-						// µÚÒ»¸öÊÇÖ÷±êÌâ£¬µÚ¶ş¸öÊÇ<br>
+						// ç¬¬ä¸€ä¸ªæ˜¯ä¸»æ ‡é¢˜ï¼Œç¬¬äºŒä¸ªæ˜¯<br>
 						for (int j = 2; j < classes.size(); j++) {
 							subtitle.append(classes.get(j).text()).append("|");
 						}
@@ -137,7 +137,7 @@ public class OpenCD extends NexusPHP {
 						if (Const.TorrentTags.BOOKMARKED.equals(bookmark)) {
 							t.bookmark = true;
 						}
-						// ÏÂÔØ¿ò
+						// ä¸‹è½½æ¡†
 						parseRssDownload(torrentCols.get(1), t, i - 1);
 						// comments
 						t.comments = torrentCols.get(2).text();

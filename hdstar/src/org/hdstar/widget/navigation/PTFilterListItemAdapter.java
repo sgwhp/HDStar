@@ -50,7 +50,7 @@ public class PTFilterListItemAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (position == 0) {
-			// 第一项增加分隔线
+			// 绗竴椤瑰鍔犲垎闅旂嚎
 			return torrentPageSeparator;
 		}
 		FilterListItemView filterItemView;

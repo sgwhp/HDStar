@@ -1,4 +1,4 @@
-﻿package org.hdstar.util;
+package org.hdstar.util;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,29 +18,22 @@ import android.widget.Toast;
 
 /**
  * 
- * 
  * UncaughtExceptionHandler：线程未捕获异常控制器是用来处理未捕获异常的。 如果程序出现了未捕获异常默认情况下则会出现强行关闭对话框
  * 实现该接口并注册为程序中的默认未捕获异常处理 这样当未捕获异常发生时，就可以做些异常处理操作 例如：收集异常信息，发送错误报告 等。
  * 
  * UncaughtException处理类,当程序发生Uncaught异常的时候,由该类来接管程序,并记录发送错误报告.
  */
 public class CrashHandler implements UncaughtExceptionHandler {
-
 	/** Debug Log Tag */
 	public static final String TAG = "CrashHandler";
-
 	/** 是否开启日志输出, 在Debug状态下开启, 在Release状态下关闭以提升程序性能 */
 	public static final boolean DEBUG = true;
-
 	/** CrashHandler实例 */
 	private static volatile CrashHandler instance;
-
 	/** 程序的Context对象 */
 	private Context mContext;
-
 	/** 系统默认的UncaughtException处理类 */
 	private Thread.UncaughtExceptionHandler mDefaultHandler;
-
 	private final SimpleDateFormat SDF = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
@@ -92,7 +85,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
 					Looper.loop();
 				}
 			}.start();
-
 			// Sleep一会后结束程序
 			// 来让线程停止一会是为了显示Toast信息给用户，然后Kill程序
 			try {
@@ -117,13 +109,10 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		} else {
 			// logCat warning
 			Log.w(TAG, "handleException", ex);
-
 			// 写入错误信息到本地文件
 			processException(ex);
 		}
-
 		return true;
-
 	}
 
 	/**
@@ -148,5 +137,4 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			}
 		}
 	}
-
 }

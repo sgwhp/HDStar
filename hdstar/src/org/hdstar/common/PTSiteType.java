@@ -4,7 +4,7 @@ import org.hdstar.R;
 
 /**
  * 
- * PTÕ¾ÀàĞÍ. <br/>
+ * PTç«™ç±»å‹. <br/>
  * 
  * @author robust
  */
@@ -39,9 +39,9 @@ public enum PTSiteType {
 					R.string.media),
 			new TorrentPageUrl(CommonUrls.PTSiteUrls.TTG_GAME, R.string.game) });
 
-	private final String name;// Ãû³Æ£¬½öÓÃ×÷ÏÔÊ¾£¬²»ÄÜ×÷ÎªÊı¾İ½øĞĞ´«Êä¡¢ĞòÁĞ»¯»ò³Ö¾Ã»¯
+	private final String name;// åç§°ï¼Œä»…ç”¨ä½œæ˜¾ç¤ºï¼Œä¸èƒ½ä½œä¸ºæ•°æ®è¿›è¡Œä¼ è¾“ã€åºåˆ—åŒ–æˆ–æŒä¹…åŒ–
 	private final String url;
-	private final TorrentPageUrl[] torrentPages;// ÖÖ×ÓÒ³ÃæµØÖ·£¬Ä¬ÈÏ´ò¿ªµÚÒ»¸ö
+	private final TorrentPageUrl[] torrentPages;// ç§å­é¡µé¢åœ°å€ï¼Œé»˜è®¤æ‰“å¼€ç¬¬ä¸€ä¸ª
 
 	PTSiteType(String name, String url, TorrentPageUrl... pageUrls) {
 		this.name = name;
@@ -51,10 +51,10 @@ public enum PTSiteType {
 
 	/**
 	 * 
-	 * »ñÈ¡ÓÃÀ´ÏÔÊ¾µÄÃû³Æ. <br/>
+	 * è·å–ç”¨æ¥æ˜¾ç¤ºçš„åç§°. <br/>
 	 * 
 	 * @author robust
-	 * @return Ãû³Æ£¬½öÓÃ×÷ÏÔÊ¾£¬²»ÄÜ×÷ÎªÊı¾İ½øĞĞ´«Êä¡¢ĞòÁĞ»¯»ò³Ö¾Ã»¯
+	 * @return åç§°ï¼Œä»…ç”¨ä½œæ˜¾ç¤ºï¼Œä¸èƒ½ä½œä¸ºæ•°æ®è¿›è¡Œä¼ è¾“ã€åºåˆ—åŒ–æˆ–æŒä¹…åŒ–
 	 */
 	public String getName() {
 		return name;
@@ -72,7 +72,7 @@ public enum PTSiteType {
 	 * 
 	 * @author robust
 	 * @param name
-	 *            enum.name()·½·¨µÃµ½µÄÖµ
+	 *            enum.name()æ–¹æ³•å¾—åˆ°çš„å€¼
 	 * @return
 	 */
 	public static PTSiteType getByName(String name) {

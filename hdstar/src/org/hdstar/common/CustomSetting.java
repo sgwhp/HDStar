@@ -10,14 +10,14 @@ public class CustomSetting implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static String device = "Android¿Í»§¶Ë";
+	public static String device = "Androidå®¢æˆ·ç«¯";
 	public static boolean loadImage = true;
 	public static boolean soundOn = true;
 	public static boolean autoRefresh = false;
 	 public static String serverAddress = "http://hdstar.ap01.aws.af.cm/";
 
-	public static boolean fade;// ¶¯»­µ­Èëµ­³öÐ§¹û
-	public static TransitionEffect anim = TransitionEffect.CubeIn;;// ¶¯»­Ð§¹û
+	public static boolean fade;// åŠ¨ç”»æ·¡å…¥æ·¡å‡ºæ•ˆæžœ
+	public static TransitionEffect anim = TransitionEffect.CubeIn;;// åŠ¨ç”»æ•ˆæžœ
 
 	public static String animToString() {
 		return anim.name();

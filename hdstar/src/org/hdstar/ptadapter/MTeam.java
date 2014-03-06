@@ -13,7 +13,7 @@ import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 
 public class MTeam extends NexusPHP {
-	// mtÖÖ×ÓÀà±ğÍ¼Æ¬styleÊôĞÔÖµÀàËÆ"background-image: url(pic/category/chd/scenetorrents/en/cat_hd.gif);"
+	// mtç§å­ç±»åˆ«å›¾ç‰‡styleå±æ€§å€¼ç±»ä¼¼"background-image: url(pic/category/chd/scenetorrents/en/cat_hd.gif);"
 	private Pattern pattern = Pattern.compile("url\\((.*?)\\)");
 
 	public MTeam() {

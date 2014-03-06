@@ -13,7 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 /**
- * ³õÊ¼»¯
+ * åˆå§‹åŒ–
  * @author robust
  *
  */
@@ -72,7 +72,7 @@ public class InitActivity extends FragmentActivity implements
 	}
 
 	/**
-	 * ÍË³öÓ¦ÓÃ
+	 * é€€å‡ºåº”ç”¨
 	 * 
 	 * @param context
 	 */

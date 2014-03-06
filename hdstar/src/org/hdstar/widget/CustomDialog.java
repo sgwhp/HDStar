@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 public class CustomDialog extends Dialog {
 
-	private static int default_width = 160; // Ĭ�Ͽ���
-	private static int default_height = 120;// Ĭ�ϸ߶�
+	private static int default_width = 160; // 默认宽度
+	private static int default_height = 120;// 默认高度
 	
 	public CustomDialog(Context context){
 		this(context, default_width, default_height, R.layout.loading_dialog,

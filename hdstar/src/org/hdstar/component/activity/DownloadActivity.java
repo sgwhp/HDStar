@@ -34,7 +34,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * ÏÂÔØ¹ÜÀí
+ * ä¸‹è½½ç®¡ç†
  * 
  * @author robust
  * 
@@ -74,11 +74,11 @@ public class DownloadActivity extends SherlockActivity implements
 		long size = prefs.getLong("size", 0);
 		long patchSize = prefs.getLong("patchSize", 0);
 		if (patchSize == 0) {
-			// ÆÕÍ¨Éı¼¶
+			// æ™®é€šå‡çº§
 			downloadSize = size;
 			sizeTV.setText(Util.formatFileSize(size));
 		} else {
-			// ÔöÁ¿Éı¼¶
+			// å¢é‡å‡çº§
 			isPatch = true;
 			downloadSize = patchSize;
 			String oriSize = Util.formatFileSize(size).toString();
@@ -139,7 +139,7 @@ public class DownloadActivity extends SherlockActivity implements
 		Intent intent = new Intent(this, DownloadService.class);
 		intent.putExtra("command", DownloadService.COMMAND_DOWNLOAD_STOP);
 		startService(intent);
-		// É¾³ıapk
+		// åˆ é™¤apk
 		String apk = prefs.getString("apk", null);
 		if (apk != null) {
 			File file = new File(Const.DOWNLOAD_DIR + File.separator + apk);

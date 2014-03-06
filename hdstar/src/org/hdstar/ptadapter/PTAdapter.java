@@ -11,11 +11,11 @@ import android.graphics.Bitmap;
 public abstract class PTAdapter {
 	protected PTSiteType mType;
 	protected String cookie;
-	protected String torrentsUrl;// ÖÖ×ÓÒ³ÃæµØÖ·
+	protected String torrentsUrl;// ç§å­é¡µé¢åœ°å€
 
 	public PTAdapter(PTSiteType type) {
 		mType = type;
-		// Ä¬ÈÏÊ¹ÓÃµÚÒ»¸ö
+		// é»˜è®¤ä½¿ç”¨ç¬¬ä¸€ä¸ª
 		torrentsUrl = mType.getTorrentPages()[0].url;
 	}
 
@@ -37,7 +37,7 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * µÇÂ¼ÊÇ·ñĞèÒªÑéÖ¤Âë. <br/>
+	 * ç™»å½•æ˜¯å¦éœ€è¦éªŒè¯ç . <br/>
 	 * 
 	 * @author robust
 	 * @return
@@ -48,7 +48,7 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ¹¹½¨»ñÈ¡ÑéÖ¤ÂëÍ¼Æ¬ÈÎÎñ. <br/>
+	 * æ„å»ºè·å–éªŒè¯ç å›¾ç‰‡ä»»åŠ¡. <br/>
 	 * 
 	 * @author robust
 	 * @return
@@ -59,15 +59,15 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ¹¹½¨µÇÂ¼ÈÎÎñ. <br/>
+	 * æ„å»ºç™»å½•ä»»åŠ¡. <br/>
 	 * 
 	 * @author robust
 	 * @param username
-	 *            ÕËºÅ
+	 *            è´¦å·
 	 * @param password
-	 *            ÃÜÂë
+	 *            å¯†ç 
 	 * @param securityCode
-	 *            ÑéÖ¤Âë£¨¿ÉÑ¡£©
+	 *            éªŒè¯ç ï¼ˆå¯é€‰ï¼‰
 	 * @return
 	 */
 	public abstract BaseAsyncTask<String> login(String username,
@@ -75,7 +75,7 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ÍË³ö. <br/>
+	 * é€€å‡º. <br/>
 	 * 
 	 * @author robust
 	 * @return
@@ -84,13 +84,13 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ¹¹½¨»ñÈ¡ÖÖ×ÓÁĞ±íÈÎÎñ. <br/>
+	 * æ„å»ºè·å–ç§å­åˆ—è¡¨ä»»åŠ¡. <br/>
 	 * 
 	 * @author robust
 	 * @param page
-	 *            Ò³Âë
+	 *            é¡µç 
 	 * @param keywords
-	 *            ¹Ø¼ü×Ö
+	 *            å…³é”®å­—
 	 * @return
 	 */
 	public abstract BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,
@@ -98,7 +98,7 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ÊÕ²Ø»òÈ¡ÏûÊÕ²Ø. <br/>
+	 * æ”¶è—æˆ–å–æ¶ˆæ”¶è—. <br/>
 	 * 
 	 * @author robust
 	 * @param torrentId
@@ -108,7 +108,7 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ÊÇ·ñÖ§³ÖrssÏÂÔØ£¨ÏÂÔØ¿ò£©. <br/>
+	 * æ˜¯å¦æ”¯æŒrssä¸‹è½½ï¼ˆä¸‹è½½æ¡†ï¼‰. <br/>
 	 * 
 	 * @author robust
 	 * @return
@@ -119,11 +119,11 @@ public abstract class PTAdapter {
 
 	/**
 	 * 
-	 * ¹¹½¨Ìí¼Óµ½rssÏÂÔØÈÎÎñ. <br/>
+	 * æ„å»ºæ·»åŠ åˆ°rssä¸‹è½½ä»»åŠ¡. <br/>
 	 * 
 	 * @author robust
 	 * @param torrentId
-	 *            ÖÖ×Óid
+	 *            ç§å­id
 	 * @return
 	 */
 	public BaseAsyncTask<Boolean> addToRss(String torrentId) {

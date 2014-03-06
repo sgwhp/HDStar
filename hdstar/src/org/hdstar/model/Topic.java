@@ -7,14 +7,14 @@ public class Topic {
 	public int topicId = 0;
 	public String author = "";
 	public String lastPost = "";
-	/** ¡°»Ø¸´/²é¿´¡±ĞÅÏ¢ */
+	/** â€œå›å¤/æŸ¥çœ‹â€ä¿¡æ¯ */
 	public String follow = "";
 	public boolean read = false;
 	public boolean locked = false;
 	public boolean sticky = false;
 	public String postTime = "";
-	/** Ò³Âë */
+	/** é¡µç  */
 	public List<String> pageIndex = null;
-	/** Ò³Âë£¨urlµÄÒ³ÂëË÷Òı£¬´Ó0¿ªÊ¼£© */
+	/** é¡µç ï¼ˆurlçš„é¡µç ç´¢å¼•ï¼Œä»0å¼€å§‹ï¼‰ */
 	public List<Integer> pageList = null;
 }

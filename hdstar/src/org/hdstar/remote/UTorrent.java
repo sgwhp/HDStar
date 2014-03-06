@@ -26,9 +26,9 @@ import com.google.gson.JsonParser;
 
 /**
  * 
- * Ô¶³Ì¦ÌTorrentÊÊÅäÆ÷. <br/>
+ * è¿œç¨‹Î¼Torrenté€‚é…å™¨. <br/>
  * 
- * ²¿·Ö¹¦ÄÜ²Î¿¼transdroid
+ * éƒ¨åˆ†åŠŸèƒ½å‚è€ƒtransdroid
  * 
  * @see http://www.transdroid.org/under-the-hood/
  * 
@@ -79,7 +79,7 @@ public class UTorrent extends RemoteBase {
 					JsonElement element = parser.parse(IOUtils
 							.inputStream2String(in));
 					JsonObject obj = element.getAsJsonObject();
-					// ½âÎö±êÇ©
+					// è§£ææ ‡ç­¾
 					JsonArray arr = obj.getAsJsonArray("label");
 					JsonArray jLabel;
 					Label label;
@@ -99,9 +99,9 @@ public class UTorrent extends RemoteBase {
 						info.hash = torrent.get(0).getAsString();
 						info.title = torrent.get(2).getAsString();
 						info.size = torrent.get(3).getAsLong();
-						// Íê³É±ÈÀı£¨0-1000£©
+						// å®Œæˆæ¯”ä¾‹ï¼ˆ0-1000ï¼‰
 						info.progress = torrent.get(4).getAsInt() / 10;
-						// ÒÑÏÂÔØ
+						// å·²ä¸‹è½½
 						info.downloaded = torrent.get(5).getAsLong();
 						info.status = convertUtorrentStatus(torrent.get(1)
 								.getAsInt(), info.progress == 100);

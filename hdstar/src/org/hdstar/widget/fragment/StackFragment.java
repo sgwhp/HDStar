@@ -39,7 +39,7 @@ public class StackFragment extends Fragment {
 	}
 
 	/**
-	 * viewpager 选中当前fragment
+	 * viewpager 閫変腑褰撳墠fragment
 	 */
 	public void onSelected() {
 	}
@@ -48,8 +48,8 @@ public class StackFragment extends Fragment {
 	}
 
 	/**
-	 * 初始化actionbar <br/>
-	 * 代替onCreateOptionsMenu
+	 * 鍒濆鍖朼ctionbar <br/>
+	 * 浠ｆ浛onCreateOptionsMenu
 	 * 
 	 * @see https://github.com/jakewharton/actionbarsherlock/issues/272
 	 */
@@ -57,8 +57,8 @@ public class StackFragment extends Fragment {
 	}
 
 	/**
-	 * actionbar被选中 <br/>
-	 * 代替onOptionsItemSelected
+	 * actionbar琚�変腑 <br/>
+	 * 浠ｆ浛onOptionsItemSelected
 	 * 
 	 * @see https://github.com/jakewharton/actionbarsherlock/issues/272
 	 */

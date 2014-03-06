@@ -16,32 +16,35 @@ import ch.boye.httpclientandroidlib.impl.conn.PoolingClientConnectionManager;
 import ch.boye.httpclientandroidlib.params.BasicHttpParams;
 import ch.boye.httpclientandroidlib.params.CoreConnectionPNames;
 import ch.boye.httpclientandroidlib.params.HttpParams;
+import ch.boye.httpclientandroidlib.params.HttpProtocolParams;
 
 public class HttpClientManager {
 	private static volatile HttpClient customHttpClient;
 
+	public static final String USER_AGENT = "Platinum Crawler";
+
 	/**
-	 * ×î´óÁ¬½ÓÊı
+	 * æœ€å¤§è¿æ¥æ•°
 	 */
 	public final static int MAX_TOTAL_CONNECTIONS = 800;
 	/**
-	 * »ñÈ¡Á¬½ÓµÄ×î´óµÈ´ıÊ±¼ä
+	 * è·å–è¿æ¥çš„æœ€å¤§ç­‰å¾…æ—¶é—´
 	 */
 	public final static int WAIT_TIMEOUT = 60 * 1000;
 	/**
-	 * Ã¿¸öÂ·ÓÉ×î´óÁ¬½ÓÊı
+	 * æ¯ä¸ªè·¯ç”±æœ€å¤§è¿æ¥æ•°
 	 */
 	public final static int MAX_ROUTE_CONNECTIONS = 400;
 	/**
-	 * Á¬½Ó³¬Ê±Ê±¼ä
+	 * è¿æ¥è¶…æ—¶æ—¶é—´
 	 */
 	public final static int CONNECT_TIMEOUT = 90 * 1000;
 	/**
-	 * ¶ÁÈ¡³¬Ê±Ê±¼ä
+	 * è¯»å–è¶…æ—¶æ—¶é—´
 	 */
 	public final static int READ_TIMEOUT = 30 * 1000;
 
-	// client¸üĞÂÖÜÆÚ
+	// clientæ›´æ–°å‘¨æœŸ
 	private static final int EXPIRED_PERIOD = 5 * 60 * 1000;
 
 	private static IdleConnectionMonitorThread idleThread;
@@ -54,28 +57,31 @@ public class HttpClientManager {
 		if (customHttpClient == null) {
 			synchronized (HttpClientManager.class) {
 				if (customHttpClient == null) {
-					HttpParams params = new BasicHttpParams();
-					params.setParameter(
-							CoreConnectionPNames.CONNECTION_TIMEOUT,
-							CONNECT_TIMEOUT);
-					params.setParameter(CoreConnectionPNames.SO_TIMEOUT,
-							WAIT_TIMEOUT);
-					params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
-					SchemeRegistry schemeRegistry = new SchemeRegistry();
-					schemeRegistry.register(new Scheme("http", 80,
-							PlainSocketFactory.getSocketFactory()));
-					schemeRegistry.register(new Scheme("https", 443,
-							SSLSocketFactory.getSocketFactory()));
-					PoolingClientConnectionManager cm = new PoolingClientConnectionManager(
-							schemeRegistry);
-					// Increase max total connection to 200
-					cm.setMaxTotal(200);
-					// Increase default max connection per route to 20
-					cm.setDefaultMaxPerRoute(20);
-					// Increase max connections for localhost:80 to 50
-					HttpHost localhost = new HttpHost("locahost", 80);
-					cm.setMaxPerRoute(new HttpRoute(localhost), 50);
-					customHttpClient = new DefaultHttpClient(cm, params);
+					// HttpParams params = new BasicHttpParams();
+					// params.setParameter(
+					// CoreConnectionPNames.CONNECTION_TIMEOUT,
+					// CONNECT_TIMEOUT);
+					// params.setParameter(CoreConnectionPNames.SO_TIMEOUT,
+					// WAIT_TIMEOUT);
+					// params.setParameter(ClientPNames.HANDLE_REDIRECTS,
+					// false);
+					// HttpProtocolParams.setUserAgent(params, USER_AGENT);
+					// SchemeRegistry schemeRegistry = new SchemeRegistry();
+					// schemeRegistry.register(new Scheme("http", 80,
+					// PlainSocketFactory.getSocketFactory()));
+					// schemeRegistry.register(new Scheme("https", 443,
+					// SSLSocketFactory.getSocketFactory()));
+					// PoolingClientConnectionManager cm = new
+					// PoolingClientConnectionManager(
+					// schemeRegistry);
+					// // Increase max total connection to 200
+					// cm.setMaxTotal(200);
+					// // Increase default max connection per route to 20
+					// cm.setDefaultMaxPerRoute(20);
+					// // Increase max connections for localhost:80 to 50
+					// HttpHost localhost = new HttpHost("locahost", 80);
+					// cm.setMaxPerRoute(new HttpRoute(localhost), 50);
+					customHttpClient = newHttpClient();
 					idleThread = new IdleConnectionMonitorThread(
 							customHttpClient.getConnectionManager());
 					idleThread.start();
@@ -87,7 +93,7 @@ public class HttpClientManager {
 
 	/**
 	 * 
-	 * ·Çµ¥Àı£¬ÓÃÍêÒªshutdown. <br/>
+	 * éå•ä¾‹ï¼Œç”¨å®Œè¦shutdown. <br/>
 	 * 
 	 * @return
 	 */
@@ -97,6 +103,7 @@ public class HttpClientManager {
 				CONNECT_TIMEOUT);
 		params.setParameter(CoreConnectionPNames.SO_TIMEOUT, WAIT_TIMEOUT);
 		params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
+		HttpProtocolParams.setUserAgent(params, USER_AGENT);
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
 				.getSocketFactory()));
@@ -119,8 +126,8 @@ public class HttpClientManager {
 	}
 
 	/**
-	 * É÷ÓÃ£¡<br/>
-	 * ÖØÖÃHttpClientÊµÀı. <br/>
+	 * æ…ç”¨ï¼<br/>
+	 * é‡ç½®HttpClientå®ä¾‹. <br/>
 	 */
 	public static void restClient() {
 		if (customHttpClient != null) {

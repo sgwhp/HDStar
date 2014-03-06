@@ -142,7 +142,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 			}
 
 		});
-		// ÏÈ×¢²á¼àÌıÆ÷
+		// å…ˆæ³¨å†Œç›‘å¬å™¨
 		viewPager.setCurrentItem(curPage);
 		// getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 	}

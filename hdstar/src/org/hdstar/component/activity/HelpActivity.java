@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 import com.slidingmenu.lib.SlidingMenu;
 
 /**
- * °ïÖú
+ * å¸®åŠ©
  * 
  * @author robust
  * 
@@ -54,7 +54,7 @@ public class HelpActivity extends BaseActivity {
 
 					@Override
 					public void onRefreshStarted(View view) {
-						// ±ÜÃâonPageStartedµ÷ÓÃË¢ĞÂÊ±ÖØ¸´¼ÓÔØ
+						// é¿å…onPageStartedè°ƒç”¨åˆ·æ–°æ—¶é‡å¤åŠ è½½
 						if (!loading) {
 							aboutPage.reload();
 						}
@@ -73,7 +73,7 @@ public class HelpActivity extends BaseActivity {
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				// ÔÚµ±Ç°µÄwebviewÖĞÌø×ªµ½ĞÂµÄurl£¬·ÀÖ¹µ¯³öä¯ÀÀÆ÷Ñ¡Ôñ
+				// åœ¨å½“å‰çš„webviewä¸­è·³è½¬åˆ°æ–°çš„urlï¼Œé˜²æ­¢å¼¹å‡ºæµè§ˆå™¨é€‰æ‹©
 				view.loadUrl(url);
 
 				return true;
@@ -105,7 +105,7 @@ public class HelpActivity extends BaseActivity {
 
 	@Override
 	public void onBackPressed() {
-		// ·µ»Ø
+		// è¿”å›
 		if (aboutPage.canGoBack()) {
 			aboutPage.goBack();
 			return;

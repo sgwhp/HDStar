@@ -30,19 +30,19 @@ import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
 import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 /**
- * »ù´¡ÇëÇóÈÎÎñ. <br/>
+ * åŸºç¡€è¯·æ±‚ä»»åŠ¡. <br/>
  * 
  * @author robust
  */
 public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
-	// ±£Ö¤Android 3.0ÒÔÉÏÏµÍ³µÄAsyncTaskÒ²ÄÜ¶àÏß³ÌÍ¬Ê±Ö´ĞĞµÄ¹¤¾ß
+	// ä¿è¯Android 3.0ä»¥ä¸Šç³»ç»Ÿçš„AsyncTaskä¹Ÿèƒ½å¤šçº¿ç¨‹åŒæ—¶æ‰§è¡Œçš„å·¥å…·
 	protected static final AsyncTaskExecInterface taskExec = new AsyncTaskExecManager()
 			.build();
 	protected String cookie = "";
 	protected HttpRequestBase request = null;
 	protected TaskCallback<T> mCallback;
 	protected ResponseParser<T> parser;
-	/** ÊÇ·ñ±»È¡Ïû */
+	/** æ˜¯å¦è¢«å–æ¶ˆ */
 	protected boolean interrupted = false;
 	protected boolean needContent = true;
 
@@ -88,14 +88,14 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		return new BaseAsyncTask<T>(cookie, request, parser);
 	}
 
-	/** ÉèÖÃcallback */
+	/** è®¾ç½®callback */
 	public void attach(TaskCallback<T> callback) {
 		mCallback = callback;
 	}
 
 	/**
 	 * 
-	 * É¾³ıcallbackÒıÓÃ£¬Í£Ö¹ÇëÇó. <br/>
+	 * åˆ é™¤callbackå¼•ç”¨ï¼Œåœæ­¢è¯·æ±‚. <br/>
 	 */
 	public void detach() {
 		interrupted = true;
@@ -182,10 +182,10 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 
 	/**
 	 * 
-	 * ÉèÖÃÖ´ĞĞÍê±ÏºóÒªÏÔÊ¾µÄÏûÏ¢×ÊÔ´id. <br/>
+	 * è®¾ç½®æ‰§è¡Œå®Œæ¯•åè¦æ˜¾ç¤ºçš„æ¶ˆæ¯èµ„æºid. <br/>
 	 * 
 	 * @param msgId
-	 *            ÒªÏÔÊ¾µÄÏûÏ¢×ÊÔ´id
+	 *            è¦æ˜¾ç¤ºçš„æ¶ˆæ¯èµ„æºid
 	 */
 	public void setMessageId(int msgId) {
 		parser.setMessageId(msgId);
@@ -193,7 +193,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 
 	/**
 	 * 
-	 * ÊÇ·ñĞèÒª´ò¿ªResponseµÄInputStream. <br/>
+	 * æ˜¯å¦éœ€è¦æ‰“å¼€Responseçš„InputStream. <br/>
 	 * 
 	 * @return
 	 */
@@ -202,7 +202,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 	}
 
 	/**
-	 * ÉèÖÃÊÇ·ñĞèÒª´ò¿ªResponseµÄInputStream
+	 * è®¾ç½®æ˜¯å¦éœ€è¦æ‰“å¼€Responseçš„InputStream
 	 * 
 	 * @param needContent
 	 */
@@ -247,7 +247,7 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 
 	/**
 	 * 
-	 * ÔÚÏß³Ì³ØÖĞÖ´ĞĞ£¬Android 3.0ÒÔÉÏÏµÍ³µÄAsyncTaskÊÇµ¥Ïß³ÌµÄ. <br/>
+	 * åœ¨çº¿ç¨‹æ± ä¸­æ‰§è¡Œï¼ŒAndroid 3.0ä»¥ä¸Šç³»ç»Ÿçš„AsyncTaskæ˜¯å•çº¿ç¨‹çš„. <br/>
 	 * 
 	 * @param task
 	 * @param args

@@ -34,7 +34,7 @@ public class SoundPoolManager {
 		}
 		Calendar calendar = Calendar.getInstance(Locale.getDefault());
 		int h = calendar.get(Calendar.HOUR_OF_DAY);
-		//23:00ÖÁ´ÎÈÕ8:00ÒÔ¼°13:00ÖÁ14:00²»¿ªÆôÉùÒôÌáÊ¾
+		//23:00è‡³æ¬¡æ—¥8:00ä»¥åŠ13:00è‡³14:00ä¸å¼€å¯å£°éŸ³æç¤º
 		if (h > 23 || h < 8 || h == 13) {
 			return;
 		}

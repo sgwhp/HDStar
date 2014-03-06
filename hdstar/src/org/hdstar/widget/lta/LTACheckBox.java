@@ -29,7 +29,7 @@ public class LTACheckBox extends CheckBox {
 	}
 
 	/**
-	 * ¹ØÓÚDrawAllocation£¬Ö»ÓÐ¸Ã×é¼þµÄÎ»ÖÃºÍ´óÐ¡·¢Éú¸Ä±äµÄÇé¿ö²Å»á´æÔÚ´´½¨¶ÔÏóµÄÇé¿ö£¬²»ÊÇÆµ·±·¢ÉúµÄ£¬ ¹Ê¶ÔUIÐÔÄÜÓ°Ïì²»´ó
+	 * å…³äºŽDrawAllocationï¼Œåªæœ‰è¯¥ç»„ä»¶çš„ä½ç½®å’Œå¤§å°å‘ç”Ÿæ”¹å˜çš„æƒ…å†µæ‰ä¼šå­˜åœ¨åˆ›å»ºå¯¹è±¡çš„æƒ…å†µï¼Œä¸æ˜¯é¢‘ç¹å‘ç”Ÿçš„ï¼Œ æ•…å¯¹UIæ€§èƒ½å½±å“ä¸å¤§
 	 */
 	@SuppressLint("DrawAllocation")
 	@Override

@@ -137,7 +137,7 @@ public class ReplyFragment extends StackFragment {
 					String body = ((EditText) v.findViewById(R.id.body))
 							.getText().toString();
 					body = parser.toImg(body);
-					body += "\n£® π”√" + CustomSetting.device + "ªÿ∏¥£©";
+					body += "\nÔºà‰ΩøÁî®" + CustomSetting.device + "ÂõûÂ§çÔºâ";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", topicID));
 					nvp.add(new BasicNameValuePair("type", type.value()));
@@ -201,7 +201,7 @@ public class ReplyFragment extends StackFragment {
 		@Override
 		public void OnResize(int w, int h, int oldw, int oldh) {
 			if (h < oldh) {
-				// º¸≈ÃµØ≥ˆ
+				// ÈîÆÁõòÂºπÂá∫
 				if (smile.isChecked()) {
 					im.hideSoftInputFromWindow(root.getWindowToken(), 0);
 					smile.performClick();

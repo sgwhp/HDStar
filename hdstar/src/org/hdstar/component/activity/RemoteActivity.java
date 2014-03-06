@@ -90,20 +90,20 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
- * Ô¶³Ì¿ØÖÆ. <br/>
+ * è¿œç¨‹æ§åˆ¶. <br/>
  * 
  * @author robust
  */
 public class RemoteActivity extends BaseActivity implements
 		OnNavigationListener, OnClickListener {
-	/** ÏÂÀ­µ¼º½ */
+	/** ä¸‹æ‹‰å¯¼èˆª */
 	protected FilterListDropDownAdapter navigationSpinnerAdapter = null;
 	// private int skipNextOnNavigationItemSelectedCalls = 2;
-	/** µ±Ç°¹ıÂËÄ£Ê½ */
+	/** å½“å‰è¿‡æ»¤æ¨¡å¼ */
 	protected NavigationFilter currentFilter = null;
 	private PullToRefreshLayout mPullToRefreshLayout;
 	private View root;
-	/** Õ¼Î»£¬·ÀÖ¹²Ù×÷°´Å¥´°¿ÚÕÚµ²ÈÎÎñÁĞ±í£¬ÎŞÌØÊâÒâÒå */
+	/** å ä½ï¼Œé˜²æ­¢æ“ä½œæŒ‰é’®çª—å£é®æŒ¡ä»»åŠ¡åˆ—è¡¨ï¼Œæ— ç‰¹æ®Šæ„ä¹‰ */
 	private View empty;
 	private View start, pause, stop, delete;
 	private ListView listView;
@@ -114,18 +114,18 @@ public class RemoteActivity extends BaseActivity implements
 	private ArrayList<RemoteTaskInfo> filterList = new ArrayList<RemoteTaskInfo>();
 	private boolean[] selected;
 	private RssItem selectedRssItem;
-	/** Ñ¡ÖĞµÄÏÂÔØÈÎÎñÊı */
+	/** é€‰ä¸­çš„ä¸‹è½½ä»»åŠ¡æ•° */
 	private int selectedCount;
 	private PopupWindow window = null;
-	/** ÏÂÔØÈ·ÈÏ´°¿Ú */
+	/** ä¸‹è½½ç¡®è®¤çª—å£ */
 	private PopupWindow addTorrentWindow;
-	/** ÏÂÔØÄ¿Â¼ */
+	/** ä¸‹è½½ç›®å½• */
 	private EditText dirEt;
-	/** ÉèÖÃ±êÇ©´°¿Ú */
+	/** è®¾ç½®æ ‡ç­¾çª—å£ */
 	private PopupWindow setLabelWindow;
-	/** ±êÇ©ÎÄ±¾¿ò */
+	/** æ ‡ç­¾æ–‡æœ¬æ¡† */
 	private EditText labelEt;
-	/** ±êÇ©Ñ¡Ôñ */
+	/** æ ‡ç­¾é€‰æ‹© */
 	private Spinner labelSp;
 	private LinearLayout ctrlBox;
 	private CustomDialog dialog = null;
@@ -142,7 +142,7 @@ public class RemoteActivity extends BaseActivity implements
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
 
-	// /** ÊÇ·ñÒÑµÇÂ¼ */
+	// /** æ˜¯å¦å·²ç™»å½• */
 	// private boolean login;
 
 	public RemoteActivity() {
@@ -383,7 +383,7 @@ public class RemoteActivity extends BaseActivity implements
 			taskList.clear();
 			filterList.clear();
 			adapter.notifyDataSetChanged();
-			// ÇĞ»»·şÎñÆ÷Ê±£¬È¡Ïû×´Ì¬¹ıÂË
+			// åˆ‡æ¢æœåŠ¡å™¨æ—¶ï¼Œå–æ¶ˆçŠ¶æ€è¿‡æ»¤
 			currentFilter = StatusType.getShowAllType(this);
 			navigationSpinnerAdapter.updateCurrentFilter(currentFilter);
 			remote = RemoteFactory.newInstanceByName(setting.type);
@@ -480,7 +480,7 @@ public class RemoteActivity extends BaseActivity implements
 				return false;
 			}
 		});
-		// ³õÊ¼»¯ÏÂÔØÈÎÎñ¿ØÖÆµ¯³ö´°¿Ú
+		// åˆå§‹åŒ–ä¸‹è½½ä»»åŠ¡æ§åˆ¶å¼¹å‡ºçª—å£
 		ctrlBox = (LinearLayout) inflater.inflate(
 				R.layout.remote_task_ctrl_layout, null);
 		ctrlBox.findViewById(R.id.label).setOnClickListener(this);
@@ -497,7 +497,7 @@ public class RemoteActivity extends BaseActivity implements
 		window.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.pop_up_window_bottom_bg));
 		window.setAnimationStyle(R.style.task_ctrl_box_anim_style);
-		// ³õÊ¼»¯rssÏÂÔØµ¯³ö´°¿Ú
+		// åˆå§‹åŒ–rssä¸‹è½½å¼¹å‡ºçª—å£
 		View addTorrentLayout = inflater.inflate(R.layout.add_torrent_dialog,
 				null);
 		addTorrentLayout.findViewById(R.id.add_torrent)
@@ -509,7 +509,7 @@ public class RemoteActivity extends BaseActivity implements
 		addTorrentWindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.pop_up_window_bg));
 		addTorrentWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
-		// ³õÊ¼»¯ÉèÖÃ±êÇ©´°¿Ú
+		// åˆå§‹åŒ–è®¾ç½®æ ‡ç­¾çª—å£
 		View setLabelLayout = inflater.inflate(R.layout.set_label_dialog, null);
 		setLabelLayout.findViewById(R.id.set_label_btn)
 				.setOnClickListener(this);
@@ -577,7 +577,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * ÏÔÊ¾´ò±êÇ©´°¿Ú. <br/>
+	 * æ˜¾ç¤ºæ‰“æ ‡ç­¾çª—å£. <br/>
 	 */
 	private void showSetLabelWindow() {
 		List<org.hdstar.model.Label> labels = remote.getLabels();
@@ -604,7 +604,7 @@ public class RemoteActivity extends BaseActivity implements
 	}
 
 	/**
-	 * ´ò±êÇ©
+	 * æ‰“æ ‡ç­¾
 	 */
 	private void setLabel() {
 		setLabelWindow.dismiss();
@@ -629,7 +629,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * ¿ªÊ¼ÈÎÎñ. <br/>
+	 * å¼€å§‹ä»»åŠ¡. <br/>
 	 */
 	private void start() {
 		if (selectedCount == 0) {
@@ -657,7 +657,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * ÔİÍ£ÈÎÎñ. <br/>
+	 * æš‚åœä»»åŠ¡. <br/>
 	 */
 	private void pause() {
 		if (selectedCount == 0) {
@@ -685,7 +685,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * Í£Ö¹ÈÎÎñ. <br/>
+	 * åœæ­¢ä»»åŠ¡. <br/>
 	 */
 	private void stop() {
 		if (selectedCount == 0) {
@@ -713,7 +713,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * É¾³ıÈÎÎñ. <br/>
+	 * åˆ é™¤ä»»åŠ¡. <br/>
 	 */
 	private void delete() {
 		if (selectedCount == 0) {
@@ -742,7 +742,7 @@ public class RemoteActivity extends BaseActivity implements
 	}
 
 	/**
-	 * Õ¹Ê¾ÏÂÔØÈ·ÈÏ´°¿Ú
+	 * å±•ç¤ºä¸‹è½½ç¡®è®¤çª—å£
 	 */
 	private void showDownloadWindow() {
 		addTorrentWindow.update();
@@ -750,7 +750,7 @@ public class RemoteActivity extends BaseActivity implements
 	}
 
 	/**
-	 * ´ÓrssÖĞÌí¼ÓÏÂÔØÈÎÎñ
+	 * ä»rssä¸­æ·»åŠ ä¸‹è½½ä»»åŠ¡
 	 */
 	private void download() {
 		dialog = new CustomDialog(this, R.string.connecting);
@@ -814,7 +814,7 @@ public class RemoteActivity extends BaseActivity implements
 	}
 
 	/**
-	 * Ë¢ĞÂÓ²ÅÌĞÅÏ¢
+	 * åˆ·æ–°ç¡¬ç›˜ä¿¡æ¯
 	 */
 	private void refreshDiskInfo() {
 		if (!remote.diskEnable()) {

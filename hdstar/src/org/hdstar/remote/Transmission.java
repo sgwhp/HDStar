@@ -32,9 +32,9 @@ import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 
 /**
  * 
- * Ô¶³ÌTransmissionÊÊÅäÆ÷£¬rpcÔİÎŞ±êÇ©¹¦ÄÜ. <br/>
+ * è¿œç¨‹Transmissioné€‚é…å™¨ï¼Œrpcæš‚æ— æ ‡ç­¾åŠŸèƒ½. <br/>
  * 
- * ²¿·Ö¹¦ÄÜ²Î¿¼transdroid
+ * éƒ¨åˆ†åŠŸèƒ½å‚è€ƒtransdroid
  * 
  * @see http://www.transdroid.org/under-the-hood/
  * 
@@ -151,8 +151,10 @@ public class Transmission extends RemoteBase {
 							info.size = tor.getLong(RPC_TOTALSIZE);
 							info.uploaded = tor.getLong(RPC_UPLOADEDEVER);
 							info.downloaded = tor.getLong(RPC_DOWNLOADSIZE1);
-							info.ratio = info.uploaded * 100 / info.downloaded;
-							// TODO upspeed and etc
+							info.ratio = info.uploaded * 1.0f / info.downloaded;
+							info.upSpeed = tor.getLong(RPC_RATEUPLOAD);
+							info.dlSpeed = tor.getLong(RPC_RATEDOWNLOAD);
+							info.progress = (int) (info.downloaded * 100.0 / info.size);
 							info.status = hasError ? TorrentStatus.Error
 									: getStatus(tor.getInt(RPC_STATUS));
 							result.add(info);
@@ -181,19 +183,46 @@ public class Transmission extends RemoteBase {
 
 	@Override
 	public BaseAsyncTask<Boolean> start(String... hashes) {
-		// TODO Auto-generated method stub
+		try {
+			TransmissionTask<Boolean> task = new TransmissionTask<Boolean>(
+					String.format(CommonUrls.BTClient.TRANSMISSION_RPC_URL,
+							setting.ip), new BasicAuthGetParser(),
+					buildRequestObject("torrent-start",
+							buildTorrentRequestObject(hashes)).toString());
+			return task;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public BaseAsyncTask<Boolean> pause(String... hashes) {
-		// TODO Auto-generated method stub
+		try {
+			TransmissionTask<Boolean> task = new TransmissionTask<Boolean>(
+					String.format(CommonUrls.BTClient.TRANSMISSION_RPC_URL,
+							setting.ip), new BasicAuthGetParser(),
+					buildRequestObject("torrent-pause",
+							buildTorrentRequestObject(hashes)).toString());
+			return task;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public BaseAsyncTask<Boolean> stop(String... hashes) {
-		// TODO Auto-generated method stub
+		try {
+			TransmissionTask<Boolean> task = new TransmissionTask<Boolean>(
+					String.format(CommonUrls.BTClient.TRANSMISSION_RPC_URL,
+							setting.ip), new BasicAuthGetParser(),
+					buildRequestObject("torrent-stop",
+							buildTorrentRequestObject(hashes)).toString());
+			return task;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -205,8 +234,8 @@ public class Transmission extends RemoteBase {
 							setting.ip), new BasicAuthGetParser(),
 					buildRequestObject(
 							"torrent-remove",
-							buildTorrentRequestObject(hashes[0],
-									"delete-local-data", rmFile)).toString());
+							buildTorrentRequestObject("delete-local-data",
+									rmFile, hashes)).toString());
 			return task;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -252,21 +281,22 @@ public class Transmission extends RemoteBase {
 		return null;
 	}
 
-	private JSONObject buildTorrentRequestObject(String torrentID,
-			String extraKey, boolean extraValue) throws JSONException {
-		return buildTorrentRequestObject(Long.parseLong(torrentID), extraKey,
-				extraValue);
+	private JSONObject buildTorrentRequestObject(String... torrentIDs)
+			throws JSONException {
+		return buildTorrentRequestObject(null, false, torrentIDs);
 	}
 
-	private JSONObject buildTorrentRequestObject(long torrentID,
-			String extraKey, boolean extraValue) throws JSONException {
+	private JSONObject buildTorrentRequestObject(String extraKey,
+			boolean extraValue, String... torrentIDs) throws JSONException {
 
 		// Build request for one specific torrent
 		JSONObject request = new JSONObject();
-		if (torrentID != FOR_ALL) {
+		if (Long.parseLong(torrentIDs[0]) != FOR_ALL) {
 			JSONArray ids = new JSONArray();
-			ids.put(torrentID); // The only id to add
-			request.put("ids", ids);
+			for (String id : torrentIDs) {
+				ids.put(Long.parseLong(id));
+				request.put("ids", ids);
+			}
 		}
 		if (extraKey != null) {
 			request.put(extraKey, extraValue);
@@ -318,14 +348,14 @@ public class Transmission extends RemoteBase {
 	}
 
 	/**
-	 * TransmissionÇëÇóÈÎÎñ£¬»ñÈ¡rpc°æ±¾ºÅ¡¢´¦Àí409£¨session¹ıÆÚ£© <br/>
+	 * Transmissionè¯·æ±‚ä»»åŠ¡ï¼Œè·å–rpcç‰ˆæœ¬å·ã€å¤„ç†409ï¼ˆsessionè¿‡æœŸï¼‰ <br/>
 	 * 
 	 * @author robust
 	 */
 	private class TransmissionTask<T> extends BaseAsyncTask<T> {
 		private String url;
 		private final String SESSION_HEADER = "X-Transmission-Session-Id";
-		private String param;// json¸ñÊ½µÄÇëÇóÊı¾İ
+		private String param;// jsonæ ¼å¼çš„è¯·æ±‚æ•°æ®
 
 		public TransmissionTask(String url, ResponseParser<T> parser,
 				String param) {
@@ -338,7 +368,7 @@ public class Transmission extends RemoteBase {
 		protected T doInBackground(String... params) {
 			try {
 				if (rpcVersion < 0) {
-					// ÏÈ»ñÈ¡transmissionµÄ°æ±¾
+					// å…ˆè·å–transmissionçš„ç‰ˆæœ¬
 					request = new HttpPost(String.format(
 							CommonUrls.BTClient.TRANSMISSION_RPC_URL,
 							setting.ip));
@@ -368,13 +398,13 @@ public class Transmission extends RemoteBase {
 				}
 				req.setHeader("Cookie", cookie);
 				HttpResponse response = client.execute(request);
-				// 401ÔÚparserÖĞ¼¯ÖĞ´¦Àí£¬¹Ê´Ë´¦×¢ÊÍµô
+				// 401åœ¨parserä¸­é›†ä¸­å¤„ç†ï¼Œæ•…æ­¤å¤„æ³¨é‡Šæ‰
 				// if (response.getStatusLine().getStatusCode() == 401) {
 				// parser.setMessageId(R.string.http_401);
 				// return null;
 				// }
 				if (response.getStatusLine().getStatusCode() == 409) {
-					// session¹ıÆÚ
+					// sessionè¿‡æœŸ
 					req.abort();
 					sessionId = response.getFirstHeader(SESSION_HEADER)
 							.getValue();
@@ -382,7 +412,7 @@ public class Transmission extends RemoteBase {
 					response = client.execute(req);
 				}
 				if (getRpcVersion) {
-					// ½ö»ñÈ¡rpc°æ±¾ºÅ£¬ÎŞĞè·µ»Ø½á¹û£¬Ò»°ãÔÚ»ñÈ¡transmissionÊ±»áÓÃµ½
+					// ä»…è·å–rpcç‰ˆæœ¬å·ï¼Œæ— éœ€è¿”å›ç»“æœï¼Œä¸€èˆ¬åœ¨è·å–transmissionæ—¶ä¼šç”¨åˆ°
 					in = response.getEntity().getContent();
 					rpcVersion = resultToJSON(in).getJSONObject("arguments")
 							.getInt("rpc-version");

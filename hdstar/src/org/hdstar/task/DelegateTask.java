@@ -12,12 +12,12 @@ import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
 
 /**
- * Á¬½Ó´úÀí·şÎñÆ÷(HDStarService)µÄÇëÇóÈÎÎñ
+ * è¿æ¥ä»£ç†æœåŠ¡å™¨(HDStarService)çš„è¯·æ±‚ä»»åŠ¡
  * 
  * @author robust
  * 
  * @param <T>
- *            ·µ»Ø½á¹û
+ *            è¿”å›ç»“æœ
  */
 public class DelegateTask<T> extends BaseAsyncTask<T> {
 

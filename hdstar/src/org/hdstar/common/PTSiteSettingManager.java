@@ -13,8 +13,8 @@ import android.content.SharedPreferences.Editor;
 
 /**
  * 
- * PTÕ¾µãÉèÖÃ. <br/>
- * ÈÕÆÚ: 2014Äê2ÔÂ10ÈÕ ÉÏÎç10:15:58 <br/>
+ * PTç«™ç‚¹è®¾ç½®. <br/>
+ * æ—¥æœŸ: 2014å¹´2æœˆ10æ—¥ ä¸Šåˆ10:15:58 <br/>
  * 
  * @author robust
  */
@@ -118,7 +118,7 @@ public class PTSiteSettingManager {
 		}
 	}
 
-	public static void add(Context context, PTSiteSetting setting) {
+	public static int add(Context context, PTSiteSetting setting) {
 		setting.order = getMax(getPrefs(context));
 		SharedPreferences prefs = getPrefs(context);
 		Editor edit = prefs.edit();
@@ -130,9 +130,11 @@ public class PTSiteSettingManager {
 			edit.putString(COOKIE + setting.order, setting.cookie);
 			edit.putInt(MAX, setting.order + 1);
 			edit.commit();
+			return setting.order;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return -1;
 	}
 
 }

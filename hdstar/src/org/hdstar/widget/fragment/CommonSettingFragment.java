@@ -219,7 +219,7 @@ public class CommonSettingFragment extends StackFragment implements
 			updateInfo = String.format(updateInfo.toString(),
 					result.versionName, fullSize);
 			if (result.patchSize != 0) {
-				// ÔöÁ¿Éı¼¶
+				// å¢é‡å‡çº§
 				SpannableString ss = new SpannableString(updateInfo.toString()
 						+ "  " + Util.formatFileSize(result.patchSize));
 				ss.setSpan(new StrikethroughSpan(), updateInfo.length()

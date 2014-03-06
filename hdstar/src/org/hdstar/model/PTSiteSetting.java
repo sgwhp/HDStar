@@ -8,7 +8,7 @@ import android.os.Parcelable;
 
 /**
  * 
- * PTÕ¾µãÉèÖÃ. <br/>
+ * PTç«™ç‚¹è®¾ç½®. <br/>
  * 
  * @author robust
  */
@@ -18,9 +18,9 @@ public class PTSiteSetting implements Parcelable, SimpleListItem {
 	public String username;
 	public String password;
 	public String cookie;
-	/** µ±Ç°Ê¹ÓÃµÄÖÖ×ÓÒ³ÃæµØÖ·£¬ÎŞĞè³Ö¾Ã»¯ */
+	/** å½“å‰ä½¿ç”¨çš„ç§å­é¡µé¢åœ°å€ï¼Œæ— éœ€æŒä¹…åŒ– */
 	public String torrentUrl;
-	/** Ò³ÃæÃû³Æ£¬ÎŞĞè³Ö¾Ã»¯ */
+	/** é¡µé¢åç§°ï¼Œæ— éœ€æŒä¹…åŒ– */
 	public String torrentPageName;
 	private PTSiteType siteType;
 
@@ -61,10 +61,10 @@ public class PTSiteSetting implements Parcelable, SimpleListItem {
 	}
 
 	/**
-	 * ¸´ÖÆ³ıÁËtorrentUrlÒÔÍâµÄËùÓĞÊôĞÔ
+	 * å¤åˆ¶é™¤äº†torrentUrlä»¥å¤–çš„æ‰€æœ‰å±æ€§
 	 * 
 	 * @param torrentUrl
-	 *            torrentUrlµÄĞÂÖµ
+	 *            torrentUrlçš„æ–°å€¼
 	 * @return
 	 */
 	public PTSiteSetting copy(String torrentUrl, String torrentPageName) {

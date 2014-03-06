@@ -35,7 +35,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
- * µÇÂ¼
+ * ç™»å½•
  * 
  * @author robust
  * 
@@ -104,7 +104,7 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 	}
 
 	/**
-	 * »ñÈ¡ÑéÖ¤Âë
+	 * è·å–éªŒè¯ç 
 	 * */
 	void getSecurityCode() {
 		imageTask = hdsky.getSecurityImage();
@@ -216,9 +216,9 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 		@Override
 		public void onComplete(String result) {
 			String cookieStr = result;
-			// if (lang.equals("¼òÌåÖĞÎÄ")) {
+			// if (lang.equals("ç®€ä½“ä¸­æ–‡")) {
 			// cookieStr += "c_lang_folder=chs";
-			// } else if (lang.equals("·±ówÖĞÎÄ")) {
+			// } else if (lang.equals("ç¹é«”ä¸­æ–‡")) {
 			// cookieStr += "c_lang_folder=cht";
 			// }
 			HDStarApp.cookies = cookieStr;

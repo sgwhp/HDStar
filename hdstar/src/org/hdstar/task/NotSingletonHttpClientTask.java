@@ -19,7 +19,7 @@ import ch.boye.httpclientandroidlib.conn.ConnectTimeoutException;
 
 /**
  * 
- * 使用非单例HttpClient的BaseAsyncTask. <br/>
+ * 浣跨敤闈炲崟渚婬ttpClient鐨凚aseAsyncTask. <br/>
  * 
  * @see org.hdstar.task.BaseAsyncTask
  * @author robust

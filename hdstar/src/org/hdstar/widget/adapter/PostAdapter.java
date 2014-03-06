@@ -73,7 +73,7 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	public void addAll(List<Post> items) {
-		// "   Ìû×Ó£º595    ÉÏ´«£º3.754  TB   ÏÂÔØ£º35.75  GB   ·ÖÏíÂÊ£º107.505" È¥³ı¿Õ°××Ö·û
+		// "   å¸–å­ï¼š595    ä¸Šä¼ ï¼š3.754  TB   ä¸‹è½½ï¼š35.75  GB   åˆ†äº«ç‡ï¼š107.505" å»é™¤ç©ºç™½å­—ç¬¦
 		Pattern pattern = Pattern
 				.compile(
 						"\\s+([^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+)",
@@ -137,7 +137,7 @@ public class PostAdapter extends BaseAdapter {
 				new URLImageParser(holder.contentOuter, ref.get()), null));
 		// holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
 		// .getInstance());
-		// setMovementMethodºóĞèÒªµ÷ÓÃÒÔÏÂ·½·¨£¬²»ÄÜÔÚxmlÀïÅäÖÃ
+		// setMovementMethodåéœ€è¦è°ƒç”¨ä»¥ä¸‹æ–¹æ³•ï¼Œä¸èƒ½åœ¨xmlé‡Œé…ç½®
 		// holder.contentOuter.setFocusable(false);
 		// holder.contentOuter.setFocusableInTouchMode(false);
 		if (quote.fieldSet != null) {
@@ -149,7 +149,7 @@ public class PostAdapter extends BaseAdapter {
 					new URLImageParser(holder.contentMiddle, ref.get()), null));
 			// holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
 			// .getInstance());
-			// setMovementMethodºóĞèÒªµ÷ÓÃÒÔÏÂ·½·¨£¬²»ÄÜÔÚxmlÀïÅäÖÃ
+			// setMovementMethodåéœ€è¦è°ƒç”¨ä»¥ä¸‹æ–¹æ³•ï¼Œä¸èƒ½åœ¨xmlé‡Œé…ç½®
 			// holder.contentMiddle.setFocusable(false);
 			// holder.contentMiddle.setFocusableInTouchMode(false);
 			if (quote.fieldSet != null) {
@@ -162,7 +162,7 @@ public class PostAdapter extends BaseAdapter {
 						null));
 				// holder.contentInner.setMovementMethod(CustomLinkMovementMethod
 				// .getInstance());
-				// setMovementMethodºóĞèÒªµ÷ÓÃÒÔÏÂ·½·¨£¬²»ÄÜÔÚxmlÀïÅäÖÃ
+				// setMovementMethodåéœ€è¦è°ƒç”¨ä»¥ä¸‹æ–¹æ³•ï¼Œä¸èƒ½åœ¨xmlé‡Œé…ç½®
 				// holder.contentInner.setFocusable(false);
 				// holder.contentInner.setFocusableInTouchMode(false);
 				if (quote.fieldSet != null) {
@@ -313,12 +313,12 @@ public class PostAdapter extends BaseAdapter {
 		public void pm(int receiver);
 
 		/**
-		 * ±à¼­Ìû×Ó
+		 * ç¼–è¾‘å¸–å­
 		 * 
 		 * @author robust
 		 * @param p
 		 * @param top
-		 *            ÊÇ·ñÖ÷Â¥
+		 *            æ˜¯å¦ä¸»æ¥¼
 		 */
 		public void edit(Post p, boolean top);
 

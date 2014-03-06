@@ -128,7 +128,7 @@ public class TopicFragment extends StackFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		CustomLinkMovementMethod.attach(this);
-		// Ê×´Î´ò¿ª£¬ĞèÒª»ñÈ¡Êı¾İ
+		// é¦–æ¬¡æ‰“å¼€ï¼Œéœ€è¦è·å–æ•°æ®
 		boolean init = false;
 		if (adapter == null) {
 			init = true;
@@ -235,7 +235,7 @@ public class TopicFragment extends StackFragment {
 
 	@Override
 	public void onCreateActionBar(Menu menu) {
-		// ÉĞÎ´³õÊ¼»¯»òÖ÷ÌâÒÑËø¶¨
+		// å°šæœªåˆå§‹åŒ–æˆ–ä¸»é¢˜å·²é”å®š
 		if (adapter == null || adapter.getList().size() == 0
 				|| adapter.getList().get(0).id == 0) {
 			return;

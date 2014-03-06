@@ -48,17 +48,17 @@ public class HDStarApp extends Application {
 	// private static final int VALUE_COUNT = 1;
 	private static final String DISK_CACHE_SUBDIR = "thumbnails";
 
-	// private CompressFormat mCompressFormat = CompressFormat.PNG;// Í¼Æ¬Ñ¹Ëõ¸ñÊ½
-	// private static final int mCompressQuality = 70;// Í¼Æ¬Ñ¹ËõÖÊÁ¿
+	// private CompressFormat mCompressFormat = CompressFormat.PNG;// å›¾ç‰‡å‹ç¼©æ ¼å¼
+	// private static final int mCompressQuality = 70;// å›¾ç‰‡å‹ç¼©è´¨é‡
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		// ³õÊ¼»¯¸öÈËÉèÖÃµÈ
+		// åˆå§‹åŒ–ä¸ªäººè®¾ç½®ç­‰
 		init(getApplicationContext());
-		// ³õÊ¼»¯log´¦Àí¹¤¾ß
+		// åˆå§‹åŒ–logå¤„ç†å·¥å…·
 		CrashHandler.getInstance().init(getApplicationContext());
 	}
 
@@ -128,22 +128,22 @@ public class HDStarApp extends Application {
 		// // new InitDiskCacheTask().execute(externalStorageCacheDir,
 		// cacheDir);
 		// synchronized (mDiskCacheLock) {
-		// // ³¢ÊÔ´Ósd¿¨ÖĞ´´½¨
+		// // å°è¯•ä»sdå¡ä¸­åˆ›å»º
 		// if (externalStorageCacheDir != null && mDiskCache == null) {
 		// File cache = externalStorageCacheDir;
 		// try {
-		// // Èç¹ûÎÄ¼ş»òÄ¿Â¼²»´æÔÚ£¬¸Ã·½·¨»á×Ô¶¯´´½¨
+		// // å¦‚æœæ–‡ä»¶æˆ–ç›®å½•ä¸å­˜åœ¨ï¼Œè¯¥æ–¹æ³•ä¼šè‡ªåŠ¨åˆ›å»º
 		// mDiskCache = DiskLruCache.open(cache, APP_VERSION,
 		// VALUE_COUNT, DISK_CACHE_SIZE);
 		// } catch (IOException e) {
 		// e.printStackTrace();
 		// }
 		// }
-		// // ÔÚÊÖ»ú´æ´¢ÖĞ´´½¨
+		// // åœ¨æ‰‹æœºå­˜å‚¨ä¸­åˆ›å»º
 		// if (cacheDir != null && mDiskCache == null) {
 		// File cache = cacheDir;
 		// try {
-		// // Èç¹ûÎÄ¼ş»òÄ¿Â¼²»´æÔÚ£¬¸Ã·½·¨»á×Ô¶¯´´½¨
+		// // å¦‚æœæ–‡ä»¶æˆ–ç›®å½•ä¸å­˜åœ¨ï¼Œè¯¥æ–¹æ³•ä¼šè‡ªåŠ¨åˆ›å»º
 		// mDiskCache = DiskLruCache.open(cache, APP_VERSION,
 		// VALUE_COUNT, DISK_CACHE_SIZE);
 		// } catch (IOException e) {
@@ -154,7 +154,7 @@ public class HDStarApp extends Application {
 	}
 
 	/**
-	 * ²é¿´ÊÇ·ñÓĞÎ´¶ÁÏûÏ¢
+	 * æŸ¥çœ‹æ˜¯å¦æœ‰æœªè¯»æ¶ˆæ¯
 	 */
 	public void checkMessage() {
 		final DelegateTask<Boolean> task = DelegateTask.newInstance(cookies);
@@ -201,7 +201,7 @@ public class HDStarApp extends Application {
 				}.getType());
 	}
 
-	// ³õÊ¼»¯ÄÚ´æ»º´æ
+	// åˆå§‹åŒ–å†…å­˜ç¼“å­˜
 	// private void initMemoryCache() {
 	// final int memClass = ((ActivityManager) this
 	// .getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
@@ -212,7 +212,7 @@ public class HDStarApp extends Application {
 	// return bitmap.getRowBytes() * bitmap.getHeight();
 	// }
 	//
-	// // ÄÚ´æ»º´æ²»×ãÊ±£¬¿ÉÒÆÖÁÍâ²¿»º´æ
+	// // å†…å­˜ç¼“å­˜ä¸è¶³æ—¶ï¼Œå¯ç§»è‡³å¤–éƒ¨ç¼“å­˜
 	// @Override
 	// protected void entryRemoved(boolean evicted, String key,
 	// Bitmap oldValue, Bitmap newValue) {
@@ -226,7 +226,7 @@ public class HDStarApp extends Application {
 	// return mImageMemoryCache;
 	// }
 	//
-	// // ÍùÄÚ´æ»º´æÖĞ²åÈë
+	// // å¾€å†…å­˜ç¼“å­˜ä¸­æ’å…¥
 	// public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
 	// // synchronized (mImageMemoryCache) {
 	// if (getBitmapFromMemCache(key) == null) {
@@ -235,18 +235,18 @@ public class HDStarApp extends Application {
 	// // }
 	// }
 	//
-	// // ´ÓÄÚ´æ»º´æÖĞÈ¡³ö
+	// // ä»å†…å­˜ç¼“å­˜ä¸­å–å‡º
 	// public Bitmap getBitmapFromMemCache(String key) {
 	// return mImageMemoryCache.get(key);
 	// }
 	//
 	// /**
-	// * ½«bitmapÌí¼Óµ½Íâ²¿»º´æ
+	// * å°†bitmapæ·»åŠ åˆ°å¤–éƒ¨ç¼“å­˜
 	// *
 	// * @param key
-	// * bitmapµÄ±êÊ¶
+	// * bitmapçš„æ ‡è¯†
 	// * @param bitmap
-	// * Òª´æ´¢µÄBitmap
+	// * è¦å­˜å‚¨çš„Bitmap
 	// * */
 	// public void addBitmapToDiskCache(String key, Bitmap bitmap) {
 	// /*
@@ -277,7 +277,7 @@ public class HDStarApp extends Application {
 	// }
 	//
 	// /**
-	// * ´ÓÍâ²¿»º´æÖĞÈ¡Êı¾İ
+	// * ä»å¤–éƒ¨ç¼“å­˜ä¸­å–æ•°æ®
 	// * */
 	// public Bitmap getBitmapFromDiskCache(String key) {
 	// if (mDiskCache == null) {
@@ -309,7 +309,7 @@ public class HDStarApp extends Application {
 	// }
 	//
 	// /**
-	// * ¹Ø±ÕÍâ²¿»º´æ
+	// * å…³é—­å¤–éƒ¨ç¼“å­˜
 	// * */
 	// public void closeDiskCache() {
 	// try {
@@ -338,7 +338,7 @@ public class HDStarApp extends Application {
 	// }
 	//
 	/**
-	 * »ñÈ¡SD¿¨»º´æÂ·¾¶
+	 * è·å–SDå¡ç¼“å­˜è·¯å¾„
 	 * */
 	public static File getExternalStorageCacheDir(Context context,
 			String uniqueName) {
@@ -353,7 +353,7 @@ public class HDStarApp extends Application {
 	}
 
 	/**
-	 * »º´æÊÖ»ú´æ´¢»º´æÂ·¾¶
+	 * ç¼“å­˜æ‰‹æœºå­˜å‚¨ç¼“å­˜è·¯å¾„
 	 * */
 	public static File getStorageCacheDir(Context context, String uniqueName) {
 		File file = null;
@@ -372,28 +372,28 @@ public class HDStarApp extends Application {
 		return file;
 	}
 	//
-	// // ³õÊ¼»¯Íâ²¿»º´æ
+	// // åˆå§‹åŒ–å¤–éƒ¨ç¼“å­˜
 	// class InitDiskCacheTask extends AsyncTask<File, Void, Void> {
 	//
 	// @Override
 	// protected Void doInBackground(File... params) {
 	// synchronized (mDiskCacheLock) {
-	// // ³¢ÊÔ´Ósd¿¨ÖĞ´´½¨
+	// // å°è¯•ä»sdå¡ä¸­åˆ›å»º
 	// if (params[0] != null && mDiskCache == null) {
 	// File cacheDir = params[0];
 	// try {
-	// // Èç¹ûÎÄ¼ş»òÄ¿Â¼²»´æÔÚ£¬¸Ã·½·¨»á×Ô¶¯´´½¨
+	// // å¦‚æœæ–‡ä»¶æˆ–ç›®å½•ä¸å­˜åœ¨ï¼Œè¯¥æ–¹æ³•ä¼šè‡ªåŠ¨åˆ›å»º
 	// mDiskCache = DiskLruCache.open(cacheDir, APP_VERSION,
 	// VALUE_COUNT, DISK_CACHE_SIZE);
 	// } catch (IOException e) {
 	// e.printStackTrace();
 	// }
 	// }
-	// // ÔÚÊÖ»ú´æ´¢ÖĞ´´½¨
+	// // åœ¨æ‰‹æœºå­˜å‚¨ä¸­åˆ›å»º
 	// if (params[1] != null && mDiskCache == null) {
 	// File cacheDir = params[1];
 	// try {
-	// // Èç¹ûÎÄ¼ş»òÄ¿Â¼²»´æÔÚ£¬¸Ã·½·¨»á×Ô¶¯´´½¨
+	// // å¦‚æœæ–‡ä»¶æˆ–ç›®å½•ä¸å­˜åœ¨ï¼Œè¯¥æ–¹æ³•ä¼šè‡ªåŠ¨åˆ›å»º
 	// mDiskCache = DiskLruCache.open(cacheDir, APP_VERSION,
 	// VALUE_COUNT, DISK_CACHE_SIZE);
 	// } catch (IOException e) {

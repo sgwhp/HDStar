@@ -14,7 +14,7 @@ import org.jsoup.select.Elements;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 
 public class CMCT extends NexusPHP {
-	// cmctÖÖ×ÓÀà±ğÍ¼Æ¬styleÊôĞÔÖµÀàËÆ"background-image: url(pic/category/chd/bluenvelopes/720p.png);"
+	// cmctç§å­ç±»åˆ«å›¾ç‰‡styleå±æ€§å€¼ç±»ä¼¼"background-image: url(pic/category/chd/bluenvelopes/720p.png);"
 	private Pattern pattern = Pattern.compile("url\\((.*?)\\)");
 
 	public CMCT() {

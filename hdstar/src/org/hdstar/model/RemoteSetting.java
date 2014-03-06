@@ -14,7 +14,7 @@ import android.os.Parcelable;
 
 public class RemoteSetting implements Parcelable, SimpleListItem {
 
-	public int order;
+	public int order = -1;
 	public String type;
 	public String name;
 	public String ip;

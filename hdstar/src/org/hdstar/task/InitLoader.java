@@ -10,7 +10,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 /**
- * 初始化个人设置等
+ * 鍒濆鍖栦釜浜鸿缃瓑
  * 
  * @author robust
  * 

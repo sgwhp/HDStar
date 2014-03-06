@@ -108,11 +108,11 @@ public class MessageBoxFragment extends StackFragment {
 
 	@Override
 	public void onDestroyView() {
-		// StackPagerAdapter forwardºÍViewPager
-		// setCurrentItemÊ±¸÷»á´¥·¢Ò»´ÎonDestroyView
-		// µ«Á½´ÎÖ®¼ä²¢Î´Ê¹µÃlistViewµÄonRestoreInstanceStateÁ¢¼´ÉúĞ§£¬¹ÊÖ»ÓĞµÚÒ»´ÎµÄ×´Ì¬ÊÇÓĞĞ§µÄ
+		// StackPagerAdapter forwardå’ŒViewPager
+		// setCurrentItemæ—¶å„ä¼šè§¦å‘ä¸€æ¬¡onDestroyView
+		// ä½†ä¸¤æ¬¡ä¹‹é—´å¹¶æœªä½¿å¾—listViewçš„onRestoreInstanceStateç«‹å³ç”Ÿæ•ˆï¼Œæ•…åªæœ‰ç¬¬ä¸€æ¬¡çš„çŠ¶æ€æ˜¯æœ‰æ•ˆçš„
 		if (listViewState == null) {
-			// »º´ælistViewµÄ×´Ì¬£¬ÒÔ±ãÔÚfragment attachÊ±»Ö¸´
+			// ç¼“å­˜listViewçš„çŠ¶æ€ï¼Œä»¥ä¾¿åœ¨fragment attachæ—¶æ¢å¤
 			listViewState = listView.onSaveInstanceState();
 		}
 		// index = listView.getFirstVisiblePosition();
@@ -272,7 +272,7 @@ public class MessageBoxFragment extends StackFragment {
 		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 		nvp.add(new BasicNameValuePair("action", "moveordel"));
 		nvp.add(new BasicNameValuePair("box", "1"));
-		nvp.add(new BasicNameValuePair("delete", "É¾³ı"));
+		nvp.add(new BasicNameValuePair("delete", "åˆ é™¤"));
 		int[] ids = adapter.getSelectedIds();
 		for (int i = 0; i < ids.length; i++) {
 			nvp.add(new BasicNameValuePair("messages[]", ids[i] + ""));

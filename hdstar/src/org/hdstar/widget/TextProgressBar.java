@@ -47,14 +47,14 @@ public class TextProgressBar extends ProgressBar {
 		canvas.drawText(this.text, x, y, this.mPaint);
 	}
 
-	// 初始化，画笔
+	// 鍒濆鍖栵紝鐢荤瑪
 	private void initText() {
 		this.mPaint = new Paint();
 		this.mPaint.setColor(Color.WHITE);
 
 	}
 
-	// 设置文字内容
+	// 璁剧疆鏂囧瓧鍐呭
 	private void setText(int progress) {
 		int i = (int) (progress * 100.0 / this.getMax());
 		this.text = String.valueOf(i) + "%";

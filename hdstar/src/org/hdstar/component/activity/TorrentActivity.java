@@ -17,7 +17,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
- * 种子
+ * 绉嶅瓙
  * 
  * @author robust
  * 
@@ -36,13 +36,13 @@ public class TorrentActivity extends BaseStackActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		settings = new ArrayList<PTSiteSetting>();
-		// 首先添加HDSky
+		// 棣栧厛娣诲姞HDSky
 		PTSiteSetting hdsky = new PTSiteSetting();
 		hdsky.type = PTSiteType.HDSky.name();
 		hdsky.cookie = getSharedPreferences(Const.SETTING_SHARED_PREFS,
 				MODE_PRIVATE).getString("cookies", "");
 		settings.add(hdsky);
-		// 添加已保存设置的站点
+		// 娣诲姞宸蹭繚瀛樿缃殑绔欑偣
 		PTSiteSettingManager.getAll(this, settings);
 
 		if (savedInstanceState == null) {
@@ -80,7 +80,7 @@ public class TorrentActivity extends BaseStackActivity implements
 		}
 		PTSiteSetting setting = (PTSiteSetting) navigationSpinnerAdapter
 				.getItem(itemPosition);
-		// 未初始化
+		// 鏈垵濮嬪寲
 		if (setting.cookie == null || "".equals(setting.cookie)) {
 			Crouton.makeText(this, R.string.unintialized, Style.CONFIRM);
 			return true;

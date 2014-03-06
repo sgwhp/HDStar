@@ -12,7 +12,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 
 /**
- * ÂÛÌ³
+ * è®ºå›
  * 
  * @author robust
  * 

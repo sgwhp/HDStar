@@ -123,7 +123,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		text = (TextView) v.findViewById(R.id.rss_link);
 		text.setText(setting.link);
 		ImageView icon = (ImageView) v.findViewById(R.id.rss_icon);
-		// 获取图标，去掉订阅地址的所有参数，避免泄露passkey
+		// 鑾峰彇鍥炬爣锛屽幓鎺夎闃呭湴鍧�鐨勬墍鏈夊弬鏁帮紝閬垮厤娉勯湶passkey
 		ImageLoader.getInstance().displayImage(
 				String.format(CommonUrls.GETFVO_URL,
 						setting.link.substring(0, setting.link.indexOf('?'))),

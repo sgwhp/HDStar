@@ -30,7 +30,7 @@ import cn.sgwhp.patchdroid.PatchClient;
 
 /**
  * 
- * ¿ØÖÆÏÂÔØ·şÎñÊ±£¬intent±ØĞë´øµÄ²ÎÊı£º("command", DownloadService.COMMAND_DOWNLOAD_XXX),
+ * æ§åˆ¶ä¸‹è½½æœåŠ¡æ—¶ï¼Œintentå¿…é¡»å¸¦çš„å‚æ•°ï¼š("command", DownloadService.COMMAND_DOWNLOAD_XXX),
  * ("appCode", appCode) ("isPatch", isPatch)
  * 
  * @author robust
@@ -44,22 +44,22 @@ public class DownloadService extends Service {
 	public static final int DOWNLOAD_STATUS_FAILED = 5;
 	public static final int DOWNLOAD_STATUS_START = 6;
 	public static final int DOWNLOAD_STATUS_PATCH_FAILED = 7;
-	// ÏÂÔØÈÎÎñ×´Ì¬¸ü¸Ä
+	// ä¸‹è½½ä»»åŠ¡çŠ¶æ€æ›´æ”¹
 	public static final String ACTION_DOWNLOAD_STATUS_CHANGED = "org.hdstar.action.download.status.changed";
-	// ÏÂÔØÈÎÎñÊ§°Ü
+	// ä¸‹è½½ä»»åŠ¡å¤±è´¥
 	// public static final String ACTION_DOWNLOAD_FAILED =
 	// "org.hdstar.action.download.failed";
-	// ÏÂÔØ½ø¶È¸üĞÂ
+	// ä¸‹è½½è¿›åº¦æ›´æ–°
 	public static final String ACTION_DOWNLOAD_UPDATE_PROGRESS = "org.hdstar.action.download.update.progress";
-	// Ìí¼ÓÒ»¸öÏÂÔØÈÎÎñ
+	// æ·»åŠ ä¸€ä¸ªä¸‹è½½ä»»åŠ¡
 	public static final int COMMAND_DOWNLOAD_ADD = 0;
-	// ÒÆ³ıÒ»¸öÏÂÔØÈÎÎñÒÔ¼°±¾µØÎÄ¼ş
+	// ç§»é™¤ä¸€ä¸ªä¸‹è½½ä»»åŠ¡ä»¥åŠæœ¬åœ°æ–‡ä»¶
 	public static final int COMMAND_DOWNLOAD_PAUSE = 1;
-	// Í£Ö¹Ò»¸öÏÂÔØÈÎÎñ
+	// åœæ­¢ä¸€ä¸ªä¸‹è½½ä»»åŠ¡
 	public static final int COMMAND_DOWNLOAD_STOP = 2;
-	// Í£Ö¹ËùÓĞÏÂÔØÈÎÎñ²¢½áÊøService
+	// åœæ­¢æ‰€æœ‰ä¸‹è½½ä»»åŠ¡å¹¶ç»“æŸService
 	public static final int COMMAND_DOWNLOAD_EXIT = 3;
-	// ¼ÌĞøÏÂÔØÀúÊ·¼ÇÂ¼
+	// ç»§ç»­ä¸‹è½½å†å²è®°å½•
 	public static final int COMMAND_DOWNLOAD_RESUME = 4;
 	private NotificationManager nm;
 	private Notification nf;
@@ -119,7 +119,7 @@ public class DownloadService extends Service {
 	}
 
 	/**
-	 * Í£Ö¹Ò»¸öÏÂÔØÈÎÎñ
+	 * åœæ­¢ä¸€ä¸ªä¸‹è½½ä»»åŠ¡
 	 */
 	void stop() {
 		if (task != null) {
@@ -145,12 +145,12 @@ public class DownloadService extends Service {
 	}
 
 	/**
-	 * Ò»¸öÏÂÔØÈÎÎñÖ´ĞĞÍê±ÏºóµÄºóĞø¹¤×÷
+	 * ä¸€ä¸ªä¸‹è½½ä»»åŠ¡æ‰§è¡Œå®Œæ¯•åçš„åç»­å·¥ä½œ
 	 * 
 	 * @param task
-	 *            Ö´ĞĞÍê±ÏµÄtask
+	 *            æ‰§è¡Œå®Œæ¯•çš„task
 	 * @param isSuccessfully
-	 *            true ³É¹¦Ö´ĞĞ false Ö´ĞĞÊ§°Ü
+	 *            true æˆåŠŸæ‰§è¡Œ false æ‰§è¡Œå¤±è´¥
 	 */
 	private synchronized void finishDownload(DownloadTask task,
 			boolean isSuccessfully) {
@@ -168,7 +168,7 @@ public class DownloadService extends Service {
 					"application/vnd.android.package-archive");
 		} else {
 			status = DOWNLOAD_STATUS_FAILED;
-			text = "ÏÂÔØÊ§°Ü£¬µã»÷²é¿´";
+			text = "ä¸‹è½½å¤±è´¥ï¼Œç‚¹å‡»æŸ¥çœ‹";
 			nfIntent = new Intent(this, DownloadActivity.class);
 		}
 		updateStatus(status);
@@ -189,7 +189,7 @@ public class DownloadService extends Service {
 		private long size = -1;
 		private long startPos = 0;
 		private long lastUpdate;
-		private final float UPDATE_PERCENT = 0.05f;// 5%¸üĞÂÒ»´Î½ø¶È
+		private final float UPDATE_PERCENT = 0.05f;// 5%æ›´æ–°ä¸€æ¬¡è¿›åº¦
 		private long updateOffset;
 		private String fileName;
 		private String apkName;
@@ -224,7 +224,7 @@ public class DownloadService extends Service {
 				client = HttpClientManager.getHttpClient();
 				get = new HttpGet(CommonUrls.HDStar.SERVER_DOWNLOAD_URL
 						+ "?appCode=" + Const.APP_CODE + "&patch=" + isPatch);
-				// ²¢·ÇÊ×´ÎÏÂÔØ
+				// å¹¶éé¦–æ¬¡ä¸‹è½½
 				if (!isNew) {
 					fileName = shared.getString("downloadFile", null);
 					if (fileName != null) {
@@ -254,7 +254,7 @@ public class DownloadService extends Service {
 							.substring(fileName.indexOf("filename=") + 9);
 					File tmpFile = new File(dir.getAbsolutePath()
 							+ File.separator + fileName);
-					// É¾³ıÒÑ´æÔÚµÄÍ¬ÃûÎÄ¼ş
+					// åˆ é™¤å·²å­˜åœ¨çš„åŒåæ–‡ä»¶
 					if (tmpFile.exists()) {
 						tmpFile.delete();
 					}
@@ -283,16 +283,16 @@ public class DownloadService extends Service {
 								Const.DOWNLOAD_DIR + File.separator
 										+ "hdstar.apk", Const.DOWNLOAD_DIR
 										+ File.separator + fileName);
-						// ±£´æapkÎÄ¼şÃû
+						// ä¿å­˜apkæ–‡ä»¶å
 						apkName = "hdstar.apk";
 						editor.putString("apk", apkName);
 						editor.commit();
-						// É¾³ıÔöÁ¿ÎÄ¼ş
+						// åˆ é™¤å¢é‡æ–‡ä»¶
 						File patchFile = new File(dir.getAbsolutePath()
 								+ File.separator + fileName);
 						patchFile.delete();
 					} else {
-						// ±£´æapkÎÄ¼şÃû
+						// ä¿å­˜apkæ–‡ä»¶å
 						apkName = fileName;
 						editor.putString("apk", apkName);
 						editor.commit();

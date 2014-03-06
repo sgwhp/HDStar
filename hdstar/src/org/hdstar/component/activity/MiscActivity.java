@@ -7,7 +7,7 @@ import org.hdstar.R;
 import android.os.Bundle;
 
 /**
- * ÆäËû
+ * å…¶ä»–
  * @author robust
  *
  */

@@ -45,13 +45,13 @@ import ch.boye.httpclientandroidlib.util.EntityUtils;
 
 /**
  * 
- * NexushPHPÄ£°åµÄÕ¾µãÊÊÅäÆ÷. <br/>
+ * NexushPHPæ¨¡æ¿çš„ç«™ç‚¹é€‚é…å™¨. <br/>
  * 
  * @author robust
  */
 public class NexusPHP extends PTAdapter {
 
-	/** ÑéÖ¤ÂëµÄhashÖµ */
+	/** éªŒè¯ç çš„hashå€¼ */
 	protected String imageHash;
 
 	public NexusPHP(PTSiteType type) {
@@ -64,7 +64,7 @@ public class NexusPHP extends PTAdapter {
 	}
 
 	/**
-	 * ¹¹½¨ÇëÇó²ÎÊı <br/>
+	 * æ„å»ºè¯·æ±‚å‚æ•° <br/>
 	 * 
 	 * @param username
 	 * @param password
@@ -127,10 +127,10 @@ public class NexusPHP extends PTAdapter {
 
 	/**
 	 * 
-	 * ½âÎöÄ³ĞĞÖÖ×ÓÖĞµÄÀà±ğÁĞ. <br/>
+	 * è§£ææŸè¡Œç§å­ä¸­çš„ç±»åˆ«åˆ—. <br/>
 	 * 
 	 * @param tClassCol
-	 *            Àà±ğÁĞ£¬Ò»°ãÎªµÚÒ»ÁĞ
+	 *            ç±»åˆ«åˆ—ï¼Œä¸€èˆ¬ä¸ºç¬¬ä¸€åˆ—
 	 * @param t
 	 */
 	protected void parseTorrentClass(Element tClassCol, Torrent t) {
@@ -148,20 +148,20 @@ public class NexusPHP extends PTAdapter {
 
 	/**
 	 * 
-	 * ½âÎöÄ³ĞĞÖÖ×ÓÖĞ²Ù×÷ÁĞµÄÏÂÔØ¿ò×´Ì¬. <br/>
+	 * è§£ææŸè¡Œç§å­ä¸­æ“ä½œåˆ—çš„ä¸‹è½½æ¡†çŠ¶æ€. <br/>
 	 * 
 	 * @param tRssRol
-	 *            ²Ù×÷ÁĞ£¬Ò»°ãÎªµÚ¶şÁĞ£¬Óë±êÌâÔÚÍ¬Ò»ÁĞ
+	 *            æ“ä½œåˆ—ï¼Œä¸€èˆ¬ä¸ºç¬¬äºŒåˆ—ï¼Œä¸æ ‡é¢˜åœ¨åŒä¸€åˆ—
 	 * @param t
 	 * @param index
-	 *            ÖÖ×ÓËùÔÚĞĞÊı
+	 *            ç§å­æ‰€åœ¨è¡Œæ•°
 	 */
 	protected void parseRssDownload(Element tRssRol, Torrent t, int index) {
 	}
 
 	/**
 	 * 
-	 * »ñÈ¡ÖÖ×Ó½âÎöÆ÷. <br/>
+	 * è·å–ç§å­è§£æå™¨. <br/>
 	 * 
 	 * @return
 	 */
@@ -215,7 +215,7 @@ public class NexusPHP extends PTAdapter {
 						if (Const.TorrentTags.BOOKMARKED.equals(bookmark)) {
 							t.bookmark = true;
 						}
-						// ÏÂÔØ¿ò
+						// ä¸‹è½½æ¡†
 						parseRssDownload(torrentCols.get(1), t, i - 1);
 						// comments
 						t.comments = torrentCols.get(2).text();
@@ -295,7 +295,7 @@ public class NexusPHP extends PTAdapter {
 
 	/**
 	 * 
-	 * ÏÂÔØnexusphpÑéÖ¤ÂëÇëÇóÈÎÎñ. <br/>
+	 * ä¸‹è½½nexusphpéªŒè¯ç è¯·æ±‚ä»»åŠ¡. <br/>
 	 * 
 	 * @author robust
 	 */
@@ -325,7 +325,7 @@ public class NexusPHP extends PTAdapter {
 
 		/**
 		 * 
-		 * »ñÈ¡ÑéÖ¤ÂëµÄhashÖµ. <br/>
+		 * è·å–éªŒè¯ç çš„hashå€¼. <br/>
 		 * 
 		 * @param url
 		 * @return
@@ -382,7 +382,7 @@ public class NexusPHP extends PTAdapter {
 		}
 
 		/**
-		 * ÏÂÔØÑéÖ¤Âë. <br/>
+		 * ä¸‹è½½éªŒè¯ç . <br/>
 		 * 
 		 * @param url
 		 * @return

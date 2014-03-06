@@ -70,14 +70,14 @@ public class URLImageParser implements ImageGetter {
 		final URLDrawable urlDrawable = new URLDrawable(c.getResources());
 		urlDrawable.setDrawable(c.getResources().getDrawable(
 				R.drawable.url_image_loading));
-		// ´Ë´¦²»ÄÜÊ¹ÓÃÔ²½ÇµÄÍ¼Æ¬ÏÔÊ¾ÅäÖÃ
+		// æ­¤å¤„ä¸èƒ½ä½¿ç”¨åœ†è§’çš„å›¾ç‰‡æ˜¾ç¤ºé…ç½®
 		ImageLoader.getInstance().loadImage(source, HDStarApp.displayOptions,
 				new SimpleImageLoadingListener() {
 					// private View mView;
 
 					@Override
 					public void onLoadingStarted(String imageUri, View view) {
-						// ÒÔÏÂbugÒÑÔÚUIL.1.9ÖĞĞŞ¸´
+						// ä»¥ä¸‹bugå·²åœ¨UIL.1.9ä¸­ä¿®å¤
 						// see bug:
 						// https://github.com/nostra13/Android-Universal-Image-Loader/issues/356
 						// mView = view;
@@ -90,7 +90,7 @@ public class URLImageParser implements ImageGetter {
 						if (loadedImage != null) {
 							urlDrawable.setDrawable(new BitmapDrawable(c
 									.getResources(), loadedImage));
-							// ¿ÉÒÔ½â¾öÍ¼Æ¬ÔØÈëºóÖØµşµÄÎÊÌâ£¬µ«ÊÇtextview»á±»Éè¶¨ËÀÁË¸ß¶È
+							// å¯ä»¥è§£å†³å›¾ç‰‡è½½å…¥åé‡å çš„é—®é¢˜ï¼Œä½†æ˜¯textviewä¼šè¢«è®¾å®šæ­»äº†é«˜åº¦
 							// container.setHeight(container.getHeight()
 							// + drawable.getIntrinsicHeight());
 							// container.setEllipsize(null);

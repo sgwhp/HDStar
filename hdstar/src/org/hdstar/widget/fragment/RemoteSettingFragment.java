@@ -77,8 +77,6 @@ public class RemoteSettingFragment extends StackFragment {
 			setting = b.getParcelable("setting");
 		} else {
 			setting = new RemoteSetting();
-			setting.order = RemoteSettingManager
-					.getMaxRemote(RemoteSettingManager.getPrefs(getActivity()));
 		}
 		typeStr = RemoteType.getAllNames();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -179,10 +177,10 @@ public class RemoteSettingFragment extends StackFragment {
 		String usernameStr = username.getText().toString();
 		String passwordStr = password.getText().toString();
 		String dir = downloadDir.getText().toString();
-		if ("".equals(nameStr) || "".equals(usernameStr)
-				|| "".equals(passwordStr)) {
+		if ("".equals(nameStr)) {
 			Crouton.makeText(getActivity(), R.string.fill_in_the_blanks,
 					Style.CONFIRM).show();
+			name.setError(null);
 			return;
 		}
 		setting.name = nameStr;
@@ -191,8 +189,9 @@ public class RemoteSettingFragment extends StackFragment {
 		setting.password = passwordStr;
 		setting.downloadDir = dir;
 		if (mMode == MODE_ADD) {
-			RemoteSettingManager.add(getActivity(), setting,
+			setting.order = RemoteSettingManager.add(getActivity(), setting,
 					setDefault.isChecked());
+			mMode = MODE_EDIT;
 		} else {
 			RemoteSettingManager.save(getActivity(), setting,
 					setDefault.isChecked());

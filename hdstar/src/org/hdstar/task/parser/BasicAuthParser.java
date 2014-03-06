@@ -8,7 +8,7 @@ import ch.boye.httpclientandroidlib.HttpResponse;
 
 /**
  * 
- * BasicAuthÑéÖ¤µÄ401´¦Àí <br/>
+ * BasicAuthéªŒè¯çš„401å¤„ç† <br/>
  * 
  * @author robust
  */

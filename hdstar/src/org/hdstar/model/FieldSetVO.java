@@ -1,7 +1,7 @@
 package org.hdstar.model;
 
 /**
- * <fieldset>±êÇ©bean µ±fieldSetÎªnullÊ±£¬±íÊ¾µ±Ç°Îª×îºóÒ»²ã
+ * <fieldset>æ ‡ç­¾bean å½“fieldSetä¸ºnullæ—¶ï¼Œè¡¨ç¤ºå½“å‰ä¸ºæœ€åä¸€å±‚
  * 
  * @author robust
  * 

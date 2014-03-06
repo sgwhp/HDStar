@@ -11,12 +11,12 @@ import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
 
 /**
- * 连接原始服务器的请求任务
+ * 杩炴帴鍘熷鏈嶅姟鍣ㄧ殑璇锋眰浠诲姟
  * 
  * @author robust
  * 
  * @param <T>
- *            返回结果
+ *            杩斿洖缁撴灉
  */
 public class OriginTask<T> extends BaseAsyncTask<T> {
 

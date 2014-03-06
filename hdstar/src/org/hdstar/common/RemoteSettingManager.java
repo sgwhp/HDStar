@@ -32,7 +32,7 @@ public class RemoteSettingManager {
 
 	/**
 	 * 
-	 * 获取默认的远程服务器设置顺序. <br/>
+	 * 鑾峰彇榛樿鐨勮繙绋嬫湇鍔″櫒璁剧疆椤哄簭. <br/>
 	 * 
 	 * @author robust
 	 * @param context
@@ -132,10 +132,11 @@ public class RemoteSettingManager {
 		}
 	}
 
-	public static void add(Context context, RemoteSetting setting,
+	public static int add(Context context, RemoteSetting setting,
 			boolean isDefault) {
 		try {
 			SharedPreferences prefs = getPrefs(context);
+			setting.order = getMaxRemote(prefs);
 			Editor edit = prefs.edit();
 			if (isDefault) {
 				edit.putInt(DEFAULT, setting.order);
@@ -145,13 +146,15 @@ public class RemoteSettingManager {
 			edit.putString(IP + setting.order, setting.ip);
 			edit.putString(USERNAME + setting.order, setting.username);
 			edit.putString(PASSWORD + setting.order,
-					DES.decryptDES(setting.password, Const.TAG));
+					DES.encryptDES(setting.password, Const.TAG));
 			edit.putString(DOWNLOAD_DIR + setting.order, setting.downloadDir);
 			edit.putBoolean(RM_FILE + setting.order, setting.rmFile);
 			edit.putInt(MAX, setting.order + 1);
 			edit.commit();
+			return setting.order;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return -1;
 	}
 }

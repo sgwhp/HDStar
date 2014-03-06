@@ -137,6 +137,9 @@ public class RemoteListFragment extends StackFragment implements
 		case UTorrent:
 			iconId = R.drawable.utorrent_icon;
 			break;
+		case Transmission:
+			iconId = R.drawable.transmission_icon;
+			break;
 		}
 		if (iconId != -1) {
 			icon.setImageResource(iconId);

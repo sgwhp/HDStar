@@ -28,7 +28,7 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	private HashMap<String, PTSiteSetting> settings;
 	private PTSiteType[] mTypes;
 	{
-		// 初始化所有站点，排除掉HDSky
+		// 鍒濆鍖栨墍鏈夌珯鐐癸紝鎺掗櫎鎺塇DSky
 		PTSiteType[] types = PTSiteType.values();
 		mTypes = new PTSiteType[types.length - 1];
 		for (int i = 0, j = 0; i < types.length; i++) {
@@ -141,7 +141,7 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 		text = (TextView) v.findViewById(R.id.username);
 		text.setText(username);
 		ImageView icon = (ImageView) v.findViewById(R.id.site_icon);
-		// 获取图标
+		// 鑾峰彇鍥炬爣
 		ImageLoader.getInstance().displayImage(
 				String.format(CommonUrls.GETFVO_URL, type.getUrl()), icon,
 				HDStarApp.displayOptions);

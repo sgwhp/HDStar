@@ -6,7 +6,7 @@ import ch.boye.httpclientandroidlib.HttpResponse;
 
 /**
  * 
- * BasicAuth验证，成功即返回200代码都用此类处理 <br/>
+ * BasicAuth楠岃瘉锛屾垚鍔熷嵆杩斿洖200浠ｇ爜閮界敤姝ょ被澶勭悊 <br/>
  * 
  * @author robust
  */

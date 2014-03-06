@@ -8,15 +8,15 @@ import org.hdstar.R;
 import ch.boye.httpclientandroidlib.HttpResponse;
 
 /**
- * ÇëÇóÈÎÎñ½âÎö. <br/>
- * ËùÓĞµÄBaseAsyncTask¶¼ÒªÓÉ´ËÀàÀ´½âÎöÊı¾İ²¢ÅĞ¶ÏÇëÇóÈÎÎñÊÇ·ñ³É¹¦Íê³É
+ * è¯·æ±‚ä»»åŠ¡è§£æ. <br/>
+ * æ‰€æœ‰çš„BaseAsyncTaskéƒ½è¦ç”±æ­¤ç±»æ¥è§£ææ•°æ®å¹¶åˆ¤æ–­è¯·æ±‚ä»»åŠ¡æ˜¯å¦æˆåŠŸå®Œæˆ
  * 
  * @author robust
  */
 public abstract class ResponseParser<T> {
 	public static final int SUCCESS_MSG_ID = 0;
 	protected int msgId = R.string.refresh_failed;
-	protected Type type;// gson ½âÎöÊ±ĞèÒªÓÃµ½µÄÀàĞÍ£¬·ºĞÍÇëÊ¹ÓÃgson×Ô´øµÄtypetoken»ñÈ¡
+	protected Type type;// gson è§£ææ—¶éœ€è¦ç”¨åˆ°çš„ç±»å‹ï¼Œæ³›å‹è¯·ä½¿ç”¨gsonè‡ªå¸¦çš„typetokenè·å–
 
 	public ResponseParser() {
 	}
@@ -38,7 +38,7 @@ public abstract class ResponseParser<T> {
 	}
 
 	/**
-	 * ÈÎÎñÊÇ·ñÍê³É. <br/>
+	 * ä»»åŠ¡æ˜¯å¦å®Œæˆ. <br/>
 	 * 
 	 * @return
 	 */

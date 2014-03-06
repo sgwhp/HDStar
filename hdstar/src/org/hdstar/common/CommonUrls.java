@@ -3,7 +3,7 @@ package org.hdstar.common;
 public class CommonUrls {
 	/**
 	 * 
-	 * web·şÎñÆ÷µØÖ·. <br/>
+	 * webæœåŠ¡å™¨åœ°å€. <br/>
 	 * 
 	 * @author robust
 	 */
@@ -46,7 +46,7 @@ public class CommonUrls {
 		public static final String TORRENTS_URL = BASE_URL
 				+ "/torrents.php?page=%d";
 
-		/** ¿Í»§¶ËÓ¦ÓÃ·şÎñÆ÷µØÖ· */
+		/** å®¢æˆ·ç«¯åº”ç”¨æœåŠ¡å™¨åœ°å€ */
 		// public static final String SERVER_ADDRESS =
 		// "http://hdstar.ap01.aws.af.cm/";
 		public static String SERVER_ADDRESS;
@@ -68,7 +68,7 @@ public class CommonUrls {
 		public static String SERVER_ABOUT_URL;
 
 		/**
-		 * ¸ù¾İ¸öÈËÉèÖÃ³õÊ¼»¯Ó¦ÓÃ·şÎñÆ÷µØÖ· <br/>
+		 * æ ¹æ®ä¸ªäººè®¾ç½®åˆå§‹åŒ–åº”ç”¨æœåŠ¡å™¨åœ°å€ <br/>
 		 * 
 		 * @param serverAddr
 		 */
@@ -96,13 +96,13 @@ public class CommonUrls {
 	}
 
 	public static class BTClient {
-		/** ruTorrentµØÖ· */
+		/** ruTorrentåœ°å€ */
 		public static final String RUTORRENT_HOME_PAGE = "http://%s/rutorrent";
 		public static final String RUTORRENT_RPC_ACTION_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/httprpc/action.php";
 		public static final String RUTORRENT_RSS_ACTION_URL = RUTORRENT_HOME_PAGE
 				+ "/plugins/rss/action.php";
-		/** Ë¢ĞÂrss±êÇ©µØÖ· */
+		/** åˆ·æ–°rssæ ‡ç­¾åœ°å€ */
 		public static final String RUTORRENT_RSS_REFRESH_URL = RUTORRENT_RSS_ACTION_URL
 				+ "?mode=refresh&rss=%s";
 		public static final String RUTORRENT_DISK_SPACE_URL = RUTORRENT_HOME_PAGE
@@ -110,7 +110,7 @@ public class CommonUrls {
 		public static final String RUTORRENT_ADD_URL = RUTORRENT_HOME_PAGE
 				+ "/php/addtorrent.php?";
 
-		/** ¦ÌTorrentµØÖ· ¡£ÎªÁËÍ³Ò»¸ñÊ½£¬·½±ãµ÷ÓÃString.format()£¬token²ÎÊıÎñ±Ø·ÅÔÚÊ×Î» */
+		/** Î¼Torrentåœ°å€ ã€‚ä¸ºäº†ç»Ÿä¸€æ ¼å¼ï¼Œæ–¹ä¾¿è°ƒç”¨String.format()ï¼Œtokenå‚æ•°åŠ¡å¿…æ”¾åœ¨é¦–ä½ */
 		public static final String UTORRENT_HOME_PAGE = "http://%s/gui";
 		public static final String UTORRENT_TOKEN_URL = UTORRENT_HOME_PAGE
 				+ "/token.html";
@@ -125,15 +125,15 @@ public class CommonUrls {
 		public static final String UTORRENT_SET_LABEL_URL = UTORRENT_BASE_REQ_URL
 				+ "&action=setprops";
 
-		/** transmissionµØÖ· */
+		/** transmissionåœ°å€ */
 		public static final String TRANSMISSION_HOME_PAGE = "http://%s/transmission/web";
 		public static final String TRANSMISSION_RPC_URL = "http://%s/transmission/rpc";
 	}
 
-	// »ñÈ¡ÍøÕ¾Í¼±ê¹¤¾ßµØÖ·
+	// è·å–ç½‘ç«™å›¾æ ‡å·¥å…·åœ°å€
 	public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
 
-	// nexusphp»ñÈ¡ÑéÖ¤ÂëµØÖ·
+	// nexusphpè·å–éªŒè¯ç åœ°å€
 	public static final String NEXUSPHP_FETCH_SECURITY_IMAGE_URL = "%s/image.php?action=regimage&imagehash=%s";
 	public static final String NEXUSPHP_LOGIN_URL = "%s/login.php";
 	public static final String NEXUSPHP_TAKE_LOGIN_URL = "%s/takelogin.php";
@@ -162,20 +162,20 @@ public class CommonUrls {
 		public static final String HDW_HOME_PAGE = HDW + "/index.php";
 		public static final String HDW_TORRENTS_URL = HDW
 				+ "/browse.php?page=%d";
-		// RndÊÇÊ±¼ä£¬µ¥Î»ºÁÃë
+		// Rndæ˜¯æ—¶é—´ï¼Œå•ä½æ¯«ç§’
 		public static final String HDW_RSS_DOWNLOAD_URL = HDW
 				+ "/_ajax_addtobasket.php?Rnd=%d";
 		public static final String HDW_LOGIN = HDW + "/login.php";
 		public static final String HDW_TAKE_LOGIN = HDW + "/takelogin.php";
 		public static final String HDW_LOGOUT = HDW + "/logout.php";
-		// tm Ëæ»úÊı£¬Ë¢ĞÂÊ±Ê¹ÓÃ
+		// tm éšæœºæ•°ï¼Œåˆ·æ–°æ—¶ä½¿ç”¨
 		// public static final String HDW_GET_SECURITY_IMG =
 		// "/validatecode.php?tm=%d";
 		public static final String HDW_GET_SECURITY_IMG = HDW
 				+ "/validatecode.php";
 		public static final String HDW_BOOKMARK = HDW
 				+ "/bookmark.php?torrent=?%d";
-		// post£¬²ÎÊıdelbookmark£¬ÖÖ×ÓidÊı×é
+		// postï¼Œå‚æ•°delbookmarkï¼Œç§å­idæ•°ç»„
 		public static final String HDW_DEL_BOOKMARK = HDW
 				+ "/takedelbookmarks.php";
 
@@ -185,7 +185,7 @@ public class CommonUrls {
 				+ "/torrents.php?page=%d";
 		public static final String MT_ADULT_URL = MT + "/adult.php?page=%d";
 
-		// OpenCDµÄµÇÂ¼Ò³ÃæÖ»ÄÜÊÇhttps£¬ËùÒÔÍ³Ò»Ê¹ÓÃhttps
+		// OpenCDçš„ç™»å½•é¡µé¢åªèƒ½æ˜¯httpsï¼Œæ‰€ä»¥ç»Ÿä¸€ä½¿ç”¨https
 		public static final String OPEN_CD = "https://open.cd";
 		public static final String OPEN_CD_RSS_DOWNLOAD_URL = OPEN_CD
 				+ "/bookmark.php?type=1&level=0&cmd=&torrentid=%s";

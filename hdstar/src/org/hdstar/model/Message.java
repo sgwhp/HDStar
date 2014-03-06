@@ -12,15 +12,15 @@ public class Message implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/** ÊÇ·ñÒÑ¶Á */
+	/** æ˜¯å¦å·²è¯» */
 	public boolean read = true;
-	/** Ö÷Ìâ */
+	/** ä¸»é¢˜ */
 	public String subject = "";
-	/** ·¢ËÍÈË */
+	/** å‘é€äºº */
 	public String sender = "";
-	/** »Ø¸´ÈË */
+	/** å›å¤äºº */
 	public String replyer = "";
-	/** Ê±¼ä */
+	/** æ—¶é—´ */
 	public String time = "";
 	/** id */
 	public int id;

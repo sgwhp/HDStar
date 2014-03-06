@@ -16,7 +16,7 @@ import ch.boye.httpclientandroidlib.auth.UsernamePasswordCredentials;
 import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 
 /**
- * ×ÓÀàÃüÃûÒªÓëRemoteTypeÖĞµÄÒ»ÖÂ
+ * å­ç±»å‘½åè¦ä¸RemoteTypeä¸­çš„ä¸€è‡´
  * 
  * @see org.hdstar.common.RemoteType
  * @author robust
@@ -24,9 +24,9 @@ import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
  */
 public abstract class RemoteBase {
 	protected RemoteType mType;
-	/** ÉèÖÃĞÅÏ¢£¬°üÀ¨ip¡¢¶Ë¿Ú¡¢ÓÃ»§Ãû¡¢ÃÜÂëµÈ */
+	/** è®¾ç½®ä¿¡æ¯ï¼ŒåŒ…æ‹¬ipã€ç«¯å£ã€ç”¨æˆ·åã€å¯†ç ç­‰ */
 	protected RemoteSetting setting;
-	/** ÈÎÎñÁĞ±íµÄËùÓĞ±êÇ© */
+	/** ä»»åŠ¡åˆ—è¡¨çš„æ‰€æœ‰æ ‡ç­¾ */
 	protected ArrayList<Label> mLabels = new ArrayList<Label>();
 
 	public RemoteBase(RemoteType type) {
@@ -43,7 +43,11 @@ public abstract class RemoteBase {
 
 	public void setSetting(RemoteSetting setting) {
 		this.setting = setting;
-		// ÉèÖÃauthÑéÖ¤²ÎÊı
+		if (setting.username.equals("")) {
+			// æœªè®¾ç½®è´¦å·ï¼Œé»˜è®¤æ— éœ€authè®¤è¯
+			return;
+		}
+		// è®¾ç½®authéªŒè¯å‚æ•°
 		String ip;
 		int port;
 		String[] sa = setting.ip.split(":");
@@ -68,12 +72,12 @@ public abstract class RemoteBase {
 
 	// /**
 	// *
-	// * ¹¹½¨µÇÂ¼ÇëÇó. <br/>
+	// * æ„å»ºç™»å½•è¯·æ±‚. <br/>
 	// *
 	// * @param username
-	// * ÓÃ»§Ãû
+	// * ç”¨æˆ·å
 	// * @param password
-	// * ÃÜÂë
+	// * å¯†ç 
 	// * @return
 	// */
 	// public abstract BaseAsyncTask<Boolean> login(String username,
@@ -81,7 +85,7 @@ public abstract class RemoteBase {
 
 	/**
 	 * 
-	 * ¹¹½¨»ñÈ¡ÈÎÎñÁĞ±íÇëÇó. <br/>
+	 * æ„å»ºè·å–ä»»åŠ¡åˆ—è¡¨è¯·æ±‚. <br/>
 	 * 
 	 * @return
 	 */
@@ -89,42 +93,42 @@ public abstract class RemoteBase {
 
 	/**
 	 * 
-	 * ¹¹½¨¿ªÊ¼ÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºå¼€å§‹ä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param hashes
-	 *            ËùÓĞÈÎÎñhash
+	 *            æ‰€æœ‰ä»»åŠ¡hash
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> start(String... hashes);
 
 	/**
 	 * 
-	 * ¹¹½¨ÔİÍ£ÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºæš‚åœä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param hashes
-	 *            ËùÓĞÈÎÎñhash
+	 *            æ‰€æœ‰ä»»åŠ¡hash
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> pause(String... hashes);
 
 	/**
 	 * 
-	 * ¹¹½¨Í£Ö¹ÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºåœæ­¢ä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param hashes
-	 *            ËùÓĞÈÎÎñhash
+	 *            æ‰€æœ‰ä»»åŠ¡hash
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> stop(String... hashes);
 
 	/**
 	 * 
-	 * ¹¹½¨É¾³ıÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºåˆ é™¤ä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param rmFile
-	 *            ÊÇ·ñÒÆ³ıÎÄ¼ş
+	 *            æ˜¯å¦ç§»é™¤æ–‡ä»¶
 	 * @param hashes
-	 *            ËùÓĞÈÎÎñhash
+	 *            æ‰€æœ‰ä»»åŠ¡hash
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> remove(boolean rmFile,
@@ -132,14 +136,14 @@ public abstract class RemoteBase {
 
 	/**
 	 * 
-	 * ¹¹½¨Ìí¼ÓÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºæ·»åŠ ä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param dir
-	 *            ÏÂÔØÄ¿Â¼
+	 *            ä¸‹è½½ç›®å½•
 	 * @param hashes
-	 *            ËùÓĞÈÎÎñhash
+	 *            æ‰€æœ‰ä»»åŠ¡hash
 	 * @param urls
-	 *            ĞÂÔöÖÖ×ÓµØÖ·
+	 *            æ–°å¢ç§å­åœ°å€
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> add(String dir, String hash,
@@ -147,12 +151,12 @@ public abstract class RemoteBase {
 
 	/**
 	 * 
-	 * ¹¹½¨ÓÉurlÌí¼Óµ¥¸öÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºç”±urlæ·»åŠ å•ä¸ªä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param dir
-	 *            ÏÂÔØÄ¿Â¼
+	 *            ä¸‹è½½ç›®å½•
 	 * @param url
-	 *            ÖÖ×ÓµØÖ·
+	 *            ç§å­åœ°å€
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> addByUrl(String dir, String url);
@@ -160,20 +164,20 @@ public abstract class RemoteBase {
 	public abstract boolean diskEnable();
 
 	/**
-	 * ¹¹½¨»ñÈ¡´ÅÅÌĞÅÏ¢ÇëÇó
+	 * æ„å»ºè·å–ç£ç›˜ä¿¡æ¯è¯·æ±‚
 	 * 
-	 * @return Êı×é³¤¶ÈÎª2£¬·Ö±ğÊÇ×Ü¿Õ¼äºÍ¿ÉÓÃ¿Õ¼ä
+	 * @return æ•°ç»„é•¿åº¦ä¸º2ï¼Œåˆ†åˆ«æ˜¯æ€»ç©ºé—´å’Œå¯ç”¨ç©ºé—´
 	 */
 	public abstract BaseAsyncTask<long[]> getDiskInfo();
 
 	/**
 	 * 
-	 * ¹¹½¨ÉèÖÃ±êÇ©ÈÎÎñÇëÇó. <br/>
+	 * æ„å»ºè®¾ç½®æ ‡ç­¾ä»»åŠ¡è¯·æ±‚. <br/>
 	 * 
 	 * @param label
-	 *            ±êÇ©
+	 *            æ ‡ç­¾
 	 * @param hashes
-	 *            ËùÓĞÈÎÎñhash
+	 *            æ‰€æœ‰ä»»åŠ¡hash
 	 * @return
 	 */
 	public abstract BaseAsyncTask<Boolean> setLabel(String label,

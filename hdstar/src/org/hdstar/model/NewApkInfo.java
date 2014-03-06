@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 
- * App¿ÉÉı¼¶Ê±£¬×îĞÂ°æ±¾µÄapkĞÅÏ¢. <br/>
+ * Appå¯å‡çº§æ—¶ï¼Œæœ€æ–°ç‰ˆæœ¬çš„apkä¿¡æ¯. <br/>
  * 
  * @author robust
  */
@@ -13,22 +13,22 @@ public class NewApkInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/** Ó¦ÓÃµÄid£¬·şÎñÆ÷ĞèÒª¼ÇÂ¼£¬±¾Ó¦ÓÃidÎª1 */
+	/** åº”ç”¨çš„idï¼ŒæœåŠ¡å™¨éœ€è¦è®°å½•ï¼Œæœ¬åº”ç”¨idä¸º1 */
 	public int appCode;
-	/** °üÃû */
+	/** åŒ…å */
 	public String packageName;
-	/** °æ±¾ºÅ */
+	/** ç‰ˆæœ¬å· */
 	public int versionCode;
-	/** °æ±¾Ãû³Æ */
+	/** ç‰ˆæœ¬åç§° */
 	public String versionName;
-	/** ĞÂ°æapk´óĞ¡ */
+	/** æ–°ç‰ˆapkå¤§å° */
 	public long size;
-	/** ÔöÁ¿°ü´óĞ¡ */
+	/** å¢é‡åŒ…å¤§å° */
 	public long patchSize;
-	/** ÃèÊö */
+	/** æè¿° */
 	public String desc;
-	/** ½ØÍ¼µØÖ· */
+	/** æˆªå›¾åœ°å€ */
 	public String[] pics;
-	/** ¸üĞÂÊ±¼ä */
+	/** æ›´æ–°æ—¶é—´ */
 	public String updateDate;
 }

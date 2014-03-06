@@ -15,7 +15,7 @@ public class Util {
 	public static final double KB_TO_B = 1024.0;
 	public static final double MB_TO_B = KB_TO_B * 1024;
 	public static final double GB_TO_B = MB_TO_B * 1024;
-	// ´Ë´¦Êı¾İ³¤¶ÈÒÑ¾­³¬¹ıÕûĞÍÏŞÖÆ
+	// æ­¤å¤„æ•°æ®é•¿åº¦å·²ç»è¶…è¿‡æ•´å‹é™åˆ¶
 	public static final double TB_TO_B = GB_TO_B * 1024;
 
 	public static CharSequence formatFileSize(long size) {
@@ -34,10 +34,10 @@ public class Util {
 	}
 
 	/**
-	 * »ñÈ¡appµ±Ç°°æ±¾ºÅ
+	 * è·å–appå½“å‰ç‰ˆæœ¬å·
 	 * 
 	 * @param context
-	 * @return µ±Ç°°æ±¾ºÅ
+	 * @return å½“å‰ç‰ˆæœ¬å·
 	 */
 	public static int getVersionCode(Context context) {
 		try {
@@ -50,7 +50,7 @@ public class Util {
 	}
 
 	/**
-	 * ¸ù¾İÊÖ»úµÄ·Ö±æÂÊ´Ó dp µÄµ¥Î» ×ª³ÉÎª px(ÏñËØ)
+	 * æ ¹æ®æ‰‹æœºçš„åˆ†è¾¨ç‡ä» dp çš„å•ä½ è½¬æˆä¸º px(åƒç´ )
 	 */
 	public static int dip2px(Context context, float dpValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
@@ -58,7 +58,7 @@ public class Util {
 	}
 
 	/**
-	 * ¸ù¾İÊÖ»úµÄ·Ö±æÂÊ´Ó px(ÏñËØ) µÄµ¥Î» ×ª³ÉÎª dp
+	 * æ ¹æ®æ‰‹æœºçš„åˆ†è¾¨ç‡ä» px(åƒç´ ) çš„å•ä½ è½¬æˆä¸º dp
 	 */
 	public static int px2dip(Context context, float pxValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
@@ -71,7 +71,7 @@ public class Util {
 	}
 
 	/**
-	 * ÏÔÊ¾ÍË³öÌáÊ¾¿ò
+	 * æ˜¾ç¤ºé€€å‡ºæç¤ºæ¡†
 	 * 
 	 * @param context
 	 */

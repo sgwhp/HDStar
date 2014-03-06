@@ -2,7 +2,7 @@ package org.hdstar.util;
 
 public class EncodeDecode {
 
-	// ÔİÊ±ÏÈÓÃ
+	// æš‚æ—¶å…ˆç”¨
 	public static String encode(String s) {
 		if (s == null) {
 			return null;

@@ -40,7 +40,7 @@ import com.google.gson.JsonParser;
 
 /**
  * 
- * Ô¶³ÌruTorrentÊÊÅäÆ÷. <br/>
+ * è¿œç¨‹ruTorrenté€‚é…å™¨. <br/>
  * 
  * @author robust
  */
@@ -77,13 +77,6 @@ public class RuTorrent extends RemoteBase {
 			@Override
 			public ArrayList<RemoteTaskInfo> parseContent(HttpResponse res,
 					InputStream in) {
-				// if (res.getStatusLine().getStatusCode() == 401) {
-				// Intent intent = new Intent(context,
-				// RemoteLoginActivity.class);
-				// context.startActivity(intent);
-				// context.finish();
-				// return null;
-				// }
 				JsonParser parser = new JsonParser();
 				JsonElement element = parser.parse(new InputStreamReader(in));
 				JsonObject obj = element.getAsJsonObject().getAsJsonObject("t");

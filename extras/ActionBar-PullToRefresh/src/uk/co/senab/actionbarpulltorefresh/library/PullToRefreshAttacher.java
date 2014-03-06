@@ -124,7 +124,7 @@ public class PullToRefreshAttacher {
 		}
 		// Make Header View invisible so it still gets a layout pass
 		// edit by robust. change visibility to gone.
-		// ÉèÖÃ³Éinvisible»áµ¼ÖÂactionbarÎŞ·¨»ñÈ¡½¹µã
+		// è®¾ç½®æˆinvisibleä¼šå¯¼è‡´actionbaræ— æ³•è·å–ç„¦ç‚¹
 		mHeaderView.setVisibility(View.GONE);
 
 		// Notify transformer
@@ -208,7 +208,7 @@ public class PullToRefreshAttacher {
 	 *            - Whether the attacher should be in a refreshing state,
 	 */
 	final void setRefreshing(boolean refreshing) {
-		// ÖØÖÃ£¬±ÜÃâcurrentMode¶Ô´úÂëË¢ĞÂµÄÏÔÊ¾·½Ê½Ôì³É¸ÉÈÅ
+		// é‡ç½®ï¼Œé¿å…currentModeå¯¹ä»£ç åˆ·æ–°çš„æ˜¾ç¤ºæ–¹å¼é€ æˆå¹²æ‰°
 		reset(false);
 		setRefreshingInt(null, refreshing, false);
 	}
@@ -312,7 +312,7 @@ public class PullToRefreshAttacher {
 				if (yDiff > xDiff && currentMode == Mode.PULL_FROM_START
 						|| currentMode == Mode.BOTH) {
 					currentMode = Mode.PULL_FROM_START;
-					// ÏÂÀ­Ê±£¬ÔÚ´Ë´¦ÉèÖÃ³õÊ¼ÖµÎª0
+					// ä¸‹æ‹‰æ—¶ï¼Œåœ¨æ­¤å¤„è®¾ç½®åˆå§‹å€¼ä¸º0
 					mLastMotionY = 0;
 					mIsBeingDragged = true;
 					onPullStarted(y);
@@ -392,15 +392,15 @@ public class PullToRefreshAttacher {
 				if (mMode.pullFromEnd()
 						&& delegate.isReadyForPullFromEnd(view, rawX, rawY)) {
 					if (isDragged) {
-						// ¼´¿ÉÉÏÀ­£¬Ò²¿ÉÏÂÀ­£¬ÊÓmMode¶ø¶¨¡£
-						// ×÷ÎªÁÙÊ±±£´æµÄÖµ£¬ÔÚonInterceptTouchEventµÄmoveÊÂ¼şÖĞ£¬
-						// »áÈ·¶¨ÎªÉÏÀ­»òÏÂÀ­µÄÆäÖĞÒ»ÖÖ£¬ÎŞÌØ±ğÒâÒå
+						// å³å¯ä¸Šæ‹‰ï¼Œä¹Ÿå¯ä¸‹æ‹‰ï¼Œè§†mModeè€Œå®šã€‚
+						// ä½œä¸ºä¸´æ—¶ä¿å­˜çš„å€¼ï¼Œåœ¨onInterceptTouchEventçš„moveäº‹ä»¶ä¸­ï¼Œ
+						// ä¼šç¡®å®šä¸ºä¸Šæ‹‰æˆ–ä¸‹æ‹‰çš„å…¶ä¸­ä¸€ç§ï¼Œæ— ç‰¹åˆ«æ„ä¹‰
 						currentMode = mMode;
 					} else {
 						isDragged = true;
 						currentMode = Mode.PULL_FROM_END;
 					}
-					// ÉÏÀ­Ê±£¬ÒªÔÚ´Ë´¦ÉèÖÃ³õÊ¼ÖµÎªview¸ß¶È
+					// ä¸Šæ‹‰æ—¶ï¼Œè¦åœ¨æ­¤å¤„è®¾ç½®åˆå§‹å€¼ä¸ºviewé«˜åº¦
 					mLastMotionY = view.getHeight();
 				}
 				return isDragged;
@@ -648,7 +648,7 @@ public class PullToRefreshAttacher {
 
 		// Hide Header View
 		hideHeaderView();
-		// ÖÃ¿Õµ±Ç°Ä£Ê½£¬·ÀÖ¹¸ÉÈÅ´úÂë´¥·¢µÄË¢ĞÂ
+		// ç½®ç©ºå½“å‰æ¨¡å¼ï¼Œé˜²æ­¢å¹²æ‰°ä»£ç è§¦å‘çš„åˆ·æ–°
 		currentMode = null;
 	}
 

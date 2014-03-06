@@ -86,7 +86,7 @@ public class NewTopicFragment extends StackFragment {
 		if (bodyStr == null) {
 			bodyStr = "";
 		}
-		// Ä¬ÈÏĞÂ½¨Ö÷ÌâÄ£Ê½
+		// é»˜è®¤æ–°å»ºä¸»é¢˜æ¨¡å¼
 		type = ForumPostType.getByValue(args.getString("type"));
 		if (type == null) {
 			type = ForumPostType.New;
@@ -145,8 +145,8 @@ public class NewTopicFragment extends StackFragment {
 							.newInstance(HDStarApp.cookies);
 					task.attach(mCallback);
 					attachTask(task);
-					bodyStr = parser.toImg(bodyStr) + "\n£¨Ê¹ÓÃ"
-							+ CustomSetting.device + "·¢²¼£©";
+					bodyStr = parser.toImg(bodyStr) + "\nï¼ˆä½¿ç”¨"
+							+ CustomSetting.device + "å‘å¸ƒï¼‰";
 					List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 					nvp.add(new BasicNameValuePair("id", id + ""));
 					nvp.add(new BasicNameValuePair("type", type.value()));
@@ -211,7 +211,7 @@ public class NewTopicFragment extends StackFragment {
 			@Override
 			public void OnResize(int w, int h, int oldw, int oldh) {
 				if (h < oldh) {
-					// ¼üÅÌµ¯³ö
+					// é”®ç›˜å¼¹å‡º
 					if (smile.isChecked()) {
 						im.hideSoftInputFromWindow(root.getWindowToken(), 0);
 						smile.performClick();

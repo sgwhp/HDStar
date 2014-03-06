@@ -1,7 +1,7 @@
 package org.hdstar.common;
 
 /**
- * 站点种子页面信息. <br/>
+ * 绔欑偣绉嶅瓙椤甸潰淇℃伅. <br/>
  * 
  * @author robust
  */

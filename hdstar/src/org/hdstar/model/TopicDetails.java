@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 /**
  * 
- * Ìû×ÓÏêÇé. <br/>
- * ÈÕÆÚ: 2014Äê2ÔÂ9ÈÕ ÉÏÎç9:29:53 <br/>
+ * å¸–å­è¯¦æƒ…. <br/>
+ * æ—¥æœŸ: 2014å¹´2æœˆ9æ—¥ ä¸Šåˆ9:29:53 <br/>
  * 
  * @author robust
- * @history 2014Äê2ÔÂ9ÈÕ robust ĞÂ½¨
+ * @history 2014å¹´2æœˆ9æ—¥ robust æ–°å»º
  */
 public class TopicDetails implements Serializable {
 

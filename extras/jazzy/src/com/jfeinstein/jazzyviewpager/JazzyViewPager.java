@@ -75,7 +75,7 @@ public class JazzyViewPager extends ViewPager {
 
 	public void setTransitionEffect(TransitionEffect effect) {
 		mEffect = effect;
-		// ¸Ä±ä¶¯»­ºó£¬ÒªÖØÖÃÖ®Ç°ÒÑ¾­Ó¦ÓÃµÄ¶¯»­Ğ§¹û
+		// æ”¹å˜åŠ¨ç”»åï¼Œè¦é‡ç½®ä¹‹å‰å·²ç»åº”ç”¨çš„åŠ¨ç”»æ•ˆæœ
 		reset();
 	}
 
@@ -357,7 +357,7 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setScaleX(left, mScale);
 				ViewHelper.setScaleY(left, mScale);
 				if (!in) {
-					// ±»·Å´óºó£¬Ô­À´µÄÒÆ¶¯¾àÀë²»ÄÜ±£Ö¤¸Ãview±»ÒÆ³öÆÁÄ»·¶Î§
+					// è¢«æ”¾å¤§åï¼ŒåŸæ¥çš„ç§»åŠ¨è·ç¦»ä¸èƒ½ä¿è¯è¯¥viewè¢«ç§»å‡ºå±å¹•èŒƒå›´
 					mTrans = -left.getMeasuredWidth() * positionOffset / 2;
 					ViewHelper.setTranslationX(left, mTrans);
 				}
@@ -371,7 +371,7 @@ public class JazzyViewPager extends ViewPager {
 				ViewHelper.setScaleX(right, mScale);
 				ViewHelper.setScaleY(right, mScale);
 				if (!in) {
-					// ±»·Å´óºó£¬Ô­À´µÄÒÆ¶¯¾àÀë²»ÄÜ±£Ö¤¸Ãview±»ÒÆ³öÆÁÄ»·¶Î§
+					// è¢«æ”¾å¤§åï¼ŒåŸæ¥çš„ç§»åŠ¨è·ç¦»ä¸èƒ½ä¿è¯è¯¥viewè¢«ç§»å‡ºå±å¹•èŒƒå›´
 					mTrans = right.getMeasuredWidth() * (1 - positionOffset)
 							/ 2;
 					ViewHelper.setTranslationX(right, mTrans);
@@ -497,7 +497,7 @@ public class JazzyViewPager extends ViewPager {
 				mRot = 180.0f * positionOffset;
 				if (mRot > 90.0f) {
 					left.setVisibility(View.INVISIBLE);
-					// 3.0ÒÔÏÂ°æ±¾µÄinvisibleÎŞĞ§£¬Ğèµ÷ÓÃÒÔÏÂ·½·¨
+					// 3.0ä»¥ä¸‹ç‰ˆæœ¬çš„invisibleæ— æ•ˆï¼Œéœ€è°ƒç”¨ä»¥ä¸‹æ–¹æ³•
 					left.clearAnimation();
 				} else {
 					if (left.getVisibility() == View.INVISIBLE)
