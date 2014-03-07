@@ -9,13 +9,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * 
+ * 论坛帖子页码列表适配器. <br/>
+ * 
+ * @author robust
+ */
 public class PageAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private int maxPage;
+	private String pageIndex;
 
 	public PageAdapter(Context context, int maxPage) {
 		inflater = LayoutInflater.from(context);
 		this.maxPage = maxPage;
+		pageIndex = context.getString(R.string.pageIndex);
 	}
 
 	@Override
@@ -44,7 +52,7 @@ public class PageAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.text.setText((position + 1) + "");
+		holder.text.setText(String.format(pageIndex, (position + 1)));
 		return convertView;
 	}
 

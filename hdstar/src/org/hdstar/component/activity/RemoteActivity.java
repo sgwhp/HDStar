@@ -23,8 +23,8 @@ import org.hdstar.remote.RemoteBase;
 import org.hdstar.remote.RemoteFactory;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.parser.ResponseParser;
 import org.hdstar.task.TaskStatus;
+import org.hdstar.task.parser.ResponseParser;
 import org.hdstar.util.RssHandler;
 import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
@@ -105,7 +105,7 @@ public class RemoteActivity extends BaseActivity implements
 	private View root;
 	/** 占位，防止操作按钮窗口遮挡任务列表，无特殊意义 */
 	private View empty;
-	private View start, pause, stop, delete;
+	private View label, start, pause, stop, delete;
 	private ListView listView;
 	private ExpandableListView rssListView;
 	private RemoteTaskAdapter adapter;
@@ -389,6 +389,15 @@ public class RemoteActivity extends BaseActivity implements
 			remote = RemoteFactory.newInstanceByName(setting.type);
 			remote.setSetting(setting);
 			dirEt.setText(setting.downloadDir);
+
+			// 刷新打标签按钮
+			if (remote.setLabelEnabled()) {
+				label.setVisibility(View.VISIBLE);
+			} else {
+				label.setVisibility(View.GONE);
+			}
+
+			// 刷新磁盘信息界面
 			if (remote.diskEnable()) {
 				findViewById(R.id.disk_info).setVisibility(View.VISIBLE);
 				findViewById(R.id.refresh_disk_info).setOnClickListener(this);
@@ -483,7 +492,8 @@ public class RemoteActivity extends BaseActivity implements
 		// 初始化下载任务控制弹出窗口
 		ctrlBox = (LinearLayout) inflater.inflate(
 				R.layout.remote_task_ctrl_layout, null);
-		ctrlBox.findViewById(R.id.label).setOnClickListener(this);
+		label = ctrlBox.findViewById(R.id.label);
+		label.setOnClickListener(this);
 		start = ctrlBox.findViewById(R.id.start);
 		start.setOnClickListener(this);
 		pause = ctrlBox.findViewById(R.id.pause);
@@ -524,6 +534,13 @@ public class RemoteActivity extends BaseActivity implements
 		setLabelWindow.setAnimationStyle(R.style.normalPopWindow_anim_style);
 	}
 
+	/**
+	 * 
+	 * TODO 刷新某个rss订阅. <br/>
+	 * 
+	 * @param refreshingLabel
+	 *            该订阅的位置
+	 */
 	private void refreshRss(int refreshingLabel) {
 		BaseAsyncTask<RssChannel> task = new BaseAsyncTask<RssChannel>();
 		task.attach(new RssCallBack(refreshingLabel));
@@ -829,6 +846,10 @@ public class RemoteActivity extends BaseActivity implements
 		BaseAsyncTask.commit(diskTask);
 	}
 
+	/**
+	 * 
+	 * 应用当前过滤模式 <br/>
+	 */
 	private void applyFilter() {
 		filterList.clear();
 		for (RemoteTaskInfo task : taskList) {
@@ -861,6 +882,9 @@ public class RemoteActivity extends BaseActivity implements
 	// }
 	// };
 
+	/**
+	 * 获取任务列表请求回调
+	 */
 	private TaskCallback<ArrayList<RemoteTaskInfo>> mCallback = new TaskCallback<ArrayList<RemoteTaskInfo>>() {
 
 		@Override
@@ -893,6 +917,9 @@ public class RemoteActivity extends BaseActivity implements
 		}
 	};
 
+	/**
+	 * 操作（开始、暂停等）任务请求回调
+	 */
 	private TaskCallback<Boolean> processCallback = new TaskCallback<Boolean>() {
 
 		@Override
@@ -915,6 +942,12 @@ public class RemoteActivity extends BaseActivity implements
 
 	};
 
+	/**
+	 * 
+	 * 获取rss信息请求回调 <br/>
+	 * 
+	 * @author wuhongping
+	 */
 	private class RssCallBack implements TaskCallback<RssChannel> {
 		private int labelPosition;
 
@@ -942,6 +975,9 @@ public class RemoteActivity extends BaseActivity implements
 		}
 	}
 
+	/**
+	 * 获取磁盘信息请求回调
+	 */
 	private TaskCallback<long[]> diskCallback = new TaskCallback<long[]>() {
 
 		@Override
@@ -978,6 +1014,12 @@ public class RemoteActivity extends BaseActivity implements
 		}
 	}
 
+	/**
+	 * 
+	 * 上下载任务列表适配器 <br/>
+	 * 
+	 * @author robust
+	 */
 	public class RemoteTaskAdapter extends BaseAdapter {
 
 		private String taskInfo;
@@ -1075,6 +1117,11 @@ public class RemoteActivity extends BaseActivity implements
 
 	}
 
+	/**
+	 * rss频道holder <br/>
+	 * 
+	 * @author robust
+	 */
 	private static class RssChannelViewHolder {
 		private ImageView expand, icon;
 		private TextView label;
@@ -1090,6 +1137,12 @@ public class RemoteActivity extends BaseActivity implements
 		}
 	}
 
+	/**
+	 * 
+	 * rss订阅列表适配器 <br/>
+	 * 
+	 * @author robust
+	 */
 	private class RssAdapter extends BaseExpandableListAdapter {
 
 		RssAdapter() {

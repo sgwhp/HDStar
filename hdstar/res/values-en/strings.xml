@@ -89,8 +89,7 @@
     <string name="signature_hint">May contain BB codes. Max image size is 500*200 and only the first image would be displayed.</string>
     <string name="save">save</string>
     <string name="forward">Jump To</string>
-    <string name="page_header">page</string>
-    <string name="page_footer"> </string>
+    <string name="pageIndex">page %1$d</string>
 
     <string name="download_image">Download image</string>
     <string name="sound_on">Sound on</string>

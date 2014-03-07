@@ -196,19 +196,15 @@ public class Transmission extends RemoteBase {
 		return null;
 	}
 
+	/**
+	 * 
+	 * Transmission无暂停功能，以停止代替.
+	 * 
+	 * @see org.hdstar.remote.RemoteBase#pause(java.lang.String[])
+	 */
 	@Override
 	public BaseAsyncTask<Boolean> pause(String... hashes) {
-		try {
-			TransmissionTask<Boolean> task = new TransmissionTask<Boolean>(
-					String.format(CommonUrls.BTClient.TRANSMISSION_RPC_URL,
-							setting.ip), new BasicAuthGetParser(),
-					buildRequestObject("torrent-pause",
-							buildTorrentRequestObject(hashes)).toString());
-			return task;
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return stop(hashes);
 	}
 
 	@Override
@@ -274,6 +270,11 @@ public class Transmission extends RemoteBase {
 	@Override
 	public BaseAsyncTask<long[]> getDiskInfo() {
 		return null;
+	}
+
+	@Override
+	public boolean setLabelEnabled() {
+		return false;
 	}
 
 	@Override

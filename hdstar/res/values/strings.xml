@@ -90,8 +90,7 @@
     <string name="signature_hint">允许使用BBCode代码。最大图片尺寸为500*200，只有第一张图片会显示。</string>
     <string name="save">保存</string>
     <string name="forward">跳转</string>
-    <string name="page_header">第</string>
-    <string name="page_footer">页</string>
+    <string name="pageIndex">第%1$d页</string>
     
     <!-- setting -->
     <string name="download_image">获取网络图片</string>

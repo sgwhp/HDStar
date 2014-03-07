@@ -89,8 +89,7 @@
     <string name="signature_hint">允許使用BBCode代碼。最大圖片尺寸為500*200，只有第一張會顯示。</string>
     <string name="save">保存</string>
     <string name="forward">跳轉</string>
-    <string name="page_header">第</string>
-    <string name="page_footer">頁</string>
+    <string name="pageIndex">第%1$d頁</string>
     
     <string name="download_image">獲取網絡圖片</string>
     <string name="sound_on">提示音</string>

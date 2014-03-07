@@ -172,6 +172,16 @@ public abstract class RemoteBase {
 
 	/**
 	 * 
+	 * 是否支持标签功能. <br/>
+	 * 
+	 * @return
+	 */
+	public boolean setLabelEnabled() {
+		return true;
+	}
+
+	/**
+	 * 
 	 * 构建设置标签任务请求. <br/>
 	 * 
 	 * @param label
