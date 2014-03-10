@@ -83,7 +83,9 @@ public class HelpActivity extends BaseActivity {
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
 				loading = true;
-				mPullToRefreshLayout.setRefreshing(true);
+				if (!mPullToRefreshLayout.isRefreshing()) {
+					mPullToRefreshLayout.setRefreshing(true);
+				}
 			}
 
 			@Override
