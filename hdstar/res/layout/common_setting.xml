@@ -106,7 +106,7 @@
             android:id="@+id/server_addr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_bottom_sel"
+            android:background="@drawable/setting_strip_middle_sel"
             android:ems="10"
             android:gravity="right|center_vertical"
             android:inputType="text"
@@ -121,5 +121,36 @@
             android:paddingLeft="5dip"
             android:text="@string/server_addr" />
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/setting_strip_bottom_sel" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:text="@string/enable_proxy" />
+
+        <org.hdstar.widget.lta.LTAToggleButton
+            android:id="@+id/enable_proxy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/transparent_checkbox_bg_sel"
+            android:textOff=""
+            android:textOn="" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dip"
+        android:background="@drawable/log_out_btn_sel"
+        android:text="@string/reset" />
 
 </LinearLayout>

@@ -31,7 +31,6 @@
     <string name="loaded">Update completed</string>
     <string name="get_security_code">Fetching the security code…</string>
     <string name="failed_to_download_security_code">Failed. Try again latter</string>
-    <string name="exit">exit</string>
     <string name="exit_message">Sure to exit?</string>
     <string name="log_out_message">Sure to log out?</string>
     <string name="confirm">confirm</string>
@@ -91,9 +90,12 @@
     <string name="forward">Jump To</string>
     <string name="pageIndex">page %1$d</string>
 
+    <!-- setting -->
     <string name="download_image">Download image</string>
     <string name="sound_on">Sound on</string>
     <string name="remote_server">Remote Server</string>
+    <string name="reset">Reset</string>
+    <string name="reset_message">Do you want to reset the current client setting to its default?</string>
     <string name="clear_cache">Clear cache</string>
     <string name="cache_cleared">Cache is cleared</string>
     <string name="check_update">Update</string>
@@ -105,6 +107,7 @@
     <string name="device_name_setting_hint">Device name</string>
     <string name="auto_refresh">Auto refresh after adding a reply</string>
     <string name="server_addr">Server</string>
+    <string name="enable_proxy">Enable proxy</string>
     <string name="animation">Animation</string>
     <string name="anim_fade">Fade</string>
     <string name="anim_standard">Standard</string>
@@ -149,7 +152,6 @@
     
     <!-- remote -->
     <string name="task_info">Size:%1$s - Uploaded: %2$s(Ratio: %3$s)  DL:%4$s/s  UL: %5$s/s</string>
-    <string name="connecting">Connecting…</string>
     <string name="no_task_selected">Please select a task.</string>
     <string name="download">Load</string>
     <string name="rss">rss</string>
@@ -172,11 +174,9 @@
 	<string name="init">Init</string>
 	<string name="initialize_completed">Initialize completed.</string>
 	<string name="connecting">Connecting…</string>
-	<string name="saved">Saved.</string>
 	<string name="unintialized">Unintialized.</string>
 	<string name="torrents">Torrents</string>
 	<string name="OpenCD">OpenCD</string>
-	<string name="music">Music</string>
 	<string name="adult">Adult</string>
 	<string name="media">Media</string>
 	<string name="game">Games&amp;Warez</string>

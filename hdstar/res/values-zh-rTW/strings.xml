@@ -31,7 +31,6 @@
     <string name="loaded">數據已更新</string>
     <string name="get_security_code">正在獲取驗證碼…</string>
     <string name="failed_to_download_security_code">獲取驗證碼失敗，請重試</string>
-    <string name="exit">退出</string>
     <string name="exit_message">確定退出？</string>
     <string name="log_out_message">確定註銷？</string>
     <string name="confirm">提示</string>
@@ -92,9 +91,12 @@
     <string name="forward">跳轉</string>
     <string name="pageIndex">第%1$d頁</string>
     
+    <!-- setting -->
     <string name="download_image">獲取網絡圖片</string>
     <string name="sound_on">提示音</string>
     <string name="remote_server">遠程服務器</string>
+    <string name="reset">重置</string>
+    <string name="reset_message">確定重置此按鈕以上的個人設置為默認值嗎？</string>
     <string name="clear_cache">清除緩存</string>
     <string name="cache_cleared">緩存已清除</string>
     <string name="check_update">檢查更新</string>
@@ -105,6 +107,7 @@
     <string name="update_info">版本：%1$s\n新版大小： %2$s</string>
     <string name="device_name_setting_hint">設備名</string>
     <string name="server_addr">服務器地址</string>
+    <string name="enable_proxy">開啟代理</string>
     <string name="animation">動畫</string>
     <string name="anim_fade">淡入淡出</string>
     <string name="anim_standard">標準</string>
@@ -148,7 +151,6 @@
     
     <!-- remote -->
     <string name="task_info">大小：%1$s - 已上傳：%2$s（分享率：%3$s）  下載速度：%4$s/s  上傳速度：%5$/s</string>
-    <string name="connecting">正在連接…</string>
     <string name="no_task_selected">請選擇一個任務</string>
     <string name="download">下載</string>
     <string name="rss">訂閱</string>
@@ -171,11 +173,9 @@
 	<string name="init">初始化</string>
 	<string name="initialize_completed">初始化完成</string>
 	<string name="connecting">通訊中…</string>
-	<string name="saved">保存成功</string>
 	<string name="unintialized">未初始化</string>
 	<string name="torrents">種子</string>
 	<string name="OpenCD">原抓</string>
-	<string name="music">音樂</string>
 	<string name="adult">成人</string>
 	<string name="media">影視&amp;音樂</string>
 	<string name="game">遊戲&amp;軟體</string>

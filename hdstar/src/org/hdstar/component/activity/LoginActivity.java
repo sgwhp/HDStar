@@ -1,17 +1,15 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
-import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
-import org.hdstar.common.CustomSetting;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.ptadapter.HDSky;
 import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.util.DES;
-import org.hdstar.util.SoundPoolManager;
 import org.hdstar.util.Util;
 import org.hdstar.widget.CustomDialog;
+import org.hdstar.widget.fragment.CommonSettingFragment;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -21,15 +19,14 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ToggleButton;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -40,17 +37,14 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * @author robust
  * 
  */
-public class LoginActivity extends SherlockActivity implements OnClickListener {
+public class LoginActivity extends SherlockFragmentActivity implements
+		OnClickListener {
 	private BaseAsyncTask<Bitmap> imageTask = null;
 	private BaseAsyncTask<String> task = null;
 	private CustomDialog dialog = null;
-	private ToggleButton fetchImage;
-	private ToggleButton sound;
-	private EditText deviceName;
-	private ToggleButton autoRefresh;
-	private EditText serverAddr;
 	private ImageView securityImage;
 	private HDSky hdsky = new HDSky();
+	private boolean settingViewIsShown;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,25 +107,6 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 	}
 
 	private void login() {
-		if (fetchImage != null) {
-			Editor edit = getSharedPreferences(Const.SETTING_SHARED_PREFS,
-					MODE_PRIVATE).edit();
-			CustomSetting.loadImage = fetchImage.isChecked();
-			edit.putBoolean("loadImage", CustomSetting.loadImage);
-			CustomSetting.soundOn = sound.isChecked();
-			if (!CustomSetting.soundOn) {
-				SoundPoolManager.clear();
-			}
-			edit.putBoolean("sound", CustomSetting.soundOn);
-			CustomSetting.device = deviceName.getText().toString();
-			edit.putString("device", CustomSetting.device);
-			CustomSetting.autoRefresh = autoRefresh.isChecked();
-			edit.putBoolean("autoRefresh", CustomSetting.autoRefresh);
-			CustomSetting.serverAddress = serverAddr.getText().toString();
-			edit.putString("serverAddr", CustomSetting.serverAddress);
-			edit.commit();
-			CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
-		}
 		if (imageTask.getStatus() == AsyncTask.Status.FINISHED) {
 			String imageString = ((EditText) findViewById(R.id.security_code))
 					.getText().toString();
@@ -171,7 +146,6 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 					if (task.getStatus() != AsyncTask.Status.FINISHED)
 						task.abort();
 				}
-
 			});
 			dialog.show();
 			task = hdsky.login(id, password, imageString);
@@ -193,19 +167,13 @@ public class LoginActivity extends SherlockActivity implements OnClickListener {
 			getSecurityCode();
 			break;
 		case R.id.setting:
-			if (fetchImage == null) {
-				ViewStub stub = (ViewStub) findViewById(R.id.setting_stub);
-				stub.inflate();
-				fetchImage = (ToggleButton) findViewById(R.id.fetchImage);
-				sound = (ToggleButton) findViewById(R.id.sound);
-				autoRefresh = (ToggleButton) findViewById(R.id.auto_refresh);
-				deviceName = (EditText) findViewById(R.id.deviceName);
-				serverAddr = (EditText) findViewById(R.id.server_addr);
-				fetchImage.setChecked(CustomSetting.loadImage);
-				sound.setChecked(CustomSetting.soundOn);
-				deviceName.setText(CustomSetting.device);
-				autoRefresh.setChecked(CustomSetting.autoRefresh);
-				serverAddr.setText(CustomSetting.serverAddress);
+			if (!settingViewIsShown) {
+				settingViewIsShown = true;
+				FragmentTransaction transaction = getSupportFragmentManager()
+						.beginTransaction();
+				transaction.replace(R.id.common_setting,
+						CommonSettingFragment.getInstance());
+				transaction.commit();
 			}
 			break;
 		}

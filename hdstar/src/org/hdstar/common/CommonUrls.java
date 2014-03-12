@@ -67,6 +67,9 @@ public class CommonUrls {
 		public static String SERVER_CHECK_UPDATE_URL;
 		public static String SERVER_ABOUT_URL;
 
+		/** 代理服务器地址 */
+		public static final String PROXY_SERVER_ADDR = "http://91.121.104.122/ptc/";
+
 		/**
 		 * 根据个人设置初始化应用服务器地址 <br/>
 		 * 

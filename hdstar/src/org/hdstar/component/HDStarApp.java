@@ -69,6 +69,9 @@ public class HDStarApp extends Application {
 	}
 
 	public static void initImageLoader(Context context) {
+		if (displayOptions != null) {
+			return;
+		}
 		// This configuration tuning is custom. You can tune every option, you
 		// may tune some of them,
 		// or you can create default configuration by
@@ -116,10 +119,11 @@ public class HDStarApp extends Application {
 		CustomSetting.autoRefresh = shared.getBoolean("autoRefresh", false);
 		CustomSetting.serverAddress = shared.getString("serverAddr",
 				CustomSetting.serverAddress);
+		CustomSetting.enableProxy = shared.getBoolean("enableProxy", false);
 		CustomSetting.fade = shared.getBoolean("fade", false);
 		CustomSetting.anim = CustomSetting.stringToAnim(shared.getString(
 				"anim", TransitionEffect.CubeIn.name()));
-		CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
+		CommonUrls.HDStar.initServerAddr(CustomSetting.getCurServerAddr());
 		initImageLoader(context);
 		// initMemoryCache();
 		// File cacheDir = getStorageCacheDir(this, DISK_CACHE_SUBDIR);

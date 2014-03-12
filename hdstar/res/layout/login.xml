@@ -113,15 +113,23 @@
             android:layout_alignLeft="@+id/security_image"
             android:layout_alignTop="@+id/password"
             android:src="@drawable/password_ic" />
+        
+         <FrameLayout
+            android:id="@+id/common_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/security_code"
+            android:layout_alignRight="@+id/security_code"
+            android:layout_below="@+id/linearLayout1" />
 
-        <ViewStub
+       <!--  <ViewStub
             android:id="@+id/setting_stub"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/security_code"
             android:layout_alignRight="@+id/security_code"
             android:layout_below="@+id/linearLayout1"
-            android:layout="@layout/setting_sub" />
+            android:layout="@layout/setting_sub" /> -->
     </RelativeLayout>
 
 </ScrollView>

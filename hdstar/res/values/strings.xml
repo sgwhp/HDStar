@@ -96,6 +96,8 @@
     <string name="download_image">获取网络图片</string>
     <string name="sound_on">提示音</string>
     <string name="remote_server">远程服务器</string>
+    <string name="reset">重置</string>
+    <string name="reset_message">确定重置此按钮以上的个人设置为默认值吗？</string>
     <string name="clear_cache">清除缓存</string>
     <string name="cache_cleared">缓存已清除</string>
     <string name="check_update">检查更新</string>
@@ -107,6 +109,7 @@
     <string name="device_name_setting_hint">设备名</string>
     <string name="server_addr">服务器地址</string>
     <string name="auto_refresh">回复后自动刷新</string>
+    <string name="enable_proxy">开启代理</string>
     <string name="animation">动画</string>
     <string name="anim_fade">淡入淡出</string>
     <string name="anim_standard">标准</string>
@@ -156,7 +159,6 @@
     <string name="rutorrent">ruTorrent</string>
     <string name="task_info">大小：%1$s - 已上传：%2$s（分享率：%3$s）  下载速度：%4$s/s  上传速度：%5$s/s</string>
     <string name="ip_hint">127.0.0.1:80</string>
-    <string name="connecting">正在连接…</string>
     <string name="no_task_selected">请选择一个任务</string>
     <string name="remove_file">删除文件</string>
     <string name="download">下载</string>
@@ -180,11 +182,9 @@
 	<string name="init">初始化</string>
 	<string name="initialize_completed">初始化完成</string>
 	<string name="connecting">通讯中…</string>
-	<string name="saved">保存成功</string>
 	<string name="unintialized">未初始化</string>
 	<string name="torrents">种子</string>
 	<string name="OpenCD">原抓</string>
-	<string name="music">音乐</string>
 	<string name="adult">成人</string>
 	<string name="media">影视&amp;音乐</string>
 	<string name="game">游戏&amp;软件</string>

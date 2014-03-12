@@ -1,7 +1,7 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
-import org.hdstar.widget.fragment.CommonSettingFragment;
+import org.hdstar.widget.fragment.SettingFragment;
 
 import android.os.Bundle;
 
@@ -20,7 +20,7 @@ public class SettingActivity extends BaseStackActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
-			stackAdapter.add(new CommonSettingFragment());
+			stackAdapter.add(new SettingFragment());
 		}
 	}
 

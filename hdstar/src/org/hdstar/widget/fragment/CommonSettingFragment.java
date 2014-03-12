@@ -4,99 +4,54 @@ import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
-import org.hdstar.component.DownloadService;
 import org.hdstar.component.HDStarApp;
-import org.hdstar.component.activity.DownloadActivity;
-import org.hdstar.component.activity.LoginActivity;
-import org.hdstar.model.NewApkInfo;
-import org.hdstar.model.ResponseWrapper;
-import org.hdstar.ptadapter.HDSky;
-import org.hdstar.task.BaseAsyncTask;
-import org.hdstar.task.BaseAsyncTask.TaskCallback;
-import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
-import org.hdstar.util.Util;
-import org.hdstar.widget.CustomDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.StrikethroughSpan;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
-import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
-public class CommonSettingFragment extends StackFragment implements
-		OnClickListener {
+/**
+ * 
+ * 常用设置，包括是否获取网络图片、服务器地址等 <br/>
+ * 
+ * @author robust
+ */
+public class CommonSettingFragment extends Fragment implements OnClickListener {
 	private ToggleButton fetchImage;
 	private ToggleButton sound;
 	private EditText deviceName;
 	private ToggleButton autoRefresh;
 	private EditText serverAddr;
-	private Button downloadBtn;
-	private CustomDialog loadingDialog = null;
-	private BaseAsyncTask<Boolean> logoutTask;
+	private ToggleButton enableProxy;
 
-	// private DelegateTask<NewApkInfo> task;
+	public static CommonSettingFragment getInstance() {
+		return new CommonSettingFragment();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.setting, null);
+
+		View v = inflater.inflate(R.layout.common_setting, null);
 		fetchImage = (ToggleButton) v.findViewById(R.id.fetchImage);
 		sound = (ToggleButton) v.findViewById(R.id.sound);
 		autoRefresh = (ToggleButton) v.findViewById(R.id.auto_refresh);
 		deviceName = (EditText) v.findViewById(R.id.deviceName);
 		serverAddr = (EditText) v.findViewById(R.id.server_addr);
-		downloadBtn = (Button) v.findViewById(R.id.download_btn);
-		fetchImage.setChecked(CustomSetting.loadImage);
-		sound.setChecked(CustomSetting.soundOn);
-		deviceName.setText(CustomSetting.device);
-		autoRefresh.setChecked(CustomSetting.autoRefresh);
-		serverAddr.setText(CustomSetting.serverAddress);
-		downloadBtn.setOnClickListener(this);
-		v.findViewById(R.id.logOut).setOnClickListener(this);
-		v.findViewById(R.id.clearCache).setOnClickListener(this);
-		v.findViewById(R.id.checkUpdate).setOnClickListener(this);
-		v.findViewById(R.id.animation).setOnClickListener(this);
-		v.findViewById(R.id.remote_server).setOnClickListener(this);
-		v.findViewById(R.id.rss).setOnClickListener(this);
-		v.findViewById(R.id.pt_site).setOnClickListener(this);
+		enableProxy = (ToggleButton) v.findViewById(R.id.enable_proxy);
+		bindData();
 		return v;
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		SharedPreferences shared = getActivity().getSharedPreferences(
-				Const.DOWNLOAD_SHARED_PREFS, Activity.MODE_PRIVATE);
-		if (shared.getInt("status", -1) != -1) {
-			downloadBtn.setVisibility(View.VISIBLE);
-		} else {
-			downloadBtn.setVisibility(View.GONE);
-		}
 	}
 
 	@Override
@@ -115,163 +70,42 @@ public class CommonSettingFragment extends StackFragment implements
 		edit.putString("device", CustomSetting.device);
 		CustomSetting.autoRefresh = autoRefresh.isChecked();
 		edit.putBoolean("autoRefresh", CustomSetting.autoRefresh);
-		CustomSetting.serverAddress = serverAddr.getText().toString();
+		CustomSetting.setServerAddress(serverAddr.getText().toString());
 		edit.putString("serverAddr", CustomSetting.serverAddress);
+		CustomSetting.enableProxy = enableProxy.isChecked();
+		edit.putBoolean("enableProxy", CustomSetting.enableProxy);
 		edit.commit();
-		CommonUrls.HDStar.initServerAddr(CustomSetting.serverAddress);
+		CommonUrls.HDStar.initServerAddr(CustomSetting.getCurServerAddr());
 	}
 
 	@Override
 	public void onClick(View v) {
 		final Activity act = getActivity();
 		switch (v.getId()) {
-		case R.id.logOut:
+		case R.id.reset:
 			new AlertDialog.Builder(getActivity())
-					.setTitle(R.string.log_out)
+					.setTitle(R.string.reset)
 					.setIcon(R.drawable.ic_launcher)
-					.setMessage(R.string.log_out_message)
-					.setPositiveButton(R.string.log_out,
+					.setMessage(R.string.reset_message)
+					.setPositiveButton(R.string.reset,
 							new DialogInterface.OnClickListener() {
 
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									loadingDialog = new CustomDialog(
-											getActivity(), R.string.connecting);
-									loadingDialog
-											.setOnDismissListener(new OnDismissListener() {
-
-												@Override
-												public void onDismiss(
-														DialogInterface dialog) {
-													detachLogoutTask();
-												}
-											});
-									loadingDialog.show();
-									logoutTask = new HDSky().logout();
-									logoutTask.attach(logoutCallback);
-									BaseAsyncTask.commit(logoutTask);
-								}
-							})
-					.setNegativeButton(android.R.string.cancel,
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-								}
-							}).create().show();
-			break;
-		case R.id.clearCache:
-			ImageLoader.getInstance().clearDiscCache();
-			Crouton.makeText(act, R.string.cache_cleared, Style.INFO).show();
-			break;
-		case R.id.checkUpdate:
-			Crouton.makeText(act, R.string.searching_for_update, Style.INFO)
-					.show();
-			DelegateTask<NewApkInfo> task = DelegateTask.newInstance("");
-			task.attach(mCallback);
-			attachTask(task);
-			task.execGet(
-					CommonUrls.HDStar.SERVER_CHECK_UPDATE_URL + "?appCode="
-							+ Const.APP_CODE + "&packageName="
-							+ act.getPackageName() + "&versionCode="
-							+ Util.getVersionCode(act),
-					new TypeToken<ResponseWrapper<NewApkInfo>>() {
-					}.getType());
-			break;
-		case R.id.download_btn:
-			Intent dIntent = new Intent(act, DownloadActivity.class);
-			startActivity(dIntent);
-			break;
-		case R.id.animation:
-			push(new AnimSettingFragment());
-			break;
-		case R.id.remote_server:
-			push(new RemoteListFragment());
-			break;
-		case R.id.rss:
-			push(new RssListFragment());
-			break;
-		case R.id.pt_site:
-			push(new PTListFragment());
-			break;
-		}
-	}
-
-	private void detachLogoutTask() {
-		if (logoutTask != null) {
-			logoutTask.detach();
-		}
-	}
-
-	private TaskCallback<NewApkInfo> mCallback = new TaskCallback<NewApkInfo>() {
-
-		@Override
-		public void onComplete(final NewApkInfo result) {
-			if (result == null) {
-				Crouton.makeText(getActivity(), R.string.latest_version,
-						Style.CONFIRM).show();
-				return;
-			}
-			CharSequence updateInfo = getString(R.string.update_info);
-			CharSequence fullSize = Util.formatFileSize(result.size);
-			updateInfo = String.format(updateInfo.toString(),
-					result.versionName, fullSize);
-			if (result.patchSize != 0) {
-				// 增量升级
-				SpannableString ss = new SpannableString(updateInfo.toString()
-						+ "  " + Util.formatFileSize(result.patchSize));
-				ss.setSpan(new StrikethroughSpan(), updateInfo.length()
-						- fullSize.length() - 1, updateInfo.length(),
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-				updateInfo = ss;
-			}
-			new AlertDialog.Builder(getActivity())
-					.setTitle(R.string.update)
-					.setIcon(R.drawable.ic_launcher)
-					.setMessage(updateInfo)
-					.setPositiveButton(R.string.update,
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									SharedPreferences shared = getActivity()
-											.getSharedPreferences(
-													Const.DOWNLOAD_SHARED_PREFS,
-													Activity.MODE_PRIVATE);
-									Editor editor = shared.edit();
-									editor.putString("packageName",
-											result.packageName);
-									editor.putString("desc", result.desc);
-									StringBuilder pics = new StringBuilder();
-									for (String pic : result.pics) {
-										pics.append(pic).append(" ");
-									}
-									pics.deleteCharAt(pics.length() - 1);
-									editor.putString("pics", pics.toString());
-									editor.putString("updateDate",
-											result.updateDate);
-									editor.putString("versionName",
-											result.versionName);
-									editor.putInt("versionCode",
-											result.versionCode);
-									editor.putLong("size", result.size);
-									editor.putLong("patchSize",
-											result.patchSize);
+									Editor editor = act.getSharedPreferences(
+											"", Context.MODE_PRIVATE).edit();
+									editor.remove("loadImage");
+									editor.remove("sound");
+									editor.remove("device");
+									editor.remove("autoRefresh");
+									editor.remove("serverAddr");
+									editor.remove("enableProxy");
+									editor.remove("fade");
+									editor.remove("anim");
 									editor.commit();
-									Intent dlIntent = new Intent(getActivity(),
-											DownloadActivity.class);
-									startActivity(dlIntent);
-									dlIntent = new Intent(getActivity(),
-											DownloadService.class);
-									dlIntent.putExtra(
-											"command",
-											DownloadService.COMMAND_DOWNLOAD_ADD);
-									dlIntent.putExtra("isPatch",
-											result.patchSize != 0);
-									getActivity().startService(dlIntent);
+									HDStarApp.init(act);
+									bindData();
 								}
 							})
 					.setNegativeButton(android.R.string.cancel,
@@ -282,43 +116,20 @@ public class CommonSettingFragment extends StackFragment implements
 										int which) {
 								}
 							}).create().show();
+			break;
 		}
+	}
 
-		@Override
-		public void onCancel() {
-		}
+	/**
+	 * 绑定数据 <br/>
+	 */
+	private void bindData() {
+		fetchImage.setChecked(CustomSetting.loadImage);
+		sound.setChecked(CustomSetting.soundOn);
+		deviceName.setText(CustomSetting.device);
+		autoRefresh.setChecked(CustomSetting.autoRefresh);
+		serverAddr.setText(CustomSetting.serverAddress);
+		enableProxy.setChecked(CustomSetting.enableProxy);
+	}
 
-		@Override
-		public void onFail(Integer msgId) {
-			Crouton.makeText(getActivity(), msgId, Style.ALERT).show();
-		}
-
-	};
-
-	private TaskCallback<Boolean> logoutCallback = new TaskCallback<Boolean>() {
-
-		@Override
-		public void onComplete(Boolean result) {
-			loadingDialog.dismiss();
-			Activity act = getActivity();
-			Editor edit = act.getSharedPreferences(Const.SETTING_SHARED_PREFS,
-					Activity.MODE_PRIVATE).edit();
-			edit.remove("cookies");
-			edit.commit();
-			HDStarApp.cookies = null;
-			Intent intent = new Intent(act, LoginActivity.class);
-			startActivity(intent);
-			act.finish();
-		}
-
-		@Override
-		public void onCancel() {
-		}
-
-		@Override
-		public void onFail(Integer msgId) {
-			loadingDialog.dismiss();
-			Crouton.showText(getActivity(), msgId, Style.ALERT);
-		}
-	};
 }
