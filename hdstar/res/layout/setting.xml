@@ -44,7 +44,7 @@
             android:id="@+id/pt_site"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_strip_bottom_sel"
+            android:background="@drawable/setting_strip_middle_sel"
             android:drawableRight="@drawable/zebra_arrow_bg_sel"
             android:clickable="true"
             android:gravity="center_vertical"

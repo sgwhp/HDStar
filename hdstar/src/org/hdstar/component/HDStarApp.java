@@ -113,13 +113,18 @@ public class HDStarApp extends Application {
 		SharedPreferences shared = context.getSharedPreferences(
 				Const.SETTING_SHARED_PREFS, MODE_PRIVATE);
 		cookies = shared.getString("cookies", null);
-		CustomSetting.loadImage = shared.getBoolean("loadImage", true);
-		CustomSetting.soundOn = shared.getBoolean("sound", true);
-		CustomSetting.device = shared.getString("device", CustomSetting.device);
-		CustomSetting.autoRefresh = shared.getBoolean("autoRefresh", false);
+		CustomSetting.loadImage = shared.getBoolean("loadImage",
+				CustomSetting.LOAD_IMAGE_DEFAULT);
+		CustomSetting.soundOn = shared.getBoolean("sound",
+				CustomSetting.SOUND_ON_DEFAULT);
+		CustomSetting.device = shared.getString("device",
+				CustomSetting.DEVICE_DEFAULT);
+		CustomSetting.autoRefresh = shared.getBoolean("autoRefresh",
+				CustomSetting.AUTO_REFRESH_DEFAULT);
 		CustomSetting.serverAddress = shared.getString("serverAddr",
-				CustomSetting.serverAddress);
-		CustomSetting.enableProxy = shared.getBoolean("enableProxy", false);
+				CustomSetting.SERVER_ADDRESS_DEFAULT);
+		CustomSetting.enableProxy = shared.getBoolean("enableProxy",
+				CustomSetting.ENABLE_PROXY_DEFAULT);
 		CustomSetting.fade = shared.getBoolean("fade", false);
 		CustomSetting.anim = CustomSetting.stringToAnim(shared.getString(
 				"anim", TransitionEffect.CubeIn.name()));

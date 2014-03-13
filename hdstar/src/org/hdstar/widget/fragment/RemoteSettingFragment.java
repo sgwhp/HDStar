@@ -112,7 +112,7 @@ public class RemoteSettingFragment extends StackFragment {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				String typeName = typeStr[position];
-				if (name.getText().toString().equals("")) {
+				if (setting.name == null) {
 					name.setText(typeName);
 				}
 				for (RemoteType type : RemoteType.values()) {

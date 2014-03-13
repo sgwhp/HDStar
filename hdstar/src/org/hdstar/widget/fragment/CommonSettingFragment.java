@@ -4,12 +4,10 @@ import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
-import org.hdstar.component.HDStarApp;
 import org.hdstar.util.SoundPoolManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -50,6 +48,7 @@ public class CommonSettingFragment extends Fragment implements OnClickListener {
 		deviceName = (EditText) v.findViewById(R.id.deviceName);
 		serverAddr = (EditText) v.findViewById(R.id.server_addr);
 		enableProxy = (ToggleButton) v.findViewById(R.id.enable_proxy);
+		v.findViewById(R.id.reset).setOnClickListener(this);
 		bindData();
 		return v;
 	}
@@ -80,7 +79,7 @@ public class CommonSettingFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		final Activity act = getActivity();
+		// final Activity act = getActivity();
 		switch (v.getId()) {
 		case R.id.reset:
 			new AlertDialog.Builder(getActivity())
@@ -93,18 +92,18 @@ public class CommonSettingFragment extends Fragment implements OnClickListener {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									Editor editor = act.getSharedPreferences(
-											"", Context.MODE_PRIVATE).edit();
-									editor.remove("loadImage");
-									editor.remove("sound");
-									editor.remove("device");
-									editor.remove("autoRefresh");
-									editor.remove("serverAddr");
-									editor.remove("enableProxy");
-									editor.remove("fade");
-									editor.remove("anim");
-									editor.commit();
-									HDStarApp.init(act);
+									// Editor editor = act.getSharedPreferences(
+									// "", Context.MODE_PRIVATE).edit();
+									// editor.remove("loadImage");
+									// editor.remove("sound");
+									// editor.remove("device");
+									// editor.remove("autoRefresh");
+									// editor.remove("serverAddr");
+									// editor.remove("enableProxy");
+									// editor.remove("fade");
+									// editor.remove("anim");
+									// editor.commit();
+									CustomSetting.setDefault();
 									bindData();
 								}
 							})
