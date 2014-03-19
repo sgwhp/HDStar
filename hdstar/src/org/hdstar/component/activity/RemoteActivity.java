@@ -193,7 +193,6 @@ public class RemoteActivity extends BaseActivity implements
 			actionbar.setSelectedNavigationItem(RemoteSettingManager
 					.getDefault(this) + 1);
 		} else {
-			findViewById(R.id.login).setEnabled(false);
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.confirm)
 					.setIcon(R.drawable.ic_launcher)
