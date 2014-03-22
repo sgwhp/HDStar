@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class PTListFragment extends StackFragment implements OnClickListener {
@@ -63,6 +65,13 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	public void onSelected() {
 		mContainer.removeAllViews();
 		init();
+	}
+	
+	@Override
+	public void onCreateActionBar(Menu menu) {
+		super.onCreateActionBar(menu);
+		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
+		.setSubtitle(R.string.pt_site);
 	}
 
 	// @Override

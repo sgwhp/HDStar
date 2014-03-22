@@ -5,12 +5,34 @@
     android:background="@color/background"
     android:orientation="vertical" >
 
-    <ExpandableListView
-        android:id="@+id/rss_list"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        style="@style/ExpandableListViewStyle" />
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/no_data_bg"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="@string/no_setting_data"
+                android:textSize="24sp" />
+        </FrameLayout>
+
+        <ExpandableListView
+            android:id="@+id/rss_list"
+            style="@style/ExpandableListViewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <include
         android:layout_width="match_parent"

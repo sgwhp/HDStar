@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="background">#ffa3cafd</color>
-  <color name="dark_background">#FF89CAE6</color>
-  <color name="white">#FFFFFFFF</color>
-  <color name="black">#FF000000</color>
-  <color name="half_transparent">#bb000000</color>
-  <color name="half_transparent_white">#b0ffffff</color>
-  <color name="transparent">#00000000</color>
-  <color name="dark">#ff2f445f</color>
-  <color name="loadingtext">#ff5d6069</color>
-  <color name="listSelected_color">#ff4154a3</color>
-  <color name="read_bg">#00000000</color>
-  <color name="unread_bg">#ffc0c0c0</color>
-  <color name="green">#8acc12</color>
+
+    <color name="background">#ffcdd0d3</color>
+    <color name="dark_background">#ffbdbfc2</color>
+    <color name="background_blue">#ffa3cafd</color>
+   <!--  <color name="dark_background">#FF89CAE6</color> -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="half_transparent">#bb000000</color>
+    <color name="half_transparent_white">#b0ffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="dark">#ff2f445f</color>
+    <color name="loadingtext">#ff5d6069</color>
+    <color name="listSelected_color">#ff4154a3</color>
+    <color name="read_bg">#00000000</color>
+    <color name="unread_bg">#ffc0c0c0</color>
+    <color name="green">#8acc12</color>
+
 </resources>

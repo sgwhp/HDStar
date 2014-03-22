@@ -139,7 +139,7 @@ public class TorrentListFragment extends StackFragment {
 			}
 		});
 		menu.add(0, Menu.FIRST, 0, android.R.string.search_go)
-				.setIcon(android.R.drawable.ic_search_category_default)
+				.setIcon(R.drawable.search)
 				.setActionView(search)
 				.setShowAsAction(
 						MenuItem.SHOW_AS_ACTION_ALWAYS

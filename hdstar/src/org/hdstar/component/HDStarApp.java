@@ -127,7 +127,7 @@ public class HDStarApp extends Application {
 				CustomSetting.ENABLE_PROXY_DEFAULT);
 		CustomSetting.fade = shared.getBoolean("fade", false);
 		CustomSetting.anim = CustomSetting.stringToAnim(shared.getString(
-				"anim", TransitionEffect.CubeIn.name()));
+				"anim", TransitionEffect.Standard.name()));
 		CommonUrls.HDStar.initServerAddr(CustomSetting.getCurServerAddr());
 		initImageLoader(context);
 		// initMemoryCache();

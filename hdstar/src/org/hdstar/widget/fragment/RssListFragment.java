@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -27,6 +28,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 	private ArrayList<RssSetting> settings;
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
+	private View noData;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +36,7 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		mInflater = inflater;
 		View v = inflater.inflate(R.layout.scroll_list, null);
 		mContainer = (LinearLayout) v.findViewById(R.id.container);
+		noData = v.findViewById(R.id.no_data);
 		return v;
 	}
 
@@ -53,7 +56,10 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		Context context = getActivity();
 		settings = RssSettingManager.getAll(context);
 		if (settings.size() == 0) {
+			noData.setVisibility(View.VISIBLE);
 			return;
+		} else {
+			noData.setVisibility(View.GONE);
 		}
 		View v;
 		if (settings.size() == 1) {
@@ -103,6 +109,8 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		item.setIcon(R.drawable.add);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
+				.setSubtitle(R.string.rss);
 	}
 
 	@Override

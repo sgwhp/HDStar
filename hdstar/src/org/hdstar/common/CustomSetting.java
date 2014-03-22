@@ -30,7 +30,7 @@ public class CustomSetting implements Serializable {
 	public static boolean enableProxy = ENABLE_PROXY_DEFAULT;
 
 	public static boolean fade;// 动画淡入淡出效果
-	public static TransitionEffect anim = TransitionEffect.CubeIn;;// 动画效果
+	public static TransitionEffect anim = TransitionEffect.Standard;// 动画效果
 
 	public static void setDefault() {
 		device = DEVICE_DEFAULT;

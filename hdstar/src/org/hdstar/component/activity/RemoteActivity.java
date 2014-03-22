@@ -108,6 +108,7 @@ public class RemoteActivity extends BaseActivity implements
 	private View label, start, pause, stop, delete;
 	private ListView listView;
 	private ExpandableListView rssListView;
+	private View noData;
 	private RemoteTaskAdapter adapter;
 	private RssAdapter rssAdapter;
 	private ArrayList<RemoteTaskInfo> taskList = new ArrayList<RemoteTaskInfo>();
@@ -162,6 +163,7 @@ public class RemoteActivity extends BaseActivity implements
 		mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
 		empty = findViewById(R.id.empty);
 
+		noData = findViewById(R.id.no_data);
 		rssListView = (ExpandableListView) findViewById(R.id.rss_list);
 
 		inflater = LayoutInflater.from(this);
@@ -206,6 +208,7 @@ public class RemoteActivity extends BaseActivity implements
 									Intent intent = new Intent(
 											RemoteActivity.this,
 											SettingActivity.class);
+									intent.putExtra("action", SettingActivity.ACTION_ADD_REMOTE_SETTING);
 									startActivity(intent);
 									finish();
 								}
@@ -425,6 +428,11 @@ public class RemoteActivity extends BaseActivity implements
 
 	protected void init() {
 		rssSettings = RssSettingManager.getAll(this);
+		if(rssSettings.size() == 0){
+			noData.setVisibility(View.VISIBLE);
+		} else {
+			noData.setVisibility(View.GONE);
+		}
 		rssStatus = new TaskStatus[rssSettings.size()];
 		for (int i = rssSettings.size() - 1; i >= 0; i--) {
 			rssStatus[i] = TaskStatus.Normal;

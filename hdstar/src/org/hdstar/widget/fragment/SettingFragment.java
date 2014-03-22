@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
 
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,11 +45,14 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 	private Button downloadBtn;
 	private CustomDialog loadingDialog = null;
 	private BaseAsyncTask<Boolean> logoutTask;
+	private ScrollView mContainer;
+	private int scrollX, scrollY;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.setting, null);
+		mContainer = (ScrollView) v.findViewById(R.id.scroll_container);
 		downloadBtn = (Button) v.findViewById(R.id.download_btn);
 		downloadBtn.setOnClickListener(this);
 		v.findViewById(R.id.logOut).setOnClickListener(this);
@@ -58,6 +62,14 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 		v.findViewById(R.id.remote_server).setOnClickListener(this);
 		v.findViewById(R.id.rss).setOnClickListener(this);
 		v.findViewById(R.id.pt_site).setOnClickListener(this);
+		if (scrollX != 0 || scrollY != 0) {
+			mContainer.post(new Runnable(){
+
+				@Override
+				public void run() {
+					mContainer.scrollTo(scrollX, scrollY);
+				}});
+		}
 		return v;
 	}
 
@@ -81,6 +93,22 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 		} else {
 			downloadBtn.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (scrollX == 0 && scrollY == 0) {
+			scrollX = mContainer.getScrollX();
+			scrollY = mContainer.getScrollY();
+		}
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onSelected() {
+		super.onSelected();
+		scrollX = 0;
+		scrollY = 0;
 	}
 
 	@Override

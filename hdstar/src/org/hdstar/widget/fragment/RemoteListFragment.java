@@ -16,21 +16,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+/**
+ * 远程控制设置列表
+ * @author robust
+ *
+ */
 public class RemoteListFragment extends StackFragment implements
 		OnClickListener {
 	private LinearLayout mContainer;
 	private ArrayList<RemoteSetting> settings;
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
-
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	// setHasOptionsMenu(true);
-	// }
+	private View noData;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +39,7 @@ public class RemoteListFragment extends StackFragment implements
 		mInflater = inflater;
 		View v = inflater.inflate(R.layout.scroll_list, null);
 		mContainer = (LinearLayout) v.findViewById(R.id.container);
+		noData = v.findViewById(R.id.no_data);
 		return v;
 	}
 
@@ -56,7 +58,10 @@ public class RemoteListFragment extends StackFragment implements
 	private void init() {
 		settings = RemoteSettingManager.getAll(getActivity());
 		if (settings.size() == 0) {
+			noData.setVisibility(View.VISIBLE);
 			return;
+		} else {
+			noData.setVisibility(View.GONE);
 		}
 		Context context = getActivity();
 		View v;
@@ -82,26 +87,6 @@ public class RemoteListFragment extends StackFragment implements
 		mContainer.addView(v);
 	}
 
-	// @Override
-	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	// MenuItem item = menu
-	// .add(0, R.id.ab_add_remote_setting, 0, R.string.add);
-	// item.setIcon(R.drawable.add);
-	// item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
-	// | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case R.id.ab_add_remote_setting:
-	// push(RemoteSettingFragment.newInstance(
-	// RemoteSettingFragment.MODE_ADD, null));
-	// return true;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
-
 	@Override
 	public void onCreateActionBar(Menu menu) {
 		MenuItem item = menu
@@ -109,6 +94,8 @@ public class RemoteListFragment extends StackFragment implements
 		item.setIcon(R.drawable.add);
 		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
 				| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
+		.setSubtitle(R.string.remote);
 	}
 
 	@Override

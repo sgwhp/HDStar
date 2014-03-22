@@ -29,7 +29,7 @@ import com.slidingmenu.lib.SlidingMenu;
 
 public class BaseStackActivity extends SlidingFragmentActivity implements
 		StackHook {
-	private int mTitleRes;
+	private int mTitleRes;//标题文字的资源id
 	private String mTitle;
 	protected ListFragment mFrag;
 	public static int newMessageNum = 0;
@@ -70,7 +70,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		sm.setFadeDegree(0.35f);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		setSlidingActionBarEnabled(false);
+//		setSlidingActionBarEnabled(false);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -95,6 +95,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		stackAdapter = new StackPagerAdapter(getSupportFragmentManager(),
 				viewPager);
 		if (savedInstanceState != null) {
+			//恢复后台被杀前的数据
 			int count = savedInstanceState.getInt("pageCount");
 			curPage = savedInstanceState.getInt("selectedPage");
 			Fragment f;
@@ -127,6 +128,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 					stackAdapter.up(position - curPage);
 				}
 				curPage = position;
+				//刷新actionbar，展示当前fragment的optionsmenu
 				invalidateOptionsMenu();
 
 				switch (position) {
@@ -163,6 +165,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		//保存总页数和当前页码
 		outState.putInt("pageCount", stackAdapter.getCount());
 		outState.putInt("selectedPage", viewPager.getCurrentItem());
 	}
@@ -218,6 +221,9 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		return "android:switcher:" + R.id.viewPager + ":" + position;
 	}
 
+	/**
+	 * 新消息广播接收器
+	 */
 	private BroadcastReceiver newMessageReceiver = new BroadcastReceiver() {
 
 		@Override
