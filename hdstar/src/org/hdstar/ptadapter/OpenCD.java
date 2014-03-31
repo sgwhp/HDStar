@@ -8,7 +8,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
+import org.hdstar.common.CommonUrls.PTSiteUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
@@ -21,6 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import ch.boye.httpclientandroidlib.Header;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
@@ -78,6 +81,16 @@ public class OpenCD extends NexusPHP {
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
 				try {
+					Header header = res.getFirstHeader("Location");
+					if (res.getStatusLine().getStatusCode() == 302
+							&& header != null
+							&& header.getValue().startsWith(
+									String.format(
+											CommonUrls.NEXUSPHP_LOGIN_URL,
+											PTSiteUrls.OPEN_CD))) {
+						msgId = R.string.not_login;
+						return null;
+					}
 					Document doc = Jsoup.parse(in, Const.CHARSET,
 							mType.getUrl());
 					ArrayList<Torrent> torrents = new ArrayList<Torrent>();

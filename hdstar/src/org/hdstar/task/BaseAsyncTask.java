@@ -256,12 +256,38 @@ public class BaseAsyncTask<T> extends AsyncTask<String, Integer, T> {
 		taskExec.execute(task, args);
 	}
 
+	/**
+	 * 
+	 * 任务回调 <br/>
+	 * 
+	 * @author robust
+	 */
 	public static interface TaskCallback<T> {
 
-		public abstract void onComplete(T result);
+		/**
+		 * 任务执行完成 <br/>
+		 * onComplete还是onFail被调用取决于ResponseParser的isSucceeded方法
+		 * 
+		 * @see org.hdstar.task.parser.ResponseParser
+		 * 
+		 * @param result
+		 */
+		public void onComplete(T result);
 
-		public abstract void onCancel();
+		/**
+		 * 任务被取消 <br/>
+		 */
+		public void onCancel();
 
-		public abstract void onFail(Integer msgId);
+		/**
+		 * 任务执行失败 <br/>
+		 * onComplete还是onFail被调用取决于ResponseParser的isSucceeded方法
+		 * 
+		 * @see org.hdstar.task.parser.ResponseParser
+		 * 
+		 * @param msgId
+		 *            失败提示的资源文件id
+		 */
+		public void onFail(Integer msgId);
 	}
 }

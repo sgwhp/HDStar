@@ -69,6 +69,7 @@
     <string name="edit">Edit</string>
     <string name="delete_post_msg">You are about to delete a post.</string>
     <string name="delete_topic_msg">You are about to delete a topic.</string>
+    <string name="not_login">Please login!</string>
     
     <string name="delete">delete</string>
     <string name="deleting">processing delete request…</string>

@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 
+import org.hdstar.R;
+import org.hdstar.common.Const.ResponseCode;
 import org.hdstar.model.ResponseWrapper;
 
 import ch.boye.httpclientandroidlib.HttpResponse;
@@ -32,6 +34,8 @@ public class DelegateGetParser<T> extends ResponseParser<T> {
 			if (wrapper.resCode == 200) {
 				setSucceeded();
 				return wrapper.body;
+			} else if (wrapper.resCode == ResponseCode.NOT_LOGIN) {
+				msgId = R.string.not_login;
 			}
 		}
 		return null;

@@ -171,6 +171,17 @@ public class NexusPHP extends PTAdapter {
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
 				try {
+					Header header = res.getFirstHeader("Location");
+					if (res.getStatusLine().getStatusCode() == 302
+							&& header != null
+							&& header.getValue().startsWith(
+									String.format(
+											CommonUrls.NEXUSPHP_LOGIN_URL,
+											mType.getUrl()))) {
+						// 未登录
+						msgId = R.string.not_login;
+						return null;
+					}
 					Document doc = Jsoup.parse(in, Const.CHARSET,
 							mType.getUrl());
 					ArrayList<Torrent> torrents = new ArrayList<Torrent>();
@@ -233,7 +244,7 @@ public class NexusPHP extends PTAdapter {
 						t.uploader = torrentCols.get(8).text();
 						torrents.add(t);
 					}
-					msgId = ResponseParser.SUCCESS_MSG_ID;
+					setSucceeded();
 					return torrents;
 				} catch (NullPointerException e) {
 					e.printStackTrace();
@@ -275,7 +286,7 @@ public class NexusPHP extends PTAdapter {
 				if (location == null || !location.equals(mType.getUrl() + "/")) {
 					return false;
 				}
-				msgId = ResponseParser.SUCCESS_MSG_ID;
+				setSucceeded();
 				return true;
 			}
 		};

@@ -42,6 +42,7 @@
     <string name="try_to_login">正在嘗試登錄…</string>
     <string name="login_failed">登錄失敗，請重試</string>
     <string name="login_error">登錄失敗，確認帳號、密碼及驗證碼無誤后再重試</string>
+    <string name="not_login">請重新登錄</string>
     
     <string name="reply">回覆</string>
     <string name="new_topic">新建主題</string>

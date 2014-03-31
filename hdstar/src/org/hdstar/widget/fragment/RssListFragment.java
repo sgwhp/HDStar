@@ -132,10 +132,13 @@ public class RssListFragment extends StackFragment implements OnClickListener {
 		text.setText(setting.link);
 		ImageView icon = (ImageView) v.findViewById(R.id.rss_icon);
 		// 获取图标，去掉订阅地址的所有参数，避免泄露passkey
+		String url = setting.link;
+		if (url.contains("?")) {
+			url = url.substring(0, url.indexOf('?'));
+		}
 		ImageLoader.getInstance().displayImage(
-				String.format(CommonUrls.GETFVO_URL,
-						setting.link.substring(0, setting.link.indexOf('?'))),
-				icon, HDStarApp.displayOptions);
+				String.format(CommonUrls.GETFVO_URL, url), icon,
+				HDStarApp.displayOptions);
 		v.setId(id);
 		v.setOnClickListener(this);
 		return v;

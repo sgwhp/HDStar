@@ -1,7 +1,6 @@
 package org.hdstar.widget.fragment;
 
 import org.hdstar.R;
-import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RssSettingManager;
 import org.hdstar.model.RssSetting;
 
@@ -127,6 +126,18 @@ public class RssSettingFragment extends StackFragment implements
 		return false;
 	}
 
+	/**
+	 * 返回并刷新上一页面 <br/>
+	 */
+	private void backAndRefresh() {
+		StackFragment f = getStackAdapter().preItem();
+		getViewPager()
+				.setCurrentItem(getViewPager().getCurrentItem() - 1, true);
+		if (f != null) {
+			f.refresh();
+		}
+	}
+
 	private void save() {
 		String labelStr = label.getText().toString();
 		String linkStr = link.getText().toString();
@@ -142,12 +153,7 @@ public class RssSettingFragment extends StackFragment implements
 		} else {
 			RssSettingManager.save(getActivity(), setting);
 		}
-		StackFragment f = getStackAdapter().preItem();
-		getViewPager()
-				.setCurrentItem(getViewPager().getCurrentItem() - 1, true);
-		if (f != null) {
-			f.refresh();
-		}
+		backAndRefresh();
 		Crouton.makeText(getActivity(), R.string.saved, Style.INFO).show();
 	}
 
@@ -155,10 +161,8 @@ public class RssSettingFragment extends StackFragment implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.remove:
-			RemoteSettingManager.removeRemoteSettings(getActivity(),
-					setting.order);
-			getViewPager().setCurrentItem(getViewPager().getCurrentItem() - 1,
-					true);
+			RssSettingManager.removeRssSettings(getActivity(), setting.order);
+			backAndRefresh();
 			break;
 		case R.id.scan:
 			Intent intent = new Intent(getActivity(), CaptureActivity.class);

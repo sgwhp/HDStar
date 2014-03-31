@@ -15,10 +15,26 @@ public class Const {
 	public static final String TAG = "*HDStar*";
 	public static final int APP_CODE = 1;
 
+	/**
+	 * 
+	 * 响应代码 <br/>
+	 * 
+	 * @author robust
+	 */
 	public final class ResponseCode {
 		public static final int PARAMETER_ERROR = 1000;
 		public static final int PARSE_ERROR = 1001;
 		public static final int APK_NOT_FOUND = 1002;
+		public static final int DB_ERROR = 1003;
+
+		/**
+		 * 未登录
+		 */
+		public static final int NOT_LOGIN = -1000;
+		/**
+		 * 未经授权，http 401
+		 */
+		public static final int NOT_AUTHORIZED = -1001;
 	}
 
 	public static final String CHARSET = "UTF-8";
@@ -36,8 +52,6 @@ public class Const {
 	public static final String NEW_MESSAGE_ACTION = "org.hdstar.NEW_MESSAGE";
 	public static final int NEW_MESSAGE_REQ_REFRESH = 1;
 	public static final int NEW_MESSAGE_REQ_VIEW = 2;
-
-	// public static final int[] forumIds = { 1, 2, 11, 9 };
 
 	public static final int[] boxTypes = { 1, -1 };
 

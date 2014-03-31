@@ -95,8 +95,7 @@ public class RemoteSettingFragment extends StackFragment {
 				public void onClick(View v) {
 					RemoteSettingManager.removeRemoteSettings(getActivity(),
 							setting.order);
-					getViewPager().setCurrentItem(
-							getViewPager().getCurrentItem() - 1, true);
+					backAndRefresh();
 				}
 			});
 			for (RemoteType type : RemoteType.values()) {
@@ -166,6 +165,18 @@ public class RemoteSettingFragment extends StackFragment {
 		return false;
 	}
 
+	/**
+	 * 返回并刷新上一页面 <br/>
+	 */
+	private void backAndRefresh() {
+		StackFragment f = getStackAdapter().preItem();
+		getViewPager()
+				.setCurrentItem(getViewPager().getCurrentItem() - 1, true);
+		if (f != null) {
+			f.refresh();
+		}
+	}
+
 	private void save() {
 		String nameStr = name.getText().toString();
 		String ipStr = ip.getText().toString();
@@ -196,12 +207,7 @@ public class RemoteSettingFragment extends StackFragment {
 			RemoteSettingManager.save(getActivity(), setting,
 					setDefault.isChecked());
 		}
-		StackFragment f = getStackAdapter().preItem();
-		getViewPager()
-				.setCurrentItem(getViewPager().getCurrentItem() - 1, true);
-		if (f != null) {
-			f.refresh();
-		}
+		backAndRefresh();
 		Crouton.makeText(getActivity(), R.string.saved, Style.INFO).show();
 	}
 }

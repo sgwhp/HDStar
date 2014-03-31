@@ -9,7 +9,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
+import org.hdstar.common.CommonUrls.PTSiteUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.model.Torrent;
@@ -179,6 +181,14 @@ public class HDWing extends PTAdapter {
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
 				try {
+					Header header = res.getFirstHeader("Location");
+					if (res.getStatusLine().getStatusCode() == 302
+							&& header != null
+							&& header.getValue().startsWith(
+									PTSiteUrls.HDW_LOGIN)) {
+						msgId = R.string.not_login;
+						return null;
+					}
 					Document doc = Jsoup.parse(in, Const.CHARSET,
 							mType.getUrl());
 					ArrayList<Torrent> torrents = new ArrayList<Torrent>();

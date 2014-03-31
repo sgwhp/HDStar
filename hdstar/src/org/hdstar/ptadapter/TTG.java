@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteType;
@@ -148,6 +149,13 @@ public class TTG extends PTAdapter {
 			@Override
 			public ArrayList<Torrent> parse(HttpResponse res, InputStream in) {
 				try {
+					Header header = res.getFirstHeader("Location");
+					if (res.getStatusLine().getStatusCode() == 302
+							&& header != null
+							&& header.getValue().startsWith("")) {
+						msgId = R.string.not_login;
+						return null;
+					}
 					// dealWithSessionId(res);
 					Document doc = Jsoup.parse(in, Const.CHARSET,
 							mType.getUrl());
