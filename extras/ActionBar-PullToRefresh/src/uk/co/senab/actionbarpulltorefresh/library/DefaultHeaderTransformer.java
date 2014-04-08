@@ -157,8 +157,8 @@ public class DefaultHeaderTransformer extends HeaderTransformer {
 		}
 		if (mHeaderProgressBar != null) {
 			mHeaderProgressBar.setVisibility(View.VISIBLE);
-			// onRefreshMinimized²»×öÈÎºÎ²Ù×÷£¬²¢ÇÒÔÚËÉ¿ªË¢ĞÂµÄÄ£Ê½ÏÂ£¬
-			// Ê¹ÓÃTranslationAnimation½ø¶ÈÌõ¿ÉÄÜ²»ÏûÊ§£¬µ¼ÖÂsetIndeterminateÎŞĞ§£¨2.3.3ÓĞÕâÖÖÇé¿ö£©
+            // onRefreshMinimizedä¸åšä»»ä½•æ“ä½œï¼Œå¹¶ä¸”åœ¨æ¾å¼€åˆ·æ–°çš„æ¨¡å¼ä¸‹ï¼Œ
+            // ä½¿ç”¨TranslationAnimationè¿›åº¦æ¡å¯èƒ½ä¸æ¶ˆå¤±ï¼Œå¯¼è‡´setIndeterminateæ— æ•ˆï¼ˆ2.3.3æœ‰è¿™ç§æƒ…å†µï¼‰
 			mHeaderProgressBar.postInvalidate();
 			mHeaderProgressBar.setIndeterminate(true);
 		}

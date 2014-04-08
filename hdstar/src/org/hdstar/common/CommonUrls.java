@@ -198,7 +198,7 @@ public class CommonUrls {
 				+ "/torrents.php?boardid=1&page=%d";
 
 		// ttg
-		public static final String TTG = "http://ttg.im";
+		public static final String TTG = "http://totheglory.im";
 		public static final String TTG_TORRENTS = TTG
 				+ "/browse.php?c=M&page=%d";
 		public static final String TTG_GAME = TTG + "/browse.php?c=G&page=%d";

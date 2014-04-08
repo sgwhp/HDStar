@@ -54,7 +54,7 @@
                android:hardwareAccelerated="true"
                android:allowBackup="true">
     <activity android:name=".CaptureActivity"
-              android:screenOrientation="landscape"
+              android:screenOrientation="portrait"
               android:clearTaskOnLaunch="true"
               android:stateNotNeeded="true"
               android:configChanges="orientation|keyboardHidden"
