@@ -13,6 +13,7 @@ import org.hdstar.model.Topic;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.util.SoundPoolManager;
+import org.hdstar.util.Util;
 import org.hdstar.widget.adapter.PageAdapter;
 import org.hdstar.widget.adapter.TopicsAdapter;
 
@@ -25,6 +26,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Gravity;
@@ -44,7 +46,13 @@ import com.google.gson.reflect.TypeToken;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+/**
+ * 论坛<br/>
+ * @author  robust
+ */
 public class ForumFragment extends StackFragment {
+    private static final int POP_UP_WINDOW_WIDTH = 100;//页码窗口宽度(dp)
+    private static final int POP_UP_WINDOW_HEIGHT = 180;//页码窗口高度(dp)
 	private View view;
 	private PullToRefreshLayout mPullToRefreshLayout;
 	private ListView listView;
@@ -56,6 +64,8 @@ public class ForumFragment extends StackFragment {
 	private int forumId = 1;
 	private int page = 0;
 	private int curPage = 0;
+    private int windowWidth;//页码窗口宽度(px)
+    private int windowHeight;//页码窗口高度(px)
 
 	public static ForumFragment newInstance(String url) {
 		Pattern pattern = Pattern.compile("forumid=([0-9]+)");
@@ -105,6 +115,8 @@ public class ForumFragment extends StackFragment {
 			init = true;
 			adapter = new TopicsAdapter(getActivity(), new ArrayList<Topic>());
 		}
+        windowWidth = Util.dip2px(getActivity(), POP_UP_WINDOW_WIDTH);
+        windowHeight = Util.dip2px(getActivity(), POP_UP_WINDOW_HEIGHT);
 		init();
 		if (init) {
 			mPullToRefreshLayout.post(new Runnable() {
@@ -199,7 +211,6 @@ public class ForumFragment extends StackFragment {
 	}
 
 	protected void init() {
-		final float dip = this.getResources().getDisplayMetrics().density;
 		final Activity act = getActivity();
 		mPullToRefreshLayout = (PullToRefreshLayout) view
 				.findViewById(R.id.ptr_layout);
@@ -246,6 +257,7 @@ public class ForumFragment extends StackFragment {
 				if (t.pageList == null) {
 					viewTopic(t.topicId, 0, t.title);
 				} else {
+                    //弹出页码列表
 					View v = LayoutInflater.from(act).inflate(
 							R.layout.popupwindow, null);
 					ListView lv = (ListView) v.findViewById(R.id.lv);
@@ -261,14 +273,30 @@ public class ForumFragment extends StackFragment {
 					});
 					lv.setAdapter(new PageAdapter(act, t.pageList
 							.get(t.pageList.size() - 1) + 1));
-					window = new PopupWindow(v, (int) (80 * dip + 0.5),
-							(int) (150 * dip + 0.5));
-					window.setBackgroundDrawable(getResources().getDrawable(
-							R.drawable.rounded_corners_pop));
-					window.setFocusable(true);
+
+                    window = new PopupWindow(v, windowWidth, windowHeight, true);
 					window.setAnimationStyle(R.style.normalPopWindow_anim_style);
-					window.update();
-					window.showAtLocation(parent, Gravity.CENTER_VERTICAL, 0, 0);
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    Rect anchorRect = new Rect(location[0], location[1], location[0] + view.getWidth(), location[1]
+                            + view.getHeight());
+
+                    int screenWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+
+                    int xPos = (screenWidth - windowWidth) / 2;
+                    int yPos	= anchorRect.top - windowHeight;
+
+                    // display on bottom
+                    if (windowHeight > view.getTop()) {
+                        yPos = anchorRect.bottom;
+                        window.setBackgroundDrawable(getResources().getDrawable(
+                                R.drawable.popover_background_down));
+                    } else {
+                        window.setBackgroundDrawable(getResources().getDrawable(
+                                R.drawable.popover_background_up));
+                    }
+                    window.update();
+					window.showAtLocation(parent, Gravity.NO_GRAVITY, xPos, yPos);
 				}
 			}
 
@@ -301,6 +329,9 @@ public class ForumFragment extends StackFragment {
 		}.getType());
 	}
 
+    /**
+     * 加载下一页
+     */
 	public void loadNextPage() {
 		DelegateTask<List<Topic>> task = new DelegateTask<List<Topic>>(
 				HDStarApp.cookies);
@@ -320,6 +351,9 @@ public class ForumFragment extends StackFragment {
 		fetch();
 	}
 
+    /**
+     * 刷新回调
+     */
 	TaskCallback<List<Topic>> refreshCallback = new TaskCallback<List<Topic>>() {
 
 		@Override
@@ -344,6 +378,9 @@ public class ForumFragment extends StackFragment {
 		}
 	};
 
+    /**
+     * 获取下一页回调
+     */
 	TaskCallback<List<Topic>> addCallback = new TaskCallback<List<Topic>>() {
 
 		@Override
