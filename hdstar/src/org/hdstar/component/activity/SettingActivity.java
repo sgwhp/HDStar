@@ -1,8 +1,11 @@
 package org.hdstar.component.activity;
 
 import org.hdstar.R;
+import org.hdstar.widget.fragment.PTListFragment;
 import org.hdstar.widget.fragment.RemoteSettingFragment;
 import org.hdstar.widget.fragment.SettingFragment;
+
+import com.umeng.analytics.MobclickAgent;
 
 import android.os.Bundle;
 
@@ -13,6 +16,7 @@ import android.os.Bundle;
  */
 public class SettingActivity extends BaseStackActivity {
 	public static final int ACTION_ADD_REMOTE_SETTING = 1;
+	public static final int ACTION_PT_SETTING = 2;
 
 	public SettingActivity() {
 		super(R.string.setting);
@@ -29,12 +33,38 @@ public class SettingActivity extends BaseStackActivity {
 			}
 			switch(action){
 			case ACTION_ADD_REMOTE_SETTING:
-				stackAdapter.add(RemoteSettingFragment.newInstance(
-						RemoteSettingFragment.MODE_ADD, null));
-				viewPager.setCurrentItem(1);
+				viewPager.post(new Runnable(){
+
+					@Override
+					public void run() {
+						stackAdapter.add(RemoteSettingFragment.newInstance(
+								RemoteSettingFragment.MODE_ADD, null));
+						viewPager.setCurrentItem(1);
+					}});
+				break;
+			case ACTION_PT_SETTING:
+				viewPager.post(new Runnable(){
+
+					@Override
+					public void run() {
+						stackAdapter.add(new PTListFragment());
+						viewPager.setCurrentItem(1, true);
+					}});
 				break;
 			}
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	@Override

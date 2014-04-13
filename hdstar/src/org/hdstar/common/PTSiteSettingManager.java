@@ -54,6 +54,11 @@ public class PTSiteSettingManager {
 		}
 		return sites;
 	}
+	
+	public static PTSiteSetting getByType(Context context, PTSiteType type){
+		HashMap<String, PTSiteSetting> sites = getAsMap(context);
+		return sites.get(type.getName());
+	}
 
 	public static PTSiteSetting get(SharedPreferences prefs, int order) {
 		PTSiteSetting setting = new PTSiteSetting();

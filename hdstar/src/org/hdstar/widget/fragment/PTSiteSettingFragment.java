@@ -290,6 +290,9 @@ public class PTSiteSettingFragment extends StackFragment implements
 			dialog.dismiss();
 			Crouton.showText(getActivity(), R.string.initialize_completed,
 					Style.INFO);
+			if(PTSiteType.HDSky.getName().equals(setting.type)){
+				HDStarApp.cookies = result;
+			}
 			setting.cookie = result;
 			PTSiteSettingManager.save(getActivity(), setting);
 			initBtn.setVisibility(View.GONE);

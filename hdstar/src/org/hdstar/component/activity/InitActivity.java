@@ -7,6 +7,8 @@ import org.hdstar.component.HDStarApp;
 import org.hdstar.model.Topic;
 import org.hdstar.task.InitLoader;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +27,18 @@ public class InitActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome);
 		getSupportLoaderManager().initLoader(0, null, this);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 //	@Override
@@ -60,7 +74,8 @@ public class InitActivity extends FragmentActivity implements
 		if (HDStarApp.cookies != null) {
 			intent = new Intent(this, ForumsActivity.class);
 		} else {
-			intent = new Intent(this, LoginActivity.class);
+			intent = new Intent(this, SettingActivity.class);
+			intent.putExtra("action", SettingActivity.ACTION_PT_SETTING);
 		}
 		startActivity(intent);
 		((HDStarApp) getApplicationContext()).checkMessage();

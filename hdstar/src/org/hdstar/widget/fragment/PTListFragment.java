@@ -28,17 +28,18 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	private static final int ID = 10000;
 	private LayoutInflater mInflater;
 	private HashMap<String, PTSiteSetting> settings;
-	private PTSiteType[] mTypes;
-	{
-		// 初始化所有站点，排除掉HDSky
-		PTSiteType[] types = PTSiteType.values();
-		mTypes = new PTSiteType[types.length - 1];
-		for (int i = 0, j = 0; i < types.length; i++) {
-			if (types[i] != PTSiteType.HDSky) {
-				mTypes[j++] = types[i];
-			}
-		}
-	}
+	private PTSiteType[] mTypes = PTSiteType.values();
+
+	// {
+	// // 初始化所有站点，排除掉HDSky
+	// PTSiteType[] types = PTSiteType.values();
+	// mTypes = new PTSiteType[types.length];
+	// for (int i = 0, j = 0; i < types.length; i++) {
+	// if (types[i] != PTSiteType.HDSky) {
+	// mTypes[j++] = types[i];
+	// }
+	// }
+	// }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +53,7 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		// init();
+//		 init();
 	}
 
 	@Override
@@ -63,15 +64,17 @@ public class PTListFragment extends StackFragment implements OnClickListener {
 
 	@Override
 	public void onSelected() {
-		mContainer.removeAllViews();
-		init();
+		if (mContainer != null) {
+			mContainer.removeAllViews();
+			init();
+		}
 	}
-	
+
 	@Override
 	public void onCreateActionBar(Menu menu) {
 		super.onCreateActionBar(menu);
 		((SherlockFragmentActivity) getActivity()).getSupportActionBar()
-		.setSubtitle(R.string.pt_site);
+				.setSubtitle(R.string.pt_site);
 	}
 
 	// @Override

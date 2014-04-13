@@ -6,6 +6,9 @@ import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.common.CustomSetting;
+import org.hdstar.common.PTSiteSettingManager;
+import org.hdstar.common.PTSiteType;
+import org.hdstar.model.PTSiteSetting;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
@@ -112,7 +115,10 @@ public class HDStarApp extends Application {
 	public static void init(Context context) {
 		SharedPreferences shared = context.getSharedPreferences(
 				Const.SETTING_SHARED_PREFS, MODE_PRIVATE);
-		cookies = shared.getString("cookies", null);
+		PTSiteSetting setting = PTSiteSettingManager.getByType(context, PTSiteType.HDSky);
+		if(setting != null){
+			cookies = setting.cookie;
+		}
 		CustomSetting.loadImage = shared.getBoolean("loadImage",
 				CustomSetting.LOAD_IMAGE_DEFAULT);
 		CustomSetting.soundOn = shared.getBoolean("sound",

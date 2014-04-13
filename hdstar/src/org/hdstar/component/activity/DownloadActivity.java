@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 下载管理
@@ -123,6 +124,7 @@ public class DownloadActivity extends SherlockActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+		MobclickAgent.onResume(this);
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(DownloadService.ACTION_DOWNLOAD_STATUS_CHANGED);
 		filter.addAction(DownloadService.ACTION_DOWNLOAD_UPDATE_PROGRESS);
@@ -132,6 +134,7 @@ public class DownloadActivity extends SherlockActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
+		MobclickAgent.onPause(this);
 		unregisterReceiver(receiver);
 	}
 

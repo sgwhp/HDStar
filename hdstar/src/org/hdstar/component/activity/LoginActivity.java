@@ -35,6 +35,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  * 登录
  * 
  * @author robust
+ * @deprecated 不再提供登录界面，统一到设置内初始化
  * 
  */
 public class LoginActivity extends SherlockFragmentActivity implements

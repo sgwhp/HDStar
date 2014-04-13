@@ -98,13 +98,13 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <Button
+      <!--   <Button
             android:id="@+id/logOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
             android:background="@drawable/log_out_btn_sel"
-            android:text="@string/log_out" />
+            android:text="@string/log_out" /> -->
     </LinearLayout>
 
 </ScrollView>

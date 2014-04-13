@@ -4,22 +4,15 @@ import org.hdstar.R;
 import org.hdstar.common.CommonUrls;
 import org.hdstar.common.Const;
 import org.hdstar.component.DownloadService;
-import org.hdstar.component.HDStarApp;
 import org.hdstar.component.activity.DownloadActivity;
-import org.hdstar.component.activity.LoginActivity;
 import org.hdstar.model.NewApkInfo;
 import org.hdstar.model.ResponseWrapper;
-import org.hdstar.ptadapter.HDSky;
-import org.hdstar.task.BaseAsyncTask;
 import org.hdstar.task.BaseAsyncTask.TaskCallback;
 import org.hdstar.task.DelegateTask;
 import org.hdstar.util.Util;
-import org.hdstar.widget.CustomDialog;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -43,8 +36,8 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class SettingFragment extends StackFragment implements OnClickListener {
 	private Button downloadBtn;
-	private CustomDialog loadingDialog = null;
-	private BaseAsyncTask<Boolean> logoutTask;
+//	private CustomDialog loadingDialog = null;
+//	private BaseAsyncTask<Boolean> logoutTask;
 	private ScrollView mContainer;
 	private int scrollX, scrollY;
 
@@ -55,7 +48,7 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 		mContainer = (ScrollView) v.findViewById(R.id.scroll_container);
 		downloadBtn = (Button) v.findViewById(R.id.download_btn);
 		downloadBtn.setOnClickListener(this);
-		v.findViewById(R.id.logOut).setOnClickListener(this);
+//		v.findViewById(R.id.logOut).setOnClickListener(this);
 		v.findViewById(R.id.clearCache).setOnClickListener(this);
 		v.findViewById(R.id.checkUpdate).setOnClickListener(this);
 		v.findViewById(R.id.animation).setOnClickListener(this);
@@ -115,43 +108,43 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 	public void onClick(View v) {
 		final Activity act = getActivity();
 		switch (v.getId()) {
-		case R.id.logOut:
-			new AlertDialog.Builder(getActivity())
-					.setTitle(R.string.log_out)
-					.setIcon(R.drawable.ic_launcher)
-					.setMessage(R.string.log_out_message)
-					.setPositiveButton(R.string.log_out,
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									loadingDialog = new CustomDialog(
-											getActivity(), R.string.connecting);
-									loadingDialog
-											.setOnDismissListener(new OnDismissListener() {
-
-												@Override
-												public void onDismiss(
-														DialogInterface dialog) {
-													detachLogoutTask();
-												}
-											});
-									loadingDialog.show();
-									logoutTask = new HDSky().logout();
-									logoutTask.attach(logoutCallback);
-									BaseAsyncTask.commit(logoutTask);
-								}
-							})
-					.setNegativeButton(android.R.string.cancel,
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-								}
-							}).create().show();
-			break;
+//		case R.id.logOut:
+//			new AlertDialog.Builder(getActivity())
+//					.setTitle(R.string.log_out)
+//					.setIcon(R.drawable.ic_launcher)
+//					.setMessage(R.string.log_out_message)
+//					.setPositiveButton(R.string.log_out,
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									loadingDialog = new CustomDialog(
+//											getActivity(), R.string.connecting);
+//									loadingDialog
+//											.setOnDismissListener(new OnDismissListener() {
+//
+//												@Override
+//												public void onDismiss(
+//														DialogInterface dialog) {
+//													detachLogoutTask();
+//												}
+//											});
+//									loadingDialog.show();
+//									logoutTask = new HDSky().logout();
+//									logoutTask.attach(logoutCallback);
+//									BaseAsyncTask.commit(logoutTask);
+//								}
+//							})
+//					.setNegativeButton(android.R.string.cancel,
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//								}
+//							}).create().show();
+//			break;
 		case R.id.clearCache:
 			ImageLoader.getInstance().clearDiscCache();
 			Crouton.makeText(act, R.string.cache_cleared, Style.INFO).show();
@@ -189,11 +182,11 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 		}
 	}
 
-	private void detachLogoutTask() {
-		if (logoutTask != null) {
-			logoutTask.detach();
-		}
-	}
+//	private void detachLogoutTask() {
+//		if (logoutTask != null) {
+//			logoutTask.detach();
+//		}
+//	}
 
 	private TaskCallback<NewApkInfo> mCallback = new TaskCallback<NewApkInfo>() {
 
@@ -285,30 +278,30 @@ public class SettingFragment extends StackFragment implements OnClickListener {
 
 	};
 
-	private TaskCallback<Boolean> logoutCallback = new TaskCallback<Boolean>() {
-
-		@Override
-		public void onComplete(Boolean result) {
-			loadingDialog.dismiss();
-			Activity act = getActivity();
-			Editor edit = act.getSharedPreferences(Const.SETTING_SHARED_PREFS,
-					Activity.MODE_PRIVATE).edit();
-			edit.remove("cookies");
-			edit.commit();
-			HDStarApp.cookies = null;
-			Intent intent = new Intent(act, LoginActivity.class);
-			startActivity(intent);
-			act.finish();
-		}
-
-		@Override
-		public void onCancel() {
-		}
-
-		@Override
-		public void onFail(Integer msgId) {
-			loadingDialog.dismiss();
-			Crouton.showText(getActivity(), msgId, Style.ALERT);
-		}
-	};
+//	private TaskCallback<Boolean> logoutCallback = new TaskCallback<Boolean>() {
+//
+//		@Override
+//		public void onComplete(Boolean result) {
+//			loadingDialog.dismiss();
+//			Activity act = getActivity();
+//			Editor edit = act.getSharedPreferences(Const.SETTING_SHARED_PREFS,
+//					Activity.MODE_PRIVATE).edit();
+//			edit.remove("cookies");
+//			edit.commit();
+//			HDStarApp.cookies = null;
+//			Intent intent = new Intent(act, LoginActivity.class);
+//			startActivity(intent);
+//			act.finish();
+//		}
+//
+//		@Override
+//		public void onCancel() {
+//		}
+//
+//		@Override
+//		public void onFail(Integer msgId) {
+//			loadingDialog.dismiss();
+//			Crouton.showText(getActivity(), msgId, Style.ALERT);
+//		}
+//	};
 }

@@ -4,8 +4,6 @@ import org.hdstar.R;
 import org.hdstar.common.RemoteSettingManager;
 import org.hdstar.common.RemoteType;
 import org.hdstar.model.RemoteSetting;
-import org.hdstar.util.Util;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -180,15 +178,15 @@ public class RemoteSettingFragment extends StackFragment {
 	private void save() {
 		String nameStr = name.getText().toString();
 		String ipStr = ip.getText().toString();
-		if (!Util.isIp(ipStr)) {
-			Crouton.makeText(getActivity(), R.string.invalidate_ip,
-					Style.CONFIRM).show();
-			return;
-		}
+//		if (!Util.isIp(ipStr)) {
+//			Crouton.makeText(getActivity(), R.string.invalidate_ip,
+//					Style.CONFIRM).show();
+//			return;
+//		}
 		String usernameStr = username.getText().toString();
 		String passwordStr = password.getText().toString();
 		String dir = downloadDir.getText().toString();
-		if ("".equals(nameStr)) {
+		if ("".equals(ipStr) || "".equals(nameStr)) {
 			Crouton.makeText(getActivity(), R.string.fill_in_the_blanks,
 					Style.CONFIRM).show();
 			name.setError(null);

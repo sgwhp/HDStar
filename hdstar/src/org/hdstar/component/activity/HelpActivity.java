@@ -17,6 +17,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.slidingmenu.lib.SlidingMenu;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 帮助
@@ -103,6 +104,18 @@ public class HelpActivity extends BaseActivity {
 				aboutPage.loadUrl(CommonUrls.HDStar.SERVER_ABOUT_URL);
 			}
 		});
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	@Override

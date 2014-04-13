@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.hdstar.R;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.os.Bundle;
 
 /**
@@ -22,5 +24,17 @@ public class MiscActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.test);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 }

@@ -3,9 +3,9 @@ package org.hdstar.component.activity;
 import java.util.ArrayList;
 
 import org.hdstar.R;
-import org.hdstar.common.Const;
 import org.hdstar.common.PTSiteSettingManager;
 import org.hdstar.common.PTSiteType;
+import org.hdstar.component.HDStarApp;
 import org.hdstar.model.PTSiteSetting;
 import org.hdstar.widget.fragment.TorrentListFragment;
 import org.hdstar.widget.navigation.PTFilterListDropDownAdapter;
@@ -13,6 +13,8 @@ import org.hdstar.widget.navigation.PTFilterListDropDownAdapter;
 import android.os.Bundle;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+import com.umeng.analytics.MobclickAgent;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -39,8 +41,7 @@ public class TorrentActivity extends BaseStackActivity implements
 		// 首先添加HDSky
 		PTSiteSetting hdsky = new PTSiteSetting();
 		hdsky.type = PTSiteType.HDSky.name();
-		hdsky.cookie = getSharedPreferences(Const.SETTING_SHARED_PREFS,
-				MODE_PRIVATE).getString("cookies", "");
+		hdsky.cookie = HDStarApp.cookies;
 		settings.add(hdsky);
 		// 添加已保存设置的站点
 		PTSiteSettingManager.getAll(this, settings);
@@ -65,6 +66,18 @@ public class TorrentActivity extends BaseStackActivity implements
 				settings);
 		getSupportActionBar().setListNavigationCallbacks(
 				navigationSpinnerAdapter, this);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	@Override
