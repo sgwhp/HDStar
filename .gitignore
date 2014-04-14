@@ -28,6 +28,16 @@ proguard/
 *.iws
 .idea/
 
+.settings/
+.DS_Store
+.idea/
+.gradle
+build/
+*.keystore
+out/
+local.properties
+
+
 # thumbnails of windows xp
 Thumbs.db
 

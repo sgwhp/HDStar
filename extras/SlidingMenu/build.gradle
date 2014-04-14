@@ -2,11 +2,11 @@ apply plugin: 'android-library'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':extras:smoothprogressbar:src:main')
+    compile project(':extras:ABS')
 }
 
 android {
-    compileSdkVersion 17
+    compileSdkVersion "Google Inc.:Google APIs:14"
     buildToolsVersion "19.0.2"
 
     sourceSets {

@@ -70,7 +70,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		sm.setFadeDegree(0.35f);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-//		setSlidingActionBarEnabled(false);
+		setSlidingActionBarEnabled(false);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

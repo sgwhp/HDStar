@@ -122,7 +122,7 @@ public class BothHeaderTransformer extends DefaultHeaderTransformer {
 
 	@Override
 	public boolean hideHeaderView(Mode mode) {
-		// 4.0ÒÔÉÏµÄ¶¯»­ÎÞ·¨Æô¶¯
+		// 4.0ä»¥ä¸Šçš„åŠ¨ç”»æ— æ³•å¯åŠ¨
 		if (Build.VERSION.SDK_INT >= super.getMinimumApiLevel()) {
 			return super.hideHeaderView(mode);
 		}

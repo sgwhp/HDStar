@@ -1,8 +1,13 @@
-apply plugin: 'android-library'
+apply plugin: 'android'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':extras:smoothprogressbar:src:main')
+    compile project(':extras:SlidingMenu')
+    compile project(':extras:ABS')
+    compile project(':extras:pulltorefresh-actionbarsherlock')
+    compile project(':extras:jazzy')
+    compile project(':extras:Crouton')
+    compile project(':extras:zxing')
 }
 
 android {
