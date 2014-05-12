@@ -32,7 +32,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	private int mTitleRes;//标题文字的资源id
 	private String mTitle;
 	protected ListFragment mFrag;
-	public static int newMessageNum = 0;
+//	public static int newMessageNum = 0;
 	protected StackPagerAdapter stackAdapter;
 	protected int curPage = 0;
 	protected JazzyViewPager viewPager;

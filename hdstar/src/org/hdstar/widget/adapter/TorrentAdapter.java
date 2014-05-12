@@ -27,6 +27,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
+/**
+ * 种子列表适配器
+ * @author robust
+ */
 public class TorrentAdapter extends BaseExpandableListAdapter {
 	private Resources res;
 	private LayoutInflater inflater;
@@ -108,57 +112,52 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 		holder.freeType.setText(Const.FreeType.getFreeTag(t.freeType));
 		holder.title.setText(t.title);
 		holder.subtitle.setText(t.subtitle);
-		Bitmap bitmap;
-		BitmapDrawable bDrawable;
 		if (t.firstClass != null) {
+            String firstClassUri;
 			if (!t.firstClass.startsWith("/")) {
-				bitmap = ImageLoader.getInstance().loadImageSync(
-						"assets://pic/torrent_class/" + t.firstClass + ".png",
-						HDStarApp.displayOptions);
-				if (bitmap != null) {
-					bitmap.setDensity(160);
-					bDrawable = new BitmapDrawable(res, bitmap);
-					bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
-							bDrawable.getIntrinsicHeight());
-					holder.title.setCompoundDrawables(bDrawable, null, null,
-							null);
-				} else {
-					holder.title.setCompoundDrawables(null, null, null, null);
-				}
+                //本地图片，放在assets/pic/torrent_class目录下
+				firstClassUri = "assets://pic/torrent_class/" + t.firstClass + ".png";
 			} else {
-				holder.title.setCompoundDrawables(null, null, null, null);
-				ImageLoader.getInstance().loadImage(
-						adapter.getType().getUrl() + t.firstClass,
-						HDStarApp.displayOptions, new ImageLoadingListener() {
-
-							@Override
-							public void onLoadingCancelled(String arg0,
-									View arg1) {
-							}
-
-							@Override
-							public void onLoadingComplete(String arg0,
-									View arg1, Bitmap result) {
-								result.setDensity(160);
-								BitmapDrawable drawable = new BitmapDrawable(
-										res, result);
-								drawable.setBounds(0, 0,
-										drawable.getIntrinsicWidth(),
-										drawable.getIntrinsicHeight());
-								holder.title.setCompoundDrawables(drawable,
-										null, null, null);
-							}
-
-							@Override
-							public void onLoadingFailed(String arg0, View arg1,
-									FailReason arg2) {
-							}
-
-							@Override
-							public void onLoadingStarted(String arg0, View arg1) {
-							}
-						});
+                //网络图片
+				firstClassUri = adapter.getType().getUrl() + t.firstClass;
 			}
+            holder.title.setCompoundDrawables(null, null, null, null);
+            ImageLoader.getInstance().loadImage(
+                    firstClassUri,
+                    HDStarApp.displayOptions, new ImageLoadingListener() {
+
+                        @Override
+                        public void onLoadingCancelled(String arg0,
+                                                       View arg1) {
+                        }
+
+                        @Override
+                        public void onLoadingComplete(String arg0,
+                                                      View arg1, Bitmap result) {
+                            if(result == null){
+                                holder.title.setCompoundDrawables(null,
+                                    null, null, null);
+                                return;
+                            }
+                            result.setDensity(160);
+                            BitmapDrawable drawable = new BitmapDrawable(
+                                    res, result);
+                            drawable.setBounds(0, 0,
+                                    drawable.getIntrinsicWidth(),
+                                    drawable.getIntrinsicHeight());
+                            holder.title.setCompoundDrawables(drawable,
+                                    null, null, null);
+                        }
+
+                        @Override
+                        public void onLoadingFailed(String arg0, View arg1,
+                                                    FailReason arg2) {
+                        }
+
+                        @Override
+                        public void onLoadingStarted(String arg0, View arg1) {
+                        }
+                    });
 		} else {
 			holder.title.setCompoundDrawables(null, null, null, null);
 		}
@@ -166,53 +165,49 @@ public class TorrentAdapter extends BaseExpandableListAdapter {
 			holder.subtitle.setCompoundDrawables(null, null, null, null);
 			return convertView;
 		}
+        String secondClassUri;
 		if (!t.secondClass.startsWith("/")) {
-			bitmap = ImageLoader.getInstance().loadImageSync(
-					"assets://pic/torrent_class/" + t.secondClass + ".png",
-					HDStarApp.displayOptions);
-			if (bitmap != null) {
-				bitmap.setDensity(160);
-				bDrawable = new BitmapDrawable(res, bitmap);
-				bDrawable.setBounds(0, 0, bDrawable.getIntrinsicWidth(),
-						bDrawable.getIntrinsicHeight());
-				holder.subtitle.setCompoundDrawables(bDrawable, null, null,
-						null);
-			} else {
-				holder.subtitle.setCompoundDrawables(null, null, null, null);
-			}
+            //本地图片，放在assets/pic/torrent_class目录下
+            secondClassUri = "assets://pic/torrent_class/" + t.secondClass + ".png";
 		} else {
-			holder.subtitle.setCompoundDrawables(null, null, null, null);
-			ImageLoader.getInstance().loadImage(
-					adapter.getType().getUrl() + t.secondClass,
-					HDStarApp.displayOptions, new ImageLoadingListener() {
-
-						@Override
-						public void onLoadingCancelled(String arg0, View arg1) {
-						}
-
-						@Override
-						public void onLoadingComplete(String arg0, View arg1,
-								Bitmap result) {
-							result.setDensity(160);
-							BitmapDrawable drawable = new BitmapDrawable(res,
-									result);
-							drawable.setBounds(0, 0,
-									drawable.getIntrinsicWidth(),
-									drawable.getIntrinsicHeight());
-							holder.subtitle.setCompoundDrawables(drawable,
-									null, null, null);
-						}
-
-						@Override
-						public void onLoadingFailed(String arg0, View arg1,
-								FailReason arg2) {
-						}
-
-						@Override
-						public void onLoadingStarted(String arg0, View arg1) {
-						}
-					});
+            //网络图片
+            secondClassUri = adapter.getType().getUrl() + t.secondClass;
 		}
+        holder.subtitle.setCompoundDrawables(null, null, null, null);
+        ImageLoader.getInstance().loadImage(
+                secondClassUri,
+                HDStarApp.displayOptions, new ImageLoadingListener() {
+
+                    @Override
+                    public void onLoadingCancelled(String arg0, View arg1) {
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String arg0, View arg1,
+                                                  Bitmap result) {
+                        if(result == null){
+                            holder.subtitle.setCompoundDrawables(null, null, null, null);
+                            return;
+                        }
+                        result.setDensity(160);
+                        BitmapDrawable drawable = new BitmapDrawable(res,
+                                result);
+                        drawable.setBounds(0, 0,
+                                drawable.getIntrinsicWidth(),
+                                drawable.getIntrinsicHeight());
+                        holder.subtitle.setCompoundDrawables(drawable,
+                                null, null, null);
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String arg0, View arg1,
+                                                FailReason arg2) {
+                    }
+
+                    @Override
+                    public void onLoadingStarted(String arg0, View arg1) {
+                    }
+                });
 		return convertView;
 	}
 

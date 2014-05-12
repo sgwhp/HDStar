@@ -21,28 +21,30 @@ import ch.boye.httpclientandroidlib.params.HttpProtocolParams;
 public class HttpClientManager {
 	private static volatile HttpClient customHttpClient;
 
-	public static final String USER_AGENT = "Platinum Crawler";
+//	public static final String USER_AGENT = "Platinum Crawler";
+    //部分站点会拒绝未知客户端（如hdw），直接用firefox
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; rv:29.0) Gecko/20100101 Firefox/29.0";
 
-	/**
-	 * 最大连接数
-	 */
-	public final static int MAX_TOTAL_CONNECTIONS = 800;
+//	/**
+//	 * 最大连接数
+//	 */
+//	public final static int MAX_TOTAL_CONNECTIONS = 800;
 	/**
 	 * 获取连接的最大等待时间
 	 */
 	public final static int WAIT_TIMEOUT = 60 * 1000;
-	/**
-	 * 每个路由最大连接数
-	 */
-	public final static int MAX_ROUTE_CONNECTIONS = 400;
+//	/**
+//	 * 每个路由最大连接数
+//	 */
+//	public final static int MAX_ROUTE_CONNECTIONS = 400;
 	/**
 	 * 连接超时时间
 	 */
 	public final static int CONNECT_TIMEOUT = 90 * 1000;
-	/**
-	 * 读取超时时间
-	 */
-	public final static int READ_TIMEOUT = 30 * 1000;
+//	/**
+//	 * 读取超时时间
+//	 */
+//	public final static int READ_TIMEOUT = 30 * 1000;
 
 	// client更新周期
 	private static final int EXPIRED_PERIOD = 5 * 60 * 1000;

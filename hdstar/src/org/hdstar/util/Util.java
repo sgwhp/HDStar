@@ -45,7 +45,9 @@ public class Util {
 					context.getPackageName(), 0).versionCode;
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
-		}
+		} catch(NullPointerException e){
+            e.printStackTrace();
+        }
 		return 0;
 	}
 
@@ -78,7 +80,7 @@ public class Util {
 	public static void showExitDialog(final Activity context) {
 		new AlertDialog.Builder(context)
 				.setTitle(R.string.confirm)
-				.setIcon(R.drawable.ic_launcher)
+				.setIcon(R.drawable.icon)
 				.setMessage(R.string.exit_message)
 				.setPositiveButton(R.string.exit,
 						new DialogInterface.OnClickListener() {

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.hdstar.R;
 import org.hdstar.common.PTSiteSettingManager;
-import org.hdstar.common.PTSiteType;
-import org.hdstar.component.HDStarApp;
 import org.hdstar.model.PTSiteSetting;
 import org.hdstar.widget.fragment.TorrentListFragment;
 import org.hdstar.widget.navigation.PTFilterListDropDownAdapter;
@@ -38,17 +36,17 @@ public class TorrentActivity extends BaseStackActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		settings = new ArrayList<PTSiteSetting>();
-		// 首先添加HDSky
-		PTSiteSetting hdsky = new PTSiteSetting();
-		hdsky.type = PTSiteType.HDSky.name();
-		hdsky.cookie = HDStarApp.cookies;
-		settings.add(hdsky);
+//		// 首先添加HDSky
+//		PTSiteSetting hdsky = new PTSiteSetting();
+//		hdsky.type = PTSiteType.HDSky.name();
+//		hdsky.cookie = HDStarApp.cookies;
+//		settings.add(hdsky);
 		// 添加已保存设置的站点
 		PTSiteSettingManager.getAll(this, settings);
 
 		if (savedInstanceState == null) {
 			curTab = 0;
-			stackAdapter.fragments.add(TorrentListFragment.newInstance(hdsky));
+			stackAdapter.fragments.add(TorrentListFragment.newInstance(settings.get(0)));
 		} else {
 			curTab = savedInstanceState.getInt("curTab");
 		}

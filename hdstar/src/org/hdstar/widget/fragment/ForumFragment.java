@@ -26,9 +26,11 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.Mode;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener2;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -281,13 +283,14 @@ public class ForumFragment extends StackFragment {
                     Rect anchorRect = new Rect(location[0], location[1], location[0] + view.getWidth(), location[1]
                             + view.getHeight());
 
-                    int screenWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+                    Point screen = new Point();
+                    getActivity().getWindowManager().getDefaultDisplay().getSize(screen);
 
-                    int xPos = (screenWidth - windowWidth) / 2;
+                    int xPos = (screen.x - windowWidth) / 2;
                     int yPos	= anchorRect.top - windowHeight;
 
                     // display on bottom
-                    if (windowHeight > view.getTop()) {
+                    if (windowHeight <= screen.y - location[1]) {
                         yPos = anchorRect.bottom;
                         window.setBackgroundDrawable(getResources().getDrawable(
                                 R.drawable.popover_background_down));

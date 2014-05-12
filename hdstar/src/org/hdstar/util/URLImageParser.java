@@ -58,7 +58,7 @@ public class URLImageParser implements ImageGetter {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		List<Bitmap> list = null;
+		List<Bitmap> list;
 		if ((list = MemoryCacheUtil.findCachedBitmapsForImageUri(source,
 				ImageLoader.getInstance().getMemoryCache())) != null
 				&& list.size() > 0) {
@@ -88,6 +88,10 @@ public class URLImageParser implements ImageGetter {
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
 						if (loadedImage != null) {
+                            if(imageUri.startsWith("assets://pic/smilies/")){
+                                //表情图片
+                                loadedImage.setDensity(160);
+                            }
 							urlDrawable.setDrawable(new BitmapDrawable(c
 									.getResources(), loadedImage));
 							// 可以解决图片载入后重叠的问题，但是textview会被设定死了高度

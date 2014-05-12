@@ -154,8 +154,8 @@ public class DownloadService extends Service {
 	 */
 	private synchronized void finishDownload(DownloadTask task,
 			boolean isSuccessfully) {
-		Intent nfIntent = null;
-		PendingIntent pIntent = null;
+		Intent nfIntent;
+		PendingIntent pIntent;
 		String text;
 		int status;
 		if (isSuccessfully) {
@@ -175,7 +175,7 @@ public class DownloadService extends Service {
 		pIntent = PendingIntent.getActivity(this, 0, nfIntent, 0);
 		nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		nf = new NotificationCompat.Builder(this)
-				.setSmallIcon(R.drawable.ic_launcher).setTicker(text)
+				.setSmallIcon(R.drawable.icon).setTicker(text)
 				.setContentTitle(getText(R.string.notification_title))
 				.setContentText(text).setContentIntent(pIntent).build();
 		nf.flags |= Notification.FLAG_AUTO_CANCEL;
@@ -264,7 +264,7 @@ public class DownloadService extends Service {
 				file = new RandomAccessFile(dir.getAbsolutePath()
 						+ File.separator + fileName, "rwd");
 				file.seek(startPos);
-				int offset = 0;
+				int offset;
 				in = response.getEntity().getContent();
 				byte[] data = new byte[16 * 1024];
 				while (!paused && (offset = in.read(data)) != -1) {

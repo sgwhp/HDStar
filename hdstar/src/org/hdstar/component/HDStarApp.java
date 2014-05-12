@@ -192,7 +192,7 @@ public class HDStarApp extends Application {
 						getApplicationContext(), 0, nIntent, 0);
 
 				Notification notification = new NotificationCompat.Builder(
-						HDStarApp.this).setSmallIcon(R.drawable.ic_launcher)
+						HDStarApp.this).setSmallIcon(R.drawable.icon)
 						.setTicker(getText(R.string.have_new_message))
 						.setContentTitle(getText(R.string.notification_title))
 						.setContentText(getText(R.string.have_new_message))

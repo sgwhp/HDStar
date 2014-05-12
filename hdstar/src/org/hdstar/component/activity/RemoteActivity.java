@@ -144,9 +144,6 @@ public class RemoteActivity extends BaseActivity implements
 	private SparseArray<RssChannel> rssChannels = new SparseArray<RssChannel>();
 	private TaskStatus[] rssStatus;
 
-	// /** 是否已登录 */
-	// private boolean login;
-
 	public RemoteActivity() {
 		super(R.string.remote);
 	}
@@ -198,7 +195,7 @@ public class RemoteActivity extends BaseActivity implements
 		} else {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.confirm)
-					.setIcon(R.drawable.ic_launcher)
+					.setIcon(R.drawable.icon)
 					.setMessage(R.string.no_remote_setting)
 					.setPositiveButton(R.string.add,
 							new DialogInterface.OnClickListener() {
@@ -309,7 +306,7 @@ public class RemoteActivity extends BaseActivity implements
 		case R.id.del:
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.confirm)
-					.setIcon(R.drawable.ic_launcher)
+					.setIcon(R.drawable.icon)
 					.setMultiChoiceItems(
 							new String[] { getString(R.string.remove_file) },
 							new boolean[] { setting.rmFile },
@@ -556,7 +553,7 @@ public class RemoteActivity extends BaseActivity implements
 
 	/**
 	 * 
-	 * TODO 刷新某个rss订阅. <br/>
+	 * 刷新某个rss订阅. <br/>
 	 * 
 	 * @param refreshingLabel
 	 *            该订阅的位置
@@ -839,15 +836,6 @@ public class RemoteActivity extends BaseActivity implements
 			mTask = null;
 		}
 		fetch();
-		// if (login) {
-		// fetch();
-		// } else {
-		// BaseAsyncTask<Boolean> task = remote.login(setting.username,
-		// setting.password);
-		// task.attach(loginCallback);
-		// BaseAsyncTask.commit(task);
-		// attachTask(task);
-		// }
 	}
 
 	/**
@@ -879,28 +867,6 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		adapter.notifyDataSetChanged();
 	}
-
-	// private TaskCallback<Boolean> loginCallback = new TaskCallback<Boolean>()
-	// {
-	//
-	// @Override
-	// public void onComplete(Boolean result) {
-	// login = true;
-	// detachTask();
-	// fetch();
-	// }
-	//
-	// @Override
-	// public void onCancel() {
-	// mPullToRefreshLayout.setRefreshComplete();
-	// }
-	//
-	// @Override
-	// public void onFail(Integer msgId) {
-	// mPullToRefreshLayout.setRefreshComplete();
-	// Crouton.makeText(RemoteActivity.this, msgId, Style.ALERT).show();
-	// }
-	// };
 
 	/**
 	 * 获取任务列表请求回调

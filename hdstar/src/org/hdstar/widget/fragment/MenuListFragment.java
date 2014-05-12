@@ -108,7 +108,7 @@ public class MenuListFragment extends ListFragment {
 	private void checkExit() {
 		new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.confirm)
-				.setIcon(R.drawable.ic_launcher)
+				.setIcon(R.drawable.icon)
 				.setMessage(R.string.exit_message)
 				.setPositiveButton(R.string.exit,
 						new DialogInterface.OnClickListener() {
