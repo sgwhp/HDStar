@@ -3,9 +3,11 @@ package org.hdstar.widget;
 import org.hdstar.R;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -17,23 +19,23 @@ public class CustomDialog extends Dialog {
 	
 	public CustomDialog(Context context){
 		this(context, default_width, default_height, R.layout.loading_dialog,
-				R.style.dialog_theme, null);
+				R.style.dialog_theme, null, true);
 	}
-	public CustomDialog(Context context, int msgId){
-		this(context, R.layout.loading_dialog, R.style.dialog_theme, msgId);
-	}
-
-	public CustomDialog(Context context, int layout, int style, String msg) {
-		this(context, default_width, default_height, layout, style, msg);
+	public CustomDialog(Context context, int msgId, boolean cancelable){
+		this(context, R.layout.loading_dialog, R.style.dialog_theme, msgId, cancelable);
 	}
 
-	public CustomDialog(Context context, int layout, int style, int msgId) {
+	public CustomDialog(Context context, int layout, int style, String msg, boolean cancelable) {
+		this(context, default_width, default_height, layout, style, msg, cancelable);
+	}
+
+	public CustomDialog(Context context, int layout, int style, int msgId, boolean cancelable) {
 		this(context, default_width, default_height, layout, style, context
-				.getResources().getString(msgId));
+				.getResources().getString(msgId), cancelable);
 	}
 
 	public CustomDialog(Context context, int width, int height, int layout,
-			int style, String msg) {
+			int style, String msg, boolean cancelable) {
 		super(context, style);
 		// set content
 		setContentView(layout);
@@ -47,6 +49,20 @@ public class CustomDialog extends Dialog {
 		params.height = (int) (height * density);
 		params.gravity = Gravity.CENTER;
 		window.setAttributes(params);
+        if(!cancelable){
+            this.setCancelable(false);
+            this.setOnKeyListener(new OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                    switch (keyCode){
+                        case KeyEvent.KEYCODE_BACK:
+                            dismiss();
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
 	}
 
 	private float getDensity(Context context) {

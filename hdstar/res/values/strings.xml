@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">铂爬虫</string>
-    
     <string name="forums">论坛</string>
     <string name="torrent">种子</string>
     <string name="remote">远程控制</string>
@@ -11,7 +10,6 @@
     <string name="setting">设置</string>
     <string name="help">帮助</string>
     <string name="exit">退出</string>
-    
     <string name="account">账号</string>
     <string name="password">密码</string>
     <string name="login">登录</string>
@@ -44,7 +42,6 @@
     <string name="login_error">登录失败，请确认账号、密码以及验证码无误后再重试</string>
     <string name="ellipsis">…</string>
     <string name="not_login">请重新登录</string>
-    
     <string name="new_topic">新建主题</string>
     <string name="reply">回复</string>
     <string name="body_is_empty">请输入正文内容</string>
@@ -72,12 +69,9 @@
     <string name="edit">编辑</string>
     <string name="delete_post_msg">确认删除该回复？</string>
     <string name="delete_topic_msg">确认删除该主题？</string>
-    
     <string name="delete">删除</string>
     <string name="deleting">正在删除…</string>
     <string name="markAsRead">标记为已读</string>
-    
-    
     <string name="forum_settings">论坛设定</string>
     <string name="topics_per_page">每页主题数</string>
     <string name="setting_num_hint">0默认，100最大</string>
@@ -92,7 +86,7 @@
     <string name="save">保存</string>
     <string name="forward">跳转</string>
     <string name="pageIndex">第%1$d页</string>
-    
+
     <!-- setting -->
     <string name="download_image">获取网络图片</string>
     <string name="sound_on">提示音</string>
@@ -141,22 +135,21 @@
     <string name="scan">扫描二维码</string>
     <string name="optional">可选</string>
     <string name="no_setting_data">请添加设置</string>
-    
     <string name="notification_title">HDSky提醒</string>
     <string name="have_new_message">你有未读消息，点击查看</string>
     <string name="no_msg_selected">请选择站内信</string>
-    
+
     <!-- torrent -->
     <string name="bookmark">收藏</string>
     <string name="unbookmark">取消收藏</string>
-    
+
     <!-- download -->
     <string name="download_complete">下载完毕，点击安装</string>
     <string name="app_version_tag">版本：</string>
     <string name="app_size_tag">大小：</string>
     <string name="update_date_tag">更新：</string>
     <string name="delete_message">确定删除？</string>
-    
+
     <!-- remote -->
     <string name="rutorrent">ruTorrent</string>
     <string name="task_info">大小：%1$s - 已上传：%2$s（分享率：%3$s）  下载速度：%4$s/s  上传速度：%5$s/s</string>
@@ -171,24 +164,25 @@
     <string name="disk">硬盘</string>
     <string name="get_disk_space_failed">获取硬盘信息失败</string>
     <string name="status">状态</string>
-	<string name="navigation_status_showall">全部</string>
-	<string name="navigation_status_onlydown">下载中</string>
-	<string name="navigation_status_onlyup">上传中</string>
-	<string name="navigation_status_onlyactive">活动</string>
-	<string name="navigation_status_onlyinactive">停止</string>
-	<string name="unlabled">其他</string>
-	<string name="http_401">HTTP 401，账号或密码错误</string>
-	
-	<!-- pt site -->
-	<string name="pt_site">PT</string>
-	<string name="init">初始化</string>
-	<string name="initialize_completed">初始化完成</string>
-	<string name="connecting">通讯中…</string>
-	<string name="unintialized">未初始化</string>
-	<string name="torrents">种子</string>
-	<string name="OpenCD">原抓</string>
-	<string name="adult">成人</string>
-	<string name="media">影视&amp;音乐</string>
-	<string name="game">游戏&amp;软件</string>
+    <string name="navigation_status_showall">全部</string>
+    <string name="navigation_status_onlydown">下载中</string>
+    <string name="navigation_status_onlyup">上传中</string>
+    <string name="navigation_status_onlyactive">活动</string>
+    <string name="navigation_status_onlyinactive">停止</string>
+    <string name="unlabled">其他</string>
+    <string name="http_401">HTTP 401，账号或密码错误</string>
+
+    <!-- pt site -->
+    <string name="pt_site">PT</string>
+    <string name="init">初始化</string>
+    <string name="initialize_completed">初始化完成</string>
+    <string name="connecting">通讯中…</string>
+    <string name="unintialized">未初始化</string>
+    <string name="torrents">种子</string>
+    <string name="OpenCD">原抓</string>
+    <string name="adult">成人</string>
+    <string name="media">影视&amp;音乐</string>
+    <string name="game">游戏&amp;软件</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

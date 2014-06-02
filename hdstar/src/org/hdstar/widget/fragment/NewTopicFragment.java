@@ -131,7 +131,7 @@ public class NewTopicFragment extends StackFragment {
 					Crouton.makeText(context, R.string.subject_is_empty,
 							Style.CONFIRM).show();
 				} else {
-					dialog = new CustomDialog(context, R.string.committing);
+					dialog = new CustomDialog(context, R.string.committing, false);
 					dialog.setOnDismissListener(new OnDismissListener() {
 
 						@Override

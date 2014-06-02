@@ -6,6 +6,7 @@ import org.hdstar.common.CustomSetting;
 import org.hdstar.util.Util;
 import org.hdstar.widget.StackHook;
 import org.hdstar.widget.adapter.StackPagerAdapter;
+import org.hdstar.widget.fragment.HexagonMenuFragment;
 import org.hdstar.widget.fragment.MenuListFragment;
 import org.hdstar.widget.fragment.StackFragment;
 
@@ -31,7 +32,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		StackHook {
 	private int mTitleRes;//标题文字的资源id
 	private String mTitle;
-	protected ListFragment mFrag;
+	protected Fragment mFrag;
 //	public static int newMessageNum = 0;
 	protected StackPagerAdapter stackAdapter;
 	protected int curPage = 0;
@@ -59,7 +60,8 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 		setBehindContentView(R.layout.menu_frame);
 		FragmentTransaction t = this.getSupportFragmentManager()
 				.beginTransaction();
-		mFrag = new MenuListFragment();
+//		mFrag = new MenuListFragment();
+        mFrag = new HexagonMenuFragment();
 		t.replace(R.id.menu_frame, mFrag);
 		t.commit();
 
@@ -209,7 +211,7 @@ public class BaseStackActivity extends SlidingFragmentActivity implements
 	}
 
 	public void refreshMenu() {
-		((ArrayAdapter<?>) mFrag.getListAdapter()).notifyDataSetChanged();
+//		((ArrayAdapter<?>) mFrag.getListAdapter()).notifyDataSetChanged();
 	}
 
 	private Fragment getFragment(int position) {

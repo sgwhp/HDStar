@@ -250,7 +250,7 @@ public class MessageBoxFragment extends StackFragment {
 					Style.CONFIRM).show();
 			return;
 		}
-		dialog = new CustomDialog(getActivity(), R.string.deleting);
+		dialog = new CustomDialog(getActivity(), R.string.deleting, false);
 		dialog.setOnKeyListener(new OnKeyListener() {
 
 			@Override

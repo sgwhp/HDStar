@@ -172,7 +172,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 						Style.CONFIRM).show();
 				return;
 			}
-			dialog = new CustomDialog(getActivity(), R.string.connecting);
+			dialog = new CustomDialog(getActivity(), R.string.connecting, false);
 			dialog.setOnDismissListener(new OnDismissListener() {
 
 				@Override
@@ -188,7 +188,7 @@ public class PTSiteSettingFragment extends StackFragment implements
 			BaseAsyncTask.commit(task);
 			break;
 		case R.id.logout:
-			dialog = new CustomDialog(getActivity(), R.string.connecting);
+			dialog = new CustomDialog(getActivity(), R.string.connecting, false);
 			dialog.setOnDismissListener(new OnDismissListener() {
 
 				@Override

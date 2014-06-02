@@ -235,13 +235,13 @@ public class RemoteActivity extends BaseActivity implements
 		MobclickAgent.onPause(this);
 	}
 
-	@Override
-	protected void onStop() {
-		detachTask();
-		super.onStop();
-	}
+    @Override
+    protected void onDestroy() {
+        detachTask();
+        super.onDestroy();
+    }
 
-	protected void attachTask(BaseAsyncTask<?> task) {
+    protected void attachTask(BaseAsyncTask<?> task) {
 		if (mTask != null) {
 			mTask.detach();
 		}
@@ -650,7 +650,7 @@ public class RemoteActivity extends BaseActivity implements
 		task.attach(processCallback);
 		attachTask(task);
 		BaseAsyncTask.commit(task);
-		dialog = new CustomDialog(this, R.string.connecting);
+		dialog = new CustomDialog(this, R.string.connecting, false);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -678,7 +678,7 @@ public class RemoteActivity extends BaseActivity implements
 		task.attach(processCallback);
 		attachTask(task);
 		BaseAsyncTask.commit(task);
-		dialog = new CustomDialog(this, R.string.connecting);
+		dialog = new CustomDialog(this, R.string.connecting, false);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -706,7 +706,7 @@ public class RemoteActivity extends BaseActivity implements
 		task.attach(processCallback);
 		attachTask(task);
 		BaseAsyncTask.commit(task);
-		dialog = new CustomDialog(this, R.string.connecting);
+		dialog = new CustomDialog(this, R.string.connecting, false);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -734,7 +734,7 @@ public class RemoteActivity extends BaseActivity implements
 		task.attach(processCallback);
 		attachTask(task);
 		BaseAsyncTask.commit(task);
-		dialog = new CustomDialog(this, R.string.connecting);
+		dialog = new CustomDialog(this, R.string.connecting, false);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -764,7 +764,7 @@ public class RemoteActivity extends BaseActivity implements
 		task.attach(processCallback);
 		attachTask(task);
 		BaseAsyncTask.commit(task);
-		dialog = new CustomDialog(this, R.string.connecting);
+		dialog = new CustomDialog(this, R.string.connecting, false);
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -787,7 +787,7 @@ public class RemoteActivity extends BaseActivity implements
 	 * 从rss中添加下载任务
 	 */
 	private void download() {
-		dialog = new CustomDialog(this, R.string.connecting);
+		dialog = new CustomDialog(this, R.string.connecting, false);
 		String dir = dirEt.getText().toString();
 		final BaseAsyncTask<Boolean> task = remote.addByUrl(dir,
 				selectedRssItem.getTheLink());

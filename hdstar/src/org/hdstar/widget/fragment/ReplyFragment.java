@@ -119,7 +119,7 @@ public class ReplyFragment extends StackFragment {
 					Crouton.makeText(context, R.string.reply_is_empty,
 							Style.CONFIRM).show();
 				} else {
-					dialog = new CustomDialog(context, R.string.reply_is_adding);
+					dialog = new CustomDialog(context, R.string.reply_is_adding, false);
 					dialog.setOnDismissListener(new OnDismissListener() {
 
 						@Override

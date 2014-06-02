@@ -2,9 +2,11 @@ package org.hdstar.component.activity;
 
 import org.hdstar.R;
 import org.hdstar.util.Util;
+import org.hdstar.widget.fragment.HexagonMenuFragment;
 import org.hdstar.widget.fragment.MenuListFragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 
@@ -17,7 +19,7 @@ public class BaseActivity extends SlidingFragmentActivity {
 
 	private int mTitleRes;
 	private String mTitle;
-	protected ListFragment mFrag;
+	protected Fragment mFrag;
 
 	public BaseActivity() {
 	}
@@ -45,7 +47,8 @@ public class BaseActivity extends SlidingFragmentActivity {
 		setBehindContentView(R.layout.menu_frame);
 		FragmentTransaction t = this.getSupportFragmentManager()
 				.beginTransaction();
-		mFrag = new MenuListFragment();
+//		mFrag = new MenuListFragment();
+        mFrag = new HexagonMenuFragment();
 		t.replace(R.id.menu_frame, mFrag);
 		t.commit();
 

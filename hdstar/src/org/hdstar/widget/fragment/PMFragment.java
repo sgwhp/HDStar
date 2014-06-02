@@ -142,7 +142,7 @@ public class PMFragment extends StackFragment {
 							Style.CONFIRM).show();
 					return;
 				}
-				dialog = new CustomDialog(context, R.string.reply_is_adding);
+				dialog = new CustomDialog(context, R.string.reply_is_adding, false);
 				dialog.setOnDismissListener(new OnDismissListener() {
 
 					@Override

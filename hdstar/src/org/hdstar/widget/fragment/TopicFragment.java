@@ -285,7 +285,7 @@ public class TopicFragment extends StackFragment {
 	}
 
 	void reply(String text, String username) {
-		if (getActivity().findViewById(android.R.id.list) != null
+		if (getActivity().findViewById(R.id.post_list) != null
 				&& adapter.getList() != null) {
 			push(ReplyFragment.newInstance(topicId + "", text, username,
 					ForumPostType.Reply));
@@ -293,7 +293,7 @@ public class TopicFragment extends StackFragment {
 	}
 
 	void edit(String text, int id, boolean mainFloor) {
-		if (getActivity().findViewById(android.R.id.list) != null
+		if (getActivity().findViewById(R.id.post_list) != null
 				&& adapter.getList() != null) {
 			if (mainFloor) {
 				push(NewTopicFragment.newInstance(id, title, text));
@@ -326,7 +326,7 @@ public class TopicFragment extends StackFragment {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								loadingDialog = new CustomDialog(getActivity(),
-										R.string.deleting);
+										R.string.deleting, false);
 								loadingDialog
 										.setOnDismissListener(new OnDismissListener() {
 

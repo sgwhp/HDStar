@@ -106,35 +106,35 @@ public class MenuListFragment extends ListFragment {
 	}
 
 	private void checkExit() {
-		new AlertDialog.Builder(getActivity())
-				.setTitle(R.string.confirm)
-				.setIcon(R.drawable.icon)
-				.setMessage(R.string.exit_message)
-				.setPositiveButton(R.string.exit,
-						new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.confirm)
+                .setIcon(R.drawable.icon)
+                .setMessage(R.string.exit_message)
+                .setPositiveButton(R.string.exit,
+                        new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								((NotificationManager) getActivity()
-										.getSystemService(
-												Context.NOTIFICATION_SERVICE))
-										.cancelAll();
-								getActivity().finish();
-							}
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                ((NotificationManager) getActivity()
+                                        .getSystemService(
+                                                Context.NOTIFICATION_SERVICE))
+                                        .cancelAll();
+                                getActivity().finish();
+                            }
 
-						})
-				.setNegativeButton(android.R.string.cancel,
-						new DialogInterface.OnClickListener() {
+                        })
+                .setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
 
-							}
+                            }
 
-						}).create().show();
-	}
+                        }).create().show();
+    }
 
 	private class SampleItem {
 		public String tag;

@@ -8,6 +8,7 @@ dependencies {
     compile project(':extras:jazzy')
     compile project(':extras:Crouton')
     compile project(':extras:zxing')
+    compile project(':extras:Hexagon')
 }
 
 android {

@@ -139,7 +139,7 @@ public class LoginActivity extends SherlockFragmentActivity implements
 				e1.printStackTrace();
 			}
 			user.commit();
-			dialog = new CustomDialog(LoginActivity.this, R.string.try_to_login);
+			dialog = new CustomDialog(LoginActivity.this, R.string.try_to_login, false);
 			dialog.setOnDismissListener(new OnDismissListener() {
 
 				@Override
