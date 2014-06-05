@@ -2,14 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/notification_bg"
     tools:context="org.hdstar.widget.fragment.HexagonMenuFragment">
 
     <cn.robust.hexagon.library.menu.HexagonMenu
         android:id="@+id/hexa"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:background="@color/menu_bg" />
 
 </FrameLayout>
