@@ -16,6 +16,8 @@
     <color name="read_bg">#00000000</color>
     <color name="unread_bg">#ffc0c0c0</color>
     <color name="green">#8acc12</color>
-    <color name="menu_bg">#ff252c36</color>
+   <!-- <color name="menu_bg">#ff252c36</color>-->
+    <color name="menu_bg">#ff3a444b</color>
+    <color name="notification_bg">#ff5d666f</color>
 
 </resources>

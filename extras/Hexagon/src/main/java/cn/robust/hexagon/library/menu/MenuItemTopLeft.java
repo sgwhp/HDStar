@@ -3,16 +3,14 @@ package cn.robust.hexagon.library.menu;
 import android.content.Context;
 import android.graphics.Color;
 
-import cn.robust.hexagon.R;
-import cn.robust.hexagon.library.Point;
-
 /**
  * Created by robust on 2014-04-27.
  */
 public class MenuItemTopLeft extends HexagonMenuItem {
     MenuItemTopLeft(Context context, HexagonMenu menu) {
         super(context, menu, HexagonMenu.ITEM_POS_TOP_LEFT);
-        setBackgroundColor(Color.rgb(27, 188, 157));
+//        setBackgroundColor(Color.rgb(27, 188, 157));
+        setBackgroundColor(Color.rgb(149, 204, 107));
         setTextColor(Color.WHITE);
     }
 

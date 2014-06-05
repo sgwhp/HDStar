@@ -3,8 +3,6 @@ package cn.robust.hexagon.library.menu;
 import android.content.Context;
 import android.graphics.Color;
 
-import cn.robust.hexagon.R;
-
 
 /**
  * Created by robust on 2014-04-27.

@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.hdstar.widget.fragment.HexagonMenuFragment">
+
+    <cn.robust.hexagon.library.menu.HexagonMenu
+        android:id="@+id/hexa"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:background="@color/menu_bg" />
+
+</FrameLayout>
