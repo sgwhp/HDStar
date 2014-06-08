@@ -43,6 +43,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnimationAdapter;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -174,7 +176,9 @@ public class MessageBoxFragment extends StackFragment {
 		mPullToRefreshLayout = (PullToRefreshLayout) view
 				.findViewById(R.id.ptr_layout);
 		listView = (ListView) view.findViewById(R.id.messageList);
-		listView.setAdapter(adapter);
+        AnimationAdapter animAdapter = new SwingLeftInAnimationAdapter(adapter);
+        animAdapter.setAbsListView(listView);
+        listView.setAdapter(animAdapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
 		}
@@ -274,8 +278,8 @@ public class MessageBoxFragment extends StackFragment {
 		nvp.add(new BasicNameValuePair("box", "1"));
 		nvp.add(new BasicNameValuePair("delete", "删除"));
 		int[] ids = adapter.getSelectedIds();
-		for (int i = 0; i < ids.length; i++) {
-			nvp.add(new BasicNameValuePair("messages[]", ids[i] + ""));
+		for (int id : ids) {
+			nvp.add(new BasicNameValuePair("messages[]", id + ""));
 		}
 		try {
 			task.execPost(CommonUrls.HDStar.COMMON_MESSAGE_BOX_URL, nvp);

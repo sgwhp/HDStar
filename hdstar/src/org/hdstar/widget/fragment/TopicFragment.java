@@ -43,6 +43,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
@@ -161,7 +162,10 @@ public class TopicFragment extends StackFragment {
 						}
 					});
 		}
-		listView.setAdapter(adapter);
+        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
+        swingBottomInAnimationAdapter.setInitialDelayMillis(300);
+        swingBottomInAnimationAdapter.setAbsListView(listView);
+		listView.setAdapter(swingBottomInAnimationAdapter);
 		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), pauseOnScroll, pauseOnFling));
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();

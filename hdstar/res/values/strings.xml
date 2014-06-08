@@ -11,6 +11,7 @@
     <string name="help">帮助</string>
     <string name="exit">退出</string>
     <string name="account">账号</string>
+    <string name="notifications">通知</string>
     <string name="password">密码</string>
     <string name="login">登录</string>
     <string name="security_code">验证码</string>

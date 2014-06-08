@@ -30,7 +30,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +43,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
+import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnimationAdapter;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -304,7 +305,9 @@ public class ForumFragment extends StackFragment {
 			}
 
 		});
-		listView.setAdapter(adapter);
+        AnimationAdapter animAdapter = new SwingLeftInAnimationAdapter(adapter);
+        animAdapter.setAbsListView(listView);
+		listView.setAdapter(animAdapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
 			// listView.setSelectionFromTop(index, top);

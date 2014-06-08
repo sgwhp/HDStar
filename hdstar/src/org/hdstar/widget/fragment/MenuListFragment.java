@@ -26,6 +26,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * @deprecated use HexagonMenuFragment instead
+ * @see org.hdstar.widget.fragment.HexagonMenuFragment
+ */
 public class MenuListFragment extends ListFragment {
 	protected SampleAdapter adapter;
 

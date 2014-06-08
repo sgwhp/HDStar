@@ -1,12 +1,10 @@
 package org.hdstar.widget.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,6 +25,7 @@ import cn.robust.hexagon.library.menu.HexagonMenu;
 import cn.robust.hexagon.library.menu.HexagonMenuItem;
 
 /**
+ * 侧边栏六边形菜单
  * @author robust
  */
 public class HexagonMenuFragment extends Fragment implements OnMenuItemClickedListener {
@@ -81,7 +80,7 @@ public class HexagonMenuFragment extends Fragment implements OnMenuItemClickedLi
     public void onClick(HexagonMenuItem menuItem) {
         Intent intent = new Intent();
         @SuppressWarnings("rawtypes")
-        Class klass = null;
+        Class klass;
         switch (menuItem.getPosition()){
             case HexagonMenu.ITEM_POS_CENTER:
                 klass = ForumsActivity.class;

@@ -16,10 +16,6 @@ import cn.robust.hexagon.Util;
 import cn.robust.hexagon.library.OnMenuItemClickedListener;
 
 /**
- * This view must not wrap by RelativeLayout, or the onLayout will work improperly.<br/>
- * Using FrameLayout and make sure this view is the only child is recommended.<br/>
- * @see http://stackoverflow.com/questions/10888466/onmeasure-being-passed-measurespec-exactly-apparently-wrongly
- * @see http://stackoverflow.com/questions/10510371/fill-remaining-space-with-fixed-aspect-ratio-surfaceview/10522282#10522282
  * <p/>
  * Created by robust on 2014-04-25.
  */

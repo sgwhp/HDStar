@@ -83,6 +83,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnimationAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.slidingmenu.lib.SlidingMenu;
 import com.umeng.analytics.MobclickAgent;
@@ -449,7 +451,9 @@ public class RemoteActivity extends BaseActivity implements
 		}
 		listView = (ListView) findViewById(R.id.task_list);
 		adapter = new RemoteTaskAdapter();
-		listView.setAdapter(adapter);
+        AnimationAdapter animAdapter = new SwingLeftInAnimationAdapter(adapter);
+        animAdapter.setAbsListView(listView);
+        listView.setAdapter(animAdapter);
 		CancelableHeaderTransformer transformer = new CancelableHeaderTransformer();
 		transformer.setFromEndLabel(
 				getString(R.string.pull_up_to_refresh_pull_label),
