@@ -27,12 +27,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnimationAdapter;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -42,7 +44,7 @@ public class TorrentListFragment extends StackFragment {
 	private PTAdapter ptAdapter;
 	private View view;
 	private PullToRefreshLayout mPullToRefreshLayout;
-	private ExpandableListView listView;
+	private ListView listView;
 	private Parcelable listViewState;
 	private TorrentAdapter adapter;
 	private List<Torrent> torrents = new ArrayList<Torrent>();
@@ -73,7 +75,7 @@ public class TorrentListFragment extends StackFragment {
 		view = inflater.inflate(R.layout.torrent_list_layout, null);
 		mPullToRefreshLayout = (PullToRefreshLayout) view
 				.findViewById(R.id.ptr_layout);
-		listView = (ExpandableListView) view.findViewById(R.id.torrent_list);
+		listView = (ListView) view.findViewById(R.id.torrent_list);
 		return view;
 	}
 
@@ -158,7 +160,9 @@ public class TorrentListFragment extends StackFragment {
 	}
 
 	void init() {
-		listView.setAdapter(adapter);
+        SwingLeftInAnimationAdapter animationAdapter = new SwingLeftInAnimationAdapter(adapter);
+        animationAdapter.setAbsListView(listView);
+		listView.setAdapter(animationAdapter);
 		if (listViewState != null) {
 			listView.onRestoreInstanceState(listViewState);
 		}

@@ -76,7 +76,7 @@ public class PostAdapter extends BaseAdapter {
 		// "   帖子：595    上传：3.754  TB   下载：35.75  GB   分享率：107.505" 去除空白字符
 		Pattern pattern = Pattern
 				.compile(
-						"\\s+([^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+)",
+						"\\s+([^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+\\s+[^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)",
 						Pattern.DOTALL);
 		Matcher matcher;
 		for (Post post : items) {
@@ -85,7 +85,7 @@ public class PostAdapter extends BaseAdapter {
 				post.info = matcher.group(1) + "\n"
 						+ matcher.group(2).replaceAll("\\s+", "") + "\n"
 						+ matcher.group(3).replaceAll("\\s+", "") + "\n"
-						+ matcher.group(4);
+						+ matcher.group(4) + "\n" + matcher.group(5);
 			}
 		}
 		this.posts.addAll(items);

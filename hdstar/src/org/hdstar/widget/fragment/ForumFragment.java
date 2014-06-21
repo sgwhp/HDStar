@@ -30,6 +30,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -285,7 +286,9 @@ public class ForumFragment extends StackFragment {
                             + view.getHeight());
 
                     Point screen = new Point();
-                    getActivity().getWindowManager().getDefaultDisplay().getSize(screen);
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+                    screen.x = display.getWidth();
+                    screen.y = display.getHeight();
 
                     int xPos = (screen.x - windowWidth) / 2;
                     int yPos	= anchorRect.top - windowHeight;

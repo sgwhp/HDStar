@@ -5,10 +5,10 @@
     android:layout_height="fill_parent"
     android:background="@color/background" >
 
-    <ExpandableListView
+    <ListView
         android:id="@+id/torrent_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        style="@style/ExpandableListViewStyle" />
+        style="@style/ListViewStyle" />
 
 </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout>

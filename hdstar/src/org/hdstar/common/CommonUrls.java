@@ -38,13 +38,14 @@ public class CommonUrls {
 		public static final String SEND_PM_URL = BASE_URL
 				+ "/sendmessage.php?reciever=";
 		public static final String BOOKMARK_URL = BASE_URL
-				+ "/bookmark.php?torrentid=";
+				+ "/bookmark.php?torrentid=%s";
 		public static final String DELETE_POST_URL = FORUM_BASE_URL
 				+ "?action=deletepost&postid=%d&sure=1";
 		public static final String DELETE_TOPIC_URL = FORUM_BASE_URL
 				+ "?action=deletetopic&topicid=%d&sure=1";
 		public static final String TORRENTS_URL = BASE_URL
 				+ "/torrents.php?page=%d";
+        public static final String RSS_DOWNLOAD_URL = BOOKMARK_URL + "&type=1";
 
 		/** 客户端应用服务器地址 */
 		// public static final String SERVER_ADDRESS =

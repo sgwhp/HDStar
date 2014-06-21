@@ -14,11 +14,11 @@
         android:orientation="vertical"
         android:gravity="center" >
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/expand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/arrow_collapse" />
+            android:src="@drawable/arrow_collapse" />-->
 
         <ImageView
             android:id="@+id/sticky"

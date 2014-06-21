@@ -11,6 +11,7 @@ import org.hdstar.common.PTSiteType;
 import org.hdstar.model.ResponseWrapper;
 import org.hdstar.model.Torrent;
 import org.hdstar.task.BaseAsyncTask;
+import org.hdstar.task.parser.DefaultGetParser;
 import org.hdstar.task.parser.DelegateGetParser;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import com.google.gson.reflect.TypeToken;
@@ -26,49 +27,19 @@ public class HDSky extends NexusPHP {
 		return true;
 	}
 
-//	@Override
-//	public BaseAsyncTask<String> login(String username, String password,
-//			String securityCode) {
-//		HttpPost post = new HttpPost(String.format(
-//				CommonUrls.NEXUSPHP_TAKE_LOGIN_URL, mType.getUrl()));
-//		try {
-//			List<NameValuePair> nvp = new ArrayList<NameValuePair>();
-//			nvp.add(new BasicNameValuePair("username", username));
-//			nvp.add(new BasicNameValuePair("password", password));
-//			nvp.add(new BasicNameValuePair("imagestring", securityCode));
-//			nvp.add(new BasicNameValuePair("imagehash", imageHash));
-//			post.setEntity(new UrlEncodedFormEntity(nvp, Const.CHARSET));
-//			ResponseParser<String> parser = new ResponseParser<String>(
-//					R.string.login_error) {
-//
-//				@Override
-//				public String parse(HttpResponse res, InputStream in) {
-//					if (res.getFirstHeader("Location") == null) {
-//						return null;
-//					}
-//					String location = res.getFirstHeader("Location").getValue();
-//					if (location == null
-//							|| !location.equals(CommonUrls.HDStar.HOME_PAGE)) {
-//						return null;
-//					}
-//					String cookieStr = "";
-//					Header[] cookies = res.getHeaders("set-cookie");
-//					for (Header h : cookies) {
-//						String str = h.getValue();
-//						cookieStr += str.substring(0, str.indexOf(";") + 1);
-//					}
-//					msgId = ResponseParser.SUCCESS_MSG_ID;
-//					return cookieStr;
-//				}
-//			};
-//			BaseAsyncTask<String> task = new BaseAsyncTask<String>(post, parser);
-//			task.setNeedContent(false);
-//			return task;
-//		} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
+    @Override
+    public boolean rssEnable() {
+        return true;
+    }
+
+    @Override
+    public BaseAsyncTask<Boolean> addToRss(String torrentId) {
+        HttpGet get = new HttpGet(String.format(
+                CommonUrls.HDStar.RSS_DOWNLOAD_URL, torrentId));
+        BaseAsyncTask<Boolean> task = BaseAsyncTask.newInstance(cookie, get,
+                new DefaultGetParser());
+        return task;
+    }
 
 	@Override
 	public BaseAsyncTask<ArrayList<Torrent>> getTorrents(int page,

@@ -163,7 +163,7 @@ public class TopicFragment extends StackFragment {
 					});
 		}
         SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
-        swingBottomInAnimationAdapter.setInitialDelayMillis(300);
+        swingBottomInAnimationAdapter.setInitialDelayMillis(200);
         swingBottomInAnimationAdapter.setAbsListView(listView);
 		listView.setAdapter(swingBottomInAnimationAdapter);
 		listView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
