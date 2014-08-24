@@ -41,7 +41,7 @@
     <string name="try_to_login">正在尝试登录…</string>
     <string name="login_failed">登录失败，请重试</string>
     <string name="login_error">登录失败，请确认账号、密码以及验证码无误后再重试</string>
-    <string name="ellipsis">…</string>
+    <string name="ellipsis" translatable="false">…</string>
     <string name="not_login">请重新登录</string>
     <string name="new_topic">新建主题</string>
     <string name="reply">回复</string>
@@ -152,9 +152,9 @@
     <string name="delete_message">确定删除？</string>
 
     <!-- remote -->
-    <string name="rutorrent">ruTorrent</string>
+    <string name="rutorrent" translatable="false">ruTorrent</string>
     <string name="task_info">大小：%1$s - 已上传：%2$s（分享率：%3$s）  下载速度：%4$s/s  上传速度：%5$s/s</string>
-    <string name="ip_hint">127.0.0.1:80</string>
+    <string name="ip_hint" translatable="false">127.0.0.1:80</string>
     <string name="no_task_selected">请选择一个任务</string>
     <string name="remove_file">删除文件</string>
     <string name="download">下载</string>
@@ -174,7 +174,7 @@
     <string name="http_401">HTTP 401，账号或密码错误</string>
 
     <!-- pt site -->
-    <string name="pt_site">PT</string>
+    <string name="pt_site" translatable="false">PT</string>
     <string name="init">初始化</string>
     <string name="initialize_completed">初始化完成</string>
     <string name="connecting">通讯中…</string>
@@ -184,6 +184,6 @@
     <string name="adult">成人</string>
     <string name="media">影视&amp;音乐</string>
     <string name="game">游戏&amp;软件</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
 </resources>

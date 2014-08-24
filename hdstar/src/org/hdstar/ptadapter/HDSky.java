@@ -24,7 +24,7 @@ public class HDSky extends NexusPHP {
 
 	@Override
 	public boolean needSecurityCode() {
-		return true;
+		return false;
 	}
 
     @Override

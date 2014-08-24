@@ -259,21 +259,21 @@ public class PostAdapter extends BaseAdapter {
 
 		ViewHolder(View v) {
 			// main = (TextView) v.findViewById(R.id.main);
-			contentOuter = (TextView) v.findViewById(R.fieldset.content_outer);
+			contentOuter = (TextView) v.findViewById(R.id.content_outer);
 			contentOuter.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
-			frameOuter = v.findViewById(R.fieldset.frame_outer);
-			legend = (TextView) v.findViewById(R.fieldset.legend);
+			frameOuter = v.findViewById(R.id.frame_outer);
+			legend = (TextView) v.findViewById(R.id.legend);
 			contentMiddle = (TextView) v
-					.findViewById(R.fieldset.content_middle);
+					.findViewById(R.id.content_middle);
 			contentMiddle.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
-			frameInner = v.findViewById(R.fieldset.frame_inner);
-			legendInner = (TextView) v.findViewById(R.fieldset.legend_inner);
-			contentInner = (TextView) v.findViewById(R.fieldset.content_inner);
+			frameInner = v.findViewById(R.id.frame_inner);
+			legendInner = (TextView) v.findViewById(R.id.legend_inner);
+			contentInner = (TextView) v.findViewById(R.id.content_inner);
 			contentInner.setMovementMethod(CustomLinkMovementMethod
 					.getInstance());
-			frameMore = (TextView) v.findViewById(R.fieldset.frame_more);
+			frameMore = (TextView) v.findViewById(R.id.frame_more);
 
 			pm = (TextView) v.findViewById(R.id.pm);
 			quote = (TextView) v.findViewById(R.id.quote);

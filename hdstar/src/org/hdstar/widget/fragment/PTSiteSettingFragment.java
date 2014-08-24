@@ -6,6 +6,7 @@ import org.hdstar.common.PTSiteSettingManager;
 import org.hdstar.common.PTSiteType;
 import org.hdstar.component.HDStarApp;
 import org.hdstar.model.PTSiteSetting;
+import org.hdstar.ptadapter.HDSky;
 import org.hdstar.ptadapter.PTAdapter;
 import org.hdstar.ptadapter.PTFactory;
 import org.hdstar.task.BaseAsyncTask;
@@ -328,6 +329,9 @@ public class PTSiteSettingFragment extends StackFragment implements
 				refreshBtn.setVisibility(View.VISIBLE);
 				refreshBtn.setOnClickListener(PTSiteSettingFragment.this);
 			}
+            if(ptAdapter instanceof HDSky){
+                ((HDStarApp)getActivity().getApplication()).cookies = "";
+            }
 		}
 
 		@Override

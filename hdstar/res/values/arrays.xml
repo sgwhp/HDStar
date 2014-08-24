@@ -7,7 +7,7 @@
         <item>求片区</item>
     </string-array>
     
-    <string-array name="boxType">
+    <string-array name="boxType" translatable="false">
         <item>收件箱</item>
         <item>发件箱</item>
 <!--         <item>管理组信箱</item>

@@ -6,7 +6,7 @@
     <!-- This is the main content -->
 
     <RelativeLayout
-        android:id="@+fieldset/frame_outer"
+        android:id="@+id/frame_outer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -18,7 +18,7 @@
         android:padding="5dp" >
 
         <RelativeLayout
-            android:id="@+fieldset/frame_inner"
+            android:id="@+id/frame_inner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -30,7 +30,7 @@
             android:padding="5dp" >
 
             <TextView
-                android:id="@+fieldset/frame_more"
+                android:id="@+id/frame_more"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -43,15 +43,15 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+fieldset/content_inner"
+                android:id="@+id/content_inner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+fieldset/frame_more"
+                android:layout_below="@+id/frame_more"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </RelativeLayout>
 
         <TextView
-            android:id="@+fieldset/legend_inner"
+            android:id="@+id/legend_inner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -61,19 +61,19 @@
             android:background="@color/background" />
 
         <TextView
-            android:id="@+fieldset/content_middle"
+            android:id="@+id/content_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+fieldset/frame_inner"
+            android:layout_below="@+id/frame_inner"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 
     <!-- This is the title label -->
 
     <TextView
-        android:id="@+fieldset/legend"
+        android:id="@+id/legend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -83,12 +83,12 @@
         android:background="@color/background" />
 
     <TextView
-        android:id="@+fieldset/content_outer"
+        android:id="@+id/content_outer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+fieldset/frame_outer"
+        android:layout_below="@+id/frame_outer"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />

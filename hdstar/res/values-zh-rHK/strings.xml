@@ -108,6 +108,7 @@
     <string name="update_info">版本：%1$s\n新版大小： %2$s</string>
     <string name="device_name_setting_hint">設備名</string>
     <string name="server_addr">服務器地址</string>
+    <string name="auto_refresh">回復后自動刷新</string>
     <string name="enable_proxy">開啟代理</string>
     <string name="animation">動畫</string>
     <string name="anim_fade">淡入淡出</string>
@@ -123,6 +124,7 @@
     <string name="anim_rotate_up">向上旋轉</string>
     <string name="anim_rotate_down">向下旋轉</string>
     <string name="anim_accordion">手風琴</string>
+    <string name="anim_panel">面板</string>
     <string name="anim_window">窗</string>
     <string name="anim_jump_up">向上跳躍</string>
     <string name="anim_jump_down">向下跳躍</string>
