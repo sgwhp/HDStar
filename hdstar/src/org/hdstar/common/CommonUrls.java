@@ -135,7 +135,7 @@ public class CommonUrls {
 	}
 
 	// 获取网站图标工具地址
-	public static final String GETFVO_URL = "http://g.etfv.co/%1$s";
+	public static final String GETFVO_URL = "http://g.etfv.co/%s";
 
 	// nexusphp获取验证码地址
 	public static final String NEXUSPHP_FETCH_SECURITY_IMAGE_URL = "%s/image.php?action=regimage&imagehash=%s";

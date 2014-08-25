@@ -8,6 +8,9 @@ import org.hdstar.model.PTSiteSetting;
 import org.hdstar.widget.fragment.TorrentListFragment;
 import org.hdstar.widget.navigation.PTFilterListDropDownAdapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
@@ -41,30 +44,58 @@ public class TorrentActivity extends BaseStackActivity implements
 //		hdsky.type = PTSiteType.HDSky.name();
 //		hdsky.cookie = HDStarApp.cookies;
 //		settings.add(hdsky);
-		// 添加已保存设置的站点
-		PTSiteSettingManager.getAll(this, settings);
+        // 添加已保存设置的站点
+        PTSiteSettingManager.getAll(this, settings);
+        if (settings.size() == 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.confirm)
+                    .setIcon(R.drawable.icon)
+                    .setMessage(R.string.no_remote_setting)
+                    .setPositiveButton(R.string.add,
+                            new DialogInterface.OnClickListener() {
 
-		if (savedInstanceState == null) {
-			curTab = 0;
-			stackAdapter.fragments.add(TorrentListFragment.newInstance(settings.get(0)));
-		} else {
-			curTab = savedInstanceState.getInt("curTab");
-		}
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    Intent intent = new Intent(TorrentActivity.this, SettingActivity.class);
+                                    intent.putExtra("action", SettingActivity.ACTION_PT_SETTING);
+                                    startActivity(intent);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            })
+                    .setNegativeButton(android.R.string.cancel,
+                            new DialogInterface.OnClickListener() {
 
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		// String[] pts = new String[settings.size()];
-		// for (int i = settings.size() - 1; i >= 0; i--) {
-		// pts[i] = settings.get(i).getSiteType().getName();
-		// }
-		// ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
-		// getSupportActionBar().getThemedContext(),
-		// R.layout.sherlock_spinner_item, pts);
-		// list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-		navigationSpinnerAdapter = new PTFilterListDropDownAdapter(this,
-				settings);
-		getSupportActionBar().setListNavigationCallbacks(
-				navigationSpinnerAdapter, this);
-	}
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                }
+                            }).create().show();
+            return;
+        } else {
+            if (savedInstanceState == null) {
+                curTab = 0;
+                stackAdapter.fragments.add(TorrentListFragment.newInstance(settings.get(0)));
+            } else {
+                curTab = savedInstanceState.getInt("curTab");
+            }
+
+            getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            // String[] pts = new String[settings.size()];
+            // for (int i = settings.size() - 1; i >= 0; i--) {
+            // pts[i] = settings.get(i).getSiteType().getName();
+            // }
+            // ArrayAdapter<CharSequence> list = new ArrayAdapter<CharSequence>(
+            // getSupportActionBar().getThemedContext(),
+            // R.layout.sherlock_spinner_item, pts);
+            // list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+            navigationSpinnerAdapter = new PTFilterListDropDownAdapter(this,
+                    settings);
+            getSupportActionBar().setListNavigationCallbacks(
+                    navigationSpinnerAdapter, this);
+        }
+    }
 	
 	@Override
 	protected void onResume() {
