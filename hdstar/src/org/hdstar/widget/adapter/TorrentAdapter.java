@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.nhaarman.listviewanimations.itemmanipulation.ExpandableListItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 /**
  * 种子列表适配器

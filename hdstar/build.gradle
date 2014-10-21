@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -9,6 +9,8 @@ dependencies {
     compile project(':extras:Crouton')
     compile project(':extras:zxing')
     compile project(':extras:Hexagon')
+    compile project(':extras:PhotoView')
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
 }
 
 android {
@@ -24,6 +26,7 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
         }
 
         // Move the tests to tests/java, tests/res, etc...

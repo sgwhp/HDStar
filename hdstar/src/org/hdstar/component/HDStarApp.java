@@ -29,7 +29,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.gson.reflect.TypeToken;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager.TransitionEffect;
-import com.nostra13.universalimageloader.cache.disc.impl.TotalSizeLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -90,8 +89,7 @@ public class HDStarApp extends Application {
 		// .memoryCacheSizePercentage(13)
 		File discCache = getExternalStorageCacheDir(context, DISK_CACHE_SUBDIR);
 		if (discCache != null) {
-			builder.discCache(new TotalSizeLimitedDiscCache(discCache,
-					DISK_CACHE_SIZE));
+            builder.diskCacheSize(DISK_CACHE_SIZE);
 			// .discCacheFileCount(100)
 			// .discCacheFileNameGenerator(new HashCodeFileNameGenerator())
 		}

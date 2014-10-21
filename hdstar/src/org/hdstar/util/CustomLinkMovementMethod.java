@@ -1,14 +1,18 @@
 package org.hdstar.util;
 
 import org.hdstar.common.CommonUrls;
+import org.hdstar.component.activity.ImageActivity;
 import org.hdstar.widget.fragment.ForumFragment;
 import org.hdstar.widget.fragment.PMFragment;
 import org.hdstar.widget.fragment.StackFragment;
 import org.hdstar.widget.fragment.TopicFragment;
 
+import android.content.Intent;
 import android.text.Layout;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -60,13 +64,20 @@ public class CustomLinkMovementMethod extends LinkMovementMethod {
 						mFragment.push(f);
 					}
 				}
-				// else if (url.contains("tel"))
-				// {
-				// } else if (url.contains("mailto"))
-				// {
-				// }
 				return true;
 			}
+            ImageSpan[] img = buffer.getSpans(off, off, ImageSpan.class);
+            if(img.length != 0){
+                Intent intent = new Intent(mFragment.getActivity(), ImageActivity.class);
+                intent.putExtra("url", img[0].getSource());
+                mFragment.startActivity(intent);
+            }
+//            ImgSpan[] img = buffer.getSpans(off, off, ImgSpan.class);
+//            if(img.length != 0){
+//                String src = img[0].getSrc();
+//                if(src != null){
+//                }
+//            }
 		}
 
 		return super.onTouchEvent(widget, buffer, event);

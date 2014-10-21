@@ -45,7 +45,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.reflect.TypeToken;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;

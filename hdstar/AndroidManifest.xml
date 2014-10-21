@@ -89,6 +89,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Styled" >
         </activity>
+        <activity
+            android:name=".component.activity.ImageActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Black.NoTitleBar"/>
         <!--<activity-->
             <!--android:name=".component.activity.RemoteLoginActivity"-->
             <!--android:configChanges="orientation|keyboardHidden"-->

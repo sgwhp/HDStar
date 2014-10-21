@@ -22,8 +22,8 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 public class URLImageParser implements ImageGetter {
 	Context c;
@@ -47,7 +47,7 @@ public class URLImageParser implements ImageGetter {
 		}
 		if (source.startsWith("pic/smilies/")) {
 			source = "assets://" + source;
-		} else if (!source.startsWith("http://")) {
+		} else if (!source.startsWith("http://") || !source.startsWith("https://")) {
 			source = CommonUrls.HDStar.SERVER_GET_IMAGE_URL
 					+ CommonUrls.HDStar.BASE_URL + "/" + source;
 		} else {
@@ -59,8 +59,8 @@ public class URLImageParser implements ImageGetter {
 			e.printStackTrace();
 		}
 		List<Bitmap> list;
-		if ((list = MemoryCacheUtil.findCachedBitmapsForImageUri(source,
-				ImageLoader.getInstance().getMemoryCache())) != null
+		if ((list = MemoryCacheUtils.findCachedBitmapsForImageUri(source,
+                ImageLoader.getInstance().getMemoryCache())) != null
 				&& list.size() > 0) {
 			Bitmap bitmap = list.get(0);
 			Drawable d = new BitmapDrawable(c.getResources(), bitmap);

@@ -1,25 +1,5 @@
 package org.hdstar.widget.adapter;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.ref.WeakReference;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.hdstar.R;
-import org.hdstar.common.CommonUrls;
-import org.hdstar.common.Const;
-import org.hdstar.component.HDStarApp;
-import org.hdstar.model.FieldSetVO;
-import org.hdstar.model.Post;
-import org.hdstar.util.CustomLinkMovementMethod;
-import org.hdstar.util.MyTextParser;
-import org.hdstar.util.URLImageParser;
-import org.hdstar.util.UserClassImageGetter;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Html;
@@ -33,15 +13,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
+import org.hdstar.common.Const;
+import org.hdstar.component.HDStarApp;
+import org.hdstar.model.FieldSetVO;
+import org.hdstar.model.Post;
+import org.hdstar.util.CustomLinkMovementMethod;
+import org.hdstar.util.MyTextParser;
+import org.hdstar.util.URLImageParser;
+import org.hdstar.util.UserClassImageGetter;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PostAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<Post> posts;
 	private SparseArray<FieldSetVO> quotes;
-	private WeakReference<Context> ref = null;
+	private Context mContext = null;
 	private OnPostClickListener mListener;
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
@@ -49,7 +48,7 @@ public class PostAdapter extends BaseAdapter {
 	public PostAdapter(Context context, List<Post> items,
 			OnPostClickListener listener) {
 		inflater = LayoutInflater.from(context);
-		ref = new WeakReference<Context>(context);
+        mContext = context;
 		this.posts = items;
 		quotes = new SparseArray<FieldSetVO>();
 		this.mListener = listener;
@@ -125,7 +124,7 @@ public class PostAdapter extends BaseAdapter {
 		holder.username.setText(Html.fromHtml(p.userName));
 		holder.floor.setText(p.floor);
 		holder.userClass.setImageBitmap(UserClassImageGetter.get(
-				p.userClassSrc, (Context) ref.get()));
+				p.userClassSrc, mContext));
 		FieldSetVO quote = quotes.get(position);
 		if (quote == null) {
 			quote = new FieldSetVO();
@@ -134,7 +133,7 @@ public class PostAdapter extends BaseAdapter {
 		}
 		// if (CustomSetting.loadImage) {
 		holder.contentOuter.setText(Html.fromHtml(quote.content,
-				new URLImageParser(holder.contentOuter, ref.get()), null));
+				new URLImageParser(holder.contentOuter, mContext), null));
 		// holder.contentOuter.setMovementMethod(CustomLinkMovementMethod
 		// .getInstance());
 		// setMovementMethod后需要调用以下方法，不能在xml里配置
@@ -146,7 +145,7 @@ public class PostAdapter extends BaseAdapter {
 			holder.legend.setText(quote.legend);
 			quote = quote.fieldSet;
 			holder.contentMiddle.setText(Html.fromHtml(quote.content,
-					new URLImageParser(holder.contentMiddle, ref.get()), null));
+					new URLImageParser(holder.contentMiddle, mContext), null));
 			// holder.contentMiddle.setMovementMethod(CustomLinkMovementMethod
 			// .getInstance());
 			// setMovementMethod后需要调用以下方法，不能在xml里配置
@@ -158,7 +157,7 @@ public class PostAdapter extends BaseAdapter {
 				holder.legendInner.setText(quote.legend);
 				quote = quote.fieldSet;
 				holder.contentInner.setText(Html.fromHtml(quote.content,
-						new URLImageParser(holder.contentInner, ref.get()),
+						new URLImageParser(holder.contentInner, mContext),
 						null));
 				// holder.contentInner.setMovementMethod(CustomLinkMovementMethod
 				// .getInstance());
@@ -288,7 +287,7 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	private static class AnimateFirstDisplayListener extends
-			SimpleImageLoadingListener {
+            SimpleImageLoadingListener {
 
 		static final List<String> displayedImages = Collections
 				.synchronizedList(new LinkedList<String>());
