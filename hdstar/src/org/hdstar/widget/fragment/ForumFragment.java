@@ -171,8 +171,7 @@ public class ForumFragment extends StackFragment {
 	public boolean onActionBarSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.ab_new_topic:
-			if (getActivity().findViewById(android.R.id.list) != null
-					&& adapter.getList() != null && !url.equals("")) {
+			if (adapter.getList() != null && !url.equals("")) {
 				push(NewTopicFragment.newInstance(forumId));
 			}
 			return true;

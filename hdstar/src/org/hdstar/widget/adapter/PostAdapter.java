@@ -183,16 +183,10 @@ public class PostAdapter extends BaseAdapter {
 		// .getInstance());
 		// holder.main.setFocusable(false);
 		// holder.main.setFocusableInTouchMode(false);
-		try {
-			ImageLoader.getInstance().displayImage(
-					CommonUrls.HDStar.SERVER_GET_IMAGE_URL
-							+ URLEncoder.encode(p.avatarSrc, Const.CHARSET),
-					holder.avatar, HDStarApp.roundedDisplayOptions,
-					animateFirstListener);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		// }
+        ImageLoader.getInstance().displayImage(CommonUrls.HDStar.genGetImageUrl(p.avatarSrc),
+                holder.avatar, HDStarApp.roundedDisplayOptions,
+                animateFirstListener);
+        // }
 		// else {
 		// holder.main.setText(Html.fromHtml(p.body));
 		// }
@@ -313,11 +307,9 @@ public class PostAdapter extends BaseAdapter {
 
 		/**
 		 * 编辑帖子
-		 * 
-		 * @author robust
+		 *
 		 * @param p
-		 * @param top
-		 *            是否主楼
+		 * @param top 是否主楼
 		 */
 		public void edit(Post p, boolean top);
 

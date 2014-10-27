@@ -11,6 +11,7 @@ dependencies {
     compile project(':extras:Hexagon')
     compile project(':extras:PhotoView')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+    compile "com.android.support:support-v4:19.+"
 }
 
 android {

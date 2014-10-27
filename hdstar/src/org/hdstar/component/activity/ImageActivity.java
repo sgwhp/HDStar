@@ -35,11 +35,16 @@ public class ImageActivity extends Activity {
         photoView = (PhotoView) findViewById(R.id.iv_photo);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         String url = getIntent().getStringExtra("url");
+        if (url.startsWith("pic/smilies/")) {
+            url = "assets://" + url;
+        } else if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = CommonUrls.HDStar.BASE_URL + "/" + url;
+        }
         ImageLoader imageLoader = ImageLoader.getInstance();
         List<Bitmap> list;
         //图片已下载
         if ((list = MemoryCacheUtils.findCachedBitmapsForImageUri(url,
-                imageLoader.getMemoryCache())) != null) {
+                imageLoader.getMemoryCache())) != null && list.size() > 0) {
             photoView.setImageBitmap(list.get(0));
             return;
         }
@@ -52,7 +57,7 @@ public class ImageActivity extends Activity {
         String thumbnail = CommonUrls.HDStar.SERVER_GET_IMAGE_URL
                 + CommonUrls.HDStar.BASE_URL + "/"+ url;
         if ((list = MemoryCacheUtils.findCachedBitmapsForImageUri(thumbnail,
-                imageLoader.getMemoryCache())) != null) {
+                imageLoader.getMemoryCache())) != null && list.size() > 0) {
             photoView.setImageBitmap(list.get(0));
         } else if(DiskCacheUtils.findInCache(thumbnail, imageLoader.getDiskCache()) != null){
             imageLoader.displayImage(url, photoView);

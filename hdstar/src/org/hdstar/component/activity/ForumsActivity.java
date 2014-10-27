@@ -34,6 +34,7 @@ public class ForumsActivity extends BaseStackActivity implements
 			curTab = 0;
 			stackAdapter.fragments.add(ForumFragment
 					.newInstance(CommonUrls.HDStar.CHAT_ROOM_URL));
+            stackAdapter.notifyDataSetChanged();
 		} else {
 			curTab = savedInstanceState.getInt("curForum");
 		}
@@ -71,6 +72,7 @@ public class ForumsActivity extends BaseStackActivity implements
 			stackAdapter.clear();
 			stackAdapter.forward(ForumFragment
 					.newInstance(CommonUrls.HDStar.FORUM_URLS[itemPosition]));
+            stackAdapter.notifyDataSetChanged();
 		}
 		return true;
 	}

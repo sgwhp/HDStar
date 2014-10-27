@@ -1,15 +1,5 @@
 package org.hdstar.component.activity;
 
-import org.hdstar.R;
-import org.hdstar.common.Const;
-import org.hdstar.common.CustomSetting;
-import org.hdstar.util.Util;
-import org.hdstar.widget.StackHook;
-import org.hdstar.widget.adapter.StackPagerAdapter;
-import org.hdstar.widget.fragment.HexagonMenuFragment;
-import org.hdstar.widget.fragment.MenuListFragment;
-import org.hdstar.widget.fragment.StackFragment;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,15 +8,22 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jfeinstein.jazzyviewpager.JazzyViewPager;
 import com.slidingmenu.lib.SlidingMenu;
+
+import org.hdstar.R;
+import org.hdstar.common.Const;
+import org.hdstar.common.CustomSetting;
+import org.hdstar.util.Util;
+import org.hdstar.widget.StackHook;
+import org.hdstar.widget.adapter.StackPagerAdapter;
+import org.hdstar.widget.fragment.HexagonMenuFragment;
+import org.hdstar.widget.fragment.StackFragment;
 
 public class BaseStackActivity extends SlidingFragmentActivity implements
 		StackHook {

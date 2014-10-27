@@ -1,15 +1,5 @@
 package org.hdstar.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.List;
-
-import org.hdstar.R;
-import org.hdstar.common.CommonUrls;
-import org.hdstar.common.Const;
-import org.hdstar.common.CustomSetting;
-import org.hdstar.component.HDStarApp;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -24,6 +14,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
+
+import org.hdstar.R;
+import org.hdstar.common.CommonUrls;
+import org.hdstar.common.CustomSetting;
+import org.hdstar.component.HDStarApp;
+
+import java.util.List;
 
 public class URLImageParser implements ImageGetter {
 	Context c;
@@ -45,19 +42,7 @@ public class URLImageParser implements ImageGetter {
 		if (!CustomSetting.loadImage) {
 			return null;
 		}
-		if (source.startsWith("pic/smilies/")) {
-			source = "assets://" + source;
-		} else if (!source.startsWith("http://") || !source.startsWith("https://")) {
-			source = CommonUrls.HDStar.SERVER_GET_IMAGE_URL
-					+ CommonUrls.HDStar.BASE_URL + "/" + source;
-		} else {
-			source = CommonUrls.HDStar.SERVER_GET_IMAGE_URL + source;
-		}
-		try {
-			URLEncoder.encode(source, Const.CHARSET);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		source = CommonUrls.HDStar.genGetImageUrl(source);
 		List<Bitmap> list;
 		if ((list = MemoryCacheUtils.findCachedBitmapsForImageUri(source,
                 ImageLoader.getInstance().getMemoryCache())) != null
@@ -111,7 +96,7 @@ public class URLImageParser implements ImageGetter {
 					public void onLoadingFailed(String imageUri, View view,
 							FailReason failReason) {
 						urlDrawable.setDrawable(c.getResources().getDrawable(
-								R.drawable.url_image_failed));
+                                R.drawable.url_image_failed));
 						container.requestLayout();
 						URLImageParser.this.container.invalidate();
 

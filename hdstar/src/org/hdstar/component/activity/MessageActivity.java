@@ -32,6 +32,7 @@ public class MessageActivity extends BaseStackActivity implements
 		if (savedInstanceState == null) {
 			curTab = 0;
 			stackAdapter.fragments.add(MessageBoxFragment.newInstance(0));
+            stackAdapter.notifyDataSetChanged();
 		} else {
 			curTab = savedInstanceState.getInt("curForum");
 		}
@@ -68,6 +69,7 @@ public class MessageActivity extends BaseStackActivity implements
 			stackAdapter.clear();
 			stackAdapter.forward(MessageBoxFragment
 					.newInstance(Const.boxTypes[itemPosition]));
+            stackAdapter.notifyDataSetChanged();
 		}
 		return true;
 	}

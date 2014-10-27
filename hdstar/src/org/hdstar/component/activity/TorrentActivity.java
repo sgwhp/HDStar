@@ -77,6 +77,7 @@ public class TorrentActivity extends BaseStackActivity implements
             if (savedInstanceState == null) {
                 curTab = 0;
                 stackAdapter.fragments.add(TorrentListFragment.newInstance(settings.get(0)));
+                stackAdapter.notifyDataSetChanged();
             } else {
                 curTab = savedInstanceState.getInt("curTab");
             }
@@ -131,6 +132,7 @@ public class TorrentActivity extends BaseStackActivity implements
 		navigationSpinnerAdapter.updateTorrentPage(setting);
 		stackAdapter.clear();
 		stackAdapter.forward(TorrentListFragment.newInstance(setting));
+        stackAdapter.notifyDataSetChanged();
 		return true;
 	}
 

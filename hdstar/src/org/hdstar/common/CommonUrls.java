@@ -1,5 +1,8 @@
 package org.hdstar.common;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class CommonUrls {
 	/**
 	 * 
@@ -97,6 +100,25 @@ public class CommonUrls {
 			SERVER_CHECK_UPDATE_URL = SERVER_ADDRESS + "checkVersion";
 			SERVER_ABOUT_URL = SERVER_ADDRESS + "about.jsp";
 		}
+
+        public static String genGetImageUrl(String url){
+            if (url.startsWith("pic/smilies/")) {
+                return "assets://" + url;
+            } else if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                try {
+                    return SERVER_GET_IMAGE_URL + URLEncoder.encode(BASE_URL + "/" + url, Const.CHARSET);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try{
+                    return SERVER_GET_IMAGE_URL + URLEncoder.encode(url, Const.CHARSET);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            return url;
+        }
 	}
 
 	public static class BTClient {

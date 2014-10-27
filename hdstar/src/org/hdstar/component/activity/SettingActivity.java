@@ -27,6 +27,7 @@ public class SettingActivity extends BaseStackActivity {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
 			stackAdapter.add(new SettingFragment());
+            stackAdapter.notifyDataSetChanged();
 			int action = getIntent().getIntExtra("action", 0);
 			if(action == 0){
 				return;
@@ -39,6 +40,7 @@ public class SettingActivity extends BaseStackActivity {
 					public void run() {
 						stackAdapter.add(RemoteSettingFragment.newInstance(
 								RemoteSettingFragment.MODE_ADD, null));
+                        stackAdapter.notifyDataSetChanged();
 						viewPager.setCurrentItem(1);
 					}});
 				break;
@@ -48,6 +50,7 @@ public class SettingActivity extends BaseStackActivity {
 					@Override
 					public void run() {
 						stackAdapter.add(new PTListFragment());
+                        stackAdapter.notifyDataSetChanged();
 						viewPager.setCurrentItem(1, true);
 					}});
 				break;
